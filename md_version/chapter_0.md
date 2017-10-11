@@ -1,6 +1,5 @@
 &nbsp;
 ## awk与 gawk 的历史
-___
         编程语言菜单
         1 份 egrep，1 份 snobol 
         2 份 ed，3 份 C
