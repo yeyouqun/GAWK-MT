@@ -1,10 +1,10 @@
-# <center>GNU Awk</center>
-#### <p align="right">GAWK： awk 完全参考手册</p>
-#### <p align="right">GNU awk 4.1 版用户指南</p>
-#### <p align="right">2015年4月</p>
+#GNU Awk
+#### GAWK： awk 完全参考手册
+#### GNU awk 4.1 版用户指南
+#### 2015年4月
 
 &nbsp;
-
+___
 献给我的父母，谢谢他们给我的爱，以及为我树立起的榜样。
 
 献给我的妻子，Miriam，他使我有一个完整的人生。谢谢你让我一起建设你的生活。
