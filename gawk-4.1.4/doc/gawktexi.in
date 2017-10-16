@@ -86,7 +86,7 @@
 @set PAGE screen
 @end ifinfo
 @ifhtml
-@set DOCUMENT Web page
+@set DOCUMENT 网页
 @set CHAPTER chapter
 @set APPENDIX appendix
 @set SECTION section
@@ -418,7 +418,7 @@ particular records in a file and perform operations upon them.
 @menu
 * 第三版前言::                      Some nice words about this
                                    @value{DOCUMENT}.
-* Foreword4::                      More nice words.
+* 第四版前言::                      More nice words.
 * 前言::                        What this @value{DOCUMENT} is about; brief
                                    history and acknowledgments.
 * Getting Started::                A basic introduction to using
@@ -1155,8 +1155,8 @@ March 2001
 @end display
 @end ifnotdocbook
 
-@node Foreword4
-@unnumbered Foreword to the Fourth Edition
+@node 第四版前言
+@unnumbered 第四版前言
 
 @c This bit is post-processed by a script which turns the chapter
 @c tag into a preface tag, and moves this stuff to before the title.
@@ -1173,33 +1173,20 @@ March 2001
    </prefaceinfo>
 @end docbook
 
-Some things don't change.  Thirteen years ago I wrote:
-``If you use AWK or want to learn how, then read this book.''
-True then, and still true today.
+有些东西一直没有变化。
+13 年前，我写下“如果你使用 AWK 或者想学习它如何工作，那么就读这本书。”
+这句话当时是真理，而现在依然是真理。
 
-Learning to use a programming language is about more than mastering the
-syntax.  One needs to acquire an understanding of how to use the
-features of the language to solve practical programming problems.
-A focus of this book is many examples that show how to use AWK.
+学习如何使用编程语言并仅仅是掌握语法这么简单。需要在理解的基础上利用语言提供的特性来解决现实中的编程问题。这本书的焦点就是用许多的例子来展示如何使用 AWK。
 
-Some things do change. Our computers are much faster and have more memory.
-Consequently, speed and storage inefficiencies of a high-level language
-matter less.  Prototyping in AWK and then rewriting in C for performance
-reasons happens less, because more often the prototype is fast enough.
+而有些东西是有变化的。我们的计算机要比之前快得多，并且有更多的内存。结果是高级的语言导致了速度与存储的低效使用。因为性能而先在 AWK 中写原型然后用 C 重写，这种情况很少发生，因为更多的情况下，原型已经足够快了。
 
-Of course, there are computing operations that are best done in C or C++.
-With @command{gawk} 4.1 and later, you do not have to choose between writing
-your program in AWK or in C/C++.  You can write most of your
-program in AWK and the aspects that require C/C++ capabilities can be written
-in C/C++, and then the pieces glued together when the @command{gawk} module loads
-the C/C++ module as a dynamic plug-in.
+当然，有些操作更适合于用 C 或者 C++ 来实现，对于 @command{gawk} 4.1 以及后面的版本，你不需要选择到底是用 AWK 还是用 C/C++ 来实现。你可以用 AWK 来实现大部分的程序。而用 C/C++ 来写的程序，你完全可以用 C 或者 C++ 来写成动态插件，然后使用 @command{gawk} 进行装载合并。
 @c Chapter 16
 @ref{Dynamic Extensions},
-has all the
-details, and, as expected, many examples to help you learn the ins and outs.
+描述了所有的技术细节，其中有许多的例子，希望让你学习到里里外外的一切。
 
-I enjoy programming in AWK and had fun (re)reading this book.
-I think you will too.
+我很享受用 AWK 来进行编程，并且在用心（重）读这本书。我想你也会这样。
 
 @ifnotdocbook
 @cindex Brennan, Michael
@@ -1232,25 +1219,14 @@ October 2014
    </prefaceinfo>
 @end docbook
 
-Several kinds of tasks occur repeatedly when working with text files.
-You might want to extract certain lines and discard the rest.  Or you
-may need to make changes wherever certain patterns appear, but leave the
-rest of the file alone.  Such jobs are often easy with @command{awk}.
-The @command{awk} utility interprets a special-purpose programming
-language that makes it easy to handle simple data-reformatting jobs.
+当工作于文本文件的时候，有几类工作不断重复出现。
+你可能想抽取指定的行并丢弃其他部分。或者你想更改特定模式的文本，而其他部分的不变。
+这样的工作使用 @command{awk} 来完成通常很简单。@command{awk} 工具解释特定的编程语言，使得它处理数据重组的工作非常在行。
 
-The GNU implementation of @command{awk} is called @command{gawk}; if you
-invoke it with the proper options or environment variables,
-it is fully compatible with
-the POSIX@footnote{The 2008 POSIX standard is accessible online at
-@w{@url{http://www.opengroup.org/onlinepubs/9699919799/}.}}
-specification of the @command{awk} language
-and with the Unix version of @command{awk} maintained
-by Brian Kernighan.
-This means that all
-properly written @command{awk} programs should work with @command{gawk}.
-So most of the time, we don't distinguish between @command{gawk} and other
-@command{awk} implementations.
+GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或者环境变量的情况下，
+它完全与 POSIX 标准@footnote{The 2008 POSIX standard is accessible online at
+@w{@url{http://www.opengroup.org/onlinepubs/9699919799/}.}} @command{awk} 语言兼容，同时与 Brian Kemighan 维护的 Unix 版本的 @command{awk} 语言兼容。
+这就是说，正确编写的 @command{awk} 程序，也可以在 @command{gawk} 下运行。因此，在大多情况下，我们不区别两者的实现。
 
 @cindex @command{awk}, POSIX and, See Also POSIX @command{awk}
 @cindex @command{awk}, POSIX and
@@ -1258,77 +1234,67 @@ So most of the time, we don't distinguish between @command{gawk} and other
 @cindex @command{gawk}, @command{awk} and
 @cindex @command{awk}, @command{gawk} and
 @cindex @command{awk}, uses for
-Using @command{awk} you can:
+
+通过 @command{awk} 我们可以达到如下目的：
 
 @itemize @value{BULLET}
 @item
-Manage small, personal databases
+管理小的个人数据库
 
 @item
-Generate reports
+产生报表
 
 @item
-Validate data
+完善数据
 
 @item
-Produce indexes and perform other document-preparation tasks
+产生索引并执行其他文件准备工作
 
 @item
-Experiment with algorithms that you can adapt later to other computer
-languages
+实验算法，这样可以回头用其他的语言实现。
+
 @end itemize
 
 @cindex @command{awk}, See Also @command{gawk}
 @cindex @command{gawk}, See Also @command{awk}
 @cindex @command{gawk}, uses for
-In addition,
-@command{gawk}
-provides facilities that make it easy to:
+
+除此之外，@command{gawk} 还提供如下设施，使我们能够：
 
 @itemize @value{BULLET}
 @item
-Extract bits and pieces of data for processing
+抽取数据的位或者块用于处理
 
 @item
-Sort data
+排序数据
 
 @item
-Perform simple network communications
+实现简单的网络通讯
 
 @item
-Profile and debug @command{awk} programs
+测评并调试 @command{awk} 程序
 
 @item
-Extend the language with functions written in C or C++
+用 C/C++ 编写函数以扩展语言功能
+
 @end itemize
 
-This @value{DOCUMENT} teaches you about the @command{awk} language and
-how you can use it effectively.  You should already be familiar with basic
-system commands, such as @command{cat} and @command{ls},@footnote{These utilities
-are available on POSIX-compliant systems, as well as on traditional
-Unix-based systems. If you are using some other operating system, you still need to
-be familiar with the ideas of I/O redirection and pipes.} as well as basic shell
-facilities, such as input/output (I/O) redirection and pipes.
+本@value{DOCUMENT}会向你们传授 @command{awk} 语言，并告诉你们如何来有效地使用它。
+你有可能已经熟悉基本的系统命令，如 @command{cat}、@command{ls}@footnote{这些工具在 Posix 兼容的系统上都有，在传统的基于 Unix 的系统上也存在。如果你使用的是一些其他的系统，你也需要熟悉一些 IO 重定向及管道的概念。} 等，也熟悉一些基本的 shell 工具，如输入输出重定向以及管道。
 
 @cindex GNU @command{awk}, See @command{gawk}
-Implementations of the @command{awk} language are available for many
-different computing environments.  This @value{DOCUMENT}, while describing
-the @command{awk} language in general, also describes the particular
-implementation of @command{awk} called @command{gawk} (which stands for
-``GNU @command{awk}'').  @command{gawk} runs on a broad range of Unix systems,
-ranging from Intel-architecture PC-based computers
-up through large-scale systems.
-@command{gawk} has also been ported to Mac OS X,
-Microsoft Windows
+
+@command{awk} 语言的实现可以在许多不同的计算机环境中获取。
+本@value{DOCUMENT}除了描述 @command{awk} 语言的总体，也会描述@command{awk} 的特殊实现，即 @command{gawk}（表示 GNU @command{awk}）。
+@command{gawk} 在很多 Unix 系统下运行，包括从 Intel 架构的 PC 机，到大型机系统。
+@command{gawk} 也被移植到了 Mac OS 平台，Windows 平台
 @ifset FOR_PRINT
-(all versions),
+（所有版本）
 @end ifset
 @ifclear FOR_PRINT
-(all versions) and OS/2 PCs,
+（所有版本） 以及 OS/2 的 PC 机，
 @end ifclear
-and OpenVMS.@footnote{Some other, obsolete systems to which @command{gawk}
-was once ported are no longer supported and the code for those systems
-has been removed.}
+还有 OpenVMS@footnote{一些已经不用的系统，在这些系统上 @command{gawk} 有过移植，但是已经不再支持，并且为支持这些系统而存在的代码也已经移除} 系统上。 
 
 @menu
 * History::                     The history of @command{gawk} and
@@ -30325,7 +30291,7 @@ implies better precision than is actually the case.
 @end itemize
 
 @node Dynamic Extensions
-@chapter Writing Extensions for @command{gawk}
+@chapter 扩展 @command{gawk} 
 @cindex dynamically loaded extensions
 
 It is possible to add new functions written in C or C++ to @command{gawk} using
