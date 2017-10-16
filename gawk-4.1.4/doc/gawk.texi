@@ -407,7 +407,7 @@ for enrichening our lives in innumerable ways.</para>
 @ifnotdocbook
 @node Top
 @top General Introduction
-@c Preface node should come right after the Top
+@c 前言 node should come right after the Top
 @c node, in `unnumbered' sections, then the chapter, `What is gawk'.
 @c Licensing nodes are appendices, they're not central to AWK.
 
@@ -421,10 +421,10 @@ particular records in a file and perform operations upon them.
 @end ifnottex
 
 @menu
-* Foreword3::                      Some nice words about this
+* 第三版前言::                      Some nice words about this
                                    @value{DOCUMENT}.
 * Foreword4::                      More nice words.
-* Preface::                        What this @value{DOCUMENT} is about; brief
+* 前言::                        What this @value{DOCUMENT} is about; brief
                                    history and acknowledgments.
 * Getting Started::                A basic introduction to using
                                    @command{awk}. How to run an @command{awk}
@@ -1051,8 +1051,8 @@ for enrichening our lives in innumerable ways.
 @summarycontents
 @contents
 
-@node Foreword3
-@unnumbered Foreword to the Third Edition
+@node 第三版前言
+@unnumbered 第三版前言
 
 @c This bit is post-processed by a script which turns the chapter
 @c tag into a preface tag, and moves this stuff to before the title.
@@ -1069,99 +1069,60 @@ for enrichening our lives in innumerable ways.
    </prefaceinfo>
 @end docbook
 
-Arnold Robbins and I are good friends. We were introduced
+我跟 Arnold Robbins 是好朋友。 在 1990 年，
 @c 11 years ago
-in 1990
-by circumstances---and our favorite programming language, AWK.
-The circumstances started a couple of years
-earlier. I was working at a new job and noticed an unplugged
-Unix computer sitting in the corner.  No one knew how to use it,
-and neither did I.  However,
-a couple of days later, it was running, and
-I was @code{root} and the one-and-only user.
-That day, I began the transition from statistician to Unix programmer.
+我们由于 AWK 因缘际会而结识。
+当时我正开始一份新工作，并注意到在公司角落里放着一台没用的 Unix 计算机。
+没有人知道怎么使用它，我也不会。但是，几天后，它跑起来了，并且我就是 root，也是唯一的用户。
+从那天起，我就开始从一个统计分析师向一个 Unix 程序员转变了。
 
-On one of many trips to the library or bookstore in search of
-books on Unix, I found the gray AWK book, a.k.a.@:
-Alfred V.@: Aho, Brian W.@: Kernighan, and
-Peter J.@: Weinberger's @cite{The AWK Programming Language} (Addison-Wesley,
-1988).  @command{awk}'s simple programming paradigm---find a pattern in the
-input and then perform an action---often reduced complex or tedious
-data manipulations to a few lines of code.  I was excited to try my
-hand at programming in AWK.
+我经常往返于图书馆与书店，搜索跟 Unix 相关的图书。
+有一次找到一本灰色的 AWK 相关的书，即 a.k.a.@: 
+Alfred V.@: Aho, Brian W.@: Kernighan, 与 Peter J.@: Weinberger 写的 @cite{The AWK Programming Language} (Addison-Wesley, 1988)。
+@comman{awk} 简洁的编程规范——就是在输入中查找某种模式的字串并执行相应动作——经常能够将复杂的或者冗长的操作化为几行代码。
+我非常兴奋，并着手开始利用 AWK 进行编程。
 
-Alas,  the @command{awk} on my computer was a limited version of the
-language described in the gray book.  I discovered that my computer
-had ``old @command{awk}'' and the book described
-``new @command{awk}.''
-I learned that this was typical; the old version refused to step
-aside or relinquish its name.  If a system had a new @command{awk}, it was
-invariably called @command{nawk}, and few systems had it.
-The best way to get a new @command{awk} was to @command{ftp} the source code for
-@command{gawk} from @code{prep.ai.mit.edu}.  @command{gawk} was a version of
-new @command{awk} written by David Trueman and Arnold, and available under
-the GNU General Public License.
+可是，我计算机上的 @command{awk} 是在灰色书里所描述的一个受限的语言版本。
+而我发现我的计算机中的就是“旧 @command{awk}”，而书中讲述的是“新 @command{awk}”。
+我知道这是典型情况；旧版本不肯让位，也不愿意放弃自己的名字。
+如果一个系统有一个“新 @command{awk}”，就会毫无例外地叫做 @command{nawk}，并且有几个系统有这样的软件。
+取得 @command{nawk} 的方式是通过 @code{prep.ai.mit.edu} 的 @command{ftp} 下载源代码。
+@command{gawk} 是一个由 David Trueman and Arnold 所写的新版本的 @command{awk}，并可以在 GNU General Public License 的许可下取得。
 
-(Incidentally,
-it's no longer difficult to find a new @command{awk}. @command{gawk} ships with
-GNU/Linux, and you can download binaries or source code for almost
-any system; my wife uses @command{gawk} on her VMS box.)
+（顺便说一句，现在找“新 @command{awk}”很容易了，GNU/Linux 就带有，你也可以在大多数系统中下载二进制版本或者源代码；
+我老婆就在她的 VMS BOX 中使用 @command{gawk}。）
 
-My Unix system started out unplugged from the wall; it certainly was not
-plugged into a network.  So, oblivious to the existence of @command{gawk}
-and the Unix community in general, and desiring a new @command{awk}, I wrote
-my own, called @command{mawk}.
-Before I was finished, I knew about @command{gawk},
-but it was too late to stop, so I eventually posted
-to a @code{comp.sources} newsgroup.
+我的 Unix 系统因闲置而被使用起来，当然也还不会连接到网络中。
+因此，很明显由于 @command{gawk} 的存在，以及 Unix 社会社区的一般特点，我需要一个“新 @command{awk}”。
+因此，我就写了一个，我把它叫做 @command{mawk}。
+在我完成前，我已经知道了 @command{gawk}，但是已经太迟了。
+因此，我还是把 @command{mawk} 发送到了 @code{comp.source} 的新闻组里。
 
-A few days after my posting, I got a friendly email
-from Arnold introducing
-himself.   He suggested we share design and algorithms and
-attached a draft of the POSIX standard so
-that I could update @command{mawk} to support language extensions added
-after publication of @cite{The AWK Programming Language}.
+几天后，我收到了来自 Arnold 的邮件，里面他介绍了一下他自己。
+他建议我分享 @command{mawk} 的设计与算法，并且提交一个 POSIX 标准草案，这样我就能够更新 @command{mawk} 来支持 @cite{The AWK Programming Language} 发布后的语言扩展。
 
-Frankly, if our roles had
-been reversed, I would not have been so open and we probably would
-have never met.  I'm glad we did meet.
-He is an AWK expert's AWK expert and a genuinely nice person.
-Arnold contributes significant amounts of his
-expertise and time to the Free Software Foundation.
+袒白讲，如果我们的角色互换，我可能就不会如此开放，我们也就可能从不会见面。
+我很高兴我们见了一面。他是一个 AWK 专家中的专家，也是确实是个好人。
+Arnold 为 Free Software Foundation 贡献了很多的才能与时间。
 
-This book is the @command{gawk} reference manual, but at its core it
-is a book about AWK programming that
-will appeal to a wide audience.
-It is a definitive reference to the AWK language as defined by the
-1987 Bell Laboratories release and codified in the 1992 POSIX Utilities
-standard.
+这本书是 @command{gawk} 的参考书，但是核心是一个关于 AWK 编程的书，适用于非常广的读者。
+编程规范参考的是 1987 年贝尔实验室的定义，并于 1992 年成为 POSIX 工具标准的语言规范。
 
-On the other hand, the novice AWK programmer can study
-a wealth of practical programs that emphasize
-the power of AWK's basic idioms:
-data-driven control flow, pattern matching with regular expressions,
-and associative arrays.
-Those looking for something new can try out @command{gawk}'s
-interface to network protocols via special @file{/inet} files.
+另一方面，对于 AWK 程序新手，能够学到实用的编程方法，而这也正是 AWK 的基本方法：
+数据驱动控制流，利用正则表达式进行匹配，以及关联数组。那些正在尝鲜的人可以通过特殊的 @file{/inet} 文件来使用 @command{gawk} 的网络协议接口。
 
-The programs in this book make clear that an AWK program is
-typically much smaller and faster to develop than
-a counterpart written in C.
-Consequently, there is often a payoff to prototyping an
-algorithm or design in AWK to get it running quickly and expose
-problems early. Often, the interpreted performance is adequate
-and the AWK prototype becomes the product.
+这本书中的例子会清楚地表明，使用 AWK 编写的程序要比C写成的程序更小更快。
+结果，可能利用 AWK 来编写算法并快速运行，以此来及时发现问题。经常的情况下，解释型的性能就足够了，因此 AWK 的原型就直接转换成了产品。
 
-The new @command{pgawk} (profiling @command{gawk}), produces
-program execution counts.
-I recently experimented with an algorithm that for
+新的 @command{pgawk}（profiling gawk）会产生代码执行的采样数据。
+我最近实验了一个算法，即对 
 @ifnotdocbook
 @math{n}
 @end ifnotdocbook
 @ifdocbook
 @i{n}
-@end ifdocbook
-lines of input, exhibited
+@end ifdocbook 
+行输入，显示出约
 @tex
 $\sim\! Cn^2$
 @end tex
@@ -1173,8 +1134,7 @@ $\sim\! Cn^2$
 @docbook
 <emphasis>&sim; Cn<superscript>2</superscript></emphasis>
 @end docbook
-performance, while
-theory predicted
+这样的性能，而理论预测下为约 
 @tex
 $\sim\! Cn\log n$
 @end tex
@@ -1186,14 +1146,10 @@ $\sim\! Cn\log n$
 @docbook
 <emphasis>&sim; Cn log n</emphasis>
 @end docbook
-behavior. A few minutes poring
-over the @file{awkprof.out} profile pinpointed the problem to
-a single line of code.  @command{pgawk} is a welcome addition to
-my programmer's toolbox.
+。查看了 @file{awkprof.out} 程序几分钟后，就在程序的一行代码中发现了问题所在。
+这样，@command{pgawk} 又成为我程序员工具箱中的一个好工具。
 
-Arnold has distilled over a decade of experience writing and
-using AWK programs, and developing @command{gawk}, into this book.  If you use
-AWK or want to learn how, then read this book.
+Arnold 淫浸在 AWK 中有十几年，并且开发了 @command{gawk}，也即本书的主题。如果你使用 AWK，并且想知道 how，那么就读这本书吧。
 
 @ifnotdocbook
 @cindex Brennan, Michael
@@ -1259,8 +1215,8 @@ October 2014
 @end display
 @end ifnotdocbook
 
-@node Preface
-@unnumbered Preface
+@node 前言
+@unnumbered 前言
 @c I saw a comment somewhere that the preface should describe the book itself,
 @c and the introduction should describe what the book covers.
 @c
@@ -18806,8 +18762,8 @@ The week number of the year (with the first Monday as the first
 day of week one) as a decimal number (01--53).
 The method for determining the week number is as specified by ISO 8601.
 (To wit: if the week containing January 1 has four or more days in the
-new year, then it is week one; otherwise it is the last week
-[52 or 53] of the previous year and the next week is week one.)
+new year, then it is week one; otherwise it is week 53 of the previous year
+and the next week is week one.)
 
 @item %w
 The weekday as a decimal number (0--6).  Sunday is day zero.
@@ -22837,7 +22793,7 @@ function _gr_init(    oldfs, oldrs, olddol0, grcat,
         n = split($4, a, "[ \t]*,[ \t]*")
         for (i = 1; i <= n; i++)
             if (a[i] in _gr_groupsbyuser)
-                _gr_groupsbyuser[a[i]] = _gr_groupsbyuser[a[i]] " " $1
+                _gr_groupsbyuser[a[i]] = gr_groupsbyuser[a[i]] " " $1
             else
                 _gr_groupsbyuser[a[i]] = $1
 
