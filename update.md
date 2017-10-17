@@ -51,3 +51,14 @@
 
 改动
 > 本网页会向你们传授
+
+## awk 与 gawk 的历史
+1. 
+英文原文
+>  At that time, he also wrote the bulk of TCP/IP Internetworking with gawk (a separate document, available as part of the gawk distribution)
+
+译文原文
+> 也就是那个时候，我也用 gawk 写了一堆的 TCP/IP 代码（作为 gawk 发布版本一部分，有一个独立的文档可用）。
+
+改动
+> 当时，他也写了 TCP/IP Internetworking with gawk （一个单独可获取的文档，是 gawk 发行版本的一部分）的主体内容。

@@ -176,14 +176,14 @@
 @set FFN File name
 @set DF data file
 @set DDF Data file
-@set PVERSION version
+@set PVERSION 版本
 @end ifclear
 @ifset FOR_PRINT
 @set FN filename
 @set FFN Filename
 @set DF datafile
 @set DDF Datafile
-@set PVERSION version
+@set PVERSION 版本
 @end ifset
 
 @c For HTML, spell out email addresses, to avoid problems with
@@ -962,8 +962,7 @@ particular records in a file and perform operations upon them.
 * Common Extensions::                   Common Extensions Summary.
 * Ranges and Locales::                  How locales used to affect regexp
                                         ranges.
-* Contributors::                        The major contributors to
-                                        @command{gawk}.
+* Contributors::                        @command{gawk} 的主要贡献者.
 * History summary::                     History summary.
 * Gawk Distribution::                   What is in the @command{gawk}
                                         distribution.
@@ -1355,85 +1354,60 @@ GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或�
 @unnumberedsec @command{awk} 与 @command{gawk} 的历史
 @cindex recipe for a programming language
 @cindex programming language, recipe for
-@sidebar Recipe for a Programming Language
+@sidebar 编程语言菜单
 
 @multitable {2 parts} {1 part  @code{egrep}} {1 part  @code{snobol}}
-@item @tab 1 part  @code{egrep} @tab 1 part  @code{snobol}
-@item @tab 2 parts @code{ed} @tab 3 parts C
+@item @tab 1 份 @code{egrep} @tab 1 份 @code{snobol}@footnote{SNOBOL语言，一种面向字符串符号（StriNg Oriented symBOlic Language）语言。——译者}
+@item @tab 2 份 @code{ed} @tab 3 份 C
 @end multitable
 
-Blend all parts well using @code{lex} and @code{yacc}.
-Document minimally and release.
+将所有部分通过 @code{lex} 与 @code{yacc} 混合在一起，并且辅以少量文档，并发布。
 
-After eight years, add another part @code{egrep} and two
-more parts C.  Document very well and release.
+8 年后，添加多一份 @code{egrep}，以及两份的 C。文档完备然后发布。
 @end sidebar
 
 @cindex Aho, Alfred
 @cindex Weinberger, Peter
 @cindex Kernighan, Brian
 @cindex @command{awk}, history of
-The name @command{awk} comes from the initials of its designers: Alfred V.@:
-Aho, Peter J.@: Weinberger, and Brian W.@: Kernighan.  The original version of
-@command{awk} was written in 1977 at AT&T Bell Laboratories.
-In 1985, a new version made the programming
-language more powerful, introducing user-defined functions, multiple input
-streams, and computed regular expressions.
-This new version became widely available with Unix System V
-Release 3.1 (1987).
-The version in System V Release 4 (1989) added some new features and cleaned
-up the behavior in some of the ``dark corners'' of the language.
-The specification for @command{awk} in the POSIX Command Language
-and Utilities standard further clarified the language.
-Both the @command{gawk} designers and the original @command{awk} designers at Bell Laboratories
-provided feedback for the POSIX specification.
+
+@command{awk} 的名字来源于最初的设计者：Alfred V.@:
+Aho, Peter J.@: Weinberger 和 Brian W.@: Kernighan。
+它的第一个版本写于 1977 年的 AT&T 贝尔实验室。
+1985 年，新版本语言通过引入用户自定义的函数、多输入流、正则表达式，而使得其功能更加强大。
+新版本的 @command{gawk} 在 Unix System V Release 3.1 (1987 年) 的时候已经广泛可用。
+而在 System V Release 4 (1989 年) 中的版本添加了一些新的特性，并清理掉了一些语言的“暗角”行为。
+在 POSIX 命令语言以及工具标准中，对 @command{awk}规范进行进一步的澄清。
+@command{gawk} 的设计者与最初的 @command{awk} 设计者对于 POSIX 规范都有相应的反馈。
 
 @cindex Rubin, Paul
 @cindex Fenlason, Jay
 @cindex Trueman, David
-Paul Rubin wrote @command{gawk} in 1986.
-Jay Fenlason completed it, with advice from Richard Stallman.  John Woods
-contributed parts of the code as well.  In 1988 and 1989, David Trueman, with
-help from me, thoroughly reworked @command{gawk} for compatibility
-with the newer @command{awk}.
-Circa 1994, I became the primary maintainer.
-Current development focuses on bug fixes,
-performance improvements, standards compliance, and, occasionally, new features.
+Paul Rubin 在 1986 年编写了 @command{gawk}，Jay Fenlason 根据 Richard Stallman 的建议完善了它。
+John Woods 也贡献了部分代码。在 1988 年和 1989 年，David Trueman 在我的帮助下完全重构了 @command{gawk}，以解决与更新的 @command{awk} 兼容的问题。
+大概是 1994 年，我成为了主要的维护者。现在的版本主要着眼于 Bug 修复、性能提升，标准化，有时也添加一些新的特性。
 
-In May 1997, J@"urgen Kahrs felt the need for network access
-from @command{awk}, and with a little help from me, set about adding
-features to do this for @command{gawk}.  At that time, he also
-wrote the bulk of
-@cite{@value{GAWKINETTITLE}}
-(a separate document, available as part of the @command{gawk} distribution).
-His code finally became part of the main @command{gawk} distribution
-with @command{gawk} @value{PVERSION} 3.1.
+1997 年 5 月，J@"urgen Kahrs 觉得有必要用 @command{awk} 访问网络，在我的一些帮助下，@command{gawk} 添加进了这样的特性。
+当时，他也写了 @cite{@value{GAWKINETTITLE}}
+（一个单独可获取的文档，是 gawk 发行版本的一部分）的主体内容。
+他的代码最终在 @command{gawk} 3.1 @value{PVERSION} 的时候成为主流 @command{gawk} 发布版本的一部分。
 
-John Haque rewrote the @command{gawk} internals, in the process providing
-an @command{awk}-level debugger. This version became available as
-@command{gawk} @value{PVERSION} 4.0 in 2011.
+John Haque 重写了 @command{gawk} 的内部实现，以提供 @command{awk} 级的调试器，这个版本在 2011 年的 @command{gawk} 4.0 @value{PVERSION} 可用。
 
 @xref{Contributors}
-for a full list of those who have made important contributions to @command{gawk}.
+查看 @command{gawk} 的主要贡献者。
 
 @node Names
-@unnumberedsec A Rose by Any Other Name
+@unnumberedsec 玫瑰别名
 
 @cindex @command{awk}, new vs.@: old
-The @command{awk} language has evolved over the years. Full details are
-provided in @ref{Language History}.
-The language described in this @value{DOCUMENT}
-is often referred to as ``new @command{awk}.''
-By analogy, the original version of @command{awk} is
-referred to as ``old @command{awk}.''
 
-On most current systems, when you run the @command{awk} utility
-you get some version of new @command{awk}.@footnote{Only
-Solaris systems still use an old @command{awk} for the
-default @command{awk} utility. A more modern @command{awk} lives in
-@file{/usr/xpg6/bin} on these systems.} If your system's standard
-@command{awk} is the old one, you will see something like this
-if you try the test program:
+@command{awk} 语言已经进化了多年，在 @ref{Language History}，有完全的列表。
+在本@value{DOCUMENT}中所涉及的我们可以称为“new @command{awk}”。
+类似的，@command{awk} 的原始版本称为“old @command{awk}”。
+
+在现在多数的系统中，你运行 @command{awk} 工具你都有一些版本的新 @command{awk}@footnote{只有在 Solaris 的系统中依然使用旧 @command{awk} 作为默认的 @command{awk} 工具。更为现代的 @command{awk} 则位于这些系统中的 @file{/usr/xpg6/bin} 目录下。}。
+如果你的系统中的标准 @command{awk} 是旧的版本，你用下面的代码测试，就可以得到这样的结果：
 
 @example
 $ @kbd{awk 1 /dev/null}
@@ -1442,56 +1416,39 @@ $ @kbd{awk 1 /dev/null}
 @end example
 
 @noindent
-In this case, you should find a version of new @command{awk},
-or just install @command{gawk}!
-
-Throughout this @value{DOCUMENT}, whenever we refer to a language feature
-that should be available in any complete implementation of POSIX @command{awk},
-we simply use the term @command{awk}.  When referring to a feature that is
-specific to the GNU implementation, we use the term @command{gawk}.
+在这个例子中，你应该能查找到一新版本的 @command{awk}，或者直接安装 @command{gawk} 即可。
+在本@value{DOCUMENT}中，如果所涉及的所有语言特性，都在一个完整实现了 POSIX 标准的 @command{awk} 中找到，我们为了简化，就使用 @command{awk} 来指代。当提到的特性特定于 GNU 版本，我们则使用 @command{gawk} 指代。
 
 @node This Manual
-@unnumberedsec Using This Book
+@unnumberedsec 使用本书
 @cindex @command{awk}, terms describing
 
-The term @command{awk} refers to a particular program as well as to the language you
-use to tell this program what to do.  When we need to be careful, we call
-the language ``the @command{awk} language,''
-and the program ``the @command{awk} utility.''
-This @value{DOCUMENT} explains
-both how to write programs in the @command{awk} language and how to
-run the @command{awk} utility.
-The term ``@command{awk} program'' refers to a program written by you in
-the @command{awk} programming language.
+@command{awk} 这个词，即指代特定的程序，也表示你要用于告诉这个程序所做事情的语言。
+当需要特别小心时，我们称之为“@command{awk} 语言”，以及“@command{awk} 工具”。
+本@value{DOCUMENT}既说明如何用 @command{awk} 语言编写程序，也说明如何来运行 @command{awk} 工具。
+“@command{awk} 程序”术语则指用 @command{awk} 语言编写的程序。
 
 @cindex @command{gawk}, @command{awk} and
 @cindex @command{awk}, @command{gawk} and
 @cindex POSIX @command{awk}
-Primarily, this @value{DOCUMENT} explains the features of @command{awk}
-as defined in the POSIX standard.  It does so in the context of the
-@command{gawk} implementation.  While doing so, it also
-attempts to describe important differences between @command{gawk}
-and other @command{awk}
+
+本书主要涉及 POSIX 标准所定义的 @command{awk} 特性。也包括在 @command{gawk} 中实现了的那些特性。这么处理，在于试图描述 @command{gawk} 与其他 @command{awk} 
 @ifclear FOR_PRINT
-implementations.@footnote{All such differences
-appear in the index under the
-entry ``differences in @command{awk} and @command{gawk}.''}
+实现版本@footnote{所有这些差异都归集在“awk 与 gawk 之间的差异”下。}
+之间的差异。
 @end ifclear
 @ifset FOR_PRINT
-implementations.
+实现版本。
 @end ifset
-Finally, it notes any @command{gawk} features that are not in
-the POSIX standard for @command{awk}.
+最后，会提及那些在 @command{gawk} 中实现了，但不在 @command{awk} POSIX 标准中定义的特性。
 
 @ifnotinfo
-This @value{DOCUMENT} has the difficult task of being both a tutorial and a reference.
-If you are a novice, feel free to skip over details that seem too complex.
-You should also ignore the many cross-references; they are for the
-expert user and for the Info and
+本@value{DOCUMENT}既可以作为教程，又可以作为参考。如果你是个新手，你可以跳过那些复杂的部分。你也可以忽略那些交叉参考；他们主要用于专家级用户，同时作为信息参考以及用于本@value{DOCUMENT}的 
 @uref{http://www.gnu.org/software/gawk/manual/, HTML}
-versions of the @value{DOCUMENT}.
+版本。
 @end ifnotinfo
 
+#TODO
 There are sidebars
 scattered throughout the @value{DOCUMENT}.
 They add a more complete explanation of points that are relevant, but not likely
@@ -34439,7 +34396,7 @@ covers the @command{gawk} source code:
 @end ifdocbook
 
 @node Language History
-@appendix The Evolution of the @command{awk} Language
+@appendix @command{awk} 语言的演化
 
 This @value{DOCUMENT} describes the GNU implementation of @command{awk},
 which follows the POSIX specification.  Many longtime @command{awk}
@@ -34473,7 +34430,7 @@ online documentation}.
 * Feature History::             The history of the features in @command{gawk}.
 * Common Extensions::           Common Extensions Summary.
 * Ranges and Locales::          How locales used to affect regexp ranges.
-* Contributors::                The major contributors to @command{gawk}.
+* Contributors::                @command{gawk} 的主要贡献者.
 * History summary::             History summary.
 @end menu
 
@@ -35794,7 +35751,7 @@ both with the default regexp matching and when @option{--traditional} or
 In all cases @command{gawk} remains POSIX-compliant.
 
 @node Contributors
-@appendixsec Major Contributors to @command{gawk}
+@appendixsec @command{gawk} 的主要贡献者
 @cindex @command{gawk}, list of contributors to
 @quotation
 @i{Always give credit where credit is due.}
