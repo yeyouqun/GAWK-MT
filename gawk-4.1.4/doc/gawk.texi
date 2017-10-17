@@ -421,11 +421,10 @@ particular records in a file and perform operations upon them.
 @end ifnottex
 
 @menu
-* 第三版前言::                      Some nice words about this
-                                   @value{DOCUMENT}.
-* 第四版前言::                      More nice words.
-* 前言::                        What this @value{DOCUMENT} is about; brief
-                                   history and acknowledgments.
+* 第三版前言::                      关于本@value{DOCUMENT}的一些话.
+* 第四版前言::                      其他一些话.
+* 前言::                        本@value{DOCUMENT}的内容; 历史概述和致谢.
+* 译序::                        译者的话.
 * Getting Started::                A basic introduction to using
                                    @command{awk}. How to run an @command{awk}
                                    program. Command-line syntax.
@@ -1285,7 +1284,7 @@ GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或�
 @end itemize
 
 本@value{DOCUMENT}会向你们传授 @command{awk} 语言，并告诉你们如何来有效地使用它。
-你有可能已经熟悉基本的系统命令，如 @command{cat}、@command{ls}@footnote{这些工具在Posix 兼容的系统上都有，在传统的基于Unix 的系统上也存在。如果你使用的是一些其他的系统，你也需要熟悉一些IO重定向及管道的概念。} 等，也熟悉一些基本的 shell 工具，如输入输出重定向以及管道。
+你有可能已经熟悉基本的系统命令，如 @command{cat}、@command{ls}@footnote{这些工具在 Posix 兼容的系统上都有，在传统的基于 Unix 的系统上也存在。如果你使用的是一些其他的系统，你也需要熟悉一些 IO 重定向及管道的概念。} 等，也熟悉一些基本的 shell 工具，如输入输出重定向以及管道。
 
 @cindex GNU @command{awk}, See @command{gawk}
 
@@ -1301,9 +1300,52 @@ GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或�
 @end ifclear
 还有 OpenVMS@footnote{一些已经不用的系统，在这些系统上 @command{gawk} 有过移植，但是已经不再支持，并且为支持这些系统而存在的代码也已经移除} 系统上。 
 
+@node 译序
+@unnumbered 译序
+
+这是我第一次翻译这么长的书。
+
+当我看到 GAWK 简单的语言与强大的功能时，我于是想到网上查找一些中文的资料，以快速学习一下这个工具，这样可以方便我在处理 Linux 字串时能够使用到它。
+
+但是我很失望，找了很久，能够找到的资料基本上是支离破碎的，并没有完整全面的中文手册。我于是求其次地找了一个英文文档，其原名为《GAWK: Effective AWK Programming》，由 Arnold D. Robbins，即 @command{gawk} 当前的主要维护者之一编写。初看之下，里面的内容浅显易懂，正好符合我自己的需求。因为这个原因，我萌发了将这个手册翻译为中文的想法。但是我拿不准我是否有这样的坚持，能够将这个手册全部翻译出来。
+
+我长久都没有动手，主要是因为没有这个魄力下定决心来做这件事情，再一个对于自己的语言能力也不太自信。一年后，这个想法一直在大脑里挥之不去。于是心里盘算，英文文档大概有 500 多页，如果我每天翻译两页，则一年后，怎么着也能够把这个文档翻译出来。并且，如果能够翻译到四页，则所需要的时间立即减少一半。翻译一本英文书，除去能力外，还得看自己是不是能够放弃翻译时的功利想法，觉得这么做是否值得。并在这种情况下，是否能够坚持一个较长而无味的过程，最后将文档翻译出来。最后，我还是下定决心，试一试。
+
+于是我第一步是将 PDF 格式的英文文档转换成 Word 文档（我用其他的工具转换过，但是结果不是很好。因为原来的 PDF 文档中有很多特别的格式，在 Word 中很难控制。所以一不做，二不休，干脆把文字复制出来，再调整其格式与原来的 PDF 相符。我不知道这么做是不是很蠢，并有违程序员懒的美名！）。光这个事情就耗了我近一个星期的时间，2016 年春节前把这个底本做好了，并且开始了翻译。
+
+实在的，前面的翻译速度是有一点慢，但是总体来说，还是按照原先的设计速度进行的。就算在过年的几天里，几乎每天都有进展。而且，翻译的难度不是很大，最考验人的是每天要拿出一定的时间来做这个事情。因为一旦停下来，就会为停下来找理由。后面就会有越来越多的理由来为延迟开脱。所以，自从翻译开始，我几乎没有中断每天做一点翻译。在翻译最后的几个附录中，我还差点要放弃翻译下去，因为觉得那些东西翻译没有什么用。但是为了保证翻译的完整性，同时也为把这个事情做“圆满”，我还是坚持把这个事情做下来了。最后只剩下 GPL 与 FDL 没有翻译。这两个协议比较其他的部分有难度一些。关键在于要翻译出带点协议性质，语言精准而且严谨，确实对我而言，能力还是不够的。而且这两个协议，我想在互联网上应该已经有了，所以也就不再翻译了。
+
+翻译到后面的时候，自己确实感觉比原来快了，可能是因为熟练了的原因。剩下的整理也花掉了我的一些时间。通过翻译这个事情，确实使自己有如下收获：
+
+@enumerate
+@item
+至少对 Word 文档的操作有一点点提升。
+
+@item
+考验并提升了一下自己的能力。
+
+@item
+再遇到长的英文文档，可能就没那么怵了。
+
+@item
+翻译能力是否有大的提高，这个不好说，但是应该有一点吧。
+
+@end enumerate
+
+这里的文字，几乎都是一个字一个字码起来，而且也是第一次翻译，里面肯定还是有很多错误的地方，也有一些词不达意的地方，对于汉语的掌握有欠火候，也会使得翻译出来的行文没有那么符合中文习惯，或者不够优美。这些真还得要各位海涵，如果大家觉得这个翻译对大家有一点作用，我就觉得这些付出也值得了。如果读者更慷慨一点，能够告诉我哪里有问题，或者有一些改进的建议那就更好了。如果有这方面的改进，请发邮件到 <yeyouqun@163.com>。
+
+我希望我的一点小努力，也为中国的软件事业做了一点点贡献。
+
+在最后，如果要有什么感谢的，首先得要感谢自由软件运动的发起者们。如果没有他们，就不会有自由软件社区，也就不会有 GNU/Linux，也就没有 GAWK 这些优秀的工具。其次还要感谢原文的作者。别人也是自由软件的拥趸，如果没有他们的先期付出，也就没有这个文档的存在。目前还只有我一个人在翻译这个文档，如果可以，我想小激动地感谢一下自己。我希望以后感谢列表能够变得更长。希望更多的人参与到完善它的过程里来。
+
+对了，我想感谢一下我儿子。好多次我打开电脑开启一天的翻译工作的时候，他经常会在键盘上随意敲击，使得我还得花掉一些时间来撤销他所做的“工作”。而且还要嚷着要听 《ABCD 歌》什么的，还得陪他听他所说的一万分钟那么久。
+
+不自量力的叶佑群
+
+2016 年 4 月 
+
 @menu
-* History::                     The history of @command{gawk} and
-                                @command{awk}.
+* History::                     @command{gawk} 与 @command{awk} 的历史.
 * Names::                       What name to use to find @command{awk}.
 * This Manual::                 Using this @value{DOCUMENT}. Includes sample
                                 input files that you can use.
@@ -1315,7 +1357,7 @@ GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或�
 @end menu
 
 @node History
-@unnumberedsec History of @command{awk} and @command{gawk}
+@unnumberedsec @command{awk} 与 @command{gawk} 的历史
 @cindex recipe for a programming language
 @cindex programming language, recipe for
 @cindex sidebar, Recipe for a Programming Language
