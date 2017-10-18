@@ -71,10 +71,10 @@
 @set EDITION 4.1
 
 @iftex
-@set DOCUMENT book
-@set CHAPTER chapter
+@set DOCUMENT 书
+@set CHAPTER 章
 @set APPENDIX appendix
-@set SECTION section
+@set SECTION 小节
 @set SUBSECTION subsection
 @set DARKCORNER @inmargin{@image{lflashlight,1cm}, @image{rflashlight,1cm}}
 @set COMMONEXT (c.e.)
@@ -92,9 +92,9 @@
 @end ifinfo
 @ifhtml
 @set DOCUMENT 网页
-@set CHAPTER chapter
+@set CHAPTER 章
 @set APPENDIX appendix
-@set SECTION section
+@set SECTION 小节
 @set SUBSECTION subsection
 @set DARKCORNER (d.c.)
 @set COMMONEXT (c.e.)
@@ -102,19 +102,19 @@
 @end ifhtml
 @ifdocbook
 @set DOCUMENT book
-@set CHAPTER chapter
+@set CHAPTER 章
 @set APPENDIX appendix
-@set SECTION section
+@set SECTION 小节
 @set SUBSECTION subsection
 @set DARKCORNER (d.c.)
 @set COMMONEXT (c.e.)
 @set PAGE page
 @end ifdocbook
 @ifxml
-@set DOCUMENT book
-@set CHAPTER chapter
+@set DOCUMENT 🌲
+@set CHAPTER 章
 @set APPENDIX appendix
-@set SECTION section
+@set SECTION 小节
 @set SUBSECTION subsection
 @set DARKCORNER (d.c.)
 @set COMMONEXT (c.e.)
@@ -122,9 +122,9 @@
 @end ifxml
 @ifplaintext
 @set DOCUMENT book
-@set CHAPTER chapter
+@set CHAPTER 章
 @set APPENDIX appendix
-@set SECTION section
+@set SECTION 小节
 @set SUBSECTION subsection
 @set DARKCORNER (d.c.)
 @set COMMONEXT (c.e.)
@@ -178,14 +178,14 @@
 
 @ifclear FOR_PRINT
 @set FN file name
-@set FFN File name
+@set FFN 文件名
 @set DF data file
 @set DDF Data file
 @set PVERSION 版本
 @end ifclear
 @ifset FOR_PRINT
 @set FN filename
-@set FFN Filename
+@set FFN 文件名
 @set DF datafile
 @set DDF Datafile
 @set PVERSION 版本
@@ -469,13 +469,10 @@ particular records in a file and perform operations upon them.
 * Index::                          Concept and Variable Index.
 
 @detailmenu
-* History::                             The history of @command{gawk} and
-                                        @command{awk}.
-* Names::                               What name to use to find
-                                        @command{awk}.
-* This Manual::                         Using this @value{DOCUMENT}. Includes
-                                        sample input files that you can use.
-* Conventions::                         Typographical Conventions.
+* History::                             @command{gawk} 与 @command{awk} 的历史。
+* Names::                               @command{awk} 的别名。
+* This Manual::                         使用本@value{DOCUMENT}；包括你可以使用的输入文件样例。
+* Conventions::                         排版约定。
 * Manual History::                      Brief history of the GNU project and
                                         this @value{DOCUMENT}.
 * How To Contribute::                   Helping to save the world.
@@ -1076,7 +1073,7 @@ for enrichening our lives in innumerable ways.
 
 我经常往返于图书馆与书店，搜索跟 Unix 相关的图书。
 有一次找到一本灰色的 AWK 相关的书，即 a.k.a.@: 
-Alfred V.@: Aho, Brian W.@: Kernighan, 与 Peter J.@: Weinberger 写的 @cite{The AWK Programming Language} (Addison-Wesley, 1988)。
+Alfred V.@: Aho, Brian W.@: Kernighan, 与 Peter J.@: Weinberger 写的 @cite{The AWK Programming Language}（Addison-Wesley, 1988）。
 @command{awk} 简洁的编程规范——就是在输入中查找某种模式的字串并执行相应动作——经常能够将复杂的或者冗长的操作化为几行代码。
 我非常兴奋，并着手开始利用 AWK 进行编程。
 
@@ -1344,11 +1341,10 @@ GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或�
 2016 年 4 月 
 
 @menu
-* History::                     @command{gawk} 与 @command{awk} 的历史.
-* Names::                       What name to use to find @command{awk}.
-* This Manual::                 Using this @value{DOCUMENT}. Includes sample
-                                input files that you can use.
-* Conventions::                 Typographical Conventions.
+* History::                     @command{gawk} 与 @command{awk} 的历史。
+* Names::                       @command{awk} 的别名。
+* This Manual::                 使用本@value{DOCUMENT}；包括你可以使用的输入文件样例。
+* Conventions::                 排版约定。
 * Manual History::              Brief history of the GNU project and this
                                 @value{DOCUMENT}.
 * How To Contribute::           Helping to save the world.
@@ -1406,8 +1402,8 @@ GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或�
 Aho, Peter J.@: Weinberger 和 Brian W.@: Kernighan。
 它的第一个版本写于 1977 年的 AT&T 贝尔实验室。
 1985 年，新版本语言通过引入用户自定义的函数、多输入流、正则表达式，而使得其功能更加强大。
-新版本的 @command{gawk} 在 Unix System V Release 3.1 (1987 年) 的时候已经广泛可用。
-而在 System V Release 4 (1989 年) 中的版本添加了一些新的特性，并清理掉了一些语言的“暗角”行为。
+新版本的 @command{gawk} 在 Unix System V Release 3.1（1987 年）的时候已经广泛可用。
+而在 System V Release 4（1989 年）中的版本添加了一些新的特性，并清理掉了一些语言的“暗角”行为。
 在 POSIX 命令语言以及工具标准中，对 @command{awk}规范进行进一步的澄清。
 @command{gawk} 的设计者与最初的 @command{awk} 设计者对于 POSIX 规范都有相应的反馈。
 
@@ -1479,236 +1475,190 @@ $ @kbd{awk 1 /dev/null}
 版本。
 @end ifnotinfo
 
-There are sidebars
-scattered throughout the @value{DOCUMENT}.
-They add a more complete explanation of points that are relevant, but not likely
-to be of interest on first reading.
+在全@value{DOCUMENT}中还分布有一些边侧栏。
+它们主要对相关的点进行更完整全面的解释，但是第一次读本@value{DOCUMENT}时可能不太有兴趣涉猎。
 @ifclear FOR_PRINT
-All appear in the index, under the heading ``sidebar.''
+所有在边侧栏的内容会在索引中出现。
 @end ifclear
 
-Most of the time, the examples use complete @command{awk} programs.
-Some of the more advanced @value{SECTION}s show only the part of the @command{awk}
-program that illustrates the concept being described.
+在多数据情况下，我们使用的例子都是完整的 @command{awk} 程序。
+一些进阶部分的@value{SECTION}，仅显示 @command{awk} 程序的一部分，以此来说明正在进行描述的概念。
 
-Although this @value{DOCUMENT} is aimed principally at people who have not been
-exposed
-to @command{awk}, there is a lot of information here that even the @command{awk}
-expert should find useful.  In particular, the description of POSIX
-@command{awk} and the example programs in
-@ref{Library Functions}, and
+本@value{DOCUMENT}主要目标人群主要集中在那些还没接触过 @command{awk} 的人，书中相当多的信息对于专家也非常有用。
+对于 @command{awk} POSIX 标准的部分更是如此。
+包括在 @ref{Library Functions} 和
 @ifnotdocbook
-in
+在
 @end ifnotdocbook
-@ref{Sample Programs},
-should be of interest.
+@ref{Sample Programs} 的样例程序。这些样例程序应该会相当有趣。
 
-This @value{DOCUMENT} is split into several parts, as follows:
+本@value{DOCUMENT}分为如下这些部分：
 
 @c FULLXREF ON
 
 @itemize @value{BULLET}
 @item
-Part I describes the @command{awk} language and the @command{gawk} program in detail.
-It starts with the basics, and continues through all of the features of @command{awk}.
-It contains the following chapters:
+第一部分对 @command{awk} 语言以及 @command{gawk} 程序进行详细描述。通过从最基础的开始，不断详解 @command{awk} 的所有特性。
+它们包含如下章节：
 
 @c nested
 @itemize @value{MINUS}
 @item
 @ref{Getting Started},
-provides the essentials you need to know to begin using @command{awk}.
+包括一些使用 @command{awk} 的基本内容。
 
 @item
 @ref{Invoking Gawk},
-describes how to run @command{gawk}, the meaning of its
-command-line options, and how it finds @command{awk}
-program source files.
+描述如何运行 @command{gawk}、命令行参数的意义，以及它如何来查找 @command{awk} 程序源代码。
 
 @item
 @ref{Regexp},
-introduces regular expressions in general, and in particular the flavors
-supported by POSIX @command{awk} and @command{gawk}.
+总体介绍正则表达式，尤其是那些 POSIX @command{awk} 以及 @command{gawk} 所支持的内容。
 
 @item
 @ref{Reading Files},
-describes how @command{awk} reads your data.
-It introduces the concepts of records and fields, as well
-as the @code{getline} command.
-I/O redirection is first described here.
-Network I/O is also briefly introduced here.
+描述 @command{awk} 如何来读取数据。本章中介绍记录（Records）与域（Fields）的概念，也包括 @code{getline} 命令。I/O 重定向是首先要描述的部分，而网络 I/O 则简单涉及。
 
 @item
 @ref{Printing},
-describes how @command{awk} programs can produce output with
-@code{print} and @code{printf}.
+介绍在 @command{awk} 程序中如何使用 @code{print} 与 @code{printf} 产生输出。
 
 @item
 @ref{Expressions},
-describes expressions, which are the basic building blocks
-for getting most things done in a program.
+介绍表达式，这些表达式是构建程序代码块，并完成目标的基础。
 
 @item
 @ref{Patterns and Actions},
-describes how to write patterns for matching records, actions for
-doing something when a record is matched, and the predefined variables
-@command{awk} and @command{gawk} use.
+描述如何为匹配记录编写模式，即当某个记录匹配时所执行的动作。同时还包括 @command{awk} 与 @command{gawk} 所使用的预定义变量。
 
 @item
 @ref{Arrays},
-covers @command{awk}'s one-and-only data structure: the associative array.
-Deleting array elements and whole arrays is described, as well as
-sorting arrays in @command{gawk}.  The @value{CHAPTER} also describes how
-@command{gawk} provides arrays of arrays.
+包括 @command{awk} 中的唯一的数组结构，关联数组。删除数组元素以及整个数组，同时也涉及 @command{gawk} 中的数组的排序。
+在本@value{CHAPTER}还包括 @command{gawk} 如何来提供数组之数组的实现方式。
 
 @item
 @ref{Functions},
-describes the built-in functions @command{awk} and @command{gawk} provide,
-as well as how to define your own functions.  It also discusses how
-@command{gawk} lets you call functions indirectly.
+描述 @command{awk} 与 @command{gawk} 所提供的内建函数，以及用户自定义函数。讨论 @command{gawk} 如何来间接调用函数。
+
 @end itemize
 
 @item
-Part II shows how to use @command{awk} and @command{gawk} for problem solving.
-There is lots of code here for you to read and learn from.
-This part contains the following chapters:
+第二部分展示如何使用 @command{awk} 与 @command{gawk} 来解决实际问题。
+这里有非常多的代码供读者阅读与学习。这个部分包括如下各章：
 
 @c nested
 @itemize @value{MINUS}
 @item
-@ref{Library Functions}, provides a number of functions meant to
-be used from main @command{awk} programs.
+@ref{Library Functions}, 展示大量的可以通过 @command{awk} 程序来调用的函数。
 
 @item
 @ref{Sample Programs},
-provides many sample @command{awk} programs.
+有许多的 @command{awk} 程序。
+
 @end itemize
 
-Reading these two chapters allows you to see @command{awk}
-solving real problems.
+通过阅读这两章，可以让你看到 @command{awk} 程序如何来解决真正的问题。
 
 @item
-Part III focuses on features specific to @command{gawk}.
-It contains the following chapters:
+第三部分关注特定于 @command{gawk} 的特性，它们包括如下各章：
 
 @c nested
 @itemize @value{MINUS}
 @item
 @ref{Advanced Features},
-describes a number of advanced features.
-Of particular note
-are the abilities to control the order of array traversal,
-have two-way communications with another process,
-perform TCP/IP networking, and
-profile your @command{awk} programs.
+描述各种高级特性。其中包括如来控制数组遍历的顺序、与另一个进程之间的双向通信、执行 TCP/IP 通信、测评你的 @command{awk} 程序。
 
 @item
 @ref{Internationalization},
-describes special features for translating program
-messages into different languages at runtime.
+描述如何将程序消息在运行时翻译成不同语言的特性。
 
 @item
-@ref{Debugger}, describes the @command{gawk} debugger.
+@ref{Debugger}, 
+描述 @command{gawk} 调试器。
 
 @item
 @ref{Arbitrary Precision Arithmetic},
-describes advanced arithmetic facilities.
+描述高级的数学计算工具。
 
 @item
-@ref{Dynamic Extensions}, describes how to add new variables and
-functions to @command{gawk} by writing extensions in C or C++.
+@ref{Dynamic Extensions}, 
+描述如何通过编写 C 与 C++ 扩展为 @command{gawk} 添加新变量与函数。
+
 @end itemize
 
 @item
 @ifclear FOR_PRINT
-Part IV provides the appendices, the Glossary, and two licenses that cover
-the @command{gawk} source code and this @value{DOCUMENT}, respectively.
-It contains the following appendices:
+第四部分包括一些附录，名词解释，以及本@value{DOCUMENT}代码所使用的两个许可。它们包含如下附录：
 @end ifclear
 @ifset FOR_PRINT
-Part IV provides the following appendices,
-including the GNU General Public License:
+第四部分包括如下附录，包括 GNU 通用公共许可：
 @end ifset
 
 @itemize @value{MINUS}
 @item
 @ref{Language History},
-describes how the @command{awk} language has evolved since
-its first release to the present.  It also describes how @command{gawk}
-has acquired features over time.
+描述 @command{awk} 语言从第一个版本到现在的演化过程。同时也描述 @command{gawk} 在不同的时间内所引入的特性。
 
 @item
 @ref{Installation},
-describes how to get @command{gawk}, how to compile it
-on POSIX-compatible systems,
-and how to compile and use it on different
-non-POSIX systems.  It also describes how to report bugs
-in @command{gawk} and where to get other freely
-available @command{awk} implementations.
+描述如何获取 @command{gawk}，如何在 POSIX 兼容的系统中编译，以及如何在非 POSIX 系统中编译与使用它。
+介绍如何来报告 @command{gawk} Bug，
+以及介绍可以自由获取 @command{awk} 的地方。
 
 @ifset FOR_PRINT
 @item
 @ref{Copying},
-presents the license that covers the @command{gawk} source code.
+提供使用 @command{gawk} 源码的许可。
+
 @end ifset
 
 @ifclear FOR_PRINT
 @item
 @ref{Notes},
-describes how to disable @command{gawk}'s extensions, as
-well as how to contribute new code to @command{gawk},
-and some possible future directions for @command{gawk} development.
+描述如何禁用 @command{gawk} 扩展，以及如何向 @command{gawk} 贡献新代码，还包括 @command{gawk} 未来可能的开发方向。
 
 @item
 @ref{Basic Concepts},
-provides some very cursory background material for those who
-are completely unfamiliar with computer programming.
+为那些初识计算编程的人提供一些粗略的背景资料。
 
-The @ref{Glossary}, defines most, if not all, of the significant terms used
-throughout the @value{DOCUMENT}.  If you find terms that you aren't familiar with,
-try looking them up here.
+@ref{Glossary}, 
+定义大多数的本@value{DOCUMENT}中所用到的术语的意义，如果你看到你不熟悉的，可以参考这里。
 
 @item
 @ref{Copying}, and
 @ref{GNU Free Documentation License},
-present the licenses that cover the @command{gawk} source code
-and this @value{DOCUMENT}, respectively.
+提供本@value{DOCUMENT}中源代码以及本@value{DOCUMENT}所使用到的两个许可证协议。
+
 @end ifclear
 @end itemize
 @end itemize
 
 @ifset FOR_PRINT
-The version of this @value{DOCUMENT} distributed with @command{gawk}
-contains additional appendices and other end material.
-To save space, we have omitted them from the
-printed edition. You may find them online, as follows:
+本@value{DOCUMENT}相关的 @command{gawk} 发行版本包含了额外的附录和其他材料。
+为了节省空间，在印刷版中我们略过了这部分。
+你可以在网上找到这些资料，链接如下：
 
 @itemize @value{BULLET}
 @item
 @uref{http://www.gnu.org/software/gawk/manual/html_node/Notes.html,
 The appendix on implementation notes}
-describes how to disable @command{gawk}'s extensions, how to contribute
-new code to @command{gawk}, where to find information on some possible
-future directions for @command{gawk} development, and the design decisions
-behind the extension API.
+描述如何禁用 @command{gawk} 扩展，如何向 @command{gawk} 贡献新代码，@command{gawk} 未来可能的开发方向，以及扩展 API 的设计决策。
 
 @item
 @uref{http://www.gnu.org/software/gawk/manual/html_node/Basic-Concepts.html,
 The appendix on basic concepts}
-provides some very cursory background material for those who
-are completely unfamiliar with computer programming.
+为那些初识计算编程的人提供一些粗略的背景资料。
 
 @item
 @uref{http://www.gnu.org/software/gawk/manual/html_node/Glossary.html,
 The Glossary}
-defines most, if not all, of the significant terms used
-throughout the @value{DOCUMENT}.  If you find terms that you aren't familiar with,
-try looking them up here.
+定义大多数的本@value{DOCUMENT}中所用到的术语的意义，如果你看到你不熟悉的，可以参考这里。
 
 @item
 @uref{http://www.gnu.org/software/gawk/manual/html_node/GNU-Free-Documentation-License.html,
 The GNU FDL}
-is the license that covers this @value{DOCUMENT}.
+本@value{DOCUMENT}所使用到的许可证协议。
+
 @end itemize
 
 @c ok not to use CHAPTER / SECTION here
@@ -1719,35 +1669,28 @@ omitted from the print edition but are available online.
 @c FULLXREF OFF
 
 @node Conventions
-@unnumberedsec Typographical Conventions
+@unnumberedsec 排版约定
 
 @cindex Texinfo
-This @value{DOCUMENT} is written in @uref{http://www.gnu.org/software/texinfo/, Texinfo},
-the GNU documentation formatting language.
-A single Texinfo source file is used to produce both the printed and online
-versions of the documentation.
+本@value{DOCUMENT}是通过 @uref{http://www.gnu.org/software/texinfo/, Texinfo}@footnote{一种文档处理软件，用一种格式即可以完成网页输出以及打印输出。这种工具主要用于编写软件手册。——译者} 完成的。
+这是一种文档格式化语言。 单一的 TexInfo 源文件，即可用于产生在线版本的文档，也可以产生打印输出的文档。
 @ifnotinfo
-Because of this, the typographical conventions
-are slightly different than in other books you may have read.
+因为这个原因，其排版约定与你所读其他的书可能有一些差异。
 @end ifnotinfo
 @ifinfo
-This @value{SECTION} briefly documents the typographical conventions used in Texinfo.
+本@value{SECTION}简要地描述了使用 Texinfo 的排版约定。
 @end ifinfo
 
-Examples you would type at the command line are preceded by the common
-shell primary and secondary prompts, @samp{$} and @samp{>}.
-Input that you type is shown @kbd{like this}.
+你在命令行上输入的例子，由通用的 Shell 主次提示符，@samp{$} 与 @samp{>} 引导。
+输入命令@kbd{如下}。
 @c 8/2014: @print{} is stripped from the texi to make docbook.
 @ifclear FOR_PRINT
-Output from the command is preceded by the glyph ``@print{}''.
-This typically represents the command's standard output.
+命令行的输出由字符“@print{}”引导。这代表了命令行的典型输出。
 @end ifclear
 @ifset FOR_PRINT
-Output from the command, usually its standard output, appears
-@code{like this}.
+命令行的输出（通常是标准输出），通常表现@code{如下}。
 @end ifset
-Error messages and other output on the command's standard error are preceded
-by the glyph ``@error{}''.  For example:
+错误信息以及其他的命令行标准错误输出则由“@error{}”引导，例如：
 
 @example
 $ @kbd{echo hi on stdout}
@@ -1757,36 +1700,22 @@ $ @kbd{echo hello on stderr 1>&2}
 @end example
 
 @ifnotinfo
-In the text, almost anything related to programming, such as
-command names,
-variable and function names, and string, numeric and regexp constants
-appear in @code{this font}. Code fragments
-appear in the same font and quoted, @samp{like this}.
-Things that are replaced by the user or programmer
-appear in @var{this font}.
-Options look like this: @option{-f}.
-@value{FFN}s are indicated like this: @file{/path/to/ourfile}.
+在文本中，所有与程序相关的东西，如命令名、变量和函数名、字串、数据、正则表达式常量都以 @code{this font} 这样的字体出现。
+代码段也以相同的字体呈现，并用单引号括起来，表现为 @samp{like this}。
+由用户或者程序员替换的部分以 @var{this font}，这样的字体出现。
+选项是如 @option{-f} 这样的参数。@value{FFN}由 @file{/path/to/ourfile} 这样的串提示。
 @ifclear FOR_PRINT
-Some things are
-emphasized @emph{like this}, and if a point needs to be made
-strongly, it is done @strong{like this}.
+有些需要强调的东西以 @emph{这样} 的字体出现。
+如果某一点需要特别强调，它以 @strong{这样} 的字体出现。
 @end ifclear
-The first occurrence of
-a new term is usually its @dfn{definition} and appears in the same
-font as the previous occurrence of ``definition'' in this sentence.
+第一个出现的术语，同一个句子中的先前出现的术语，包括其定义也用相同的字体，表现为 @dfn{这样} 的字体。
 @end ifnotinfo
 
-Characters that you type at the keyboard look @kbd{like this}.  In particular,
-there are special characters called ``control characters.''  These are
-characters that you type by holding down both the @kbd{CONTROL} key and
-another key, at the same time.  For example, a @kbd{Ctrl-d} is typed
-by first pressing and holding the @kbd{CONTROL} key, next
-pressing the @kbd{d} key, and finally releasing both keys.
+你从键盘上键入的字符也用 @kbd{like this} 这样的字体呈现。
+对于一些特别的“控制字符”，这些字符是需要你同时键入 @kbd{CONTROL} 键以及另一个键来输入。
+比如 @kbd{Ctrl-d} 需要首先按下并保持 @kbd{CONTROL} 键，然后敲击 @kbd{d} 键，然后再释放两个键。
 
-For the sake of brevity, throughout this @value{DOCUMENT}, we refer to
-Brian Kernighan's version of @command{awk} as ``BWK @command{awk}.''
-(@xref{Other Versions} for information on his and other versions.)
-
+为了简单处理，在本@value{DOCUMENT}中，我们把 Brian Kernighan 版本的 @command{awk} 称为“BWK @command{awk}”（@xref{Other Versions}，查看这个版本与其他版本的信息）。
 @ifset FOR_PRINT
 @quotation NOTE
 Notes of interest look like this.
@@ -1797,6 +1726,7 @@ Cautionary or warning notes look like this.
 @end quotation
 @end ifset
 
+#TODO20171018
 @c fakenode --- for prepinfo
 @unnumberedsubsec Dark Corners
 @cindex Kernighan, Brian
