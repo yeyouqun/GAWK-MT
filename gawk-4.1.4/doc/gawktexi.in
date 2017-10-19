@@ -1695,302 +1695,225 @@ Cautionary or warning notes look like this.
 @end quotation
 @end ifset
 
-#TODO20171018
 @c fakenode --- for prepinfo
-@unnumberedsubsec Dark Corners
+@unnumberedsubsec 暗角
 @cindex Kernighan, Brian
 @quotation
-@i{Dark corners are basically fractal---no matter how much
-you illuminate, there's always a smaller but darker one.}
+@i{暗角总是存在的——无论你多么仔细，总是有一些更小的，黑暗的地方。}
 @author Brian Kernighan
 @end quotation
 
 @cindex d.c., See dark corner
 @cindex dark corner
-Until the POSIX standard (and @cite{@value{TITLE}}),
-many features of @command{awk} were either poorly documented or not
-documented at all.  Descriptions of such features
-(often called ``dark corners'') are noted in this @value{DOCUMENT} with
+在没有做 POSIX 标准（以及没写 @cite{@value{TITLE}}）之前，@command{awk} 特性的文档少得可怜，甚至是没有文档。
+对于这样的特性（经常称为“暗角”）在这个@value{DOCUMENT}以
 @iftex
-the picture of a flashlight in the margin, as shown here.
+页边上的手电图形
 @value{DARKCORNER}
 @end iftex
 @ifnottex
 ``(d.c.).''
 @end ifnottex
+的形式提示。
 @ifclear FOR_PRINT
-They also appear in the index under the heading ``dark corner.''
+它们也出现在索引中的“暗角”区。
 @end ifclear
 
-But, as noted by the opening quote, any coverage of dark
-corners is by definition incomplete.
+但是，正如开放性引述所提示的，在定义上对暗角的覆盖是不完全的。
 
 @cindex c.e., See common extensions
-Extensions to the standard @command{awk} language that are supported by
-more than one @command{awk} implementation are marked
+
+对于 @command{awk} 标准语言的扩展，很多 @command{awk} 实现都支持，他们用
 @ifclear FOR_PRINT
-``@value{COMMONEXT},'' and listed in the index under ``common extensions''
-and ``extensions, common.''
+``@value{COMMONEXT},'' 进行标示，并在索引中的“通用扩展”以及“扩展，通用”中进行列出。
 @end ifclear
 @ifset FOR_PRINT
-``@value{COMMONEXT}'' for ``common extension.''
+``@value{COMMONEXT}'' 标识“通用扩展”。
 @end ifset
 
 @node Manual History
-@unnumberedsec The GNU Project and This Book
+@unnumberedsec GNU 项目及本书
 
 @cindex FSF (Free Software Foundation)
 @cindex Free Software Foundation (FSF)
 @cindex Stallman, Richard
-The Free Software Foundation (FSF) is a nonprofit organization dedicated
-to the production and distribution of freely distributable software.
-It was founded by Richard M.@: Stallman, the author of the original
-Emacs editor.  GNU Emacs is the most widely used version of Emacs today.
+
+自由软件基金会（FSF）是一个非营利性组织，其专注于开发与发布可自由分发的软件。
+它由 Richard M.@: Stallman——即最初的 Emacs 编辑器的作者——创建。GNU 的 Emacs 软件也是目前用得最广泛的 Emacs 版本。
 
 @cindex GNU Project
 @cindex GPL (General Public License)
 @cindex General Public License, See GPL
 @cindex documentation, online
-The GNU@footnote{GNU stands for ``GNU's Not Unix.''}
-Project is an ongoing effort on the part of the Free Software
-Foundation to create a complete, freely distributable, POSIX-compliant
-computing environment.
-The FSF uses the GNU General Public License (GPL) to ensure that
-its software's
-source code is always available to the end user.
+
+GNU@footnote{GNU 表示“GNU's Not Unix”。} 
+项目是自由软件基金会的项目，其目前依然还在持续地为创建一个完全可自由发布，与 POSIX 兼容的计算环境而努力。
+自由软件基金会通过“通用公共请可”（GPL）来保证其下的软件的源代码对于终端用户总是可用的。
 @ifclear FOR_PRINT
-A copy of the GPL is included
+GPL 的复本已经包含在
 @ifnotinfo
-in this @value{DOCUMENT}
+本@value{DOCUMENT}中
 @end ifnotinfo
-for your reference
+以供参考
 (@pxref{Copying}).
 @end ifclear
-The GPL applies to the C language source code for @command{gawk}.
-To find out more about the FSF and the GNU Project online,
-see @uref{http://www.gnu.org, the GNU Project's home page}.
-This @value{DOCUMENT} may also be read from
-@uref{http://www.gnu.org/software/gawk/manual/, GNU's website}.
+GPL 也应用于用 C 写成的 @command{gawk}。要查找更多的关于自由软件基金会以及 GNU 项目的在线信息，你可以查看 @uref{http://www.gnu.org, GNU 项目的主页}。
+本@value{DOCUMENT}也可以从 @uref{http://www.gnu.org/software/gawk/manual/, GNU 站点} 上阅读。
 
 @ifclear FOR_PRINT
-A shell, an editor (Emacs), highly portable optimizing C, C++, and
-Objective-C compilers, a symbolic debugger and dozens of large and
-small utilities (such as @command{gawk}), have all been completed and are
-freely available.  The GNU operating
-system kernel (the HURD), has been released but remains in an early
-stage of development.
+Shell，编辑器（Emacs），高度可移植的 C、C++ 与 Object-C 编译器，符号调试器以及大量的小工具（如 @command{gawk}），都已经完成并可自由获取。
+GNU 操作系统内核（HURD）也已经发布，只是还处于开发的早期阶段。
 
 @cindex Linux
 @cindex GNU/Linux
 @cindex operating systems, BSD-based
-Until the GNU operating system is more fully developed, you should
-consider using GNU/Linux, a freely distributable, Unix-like operating
-system for Intel,
-Power Architecture,
-Sun SPARC, IBM S/390, and other
-systems.@footnote{The terminology ``GNU/Linux'' is explained
-in the @ref{Glossary}.}
-Many GNU/Linux distributions are
-available for download from the Internet.
+在 GNU 操作系统完全开发好前，你应该考虑使用 GNU/Linux，一个可自由发布的，Unix-like 的操作系统，用于 Intel、Power 这样的构架，Sun Sparc，IBM S/390 等其他系统@footnote{术语``GNU/Linux''在@ref{Glossary}进行说明。}。很多的 GNU/Linux 发行版本都可以通过互联网下载。
 @end ifclear
 
 @ifnotinfo
-The @value{DOCUMENT} you are reading is actually free---at least, the
-information in it is free to anyone.  The machine-readable
-source code for the @value{DOCUMENT} comes with @command{gawk}.
-@ifclear FOR_PRINT
-(Take a moment to check the Free Documentation
-License in @ref{GNU Free Documentation License}.)
-@end ifclear
+你正在阅读的这个@value{DOCUMENT}也是免费的——最起码的。
+这里面的信息对任何一个人都是免费的。也包括与 @command{gawk} 相关的，对于机器可读的源代码。
+（花一点时间阅读一下在@ref{GNU Free Documentation License}中的自由文档许可证协议。）
 @end ifnotinfo
 
 @cindex Close, Diane
-The @value{DOCUMENT} itself has gone through multiple previous editions.
-Paul Rubin wrote the very first draft of @cite{The GAWK Manual};
-it was around 40 pages long.
-Diane Close and Richard Stallman improved it, yielding a
-version that was
-around 90 pages and barely described the original, ``old''
-version of @command{awk}.
+此@value{DOCUMENT}已经经过了多个版本。Paul Rubin 写了第一份 @cite{The GAWK Manual}，大概有40页。
+Diane Close 与 Richard Stallman 丰富了它，产生了一个大概 90 页的版本，它只针对最初的，“旧”版本的 @command{awk}。
 
-I started working with that version in the fall of 1988.
-As work on it progressed,
-the FSF published several preliminary versions (numbered 0.@var{x}).
-In 1996, edition 1.0 was released with @command{gawk} 3.0.0.
-The FSF published the first two editions under
-the title @cite{The GNU Awk User's Guide}.
+我从 1988 年秋天开始着手制作那个版本。随着工作的推进，自由软件基金会出版了几个初步的版本（版本号 0.@var{x}）。
+在 1996 年，1.0 版本随着 @command{gawk} 3.0.0 发布。
+自由软件基金会出版了前两个版本，书名为 @cite{The GNU Awk User's Guide}。
 @ifset FOR_PRINT
-SSC published two editions of the @value{DOCUMENT} under the
-title @cite{Effective awk Programming}, and O'Reilly published
-the third edition in 2001.
+SSC 出版了这个@value{DOCUMENT}的两个版本，书名为 @cite{Effective awk Programming}，O'Reilly 在 2001 年出版了第三版。
 @end ifset
 
-This edition maintains the basic structure of the previous editions.
-For FSF edition 4.0, the content was thoroughly reviewed and updated. All
-references to @command{gawk} versions prior to 4.0 were removed.
-Of significant note for that edition was the addition of @ref{Debugger}.
+这一版维持了之前的版本的基本结构。
+FSF 4.0 版的内容完全校对和更新了。所有 4.0 版本之前的 @command{gawk} 版本的参考都删去了。
+那个版本中很重要的一点是增加了 @ref{Debugger}。
 
-For FSF edition
+在 FSF 版本中，
 @ifclear FOR_PRINT
-@value{EDITION},
+@value{EDITION} 版本
 @end ifclear
 @ifset FOR_PRINT
 @value{EDITION}
-(the fourth edition as published by O'Reilly),
+(O'Reilly 出版的第四版),
 @end ifset
-the content has been reorganized into parts,
-and the major new additions are @ref{Arbitrary Precision Arithmetic},
-and @ref{Dynamic Extensions}.
+重新组织了文档内容，主要的更新是增加了 @ref{Arbitrary Precision Arithmetic} 以及 @ref{Dynamic Extensions}。
 
-This @value{DOCUMENT} will undoubtedly continue to evolve.  If you
-find an error in the @value{DOCUMENT}, please report it!  @xref{Bugs}
-for information on submitting problem reports electronically.
+这个@value{DOCUMENT}未来一定会持续优化。如果你在这个@value{DOCUMENT}发现了错误，请报告它。
+@xref{Bugs} ，你可以找到关于提交电子版问题报告的信息。 
 
 @ifset FOR_PRINT
 @c fakenode --- for prepinfo
-@unnumberedsec How to Stay Current
+@unnumberedsec 如何保持最新信息
 
-You may have a newer version of @command{gawk} than the
-one described here.  To find out what has changed,
-you should first look at the @file{NEWS} file in the @command{gawk}
-distribution, which provides a high-level summary of the changes in
-each release.
+也许你手上有比这里的版本更新的 @command{gawk} 版本。
+如果你想知道修改了什么部分，首先你应该看看 @command{gawk} 发行中的 @file{NEWS} 文件。
+这个文件中提供了每次发布的更新概要。
 
-You can then look at the @uref{http://www.gnu.org/software/gawk/manual/,
-online version} of this @value{DOCUMENT} to read about any new features.
+然后，你可以查看这个this @value{DOCUMENT} @uref{http://www.gnu.org/software/gawk/manual/,
+在线版本}，阅读新特性的相关信息。
 @end ifset
 
 @ifclear FOR_PRINT
 @node How To Contribute
-@unnumberedsec How to Contribute
+@unnumberedsec 如何贡献
 
-As the maintainer of GNU @command{awk}, I once thought that I would be
-able to manage a collection of publicly available @command{awk} programs
-and I even solicited contributions.  Making things available on the Internet
-helps keep the @command{gawk} distribution down to manageable size.
+作为 GNU @command{awk} 的维护者，我曾经想着我应该能够管理这一大堆的公开可得的 @command{awk} 程序，我甚至招募过贡献者。
+从互联网可以得到我想要的东西，能够帮助 @command{gawk} 的发布版保持在一个可管理的大小。
 
-The initial collection of material, such as it is, is still available
-at @uref{ftp://ftp.freefriends.org/arnold/Awkstuff}.  In the hopes of
-doing something more broad, I acquired the @code{awk.info} domain.
+最原始的材料，如本@value{DOCUMENT}，还可以从 @uref{ftp://ftp.freefriends.org/arnold/Awkstuff} 获取。
+为了把这个事情做得更为开放广泛，我还申请了 @code{awk.info} 域名。
 
-However, I found that I could not dedicate enough time to managing
-contributed code: the archive did not grow and the domain went unused
-for several years.
+但是，我发现我没有时间完全地来管理这些分布的代码：文档已经不再增长，而域名已经几年前就不能使用了。
 
-Late in 2008, a volunteer took on the task of setting up
-an @command{awk}-related website---@uref{http://awk.info}---and did a very
-nice job.
+2008 年的晚些时候，有志愿者设立了 @command{awk} 相关的网站—— @uref{http://awk.info} ——工作做得相当棒。
 
-If you have written an interesting @command{awk} program, or have written
-a @command{gawk} extension that you would like to share with the rest
-of the world, please see @uref{http://awk.info/?contribute} for how to
-contribute it to the website.
+如果你写过一个有味的 @command{awk} 程序，或者写了 @command{gawk} 扩展并且希望与其他人分享，请看 @uref{http://awk.info/?contribute} 来了解如何将它发布到网站上。
 
 @ignore
-As of this writing, this website is in search of a maintainer; please
-contact me if you are interested.
+如上所述，这个网站也在寻找维护者；如果你感兴趣，请联系我。
 @end ignore
 
 @ignore
-Other links:
+其他链接：
 
 http://www.reddit.com/r/linux/comments/dtect/composing_music_in_awk/
 @end ignore
 @end ifclear
 
 @node Acknowledgments
-@unnumberedsec Acknowledgments
+@unnumberedsec 致谢
 
-The initial draft of @cite{The GAWK Manual} had the following acknowledgments:
+最初的 @cite{The GAWK Manual} 的致谢如下：
 
 @quotation
-Many people need to be thanked for their assistance in producing this
-manual.  Jay Fenlason contributed many ideas and sample programs.  Richard
-Mlynarik and Robert Chassell gave helpful comments on drafts of this
-manual.  The paper @cite{A Supplemental Document for AWK} by John W.@:
-Pierce of the Chemistry Department at UC San Diego, pinpointed several
-issues relevant both to @command{awk} implementation and to this manual, that
-would otherwise have escaped us.
+很多的人需要感谢，因为他们帮助产生了这个手册。
+Jay Fenlason 提供了许多的想法与例子。
+Richard Mlynarik 与 Robert Chassell 给了文档非常有帮助的点评。
+John W.@: 写了 @cite{A Supplemental Document for AWK} 文档。
+UC San Diego 化学部的 Pierce 指出几个问题，既与 @command{awk} 实现有关，也与手册有关，不然这些问题会逃过我们的眼睛。
 @end quotation
 
 @cindex Stallman, Richard
-I would like to acknowledge Richard M.@: Stallman, for his vision of a
-better world and for his courage in founding the FSF and starting the
-GNU Project.
+我要感谢 Richard M.@: Stallman，感谢他对美好世界的愿景，并有勇气成立 FSF 并开启 GNU 项目。
 
 @ifclear FOR_PRINT
-Earlier editions of this @value{DOCUMENT} had the following acknowledgements:
+本@value{DOCUMENT}更早版本的致谢如下：
 @end ifclear
 @ifset FOR_PRINT
-The previous edition of this @value{DOCUMENT} had
-the following acknowledgements:
+本@value{DOCUMENT}之前的版本的致谢如下：
 @end ifset
 
 @quotation
-The following people (in alphabetical order)
-provided helpful comments on various
-versions of this book:
-Rick Adams,
-Dr.@: Nelson H.F. Beebe,
-Karl Berry,
-Dr.@: Michael Brennan,
-Rich Burridge,
-Claire Cloutier,
-Diane Close,
-Scott Deifik,
-Christopher (``Topher'') Eliot,
-Jeffrey Friedl,
-Dr.@: Darrel Hankerson,
-Michal Jaegermann,
-Dr.@: Richard J.@: LeBlanc,
-Michael Lijewski,
-Pat Rankin,
-Miriam Robbins,
-Mary Sheehan,
-and
-Chuck Toporek.
+下面的人（按字母顺序）为本@value{DOCUMENT}的不同版本提供了很好的点评：
+Rick Adams，
+Dr.@: Nelson H.F. Beebe， 
+Karl Berry，
+Dr.@: Michael Brennan，
+Rich Burridge，
+Claire Cloutier，
+Diane Close，
+Scott Deifik，
+Christopher (“Topher”) Eliot，
+Jeffrey Friedl，
+Dr.@: Darrel Hankerson，
+Michal Jaegermann，
+Dr.@: Richard J.@: LeBlanc，
+Michael Lijewski，
+Pat Rankin，
+Miriam Robbins，
+Mary Sheehan，
+和 Chuck Toporek。
 
 @cindex Berry, Karl
 @cindex Chassell, Robert J.@:
 @c @cindex Texinfo
-Robert J.@: Chassell provided much valuable advice on
-the use of Texinfo.
-He also deserves special thanks for
-convincing me @emph{not} to title this @value{DOCUMENT}
-@cite{How to Gawk Politely}.
-Karl Berry helped significantly with the @TeX{} part of Texinfo.
+Robert J.@: Chassell 在使用 Texinfo 上提供了非常有价值的建议。
+他也应该得到特别感谢，因为他说服我@emph{不要}用 @cite{How to Gawk Politely} 这样的标题来命名本@value{DOCUMENT}。
+Karl Berry 在 Texinfo 中的 @TeX{} 部分给予了相当大的帮助。
 
 @cindex Hartholz, Marshall
 @cindex Hartholz, Elaine
 @cindex Schreiber, Bert
 @cindex Schreiber, Rita
-I would like to thank Marshall and Elaine Hartholz of Seattle and
-Dr.@: Bert and Rita Schreiber of Detroit for large amounts of quiet vacation
-time in their homes, which allowed me to make significant progress on
-this @value{DOCUMENT} and on @command{gawk} itself.
+我也要感谢 Marshall 与 Seattle 的 Elaine Hartholz ，还有 Detroit 的 Bert and Rita Schreiber 博士，
+他们牺牲了大量的假期时间——他们本可以安安静解地在家里度过——使得我在本@value{DOCUMENT}的制作和 @command{gawk} 上的工作都能进展神速。
 
 @cindex Hughes, Phil
-Phil Hughes of SSC
-contributed in a very important way by loaning me his laptop GNU/Linux
-system, not once, but twice, which allowed me to do a lot of work while
-away from home.
+SSC 的 Phil Hughes 借给我他的笔记本 GNU/Linux 系统，不是一次，而是两次，他以这样的一种方式使我在离开家的时候做了大量的工作。
 
 @cindex Trueman, David
-David Trueman deserves special credit; he has done a yeoman job
-of evolving @command{gawk} so that it performs well and without bugs.
-Although he is no longer involved with @command{gawk},
-working with him on this project was a significant pleasure.
+David Trueman 应该得到特别的致谢。他自告奋勇地承担起了优化 @command{gawk} 的工作，因此 @command{gawk} 才会执行得如此之好，没有 Bug。
+尽管他现在不再介入 @command{gawk} 的工作，但是与他在这个项目上一起工作相当愉快。
 
 @cindex Drepper, Ulrich
 @cindex GNITS mailing list
 @cindex mailing list, GNITS
-The intrepid members of the GNITS mailing list, and most notably Ulrich
-Drepper, provided invaluable help and feedback for the design of the
-internationalization features.
+GNITS 邮件列表中的那些无畏的成员们，以及最值得尊敬的 Ulrich Drepper 为设计国际化特性提供了无价的帮助与反馈。
 
-Chuck Toporek, Mary Sheehan, and Claire Cloutier of O'Reilly & Associates contributed
-significant editorial help for this @value{DOCUMENT} for the
-3.1 release of @command{gawk}.
+来自 O'Reilly & Associates 的 Chuck Toporek，Mary Sheehan，和 Claire Cloutier，对 @command{gawk} 3.1 版的本@value{DOCUMENT}提供了编辑上的帮助，作出了重要贡献。
 @end quotation
 
 @cindex Beebe, Nelson H.F.@:
@@ -2013,80 +1936,60 @@ significant editorial help for this @value{DOCUMENT} for the
 @cindex Vinschen, Corinna
 @cindex Zaretskii, Eli
 
-Dr.@: Nelson Beebe,
-Andreas Buening,
-Dr.@: Manuel Collado,
-Antonio Colombo,
-Stephen Davies,
-Scott Deifik,
-Akim Demaille,
-Daniel Richard G.,
-Darrel Hankerson,
-Michal Jaegermann,
-J@"urgen Kahrs,
-Stepan Kasal,
-John Malmberg,
-Dave Pitts,
-Chet Ramey,
-Pat Rankin,
-Andrew Schorr,
-Corinna Vinschen,
-and Eli Zaretskii
-(in alphabetical order)
-make up the current @command{gawk} ``crack portability team.''  Without
-their hard work and help, @command{gawk} would not be nearly the robust,
-portable program it is today.  It has been and continues to be a pleasure
-working with this team of fine people.
+Dr.@: Nelson Beebe，
+Andreas Buening，
+Dr.@: Manuel Collado，
+Antonio Colombo，
+Stephen Davies，
+Scott Deifik，
+Akim Demaille，
+Daniel Richard G.，
+Darrel Hankerson，
+Michal Jaegermann，
+J@"urgen Kahrs，
+Stepan Kasal，
+John Malmberg，
+Dave Pitts，
+Chet Ramey，
+Pat Rankin，
+Andrew Schorr，
+Corinna Vinschen，
+和 Eli Zaretskii
+（按字母顺序）
+组成了目前的 @command{gawk} “霹雳移植性小组”。如果没有他们的艰苦工作与帮助，@command{gawk} 不会今天有如此稳定，可移植的程序。与这样的一群好人小组一起工作曾经是也将一直是件快乐的事情。
 
-Notable code and documentation contributions were made by
-a number of people. @xref{Contributors} for the full list.
+许多人贡献了相当多的代码与文档，@xref{Contributors} ，其中有完整的列表。
 
 @ifset FOR_PRINT
 @cindex Oram, Andy
-Thanks to Andy Oram of O'Reilly Media for initiating
-the fourth edition and for his support during the work.
-Thanks to Jasmine Kwityn for her copyediting work.
+感谢来自 O'Reilly Media 的 Andy Oram。他开始了第四版的出版，并且在这个过程中一直提供支持。
+感谢 Jasmine Kwityn 的校对工作。
 @end ifset
 
-Thanks to Michael Brennan for the Forewords.
+谢谢 Michael Brennan 写的序言。
 
 @cindex Duman, Patrice
 @cindex Berry, Karl
-Thanks to Patrice Dumas for the new @command{makeinfo} program.
-Thanks to Karl Berry, who continues to work to keep
-the Texinfo markup language sane.
+谢谢 Patrice Dumas 新写的 @command{makeinfo} 程序，也谢谢 Karl Berry 持续工作使用 Texinfo 这样的标志语言如此牛B。
 
 @cindex Kernighan, Brian
 @cindex Brennan, Michael
 @cindex Day, Robert P.J.@:
-Robert P.J.@: Day, Michael Brennan, and Brian Kernighan kindly acted as
-reviewers for the 2015 edition of this @value{DOCUMENT}. Their feedback
-helped improve the final work.
+Robert P.J.@: Day，Michael Brennan，还有 Brian Kernighan，非常好心地作为了本@value{DOCUMENT} 2015 版本的审核者。
+他们的工作使用让本@value{DOCUMENT}质量更优。
 
-I would also like to thank Brian Kernighan for his invaluable assistance during the
-testing and debugging of @command{gawk}, and for his ongoing
-help and advice in clarifying numerous points about the language.
-We could not have done nearly as good a job on either @command{gawk}
-or its documentation without his help.
+我还要感谢 Brian Kernighan，因为在测试与调试 @command{gawk} 期间提供的无价帮助，也为他在澄清无数的语言疑点上的的持续帮助与建议。
+没有他的帮助，@command{gawk} 和它的文档不会像现在这么优秀。
 
-Brian is in a class by himself as a programmer and technical
-author.  I have to thank him (yet again) for his ongoing friendship
-and for being a role model to me for close to 30 years!
-Having him as a reviewer is an exciting privilege. It has also
-been extremely humbling@enddots{}
+Brian 是一流程序员与技术作者，我要（又一次）感谢他，因为他持续的友谊与为我树立起来的近 30 年的模范作用。
+有这样的人作为评论人真是大幸。而他一直以来都如此谦卑@enddots{}
 
 @cindex Robbins, Miriam
 @cindex Robbins, Jean
 @cindex Robbins, Harry
 @cindex G-d
-I must thank my wonderful wife, Miriam, for her patience through
-the many versions of this project, for her proofreading,
-and for sharing me with the computer.
-I would like to thank my parents for their love, and for the grace with
-which they raised and educated me.
-Finally, I also must acknowledge my gratitude to G-d, for the many opportunities
-He has sent my way, as well as for the gifts He has given me with which to
-take advantage of those opportunities.
+我还得感谢我的内人，Miriam。因为她的耐心，在这个项目的多个版本之间作为第一读者，同时还与我分享电脑。
+还要感谢我的老爸老妈，因为他们的爱与生而育我的艰辛。最后，我也要把我的感谢献给 G-d，是他给我了许多机会，礼物，而这些礼物使我能够更好地利用这些机会。
 @ifnotdocbook
 @sp 2
 @noindent
@@ -2096,6 +1999,7 @@ Israel @*
 February 2015
 @end ifnotdocbook
 
+#TODO20171019
 @ifnotinfo
 @part @value{PART1}The @command{awk} Language
 @end ifnotinfo
