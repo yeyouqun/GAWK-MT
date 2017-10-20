@@ -110,7 +110,7 @@
 @set CHAPTER 章
 @set APPENDIX appendix
 @set SECTION 小节
-@set SUBSECTION subsection
+@set SUBSECTION 子小节
 @set DARKCORNER (d.c.)
 @set COMMONEXT (c.e.)
 @set PAGE page
@@ -120,7 +120,7 @@
 @set CHAPTER 章
 @set APPENDIX appendix
 @set SECTION 小节
-@set SUBSECTION subsection
+@set SUBSECTION 子小节
 @set DARKCORNER (d.c.)
 @set COMMONEXT (c.e.)
 @set PAGE page
@@ -135,10 +135,10 @@
 @end ifdocbook
 
 @ifnotdocbook
-@set PART1 Part I:@*
-@set PART2 Part II:@*
-@set PART3 Part III:@*
-@set PART4 Part IV:@*
+@set PART1 第一部分:@*
+@set PART2 第二部分:@*
+@set PART3 第三部分:@*
+@set PART4 第四部分:@*
 @end ifnotdocbook
 
 @c some special symbols
@@ -172,16 +172,16 @@
 @end ifdocbook
 
 @ifclear FOR_PRINT
-@set FN file name
+@set FN 文件名
 @set FFN 文件名
-@set DF data file
+@set DF 数据文件
 @set DDF Data file
 @set PVERSION 版本
 @end ifclear
 @ifset FOR_PRINT
-@set FN filename
+@set FN 文件名
 @set FFN 文件名
-@set DF datafile
+@set DF 数据文件
 @set DDF Datafile
 @set PVERSION 版本
 @end ifset
@@ -1999,18 +1999,15 @@ Israel @*
 February 2015
 @end ifnotdocbook
 
-#TODO20171019
 @ifnotinfo
-@part @value{PART1}The @command{awk} Language
+@part @value{PART1} @command{awk} 语言
 @end ifnotinfo
 
 @ifdocbook
 
-Part I describes the @command{awk} language and @command{gawk} program
-in detail.  It starts with the basics, and continues through all of
-the features of @command{awk}. Included also are many, but not all,
-of the features of @command{gawk}.  This part contains the
-following chapters:
+第一部分对 @command{awk} 语言以及 @command{gawk} 程序进行详细描述。通过从最基础的开始，不断详解 @command{awk} 的所有特性。
+这部分的内容也包含了 @command{gawk} 的许多特性，但不是全部。
+它们包含如下章节：
 
 @itemize @value{BULLET}
 @item
@@ -2043,46 +2040,32 @@ following chapters:
 @end ifdocbook
 
 @node Getting Started
-@chapter Getting Started with @command{awk}
+@chapter 开始 @command{awk}
 @c @cindex script, definition of
 @c @cindex rule, definition of
 @c @cindex program, definition of
 @c @cindex basic function of @command{awk}
 @cindex @command{awk}, function of
 
-The basic function of @command{awk} is to search files for lines (or other
-units of text) that contain certain patterns.  When a line matches one
-of the patterns, @command{awk} performs specified actions on that line.
-@command{awk} continues to process input lines in this way until it reaches
-the end of the input files.
+@command{awk} 的基本功能就是查找具某种模式的文本行（或者其他单位的文本）。
+当匹配某个模式后，@command{awk} 会对该行执行指定的动作。
+@command{awk} 然后继续输入行，直到文件输入处理完毕。
 
 @cindex @command{awk}, uses for
 @cindex programming languages@comma{} data-driven vs.@: procedural
 @cindex @command{awk} programs
-Programs in @command{awk} are different from programs in most other languages,
-because @command{awk} programs are @dfn{data driven} (i.e., you describe
-the data you want to work with and then what to do when you find it).
-Most other languages are @dfn{procedural}; you have to describe, in great
-detail, every step the program should take.  When working with procedural
-languages, it is usually much
-harder to clearly describe the data your program will process.
-For this reason, @command{awk} programs are often refreshingly easy to
-read and write.
+@command{awk} 中的程序与其他语言的程序不同，因为 @command{awk} 程序是@dfn{数据驱动}的（即你描述你要处理的数据，然后告诉程序找到相应数据后要执行的工作）。
+多数其他语言都是@dfn{过程式}的；你需要在非常细的细节上描述程序每一行要做什么。
+当与过程式语言打交道时，一般很难清楚地描述你的程序所要处理的数据。正是由于这个原因，@command{awk} 程序非常易读易写。
 
 @cindex program, definition of
 @cindex rule, definition of
-When you run @command{awk}, you specify an @command{awk} @dfn{program} that
-tells @command{awk} what to do.  The program consists of a series of
-@dfn{rules} (it may also contain @dfn{function definitions},
-an advanced feature that we will ignore for now;
-@pxref{User-defined}).  Each rule specifies one
-pattern to search for and one action to perform
-upon finding the pattern.
+当执行 @command{awk} 程序，你需要指定一个@dfn{程序}告知 @command{awk} 接下来要做什么。
+这个程序包括一系统的@dfn{规则}（有可能也会包含@dfn{函数定义}，一些你现在可以忽略的高级特性；@pxref{User-defined})，
+每个规则指定了要查找的模式以及一个在查找到模式时要执行的动作。
 
-Syntactically, a rule consists of a @dfn{pattern} followed by an
-@dfn{action}.  The action is enclosed in braces to separate it from the
-pattern.  Newlines usually separate rules.  Therefore, an @command{awk}
-program looks like this:
+在语法上，规则包括一个@dfn{模式}，后面带着@dfn{动作}。动作是包含在花括号中的，与模式分离。每一行一般都是新的不同的规则。
+因此，@command{awk} 程序看起来像这样：
 
 @example
 @var{pattern} @{ @var{action} @}
@@ -2091,8 +2074,7 @@ program looks like this:
 @end example
 
 @menu
-* Running gawk::                How to run @command{gawk} programs; includes
-                                command-line syntax.
+* Running gawk::                如何执行 @command{awk} 程序；包括命令行语法。
 * Sample Data Files::           Sample data files for use in the @command{awk}
                                 programs illustrated in this @value{DOCUMENT}.
 * Very Simple::                 A very simple example.
@@ -2108,31 +2090,26 @@ program looks like this:
 @end menu
 
 @node Running gawk
-@section How to Run @command{awk} Programs
+@section 如何执行 @command{awk} 程序 
 
 @cindex @command{awk} programs, running
-There are several ways to run an @command{awk} program.  If the program is
-short, it is easiest to include it in the command that runs @command{awk},
-like this:
+有几种方式执行 @command{awk} 程序。如果程序很短，最好的方式直接包含在程序的执行命令行中，如下：
 
 @example
 awk '@var{program}' @var{input-file1} @var{input-file2} @dots{}
 @end example
 
 @cindex command line, formats
-When the program is long, it is usually more convenient to put it in a file
-and run it with a command like this:
+当程序比较长，更好的方式是将其放在一个文件中，然后通过命令行执行：
 
 @example
 awk -f @var{program-file} @var{input-file1} @var{input-file2} @dots{}
 @end example
 
-This @value{SECTION} discusses both mechanisms, along with several
-variations of each.
+在本@value{SECTION}中，我们使用两种方式，但是每种方式都有一些变化。
 
 @menu
-* One-shot::                    Running a short throwaway @command{awk}
-                                program.
+* One-shot::                    运行一次性 @command{awk} 程序。
 * Read Terminal::               Using no input files (input from the keyboard
                                 instead).
 * Long::                        Putting permanent @command{awk} programs in
@@ -2144,101 +2121,77 @@ variations of each.
 @end menu
 
 @node One-shot
-@subsection One-Shot Throwaway @command{awk} Programs
+@subsection 一次性 @command{awk} 程序
 
-Once you are familiar with @command{awk}, you will often type in simple
-programs the moment you want to use them.  Then you can write the
-program as the first argument of the @command{awk} command, like this:
+一旦你熟悉了 @command{awk}，你就可以在使用时立即输入一些简单的程序。
+你可以把程序作为 @command{awk} 命令行的第一个参数，像这样：
 
 @example
 awk '@var{program}' @var{input-file1} @var{input-file2} @dots{}
 @end example
 
 @noindent
-where @var{program} consists of a series of patterns and
-actions, as described earlier.
+这个@var{程序}包括一系列的模式与动作，正如早些时候所描述的那样。
 
 @cindex single quote (@code{'})
 @cindex @code{'} (single quote)
-This command format instructs the @dfn{shell}, or command interpreter,
-to start @command{awk} and use the @var{program} to process records in the
-input file(s).  There are single quotes around @var{program} so
-the shell won't interpret any @command{awk} characters as special shell
-characters.  The quotes also cause the shell to treat all of @var{program} as
-a single argument for @command{awk}, and allow @var{program} to be more
-than one line long.
+这种命令格式告诉 @dfn{Shell}，或者命令行解释器，开启 @command{awk}，并用其中的@var{程序}来处理输入文件。
+@var{程序}是由单引号引起来的，因此 Shell 不会将 @command{awk} 中的特殊字符解析成 Shell 的字符。
+单引号也使用 Shell 将所有的@var{程序}都作为单独的 @command{awk} 部分，可以让@var{程序}多于一行。
 
 @cindex shells, scripts
 @cindex @command{awk} programs, running, from shell scripts
-This format is also useful for running short or medium-sized @command{awk}
-programs from shell scripts, because it avoids the need for a separate
-file for the @command{awk} program.  A self-contained shell script is more
-reliable because there are no other files to misplace.
+这样的方式用来执行短的或者中等大小的 @command{awk} 程序是很方便的，因为它避免了要用一个单独的文件来写 @command{awk} 程序。
+自包含的 Shell 脚本更加可靠，这样就不会跟其他的文件弄混淆。
 
-Later in this chapter, in
+在本章的后面部分，即
 @ifdocbook
-the @value{SECTION}
+@value{SECTION} 
 @end ifdocbook
-@ref{Very Simple},
-we'll see examples of several short,
-self-contained programs.
+@ref{Very Simple}，我们会学一些那些自包含的程序很短的例子。
 
 @node Read Terminal
-@subsection Running @command{awk} Without Input Files
+@subsection 不带输入文件运行 @command{awk} 
 
 @cindex standard input
 @cindex input, standard
 @cindex input files, running @command{awk} without
-You can also run @command{awk} without any input files.  If you type the
-following command line:
+你也可以运行 @command{awk} 程序，不带输入文件，如果你敲入下面的命令行：
 
 @example
 awk '@var{program}'
 @end example
 
 @noindent
-@command{awk} applies the @var{program} to the @dfn{standard input},
-which usually means whatever you type on the keyboard.  This continues
-until you indicate end-of-file by typing @kbd{Ctrl-d}.
+@command{awk} 会使@var{程序}导向到@dfn{标准输入}，也就是说，你在键盘上输入的一切都会接受为输入数据。
+这会一直持续，直到你输入 @kbd{Ctrl-d} 来表示“end-of-file”。
 @ifset FOR_PRINT
-(On non-POSIX operating systems, the end-of-file character may be different.)
+（在非 POSIX 操作系统中，“end-of-file”有可能不同。）
 @end ifset
 @ifclear FOR_PRINT
-(On non-POSIX operating systems, the end-of-file character may be different.
-For example, on OS/2, it is @kbd{Ctrl-z}.)
+（在非 POSIX 操作系统中，“end-of-file”有可能不同。如在 OS/2 中则是 @kbd{Ctrl-z}）
 @end ifclear
 
 @cindex files, input, See input files
 @cindex input files, running @command{awk} without
 @cindex @command{awk} programs, running, without input files
-As an example, the following program prints a friendly piece of advice
-(from Douglas Adams's @cite{The Hitchhiker's Guide to the Galaxy}),
-to keep you from worrying about the complexities of computer
-programming:
+如下面的例子，程序打印一小段建议（来自由 Douglas Adams 的 @cite{The Hitchhiker's Guide to the Galaxy}），使你消除计算机程序复杂性的忧虑：
 
 @example
 $ @kbd{awk 'BEGIN @{ print "Don\47t Panic!" @}'}
 @print{} Don't Panic!
 @end example
 
-@command{awk} executes statements associated with @code{BEGIN} before
-reading any input.  If there are no other statements in your program,
-as is the case here, @command{awk} just stops, instead of trying to read
-input it doesn't know how to process.
-The @samp{\47} is a magic way (explained later) of getting a single quote into
-the program, without having to engage in ugly shell quoting tricks.
+@command{awk} 在读入任何输入之前，先执行与 @code{BEGIN} 相关的语句。
+如果程序中没有了其他的代码了，像这个例子中的情况一样，@command{awk} 就直接结束，而不是试图读取自己不知道如何处理的输入。
+@samp{\47} 是一个小技巧（后面会解释）来将单引号引入程序，这样就不用使用 Shell 丑陋的引文伎俩。
 
-@quotation NOTE
-If you use Bash as your shell, you should execute the
-command @samp{set +H} before running this program interactively, to
-disable the C shell-style command history, which treats @samp{!} as a
-special character. We recommend putting this command into your personal
-startup file.
+@quotation 提示
+如果你使用 Bash，你需要先执行命令 @samp{set +H}，然后再执行这个交互式的命令，以禁用 C shell 式的命令历史，
+在这种方式下 @samp{!} 会被当作特殊字符。我们建议你将这个命令放在你用户的启动文件中。@footnote{如在 Linux 系统中用户目录下的 .profile 等文件中。——译者注} 
 @end quotation
 
-This next simple @command{awk} program
-emulates the @command{cat} utility; it copies whatever you type on the
-keyboard to its standard output (why this works is explained shortly):
+下面是一个简单模拟 @command{cat} 工具的 @command{awk} 程序；它复制你输入的字符，然后输出到标准输出上（为什么这个可以做得到等会解释）：
 
 @example
 $ @kbd{awk '@{ print @}'}
@@ -2254,14 +2207,13 @@ $ @kbd{awk '@{ print @}'}
 @end example
 
 @node Long
-@subsection Running Long Programs
+@subsection 运行长程序
 
 @cindex @command{awk} programs, running
 @cindex @command{awk} programs, lengthy
 @cindex files, @command{awk} programs in
-Sometimes @command{awk} programs are very long.  In these cases, it is
-more convenient to put the program into a separate file.  In order to tell
-@command{awk} to use that file for its program, you type:
+有时，@command{awk} 程序非常长，在这种情况下，更方便的方法是将程序放在一个独立的文件中。
+为了告诉 @command{awk} 执行某个文件中的程序，你敲入：
 
 @example
 awk -f @var{source-file} @var{input-file1} @var{input-file2} @dots{}
@@ -2269,24 +2221,22 @@ awk -f @var{source-file} @var{input-file1} @var{input-file2} @dots{}
 
 @cindex @option{-f} option
 @cindex command line, option @option{-f}
-The @option{-f} instructs the @command{awk} utility to get the
-@command{awk} program from the file @var{source-file} (@pxref{Options}).
-Any @value{FN} can be used for @var{source-file}.  For example, you
-could put the program:
+@option{-f} 参数指示 @command{awk} 工具从 @var{source-file} 中读取程序（@pxref{Options}）。
+任何的@value{FN}都可以作为@var{source-file}。如你可以输入下面命令行：
 
 @example
 BEGIN @{ print "Don't Panic!" @}
 @end example
 
 @noindent
-into the file @file{advice}.  Then this command:
+到文件 @file{advice} 中，然后执行下面的命令行：
 
 @example
 awk -f advice
 @end example
 
 @noindent
-does the same thing as this one:
+下面的代码做一样的事情：
 
 @example
 awk 'BEGIN @{ print "Don\47t Panic!" @}'
@@ -2294,35 +2244,25 @@ awk 'BEGIN @{ print "Don\47t Panic!" @}'
 
 @cindex quoting in @command{gawk} command lines
 @noindent
-This was explained earlier
-(@pxref{Read Terminal}).
-Note that you don't usually need single quotes around the @value{FN} that you
-specify with @option{-f}, because most @value{FN}s don't contain any of the shell's
-special characters.  Notice that in @file{advice}, the @command{awk}
-program did not have single quotes around it.  The quotes are only needed
-for programs that are provided on the @command{awk} command line.
-(Also, placing the program in a file allows us to use a literal single quote in the program
-text, instead of the magic @samp{\47}.)
+这个已经早解释过（@pxref{Read Terminal}）。
+注意，当你用 @option{-f} 参数指定@value{FN}时，你不需要把@value{FN}引起来，因为大多数@value{FN}都不会含 Shell 特殊字符。
+在文件 @file{advice} 中，@command{awk} 程序并没有把文件内容给引起来。引号只在命令行上输入程序才需要。（当然，把程序代码放入文件中，使得我们可以直接使用引号（‘’），而不需要像 @samp{\47} 这样的进行输入。
 
 @cindex single quote (@code{'}) in @command{gawk} command lines
 @cindex @code{'} (single quote) in @command{gawk} command lines
-If you want to clearly identify an @command{awk} program file as such,
-you can add the extension @file{.awk} to the @value{FN}.  This doesn't
-affect the execution of the @command{awk} program but it does make
-``housekeeping'' easier.
+如果你想清楚地标识这样的 @command{awk} 程序，你可以给@value{FN}加上扩展名 @file{.awk} 。
+这不会影响 @command{awk} 程序的执行，但确实使“家务事”容易了许多。
 
 @node Executable Scripts
-@subsection Executable @command{awk} Programs
+@subsection 可执行的 @command{awk} 程序
 @cindex @command{awk} programs
 @cindex @code{#} (number sign), @code{#!} (executable scripts)
 @cindex Unix, @command{awk} scripts and
 @cindex number sign (@code{#}), @code{#!} (executable scripts)
 
-Once you have learned @command{awk}, you may want to write self-contained
-@command{awk} scripts, using the @samp{#!} script mechanism.  You can do
-this on many systems.@footnote{The @samp{#!} mechanism works on
-GNU/Linux systems, BSD-based systems, and commercial Unix systems.}
-For example, you could update the file @file{advice} to look like this:
+如果你学过 @command{awk}，你可能就会想用 @samp{#!} 这样的机制写一个自包含的 @command{awk} 脚本。
+在很多系统@footnote{@samp{#!} 这样的机制可以在GNU/Linux，基于 BSD 的系统以及 Unix 系统上使用。}
+上你都可以这么干。例如，你可以把advice文件写成这样：
 
 @example
 #! /bin/awk -f
@@ -2331,10 +2271,8 @@ BEGIN @{ print "Don't Panic!" @}
 @end example
 
 @noindent
-After making this file executable (with the @command{chmod} utility),
-simply type @samp{advice}
-at the shell and the system arranges to run @command{awk} as if you had
-typed @samp{awk -f advice}:
+把这个文件设置成可执行权限（用 @command{chmod} 工具），在 Shell 中简单地输入 @samp{advice}，
+系统就会将 @command{awk} 执行成像你输入了 @samp{awk -f advice} 一样：
 
 @example
 $ @kbd{chmod +x advice}
@@ -2343,74 +2281,49 @@ $ @kbd{advice}
 @end example
 
 @noindent
-(We assume you have the current directory in your shell's search
-path variable [typically @code{$PATH}].  If not, you may need
-to type @samp{./advice} at the shell.)
+（我们假设你已经将你的当前目录放在了你的 Shell 的搜索路径变量下【一般为 @code{$PATH}】。
+如果没有这么做，你敲入 @samp{./advice} 就可以了。）
 
-Self-contained @command{awk} scripts are useful when you want to write a
-program that users can invoke without their having to know that the program is
-written in @command{awk}.
+自包含的 @command{awk} 脚本在用户调用脚本但不需要知道程序是用 @command{awk} 实现时非常有用。
 
-@sidebar Understanding @samp{#!}
+@sidebar 理解 @samp{#!}
 @cindex portability, @code{#!} (executable scripts)
 
-@command{awk} is an @dfn{interpreted} language. This means that the
-@command{awk} utility reads your program and then processes your data
-according to the instructions in your program. (This is different
-from a @dfn{compiled} language such as C, where your program is first
-compiled into machine code that is executed directly by your system's
-processor.)  The @command{awk} utility is thus termed an @dfn{interpreter}.
-Many modern languages are interpreted.
+@command{awk} 是一个@dfn{解释型}语言。这表示，@command{awk} 工具把你的程序读入后，会根据你程序中的指令来处理你的数据。
+（这不同于 C 这样的@dfn{编译型}语言，首先你需要将它们编译成机器代码，这些代码可以直接被你系统的处理器执行。）
+@command{awk} 工具因此被称为@dfn{解释器（interpreter）}。多数的现代语言都是解释执行的。
 
-The line beginning with @samp{#!} lists the full @value{FN} of an
-interpreter to run and a single optional initial command-line argument
-to pass to that interpreter.  The operating system then runs the
-interpreter with the given argument and the full argument list of the
-executed program.  The first argument in the list is the full @value{FN}
-of the @command{awk} program.  The rest of the argument list contains
-either options to @command{awk}, or @value{DF}s, or both. (Note that on
-many systems @command{awk} may be found in @file{/usr/bin} instead of
-in @file{/bin}.)
+以 @samp{#!} 开始的行列出了要执行的解释器文件的完整路径，包括一个单一的可选命令行参数要传递给对应的解释器。
+操作系统然后用给定的参数执行解释器以及所有的参数列表执行被执行的程序。
+第一个参数即是 @command{awk} 程序的完整路径。
+其他的参数，要么是 @command{awk} 的参数，要么是@value{DF}，或者二者兼有。
+（注意，在很多的系统上，@command{awk} 会在 @file{/usr/bin} 目录下找到，而不是在 @file{/bin} 目录下。）
 
-Some systems limit the length of the interpreter name to 32 characters.
-Often, this can be dealt with by using a symbolic link.
+有的系统会将解释器的长度限制在 32 个字符。但这种情况用软连接就可以解决。
 
-You should not put more than one argument on the @samp{#!}
-line after the path to @command{awk}. It does not work. The operating system
-treats the rest of the line as a single argument and passes it to @command{awk}.
-Doing this leads to confusing behavior---most likely a usage diagnostic
-of some sort from @command{awk}.
+在 @samp{#!} 行，你在 @command{awk} 的路径后面最好不好放超一个参数。
+这不会有作用。操作系统会将那一行剩下的内容当作一个参数，并传递给 @command{awk}。
+这会导致一些令人疑惑的行为——多数像是 @command{awk} 使用方法的一些诊断信息。
 
 @cindex @code{ARGC}/@code{ARGV} variables, portability and
 @cindex portability, @code{ARGV} variable
-Finally, the value of @code{ARGV[0]}
-(@pxref{Built-in Variables})
-varies depending upon your operating system.
-Some systems put @samp{awk} there, some put the full pathname
-of @command{awk} (such as @file{/bin/awk}), and some put the name
-of your script (@samp{advice}).  @value{DARKCORNER}
-Don't rely on the value of @code{ARGV[0]}
-to provide your script name.
+最后，@code{ARGV[0]} 参数的值（@pxref{Built-in Variables}）会根据系统的同而不同。
+有的系统会把 @samp{awk} 作为它的值，而有的会将 @command{awk} 的完整路径赋值给它（如 @file{/bin/awk}）。
+有一些会将脚本的文件名（@samp{advice}）赋给它。
+所以，不要依赖于 @code{ARGV[0]} 的值来提供给你的脚本使用。
 @end sidebar
 
 @node Comments
-@subsection Comments in @command{awk} Programs
+@subsection @command{awk} 程序中的注释
 @cindex @code{#} (number sign), commenting
 @cindex number sign (@code{#}), commenting
 @cindex commenting
 @cindex @command{awk} programs, documenting
 
-A @dfn{comment} is some text that is included in a program for the sake
-of human readers; it is not really an executable part of the program.  Comments
-can explain what the program does and how it works.  Nearly all
-programming languages have provisions for comments, as programs are
-typically hard to understand without them.
+@dfn{注释}，就是程序中给人读的文本；它不是可执行程序的一部份。注释可以解释程序是做什么的，以及如何做的。几乎所有的程序语言都会提供注释，因为程序如果没有它们是非常于难理解的。
 
-In the @command{awk} language, a comment starts with the number sign
-character (@samp{#}) and continues to the end of the line.
-The @samp{#} does not have to be the first character on the line. The
-@command{awk} language ignores the rest of a line following a number sign.
-For example, we could have put the following into @file{advice}:
+在 @command{awk} 语言中，注释以 @samp{#} 开头然后持续到一行的结束。 @samp{#} 不一定要是一行的开始字符。
+@command{awk} 会忽略数字符号 @samp{#} 后面的内容。如我们已经在 @file{advice} 中输入了下面的内容：
 
 @example
 # This program prints a nice, friendly message.  It helps
@@ -2418,36 +2331,22 @@ For example, we could have put the following into @file{advice}:
 BEGIN    @{ print "Don't Panic!" @}
 @end example
 
-You can put comment lines into keyboard-composed throwaway @command{awk}
-programs, but this usually isn't very useful; the purpose of a
-comment is to help you or another person understand the program
-when reading it at a later time.
+你可以将注释也带进命令行中的“用后即扔”@command{awk} 程序中，但是一般来讲，这个用处不大；注释的目的是帮你或者其他人后面阅读时理解程序。
 
 @cindex quoting, for small awk programs
 @cindex single quote (@code{'}), vs.@: apostrophe
 @cindex @code{'} (single quote), vs.@: apostrophe
-@quotation CAUTION
-As mentioned in
-@ref{One-shot},
-you can enclose short to medium-sized programs in single quotes,
-in order to keep
-your shell scripts self-contained.  When doing so, @emph{don't} put
-an apostrophe (i.e., a single quote) into a comment (or anywhere else
-in your program). The shell interprets the quote as the closing
-quote for the entire program. As a result, usually the shell
-prints a message about mismatched quotes, and if @command{awk} actually
-runs, it will probably print strange messages about syntax errors.
-For example, look at the following:
+@quotation 注意
+@ref{One-shot}，所提到的，你可以将一个中等大小的程序用单引号引起来。这样就使得你的 Shell 脚本是自包含的了。
+你这么做的时候，你@emph{不要}将撇号（’）放到你的注释中（或者你的程序的任何位置）。Shell 会将闭引号当做整个程序的结束。结果就是，Shell 会打印出引号不匹配的错误，而如果 @command{awk} 实际是执行了，也会打印出语法错误等奇怪的信息。如下面的例子中：
 
 @example
 $ @kbd{awk 'BEGIN @{ print "hello" @} # let's be cute'}
 >
 @end example
 
-The shell sees that the first two quotes match, and that
-a new quoted object begins at the end of the command line.
-It therefore prompts with the secondary prompt, waiting for more input.
-With Unix @command{awk}, closing the quoted string produces this result:
+Shell 首先看到前面两个引号匹配，然后在后面的注释又看到了一个开始的引号。
+因此就有第二个提示，并等待输入。对于 Unix @command{awk}，闭引号串会产生这样的结果：
 
 @example
 $ @kbd{awk '@{ print "hello" @} # let's be cute'}
@@ -2458,24 +2357,20 @@ $ @kbd{awk '@{ print "hello" @} # let's be cute'}
 
 @cindex @code{\} (backslash)
 @cindex backslash (@code{\})
-Putting a backslash before the single quote in @samp{let's} wouldn't help,
-because backslashes are not special inside single quotes.
-The next @value{SUBSECTION} describes the shell's quoting rules.
+在 @samp{let's} 中的撇号前面加一个转义符（\）也没有作用，因为转义符在单引号中也不是一个特殊的字符。
+下一个@value{SUBSECTION}中我们会解释 Shell 的引号规则。
 @end quotation
 
 @node Quoting
-@subsection Shell Quoting Issues
+@subsection Shell 引号问题
 @cindex shell quoting, rules for
 
 @menu
 * DOS Quoting::                 Quoting in Windows Batch Files.
 @end menu
 
-For short to medium-length @command{awk} programs, it is most convenient
-to enter the program on the @command{awk} command line.
-This is best done by enclosing the entire program in single quotes.
-This is true whether you are entering the program interactively at
-the shell prompt, or writing it as part of a larger shell script:
+对于短到中等大小的 @command{awk} 程序而言，最方便的方式是将程序在命令行中输入。
+这个通过将整个程序包含在一对单引号当中即可。无论在交互式的输入程序，还是在一个大的 Shell 脚本中输入都是可以的：
 
 @example
 awk '@var{program text}' @var{input-file1} @var{input-file2} @dots{}
@@ -2483,20 +2378,15 @@ awk '@var{program text}' @var{input-file1} @var{input-file2} @dots{}
 
 @cindex shells, quoting, rules for
 @cindex Bourne shell, quoting rules for
-Once you are working with the shell, it is helpful to have a basic
-knowledge of shell quoting rules.  The following rules apply only to
-POSIX-compliant, Bourne-style shells (such as Bash, the GNU Bourne-Again
-Shell).  If you use the C shell, you're on your own.
+一旦你通过 Shell 来运行，对于 Shell 的引号规则有所了解总是好的。
+下面的规则只应用于 POSIX 兼容的 Bourne 式的 Shell 中（如 Bash，GNU Bourne-Again Shell）。如果你用的是 C Shell，那就需要你自处了。
 
-Before diving into the rules, we introduce a concept that appears
-throughout this @value{DOCUMENT}, which is that of the @dfn{null},
-or empty, string.
+在深入规则之前，我们先介绍本@value{DOCUMENT}中通篇所使用的概念，它们就是 @dfn{null}，或者 empty 串。
 
-The null string is character data that has no value.
-In other words, it is empty.  It is written in @command{awk} programs
-like this: @code{""}. In the shell, it can be written using single
-or double quotes: @code{""} or @code{''}. Although the null string has
-no characters in it, it does exist. For example, consider this command:
+null string 就是在字符数据中没有值。换句话说，就是空的。在 @command{awk} 程序中写成这样：@code{""}。
+在 Shell 中，它可以写成单或者双引号的形式：@code{""} 或者 @code{''}。虽说 null string 中没有字符，但是确实是存在的。
+例如下面的指令：
+#TODO20171020 # BUG: menu说明中，中文字符开头的说明文本，显示不出来
 
 @example
 $ @kbd{echo ""}
