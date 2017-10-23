@@ -106,10 +106,13 @@
 改动
 > 他们的反馈让本书质量更优。
 
-## 
+## 1.1.6
 英文原文
+> Note that the single quote is not special within double quotes.
 
 译文原文
+> 注意双引号中的单引号。
 
 改动
+> 注意在双引号中的单引号不是特殊符号。
 

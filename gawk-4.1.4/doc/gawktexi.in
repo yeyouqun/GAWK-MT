@@ -175,7 +175,7 @@
 @set FN 文件名
 @set FFN 文件名
 @set DF 数据文件
-@set DDF Data file
+@set DDF 数据文件
 @set PVERSION 版本
 @end ifclear
 @ifset FOR_PRINT
@@ -2386,66 +2386,52 @@ awk '@var{program text}' @var{input-file1} @var{input-file2} @dots{}
 null string 就是在字符数据中没有值。换句话说，就是空的。在 @command{awk} 程序中写成这样：@code{""}。
 在 Shell 中，它可以写成单或者双引号的形式：@code{""} 或者 @code{''}。虽说 null string 中没有字符，但是确实是存在的。
 例如下面的指令：
-#TODO20171020 # BUG: menu说明中，中文字符开头的说明文本，显示不出来
+
+*TODO20171020 # BUG: menu说明中，中文字符开头的说明文本，显示不出来*
 
 @example
 $ @kbd{echo ""}
 @end example
 
 @noindent
-Here, the @command{echo} utility receives a single argument, even
-though that argument has no characters in it. In the rest of this
-@value{DOCUMENT}, we use the terms @dfn{null string} and @dfn{empty string}
-interchangeably.  Now, on to the quoting rules:
+在这里，@command{echo} 工具收到单一的参数，就算参数中没有字符在其中。
+在本@value{DOCUMENT}的后续部分，我们使用术语 @dfn{null string} 以及 @dfn{empty string} 来表示这样的串。现在在引号规则中：
 
 @itemize @value{BULLET}
 @item
-Quoted items can be concatenated with nonquoted items as well as with other
-quoted items.  The shell turns everything into one argument for
-the command.
+被引起来的项可以与没有被引起来项连接，也可以与已经引起来的项进行连接。Shell 会将它们全部转换成命令的参数。
 
 @item
-Preceding any single character with a backslash (@samp{\}) quotes
-that character.  The shell removes the backslash and passes the quoted
-character on to the command.
+在引起来的串中，在任何单个字符前的反斜杠（@samp{\}）都会被 Shell 移除，而将被引起来的字符传递给命令。
 
 @item
 @cindex @code{\} (backslash), in shell commands
 @cindex backslash (@code{\}), in shell commands
 @cindex single quote (@code{'}), in shell commands
 @cindex @code{'} (single quote), in shell commands
-Single quotes protect everything between the opening and closing quotes.
-The shell does no interpretation of the quoted text, passing it on verbatim
-to the command.
-It is @emph{impossible} to embed a single quote inside single-quoted text.
-Refer back to
-@ref{Comments}
-for an example of what happens if you try.
+单引号保护在开与闭引号之间的所有字符。Shell 不会对串中的东西做任何解析，并原样地传递给命令。@emph{不可能}在一个单引号中嵌入单引号。
+参考 @ref{Comments} 中的例子，看看如果你这么做会有什么结果。
 
 @item
 @cindex double quote (@code{"}), in shell commands
 @cindex @code{"} (double quote), in shell commands
-Double quotes protect most things between the opening and closing quotes.
-The shell does at least variable and command substitution on the quoted text.
-Different shells may do additional kinds of processing on double-quoted text.
+双引号保护开引号与闭引号之间的大多数据字串。Shell 只做最小的变量与命令的替换。不同的 Shell 对于双引号的处理是不一样的。
 
-Because certain characters within double-quoted text are processed by the shell,
-they must be @dfn{escaped} within the text.  Of note are the characters
-@samp{$}, @samp{`}, @samp{\}, and @samp{"}, all of which must be preceded by
-a backslash within double-quoted text if they are to be passed on literally
-to the program.  (The leading backslash is stripped first.)
-Thus, the example seen
+由于在双引号中，特定的字符是会被 Shell 处理的，因此他们在串中一定要进行@dfn{转义}。
+要注意这些符号@samp{$}，@samp{`}，@samp{\} 和 @samp{"}。这些符号如果要原样地传递给程序中，你就需要在串中用反斜杠（@samp{\} ）进行转义。
+（前导的反斜杠（@samp{\}）会先被过滤掉。）
+你可以参考
 @ifnotinfo
-previously
+之前的
 @end ifnotinfo
-in @ref{Read Terminal}:
+在 @ref{Read Terminal} 中的例子：
 
 @example
 awk 'BEGIN @{ print "Don\47t Panic!" @}'
 @end example
 
 @noindent
-could instead be written this way:
+可以写成这样的形式：
 
 @example
 $ @kbd{awk "BEGIN @{ print \"Don't Panic!\" @}"}
@@ -2454,13 +2440,10 @@ $ @kbd{awk "BEGIN @{ print \"Don't Panic!\" @}"}
 
 @cindex single quote (@code{'}), with double quotes
 @cindex @code{'} (single quote), with double quotes
-Note that the single quote is not special within double quotes.
+注意在双引号中的单引号不是特殊符号。
 
 @item
-Null strings are removed when they occur as part of a non-null
-command-line argument, while explicit null objects are kept.
-For example, to specify that the field separator @code{FS} should
-be set to the null string, use:
+空串（Null string）如果出现在非空串中时，会被移除，而显式的空串会被保留。例如：可以将域分隔符 @code{FS} 指定为空串（null string），可以这么来：
 
 @example
 awk -F "" '@var{program}' @var{files} # correct
@@ -2468,21 +2451,19 @@ awk -F "" '@var{program}' @var{files} # correct
 
 @noindent
 @cindex null strings in @command{gawk} arguments, quoting and
-Don't use this:
+而不要这么来：
 
 @example
 awk -F"" '@var{program}' @var{files}  # wrong!
 @end example
 
 @noindent
-In the second case, @command{awk} attempts to use the text of the program
-as the value of @code{FS}, and the first @value{FN} as the text of the program!
-This results in syntax errors at best, and confusing behavior at worst.
+在第二个例子中，@command{awk} 会尝试使用程序的文本作为 @code{FS} 的值，第一个@value{FN}会做为程序的文本！
+这会导致在最好的情况下是语法错误，而最坏的情况下会导致令人费解的行为。
 @end itemize
 
 @cindex quoting in @command{gawk} command lines, tricks for
-Mixing single and double quotes is difficult.  You have to resort
-to shell quoting tricks, like this:
+混用单双引号是比较麻烦的。你需要用一些 Shell 的伎俩，如：
 
 @example
 $ @kbd{awk 'BEGIN @{ print "Here is a single quote <'"'"'>" @}'}
@@ -2490,10 +2471,9 @@ $ @kbd{awk 'BEGIN @{ print "Here is a single quote <'"'"'>" @}'}
 @end example
 
 @noindent
-This program consists of three concatenated quoted strings.  The first and the
-third are single-quoted, and the second is double-quoted.
+这个程序中包括三个连接的引串。第一个与第三个都是单引号串，而第二个是双引号串。
 
-This can be ``simplified'' to:
+这个其实可以简化为：
 
 @example
 $ @kbd{awk 'BEGIN @{ print "Here is a single quote <'\''>" @}'}
@@ -2501,10 +2481,9 @@ $ @kbd{awk 'BEGIN @{ print "Here is a single quote <'\''>" @}'}
 @end example
 
 @noindent
-Judge for yourself which of these two is the more readable.
+这个得要你自己看哪个更好读。
 
-Another option is to use double quotes, escaping the embedded, @command{awk}-level
-double quotes:
+另一个使用双引号的选择，就是转换内嵌的，@command{awk} 层的双引号。
 
 @example
 $ @kbd{awk "BEGIN @{ print \"Here is a single quote <'>\" @}"}
@@ -2512,13 +2491,9 @@ $ @kbd{awk "BEGIN @{ print \"Here is a single quote <'>\" @}"}
 @end example
 
 @noindent
-This option is also painful, because double quotes, backslashes, and dollar signs
-are very common in more advanced @command{awk} programs.
+这种选择会非常痛苦，因为双引号，反斜杠（@samp{\}）以及美元符号（@samp{$}）在高级的 @command{awk} 程序中是很普遍的。
 
-A third option is to use the octal escape sequence equivalents
-(@pxref{Escape Sequences})
-for the
-single- and double-quote characters, like so:
+第三个选择是使用转义的单双引号字符的对应码的八进制序列（@pxref{Escape Sequences}），如下：
 
 @example
 $ @kbd{awk 'BEGIN @{ print "Here is a single quote <\47>" @}'}
@@ -2528,25 +2503,21 @@ $ @kbd{awk 'BEGIN @{ print "Here is a double quote <\42>" @}'}
 @end example
 
 @noindent
-This works nicely, but you should comment clearly what the
-escapes mean.
+这看起来就漂亮多了，但是你需要注释好所转义的东西是什么。
 
-A fourth option is to use command-line variable assignment, like this:
+第四个选择就是使用命令行式的变量赋值，如下：
 
 @example
 $ @kbd{awk -v sq="'" 'BEGIN @{ print "Here is a single quote <" sq ">" @}'}
 @print{} Here is a single quote <'>
 @end example
 
-(Here, the two string constants and the value of @code{sq} are concatenated
-into a single string that is printed by @code{print}.)
+（在这里，两个串常量以及 @code{sq} 的值会被连接起来成为一个单一的串，然后用 @code{print} 打印出来。）
 
-If you really need both single and double quotes in your @command{awk}
-program, it is probably best to move it into a separate file, where
-the shell won't be part of the picture and you can say what you mean.
+如果你确实在程序中即需要单引号也需要双引号，你最好是将它们移到一个单独的文件中。在文件里，Shell 不会解析你的程序所要做的事情。
 
 @node DOS Quoting
-@subsubsection Quoting in MS-Windows Batch Files
+@subsubsection MS-Windows 批处理文件中的引号问题
 
 @ignore
 Date: Wed, 21 May 2008 09:58:43 +0200 (CEST)
@@ -2576,16 +2547,11 @@ Kind regards,
 Jeroen Brink
 @end ignore
 
-Although this @value{DOCUMENT} generally only worries about POSIX systems and the
-POSIX shell, the following issue arises often enough for many users that
-it is worth addressing.
+尽管本@value{DOCUMENT}中一般只针对 POSIX 系统以及 POSIX Shell，下面的问题也值得为用户提出来。
 
 @cindex Brink, Jeroen
-The ``shells'' on Microsoft Windows systems use the double-quote
-character for quoting, and make it difficult or impossible to include an
-escaped double-quote character in a command-line script.
-The following example, courtesy of Jeroen Brink, shows
-how to print all lines in a file surrounded by double quotes:
+微软 Windows 系统中的 Shell 用双引号来引字串。因此，比较难或者不可能在命令行脚本中通过转义的方式来包含双引号。
+多谢 Jeroen Brink 提供下面的例子，呈现文件中的每一行都并用双引号引起来：
 
 @example
 gawk "@{ print \"\042\" $0 \"\042\" @}" @var{file}
@@ -2593,25 +2559,16 @@ gawk "@{ print \"\042\" $0 \"\042\" @}" @var{file}
 
 
 @node Sample Data Files
-@section @value{DDF}s for the Examples
+@section 例子中使用的@value{DDF}
 
 @cindex input files, examples
 @cindex @code{mail-list} file
-Many of the examples in this @value{DOCUMENT} take their input from two sample
-@value{DF}s.  The first, @file{mail-list}, represents a list of peoples' names
-together with their email addresses and information about those people.
-The second @value{DF}, called @file{inventory-shipped}, contains
-information about monthly shipments.  In both files,
-each line is considered to be one @dfn{record}.
+本@value{DOCUMENT}中所使用到的例子，主要从两个样例@value{DF}中输入数据。
+第一个是 @file{mail-list} 文件，里面展示了一系列的人名，同时还有他们的邮件地址，以及相关的个人信息。
+第二个是 @file{inventory-shipped} 文件，包含了每月的发货情况。两个文件中，每一行都称为一条@dfn{记录}。
 
-In @file{mail-list}, each record contains the name of a person,
-his/her phone number, his/her email address, and a code for his/her relationship
-with the author of the list.
-The columns are aligned using spaces.
-An @samp{A} in the last column
-means that the person is an acquaintance.  An @samp{F} in the last
-column means that the person is a friend.
-An @samp{R} means that the person is a relative:
+在 @file{mail-list} 文件中，每个记录包括了人名，他/她的电话号码，他/她的邮件地址，以及他/她与作者本人的关系。
+列用行来进行分隔。最后一列中的 @samp{A} 表示相识的人。@samp{F} 表示相应的人是朋友关系，@samp{R} 表示相应的人是亲属关系：
 
 @example
 @c system if test ! -d eg      ; then mkdir eg      ; fi
@@ -2635,14 +2592,8 @@ Jean-Paul    555-2127     jeanpaul.campanorum@@nyu.edu     R
 @end example
 
 @cindex @code{inventory-shipped} file
-The @value{DF} @file{inventory-shipped} represents
-information about shipments during the year.
-Each record contains the month, the number
-of green crates shipped, the number of red boxes shipped, the number of
-orange bags shipped, and the number of blue packages shipped,
-respectively.  There are 16 entries, covering the 12 months of last year
-and the first four months of the current year.
-An empty line separates the data for the two years:
+@file{inventory-shipped} 文件中的数据表示了在一年中的发货信息。
+每个记录都包括一个月绿色集装箱的发货数，红箱盒装的发货数统计，橙色的袋装的发货数统计，以及蓝色包装的发货数统计。这里面有 16 条记录，包括了了上一年最后 12 个月的数据，以及本年的前 4 个月的数据。用空行分隔了年份：
 
 @example
 @c file eg/data/inventory-shipped
@@ -2666,39 +2617,27 @@ Apr  21  70  74 514
 @c endfile
 @end example
 
-The sample files are included in the @command{gawk} distribution,
-in the directory @file{awklib/eg/data}.
+上面的文件包含在 @command{gawk} 发布版本，位于目录 @file{awklib/eg/data} 中。
 
 @node Very Simple
-@section Some Simple Examples
+@section 一些简单例子
 
-The following command runs a simple @command{awk} program that searches the
-input file @file{mail-list} for the character string @samp{li} (a
-grouping of characters is usually called a @dfn{string};
-the term @dfn{string} is based on similar usage in English, such
-as ``a string of pearls'' or ``a string of cars in a train''):
+下面的命令行执行了一个很简单的 @command{awk} 程序，就是查找 @file{mail-list} 文件中的字符串 @samp{li}
+（一组字符称为一个@dfn{字符串}，这个是基于英语中的术语@dfn{串}的用法，如“一串珍珠”或者“火车中的一串车厢”）：
 
 @example
 awk '/li/ @{ print $0 @}' mail-list
 @end example
 
 @noindent
-When lines containing @samp{li} are found, they are printed because
-@w{@samp{print $0}} means print the current line.  (Just @samp{print} by
-itself means the same thing, so we could have written that
-instead.)
+如果行中包括了 @samp{li} ，他们就会被打印出来，因为 @w{@samp{print $0}} 的意思就是打印当前行。
+（只写 @samp{print} 的意思是一样的，所以我们可以用 @samp{print} 代替 @w{@samp{print $0}}。）
 
-You will notice that slashes (@samp{/}) surround the string @samp{li}
-in the @command{awk} program.  The slashes indicate that @samp{li}
-is the pattern to search for.  This type of pattern is called a
-@dfn{regular expression}, which is covered in more detail later
-(@pxref{Regexp}).
-The pattern is allowed to match parts of words.
-There are
-single quotes around the @command{awk} program so that the shell won't
-interpret any of it as special shell characters.
+你应该注意到 @command{awk} 程序中在串 @samp{li} 两边的斜杠（@samp{/}）。
+这个斜杠指示了 @samp{li} 是要搜索的东西。这种模式称为@dfn{正则表达式}，这个知识点会在后面涉及（@pxref{Regexp}）。
+这个模式允许匹配单词的部分。在 @command{awk} 程序两边由单引号引起来，因此不会解析其中的任何字符。
 
-Here is what this program prints:
+下面是这个程序的输出:
 
 @example
 $ @kbd{awk '/li/ @{ print $0 @}' mail-list}
@@ -2710,81 +2649,60 @@ $ @kbd{awk '/li/ @{ print $0 @}' mail-list}
 
 @cindex actions, default
 @cindex patterns, default
-In an @command{awk} rule, either the pattern or the action can be omitted,
-but not both.  If the pattern is omitted, then the action is performed
-for @emph{every} input line.  If the action is omitted, the default
-action is to print all lines that match the pattern.
+在 @command{awk} 的规则中，即可以省略模式，也可以省略相关的动作，但不能两者都省略。如果模式省略了，那么动作的执行就会针对@emph{所有的}输入行。
+如果动作被省略了，那么默认的运行就是打印所有的匹配行。
 
 @cindex actions, empty
-Thus, we could leave out the action (the @code{print} statement and the
-braces) in the previous example and the result would be the same:
-@command{awk} prints all lines matching the pattern @samp{li}.  By comparison,
-omitting the @code{print} statement but retaining the braces makes an
-empty action that does nothing (i.e., no lines are printed).
+因此，我们不管例子中的动作（即 @code{print} 语句以及花括号），结果也是一样的：@command{awk} 会打印所有匹配了 @samp{li} 字串的行。如果省略了 @code{print} 语句，而保留花括号，则动作会什么也不做（即不会有行被输出）。
 
 @cindex @command{awk} programs, one-line examples
-Many practical @command{awk} programs are just a line or two long.  Following is a
-collection of useful, short programs to get you started.  Some of these
-programs contain constructs that haven't been covered yet. (The description
-of the program will give you a good idea of what is going on, but you'll
-need to read the rest of the @value{DOCUMENT} to become an @command{awk} expert!)
-Most of the examples use a @value{DF} named @file{data}.  This is just a
-placeholder; if you use these programs yourself, substitute
-your own @value{FN}s for @file{data}.
-For future reference, note that there is often more than
-one way to do things in @command{awk}.  At some point, you may want
-to look back at these examples and see if
-you can come up with different ways to do the same things shown here:
+实际的 @command{awk} 程序大多只有一两行长。下面收集了一些有用而短小的程序，以便于你开始使用 @command{awk}。
+其中有些程序包括的特性目前还没有涉及（对于程序的描述可以提示你接下来将做什么，但不需要你先读完本@value{DOCUMENT}后成为专家后再来阅读程序！）
+大多数的例子都使用名为 @file{data} 的@value{DF}。这仅是个占位符；如果你自己使用这些程序，替换成你自己的@value{FN}的 @file{data} 文件就好了。
+为了后续参考：一般来讲要完成同样一件事，@command{awk} 可以有不止一种方法。在某个时候，你可能想回过头来看这些例子，看是否能够想出更多方法来做这里展示的相同的事情。
 
 @itemize @value{BULLET}
 @item
-Print every line that is longer than 80 characters:
+打印大于 80 个字符的行：
 
 @example
 awk 'length($0) > 80' data
 @end example
 
-The sole rule has a relational expression as its pattern and has no
-action---so it uses the default action, printing the record.
+这里唯一的规则就是有一个关系表达式作为模式，但是没有动作。因此它用的是默认动作，就是打印记录（输入行）。
 
 @item
-Print the length of the longest input line:
+打印最长的行的长度：
 
 @example
 awk '@{ if (length($0) > max) max = length($0) @}
      END @{ print max @}' data
 @end example
 
-The code associated with @code{END} executes after all
-input has been read; it's the other side of the coin to @code{BEGIN}.
+这里与 @code{END} 关联的代码，会在所有的行读入后执行；它与 @code{BEGIN} 刚好相反。
 
 @cindex @command{expand} utility
 @item
-Print the length of the longest line in @file{data}:
+打印 @file{data} 文件中最长的行的长度：
 
 @example
 expand data | awk '@{ if (x < length($0)) x = length($0) @}
                    END @{ print "maximum line length is " x @}'
 @end example
 
-This example differs slightly from the previous one:
-the input is processed by the @command{expand} utility to change TABs
-into spaces, so the widths compared are actually the right-margin columns,
-as opposed to the number of input characters on each line.
+这个例子与前面的有一些不同：输入是通过 @command{expand} 工具，将 TABs 转换成空格。因此长度的比较实际上是到最右边的列数，而不是每一行的输入字符数。
 
 @item
-Print every line that has at least one field:
+打印至少有一个域的行：
 
 @example
 awk 'NF > 0' data
 @end example
 
-This is an easy way to delete blank lines from a file (or rather, to
-create a new file similar to the old file but from which the blank lines
-have been removed).
+这个是最好的删除空白行的方法（即是，创建一个与旧文件一样的文件，但是移除了其中的空白行）。
 
 @item
-Print seven random numbers from 0 to 100, inclusive:
+打印从 0 到 100 （包含 0 和 100）的7个随机数：
 
 @example
 awk 'BEGIN @{ for (i = 1; i <= 7; i++)
@@ -2792,7 +2710,7 @@ awk 'BEGIN @{ for (i = 1; i <= 7; i++)
 @end example
 
 @item
-Print the total number of bytes used by @var{files}:
+打印@var{多个文件}中总共的字节数：
 
 @example
 ls -l @var{files} | awk '@{ x += $5 @}
@@ -2800,7 +2718,7 @@ ls -l @var{files} | awk '@{ x += $5 @}
 @end example
 
 @item
-Print the total number of kilobytes used by @var{files}:
+打印@var{多个文件}所使用的 KB 总数：
 
 @c Don't use \ continuation, not discussed yet
 @c Remember that awk does floating point division,
@@ -2811,51 +2729,43 @@ ls -l @var{files} | awk '@{ x += $5 @}
 @end example
 
 @item
-Print a sorted list of the login names of all users:
+打印所有用户的登录名的排序列表：
 
 @example
 awk -F: '@{ print $1 @}' /etc/passwd | sort
 @end example
 
 @item
-Count the lines in a file:
+打印文件的行数：
 
 @example
 awk 'END @{ print NR @}' data
 @end example
 
 @item
-Print the even-numbered lines in the @value{DF}:
+打印@value{DF}中的偶数行：
 
 @example
 awk 'NR % 2 == 0' data
 @end example
 
-If you used the expression @samp{NR % 2 == 1} instead,
-the program would print the odd-numbered lines.
+如果你使用表达式 @samp{NR % 2 == 1}，则程序将打印出奇数行。
 @end itemize
 
 @node Two Rules
-@section An Example with Two Rules
+@section 两规则的例子
 @cindex @command{awk} programs
 
-The @command{awk} utility reads the input files one line at a
-time.  For each line, @command{awk} tries the patterns of each rule.
-If several patterns match, then several actions execute in the order in
-which they appear in the @command{awk} program.  If no patterns match, then
-no actions run.
+@command{awk} 工具从文件中一次读取一行。对于每一行，@command{awk} 都是尝试与每个模式进行匹配。如果有几个模式与其匹配，则几个动作都会按照匹配的顺序被执行。如果没有模式匹配上，则不会有动作会执行。
 
-After processing all the rules that match the line (and perhaps there are none),
-@command{awk} reads the next line.  (However,
-@pxref{Next Statement}
+当处理了匹配行的所有规则后（也许也没有），@command{awk} 会读取下一行。（但是，@pxref{Next Statement}，
 @ifdocbook
-and @ref{Nextfile Statement}.)
+与 @ref{Nextfile Statement} 中的相关知识。）
 @end ifdocbook
 @ifnotdocbook
-and also @pxref{Nextfile Statement}.)
+与 @pxref{Nextfile Statement}.)
 @end ifnotdocbook
-This continues until the program reaches the end of the file.
-For example, the following @command{awk} program contains two rules:
+这个过程一直持续到文件读取完毕。例如，下面的 @command{awk} 程序包含了两个规则：
 
 @example
 /12/  @{ print $0 @}
@@ -2863,17 +2773,11 @@ For example, the following @command{awk} program contains two rules:
 @end example
 
 @noindent
-The first rule has the string @samp{12} as the
-pattern and @samp{print $0} as the action.  The second rule has the
-string @samp{21} as the pattern and also has @samp{print $0} as the
-action.  Each rule's action is enclosed in its own pair of braces.
+第一个规则用字符串 @samp{12} 作为模式，以及 @samp{print $0} 作为动作。第二个规则用 @samp{21} 作为模式，也用 @samp{print $0} 作为动作。每个规则的动作都用自己的花括号包含起来。
 
-This program prints every line that contains the string
-@samp{12} @emph{or} the string @samp{21}.  If a line contains both
-strings, it is printed twice, once by each rule.
+这个程序打印每一行包含有 @samp{12} @emph{或者} @samp{21} 的行。如果有一行包含了两个串，则会打印两次，每个规则一次。
 
-This is what happens if we run this program on our two sample @value{DF}s,
-@file{mail-list} and @file{inventory-shipped}:
+如果我们同时对我们的两个@value{DF}，即 @file{mail-list} 文件与 @file{inventory-shipped} 文件执行这个程序会有什么结果：
 
 @example
 $ @kbd{awk '/12/ @{ print $0 @}}
@@ -2888,18 +2792,12 @@ $ @kbd{awk '/12/ @{ print $0 @}}
 @end example
 
 @noindent
-Note how the line beginning with @samp{Jean-Paul}
-in @file{mail-list} was printed twice, once for each rule.
+留意在 @file{mail-list} 文件中的 @samp{Jean-Paul} 开头的行，它被打印了两次，一个规则一次。
 
 @node More Complex
-@section A More Complex Example
+@section 复杂一点的例子
 
-Now that we've mastered some simple tasks, let's look at
-what typical @command{awk}
-programs do.  This example shows how @command{awk} can be used to
-summarize, select, and rearrange the output of another utility.  It uses
-features that haven't been covered yet, so don't worry if you don't
-understand all the details:
+目前我们已经掌握一些基本的技能，现在我们再看一下 @command{awk} 典型地还能做些什么事情。这个例子展示了 @command{awk} 如何被用来做汇总，选择以及重新安排另一个工具的输出。所用到的特性还没有涉及，因此你不要担心不理解所有的细节：
 
 @example
 ls -l | awk '$6 == "Nov" @{ sum += $5 @}
@@ -2907,11 +2805,8 @@ ls -l | awk '$6 == "Nov" @{ sum += $5 @}
 @end example
 
 @cindex @command{ls} utility
-This command prints the total number of bytes in all the files in the
-current directory that were last modified in November (of any year).
-The @w{@samp{ls -l}} part of this example is a system command that gives
-you a listing of the files in a directory, including each file's size and the date
-the file was last modified. Its output looks like this:
+这个命令打印当前目录下，最后的修改时间为十一月份的所有文件的总共的字节数。
+@w{@samp{ls –l}} 是这整体命令的一部分，用于显示一个目录下的文件，包括文件的大小以及最后修改时间。它的输出类似于这样：
 
 @example
 -rw-r--r--  1 arnold   user   1933 Nov  7 13:05 Makefile
@@ -2926,45 +2821,25 @@ the file was last modified. Its output looks like this:
 
 @noindent
 @cindex line continuations, with C shell
-The first field contains read-write permissions, the second field contains
-the number of links to the file, and the third field identifies the file's owner.
-The fourth field identifies the file's group.
-The fifth field contains the file's size in bytes.  The
-sixth, seventh, and eighth fields contain the month, day, and time,
-respectively, that the file was last modified.  Finally, the ninth field
-contains the @value{FN}.
+第一个域包含了读写权限，第二个域包含了文件的硬连接@footnote{硬链接(hard link， 也称链接)就是一个文件的一个或多个文件名。多数文件系统可以用多个文件名与同一个文件进行链接，这些文件名可以在同一目录或不同目录。一个文件有几个文件名，就说该文件的链接数为几。这个与软链接不同，软连接是指向文件名的文件。删除所有硬连接才能删除文件。删除被软连接的指向的文件（如果只有一个硬连接）就可以删除文件本身。——译者注}
+个数，第三个域显示了文件的属主信息。第四个域显示的文件的用户信息。第五个域显示了文件的字节大小。第六、七、八个域分别包括文件最后修改时间的月，日与时间。最后，第九个域包含了@value{FN}。
 
 @c @cindex automatic initialization
 @cindex initialization, automatic
-The @samp{$6 == "Nov"} in our @command{awk} program is an expression that
-tests whether the sixth field of the output from @w{@samp{ls -l}}
-matches the string @samp{Nov}.  Each time a line has the string
-@samp{Nov} for its sixth field, @command{awk} performs the action
-@samp{sum += $5}.  This adds the fifth field (the file's size) to the variable
-@code{sum}.  As a result, when @command{awk} has finished reading all the
-input lines, @code{sum} is the total of the sizes of the files whose
-lines matched the pattern.  (This works because @command{awk} variables
-are automatically initialized to zero.)
+在 @command{awk} 程序中 @samp{$6 == “Nov”} 就是用来判断 @w{@samp{ls –l}} 输出的第六个域是否为 @samp{Nov} 的表达式。
+如果每次的输入行的第六个域匹配字串 @samp{Nov} ，@command{awk} 就会执行 @samp{sum += $5}。
+这个会加上第五个域（文件大小）到变量 @code{sum} 中。结果就是，当 @command{awk} 完成了所有行的输入时，@code{sum} 就包含了匹配模式的所有文件的大小。（这可以工作是因为 @command{awk} 的变量会默认初始化为 0。）
 
-After the last line of output from @command{ls} has been processed, the
-@code{END} rule executes and prints the value of @code{sum}.
-In this example, the value of @code{sum} is 80600.
+最后一行处理后，@command{END} 规则就会执行，并打印出 @code{sum} 的值，在这个例子中为 80600。
 
-These more advanced @command{awk} techniques are covered in later
-@value{SECTION}s
-(@pxref{Action Overview}).  Before you can move on to more
-advanced @command{awk} programming, you have to know how @command{awk} interprets
-your input and displays your output.  By manipulating fields and using
-@code{print} statements, you can produce some very useful and
-impressive-looking reports.
+这些个高级的 @command{awk} 技术会在后面的@value{SECTION}中涉及（@pxref{Action Overview}）。在你学习到这些高级技术前，你只需要知道 @command{awk} 如何解析你的输入并显示你的输出。通过操作各个域并使用 @code{print} 语句，你就可以产生一些相当有用的，令人印象深刻的报表。
 
 @node Statements/Lines
-@section @command{awk} Statements Versus Lines
+@section @command{awk} 语句与行
 @cindex line breaks
 @cindex newlines
 
-Most often, each line in an @command{awk} program is a separate statement or
-separate rule, like this:
+通常情况下，@command{awk} 程序的每一行都是一个独立的语句或者一个独立的规则，类似于：
 
 @example
 awk '/12/  @{ print $0 @}
@@ -2972,31 +2847,23 @@ awk '/12/  @{ print $0 @}
 @end example
 
 @cindex @command{gawk}, newlines in
-However, @command{gawk} ignores newlines after any of the following
-symbols and keywords:
+但是 @command{gawk} 会忽略下面符号后面的任何新行：
 
 @example
 ,    @{    ?    :    ||    &&    do    else
 @end example
 
 @noindent
-A newline at any other point is considered the end of the
-statement.@footnote{The @samp{?} and @samp{:} referred to here is the
-three-operand conditional expression described in
-@ref{Conditional Exp}.
-Splitting lines after @samp{?} and @samp{:} is a minor @command{gawk}
-extension; if @option{--posix} is specified
-(@pxref{Options}), then this extension is disabled.}
+任何一个新行都会认为是一个语句@footnote{这里的 @samp{?} 与 @samp{:} 是一个三元操作符表达式，@ref{Conditional Exp} 中进行了描述。
+在 @samp{?} 与 @samp{:} 之后进行断行是一个小扩展，如果指定了@option{--posix} 参数(@pxref{Options})，则这个特性就会被禁用。}
+的结束。
 
 @cindex @code{\} (backslash), continuing lines and
 @cindex backslash (@code{\}), continuing lines and
-If you would like to split a single statement into two lines at a point
-where a newline would terminate it, you can @dfn{continue} it by ending the
-first line with a backslash character (@samp{\}).  The backslash must be
-the final character on the line in order to be recognized as a continuation
-character.  A backslash is allowed anywhere in the statement, even
-in the middle of a string or regular expression.  For example:
-
+在新的一行会中止一个命令的情况下，如果你想把一行命令写成两行，你可以在第一行的末尾加上反斜杠（@samp{\}）来@dfn{续写}这个命令。
+为了识别一行的后续字符（续行），（ @samp{\} ）反斜杠必须是行的结束字符。
+反斜杠可以写在这个命令的任何地方，即使在一个字符串或者正则表达式的中间也可以。如：
+#TODO20171023
 @example
 awk '/This regular expression is too long, so continue it\
  on the next line/ @{ print $1 @}'
