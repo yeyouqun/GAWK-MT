@@ -2387,8 +2387,6 @@ null string 就是在字符数据中没有值。换句话说，就是空的。�
 在 Shell 中，它可以写成单或者双引号的形式：@code{""} 或者 @code{''}。虽说 null string 中没有字符，但是确实是存在的。
 例如下面的指令：
 
-*TODO20171020 # BUG: menu说明中，中文字符开头的说明文本，显示不出来*
-
 @example
 $ @kbd{echo ""}
 @end example
@@ -2863,7 +2861,6 @@ awk '/12/  @{ print $0 @}
 在新的一行会中止一个命令的情况下，如果你想把一行命令写成两行，你可以在第一行的末尾加上反斜杠（@samp{\}）来@dfn{续写}这个命令。
 为了识别一行的后续字符（续行），（ @samp{\} ）反斜杠必须是行的结束字符。
 反斜杠可以写在这个命令的任何地方，即使在一个字符串或者正则表达式的中间也可以。如：
-#TODO20171023
 @example
 awk '/This regular expression is too long, so continue it\
  on the next line/ @{ print $1 @}'
@@ -2871,33 +2868,15 @@ awk '/This regular expression is too long, so continue it\
 
 @noindent
 @cindex portability, backslash continuation and
-We have generally not used backslash continuation in our sample programs.
-@command{gawk} places no limit on the
-length of a line, so backslash continuation is never strictly necessary;
-it just makes programs more readable.  For this same reason, as well as
-for clarity, we have kept most statements short in the programs
-presented throughout the @value{DOCUMENT}.  Backslash continuation is
-most useful when your @command{awk} program is in a separate source file
-instead of entered from the command line.  You should also note that
-many @command{awk} implementations are more particular about where you
-may use backslash continuation. For example, they may not allow you to
-split a string constant using backslash continuation.  Thus, for maximum
-portability of your @command{awk} programs, it is best not to split your
-lines in the middle of a regular expression or a string.
+我们一般不在我们的程序代码中利用反斜杠来续行。@command{gawk} 对于一行的长度没有限制，因此反斜杠续行并非是必要的。这仅是使得程序更有可读性。因为这个原因，也为清晰起见，我们尽量保证本@value{DOCUMENT}中代码的语句的短小。如果你的代码是写在单独的文件而不是命令行中，那么反斜杠就最有用了。同时你也需要知道不同的发布版本的 @command{awk} 对于反斜杠在何处使用是有特殊地方的。因此，为了能最大化你的代码的可移植性，最好不要把你的代码行在字串或者正则表达式中间断行分开。
 @c 10/2000: gawk, mawk, and current bell labs awk allow it,
 @c solaris 2.7 nawk does not. Solaris /usr/xpg4/bin/awk does though!  sigh.
 
 @cindex @command{csh} utility
 @cindex backslash (@code{\}), continuing lines and, in @command{csh}
 @cindex @code{\} (backslash), continuing lines and, in @command{csh}
-@quotation CAUTION
-@emph{Backslash continuation does not work as described
-with the C shell.}  It works for @command{awk} programs in files and
-for one-shot programs, @emph{provided} you are using a POSIX-compliant
-shell, such as the Unix Bourne shell or Bash.  But the C shell behaves
-differently!  There you must use two backslashes in a row, followed by
-a newline.  Note also that when using the C shell, @emph{every} newline
-in your @command{awk} program must be escaped with a backslash. To illustrate:
+@quotation 注意
+@emph{反斜杠续行不会在 C Shell 中有效。}它只在独立的 @command{awk} 程序文件，或者一次性的程序中有用，@emph{前提是}你使用的是 POSIX 兼容的 Shell，例如 Unix Bourne Shell 或者 Bash。但是 C Shell 的表现不同！你需要在行中使用两个反斜杠，然后再写入新行。在使用 C Shell 时你也需要留意 @command{awk} 程序中的@emph{每一个}新行都需要反斜杠转义。作为说明如下：
 
 @example
 % @kbd{awk 'BEGIN @{ \}
@@ -2908,10 +2887,9 @@ in your @command{awk} program must be escaped with a backslash. To illustrate:
 @end example
 
 @noindent
-Here, the @samp{%} and @samp{?} are the C shell's primary and secondary
-prompts, analogous to the standard shell's @samp{$} and @samp{>}.
+这里面，@samp{%} 与 @samp{?} 都是 C Shell 的主、次提示符，与标准的 Shell 的 @samp{$} 与 @samp{>} 类似。
 
-Compare the previous example to how it is done with a POSIX-compliant shell:
+与前面一个例子相比，看看 POSIX 兼容的 Shell 如何来完成：
 
 @example
 $ @kbd{awk 'BEGIN @{}
@@ -2922,18 +2900,12 @@ $ @kbd{awk 'BEGIN @{}
 @end example
 @end quotation
 
-@command{awk} is a line-oriented language.  Each rule's action has to
-begin on the same line as the pattern.  To have the pattern and action
-on separate lines, you @emph{must} use backslash continuation; there
-is no other option.
+@command{awk} 是一个面向行的语言。每一个规则的动作都与模式在同一行。为了将它们分隔在不同的行，你@emph{必须}使用反斜杠来进行续行；没有他选项。
 
 @cindex backslash (@code{\}), continuing lines and, comments and
 @cindex @code{\} (backslash), continuing lines and, comments and
 @cindex commenting, backslash continuation and
-Another thing to keep in mind is that backslash continuation and
-comments do not mix. As soon as @command{awk} sees the @samp{#} that
-starts a comment, it ignores @emph{everything} on the rest of the
-line. For example:
+还有一个事情要记住，不要将反斜杠与注释混用。@command{awk} 只要看到 @samp{#} 开始一个注释，就会忽略一行中@emph{所有的}后续部分。例如：
 
 @example
 $ @kbd{gawk 'BEGIN @{ print "dont panic" # a friendly \}
@@ -2944,149 +2916,96 @@ $ @kbd{gawk 'BEGIN @{ print "dont panic" # a friendly \}
 @end example
 
 @noindent
-In this case, it looks like the backslash would continue the comment onto the
-next line. However, the backslash-newline combination is never even
-noticed because it is ``hidden'' inside the comment. Thus, the
-@code{BEGIN} is noted as a syntax error.
+在这个例子中，看起来反斜杠会将注释续到下一行。但是，反斜杠-新行这样的组合从来不会被注意到，因为它在注释中被藏起来了。因此，@code{BEGIN} 会被视作一个语法错误。
 
 @cindex statements, multiple
 @cindex @code{;} (semicolon), separating statements in actions
 @cindex semicolon (@code{;}), separating statements in actions
-When @command{awk} statements within one rule are short, you might want to put
-more than one of them on a line.  This is accomplished by separating the statements
-with a semicolon (@samp{;}).
-This also applies to the rules themselves.
-Thus, the program shown at the start of this @value{SECTION}
-could also be written this way:
+当 @command{awk} 的一个规则中的语句很短，你想把它们放在同一行，这个可通过语句之间用分号（@samp{;}）进行分隔。这也同样适应于规则本身。因此，在本@value{SECTION}中展示的程序也可以写在这样：
 
 @example
 /12/ @{ print $0 @} ; /21/ @{ print $0 @}
 @end example
 
-@quotation NOTE
-The requirement that states that rules on the same line must be
-separated with a semicolon was not in the original @command{awk}
-language; it was added for consistency with the treatment of statements
-within an action.
+@quotation 提示
+需要声明的一点是，用一个分号分隔同一行中的规则并不是 @command{awk} 语言的首创。为了与在一个动作的语句处理保持一致，这才加入到 @command{awk} 中的。
 @end quotation
 
 @node Other Features
-@section Other Features of @command{awk}
+@section @command{awk} 的其他特性
 
 @cindex variables
-The @command{awk} language provides a number of predefined, or
-@dfn{built-in}, variables that your programs can use to get information
-from @command{awk}.  There are other variables your program can set
-as well to control how @command{awk} processes your data.
+@command{awk} 语言提供了非常多的预定义的，或者@dfn{内建的}变量，可让你的程序从 @command{awk} 获取信息。也有些变量集是让你的 @command{awk} 程序控制 @command{awk} 如何处理你的数据。
 
-In addition, @command{awk} provides a number of built-in functions for doing
-common computational and string-related operations.
-@command{gawk} provides built-in functions for working with timestamps,
-performing bit manipulation, for runtime string translation (internationalization),
-determining the type of a variable,
-and array sorting.
+另外，@command{awk} 也提供了很多的内建函数，来做一些通用性的计算与字串相关的操作。@command{gawk} 提供了内建的函数用来处理时间戳，执行位操作，以及运行时的字串翻译（国际化），确定变量的类型以及数据排序。
 
-As we develop our presentation of the @command{awk} language, we will introduce
-most of the variables and many of the functions. They are described
-systematically in @ref{Built-in Variables} and in
-@ref{Built-in}.
+当我们开发 @command{awk} 语言程序时，我们会介绍多数的变量与函数，他们会在 @ref{Built-in Variables}，以及 @ref{Built-in}，有系统的描述。
 
 @node When
-@section When to Use @command{awk}
+@section 何时使用 @command{awk}
 
 @cindex @command{awk}, uses for
-Now that you've seen some of what @command{awk} can do,
-you might wonder how @command{awk} could be useful for you.  By using
-utility programs, advanced patterns, field separators, arithmetic
-statements, and other selection criteria, you can produce much more
-complex output.  The @command{awk} language is very useful for producing
-reports from large amounts of raw data, such as summarizing information
-from the output of other utility programs like @command{ls}.
-(@xref{More Complex}.)
+目前，我们已经了解了一些 @command{awk} 可以做的事情，你可能有疑问 @command{awk} 对你有什么用处。通过使用其他工具程序，更高级的模式，域分隔符，算术语句以及其他的选择方案，你可以产生更为复杂的输出。
+@command{awk} 对于从大量的原始数据产生报表的场景中非常用有，如从其他的工具，如 @command{ls} 的输出中汇总信息。（@xref{More Complex}）
 
-Programs written with @command{awk} are usually much smaller than they would
-be in other languages.  This makes @command{awk} programs easy to compose and
-use.  Often, @command{awk} programs can be quickly composed at your keyboard,
-used once, and thrown away.  Because @command{awk} programs are interpreted, you
-can avoid the (usually lengthy) compilation part of the typical
-edit-compile-test-debug cycle of software development.
+用 @command{awk} 语言写的程序一般会比较其他的语言所写的程序要短。这使得 @command{awk} 程序非常容易组合与使用。
+@command{awk} 常常在“用后即丢”的场景中快速实现你的代码。由于 @command{awk} 是解释型的，这就避免了在编辑-编译-测试-调试这样的程序开发流程的编译流程，而这个流程通常都比较长。
 
 @cindex Brian Kernighan's @command{awk}
-Complex programs have been written in @command{awk}, including a complete
-retargetable assembler for
+也有非常复杂 @command{awk} 程序，包括一个完整的可重定位的为
 @ifclear FOR_PRINT
-eight-bit microprocessors (@pxref{Glossary}, for more information),
+ 8 位微处理写的汇编器（@pxref{Glossary}，取得详细信息），
 @end ifclear
 @ifset FOR_PRINT
-eight-bit microprocessors,
+ 8 位微处理写的汇编器，
 @end ifset
-and a microcode assembler for a special-purpose Prolog
-computer.
-The original @command{awk}'s capabilities were strained by tasks
-of such complexity, but modern versions are more capable.
+以及为专用的 Prolog 计算机写的微代码的汇编器。起初的 @command{awk} 的能力没有办法完成这么复杂的任务，但是现代版本的 @command{awk} 则具备了这样的能力。
 
 @cindex @command{awk} programs, complex
-If you find yourself writing @command{awk} scripts of more than, say,
-a few hundred lines, you might consider using a different programming
-language.  The shell is good at string and pattern matching; in addition,
-it allows powerful use of the system utilities.  Python offers a nice
-balance between high-level ease of programming and access to system
-facilities.@footnote{Other popular scripting languages include Ruby
-and Perl.}
+如果你发现你可能需要写好几百行的 @command{awk} 程序代码，你或许应该考虑使用其他的编程语言，Shell 就对字串处理与匹配就很在行；
+另外，它也可以让你充分使用系统中的强大工具。Python 在高层级上的语言编程方便性与使用系统工具之间提供了很好的平衡。
+@footnote{其他的流行的工具包括 Ruby 与 Perl。}
 
 @node Intro Summary
-@section Summary
+@section 总结
 
 @c FIXME: Review this chapter for summary of builtin functions called.
 @itemize @value{BULLET}
 @item
-Programs in @command{awk} consist of @var{pattern}--@var{action} pairs.
+@command{awk} 程序由@var{模式}-@var{动作}对组成。
 
 @item
-An @var{action} without a @var{pattern} always runs.  The default
-@var{action} for a pattern without one is @samp{@{ print $0 @}}.
+没有@var{模式}的@var{动作}也会运行。对于没有@var{模式}的默认@var{动作}就是 @samp{@{ print $0 @}} 。
 
 @item
-Use either
-@samp{awk '@var{program}' @var{files}}
-or
-@samp{awk -f @var{program-file} @var{files}}
-to run @command{awk}.
+要么使用
+ @samp{awk '@var{program}' @var{files}} 
+或者
+ @samp{awk -f @var{program-file} @var{files}} 
+来运行 @command{awk} 。
 
 @item
-You may use the special @samp{#!} header line to create @command{awk}
-programs that are directly executable.
+你可以使用特殊的 @samp{#!} 字串放在 @command{awk} 程序的第一行来直接执行。
 
 @item
-Comments in @command{awk} programs start with @samp{#} and continue to
-the end of the same line.
+@command{awk} 程序的注释以 @samp{#} 开始，并持续到同一行的结束。
 
 @item
-Be aware of quoting issues when writing @command{awk} programs as
-part of a larger shell script (or MS-Windows batch file).
+当在写大的脚本的一部份时，@command{awk} 时候要注意引号问题（或者 MS-Windows 的批处理文件）。
 
 @item
-You may use backslash continuation to continue a source line.
-Lines are automatically continued after
-a comma, open brace, question mark, colon,
-@samp{||}, @samp{&&}, @code{do}, and @code{else}.
+可以使用反斜杠来进行源代码续行。也可以在逗号 @samp{,} ，开大括号 @samp{@{} ，问号 @samp{?} ，冒号 @samp{:}，@samp{||}，@samp{&&}，@samp{do}，与 @samp{else} 后面自动续行。
 @end itemize
 
+
 @node Invoking Gawk
-@chapter Running @command{awk} and @command{gawk}
+@chapter 运行 @command{awk} 与 @command{gawk}
 
-This @value{CHAPTER} covers how to run @command{awk}, both POSIX-standard
-and @command{gawk}-specific command-line options, and what
-@command{awk} and
-@command{gawk} do with nonoption arguments.
-It then proceeds to cover how @command{gawk} searches for source files,
-reading standard input along with other files, @command{gawk}'s
-environment variables, @command{gawk}'s exit status, using include files,
-and obsolete and undocumented options and/or features.
 
-Many of the options and features described here are discussed in
-more detail later in the @value{DOCUMENT}; feel free to skip over
-things in this @value{CHAPTER} that don't interest you right now.
+本@value{CHAPTER}的内容包括如何来运行 @command{awk} ，介绍 POSIX 标准的与 @command{gawk} 特定的命令行选项，
+以及 @command{awk} 与 @command{gawk} 不带参数运行时的情形。后面再涉及 @command{gawk} 如何来搜索文件，在读取其他文件的同时从标准输入读取数据，@command{gawk} 的环境变量，退出状态，使用包含文件，以及那些过时的，未文档化的选项与特性。
+
+本@value{CHAPTER}中的许多特性与选项在后面的@value{CHAPTER}中会更详细地说明。可以跳过本@value{CHAPTER}中那些你现在不感兴趣的内容。
 
 @menu
 * Command Line::                How to run @command{awk}.
@@ -3104,15 +3023,13 @@ things in this @value{CHAPTER} that don't interest you right now.
 @end menu
 
 @node Command Line
-@section Invoking @command{awk}
+@section 调用 @command{awk}
 @cindex command line, invoking @command{awk} from
 @cindex @command{awk}, invoking
 @cindex arguments, command-line, invoking @command{awk}
 @cindex options, command-line, invoking @command{awk}
 
-There are two ways to run @command{awk}---with an explicit program or with
-one or more program files.  Here are templates for both of them; items
-enclosed in [@dots{}] in these templates are optional:
+有两种方式来运行 @command{awk}——带显式程序的方式或者是一到多个的程序文件方式。下面是两种运行方式的模式；在 [@dots{}] 中包括内容是可选：
 
 @display
 @command{awk} [@var{options}] @option{-f} @var{progfile} [@option{--}] @var{file} @dots{}
@@ -3122,12 +3039,11 @@ enclosed in [@dots{}] in these templates are optional:
 @cindex GNU long options
 @cindex long options
 @cindex options, long
-In addition to traditional one-letter POSIX-style options, @command{gawk} also
-supports GNU long options.
+除支持传统的单字母的 POSIX 选项外， @command{gawk} 也支持 GNU 长格式的选项。
 
 @cindex dark corner, invoking @command{awk}
 @cindex lint checking, empty programs
-It is possible to invoke @command{awk} with an empty program:
+也可以用空程序的方式调用 @command{awk}：
 
 @example
 awk '' datafile1 datafile2
@@ -3135,36 +3051,21 @@ awk '' datafile1 datafile2
 
 @cindex @option{--lint} option
 @noindent
-Doing so makes little sense, though; @command{awk} exits
-silently when given an empty program.
+但是，这样做基本没什么用。当程序内容为空时，@command{awk} 会安静地退出。
 @value{DARKCORNER}
-If @option{--lint} has
-been specified on the command line, @command{gawk} issues a
-warning that the program is empty.
+如果在命令行中进行了指定了 @option{--lint} 参数，@command{gawk} 会警告说，程序为空。
 
 @node Options
-@section Command-Line Options
+@section 命令行参数
 @cindex options, command-line
 @cindex command line, options
 @cindex GNU long options
 @cindex options, long
 
-Options begin with a dash and consist of a single character.
-GNU-style long options consist of two dashes and a keyword.
-The keyword can be abbreviated, as long as the abbreviation allows the option
-to be uniquely identified.  If the option takes an argument, either the
-keyword is immediately followed by an equals sign (@samp{=}) and the
-argument's value, or the keyword and the argument's value are separated
-by whitespace.
-If a particular option with a value is given more than once, it is the
-last value that counts.
+选项以横杠开始，后面接一个字符。GNU 风格的长选项，则是两个横杠后面带关键字。关键字可以是缩写的，只要缩写使得选项是可识别的唯一标识即可。如果选项带参数，要么是关键字后面直接跟一个等于号（@samp{=}）加上参数的值，要么是关键字与参数的值通过空格分隔。如果特定的选项有多个值，那么只有最后一个值有效。
 
 @cindex POSIX @command{awk}, GNU long options and
-Each long option for @command{gawk} has a corresponding
-POSIX-style short option.
-The long and short options are
-interchangeable in all contexts.
-The following list describes options mandated by the POSIX standard:
+@command{gawk} 的每一个长选项都有一个对应的 POSIX 风格的短选项。长短选项在所有的上下文中都可以互相替换的。下面的列表列出了 POSIX 标准中规定的选项：
 
 @table @code
 @item -F @var{fs}
@@ -3173,70 +3074,47 @@ The following list describes options mandated by the POSIX standard:
 @cindex @option{--field-separator} option
 @cindex @code{FS} variable, @code{--field-separator} option and
 Set the @code{FS} variable to @var{fs}
-(@pxref{Field Separators}).
+设置 @code{FS} 变量的值为 @var{fs}（@pxref{Field Separators}）。
 
 @item -f @var{source-file}
 @itemx --file @var{source-file}
 @cindex @option{-f} option
 @cindex @option{--file} option
 @cindex @command{awk} programs, location of
-Read the @command{awk} program source from @var{source-file}
-instead of in the first nonoption argument.
-This option may be given multiple times; the @command{awk}
-program consists of the concatenation of the contents of
-each specified @var{source-file}.
+从@var{源程序文件}中读取 @command{awk} 程序，而不是第一个非选项的参数。这个选项可以指定多次；@command{awk} 的程序可以由每一个指定的@var{源程序文件}连接而成。
 
 @item -v @var{var}=@var{val}
 @itemx --assign @var{var}=@var{val}
 @cindex @option{-v} option
 @cindex @option{--assign} option
 @cindex variables, setting
-Set the variable @var{var} to the value @var{val} @emph{before}
-execution of the program begins.  Such variable values are available
-inside the @code{BEGIN} rule
-(@pxref{Other Arguments}).
+在执行程序@emph{之前}，设置@var{变量}值为 @var{val}。这个变量在 @code{BEGIN} 规则中可用（@pxref{Other Arguments}）。
 
-The @option{-v} option can only set one variable, but it can be used
-more than once, setting another variable each time, like this:
-@samp{awk @w{-v foo=1} @w{-v bar=2} @dots{}}.
+@option{-v} 选项只可以设置一个变量；但是可以使用多次，如此来设置另一个变量的值：
+@samp{awk @w{-v foo=1} @w{-v bar=2} @dots{}} 。
 
 @cindex predefined variables, @code{-v} option@comma{} setting with
 @cindex variables, predefined @code{-v} option@comma{} setting with
-@quotation CAUTION
-Using @option{-v} to set the values of the built-in
-variables may lead to surprising results.  @command{awk} will reset the
-values of those variables as it needs to, possibly ignoring any
-initial value you may have given.
+@quotation 注意
+使用 @option{-v} 选项设置内置变量的值可能导致令人惊讶的结果。@command{awk} 在需要的时候，可以重新设置这些变量的值，而忽略你指定的任何初始值。
 @end quotation
 
 @item -W @var{gawk-opt}
 @cindex @option{-W} option
-Provide an implementation-specific option.
-This is the POSIX convention for providing implementation-specific options.
-These options
-also have corresponding GNU-style long options.
-Note that the long options may be abbreviated, as long as
-the abbreviations remain unique.
-The full list of @command{gawk}-specific options is provided next.
+选择一个实现有关的选项。这是为特定实现而提供的一种 POSIX 转换。这个选项也有一个 GNU 风格的长选项。注意长选项是可以缩写的，只要保证缩写是唯一的即可。特定于 @command{gawk} 的选项的完整列表下面会列出。
 
 @item --
 @cindex command line, options, end of
 @cindex options, command-line, end of
-Signal the end of the command-line options.  The following arguments
-are not treated as options even if they begin with @samp{-}.  This
-interpretation of @option{--} follows the POSIX argument parsing
-conventions.
+指示命令行选项的结束。后续的参数不会被识别为选项，即使它们以 @samp{-} 开始。
+对于 @option{--} 的解释是参照 POSIX 的参数分析习惯。
 
 @cindex @code{-} (hyphen), filenames beginning with
 @cindex hyphen (@code{-}), filenames beginning with
-This is useful if you have @value{FN}s that start with @samp{-},
-or in shell scripts, if you have @value{FN}s that will be specified
-by the user that could start with @samp{-}.
-It is also useful for passing options on to the @command{awk}
-program; see @ref{Getopt Function}.
+如果你有一个@value{FN}以 @samp{-} 开始，这个参数则非常有用，或者在 Shell 脚本里，@value{FN}会由用户来指定。在把参数传递给 @command{awk} 程序上，这个参数也非常有用。查看 @ref{Getopt Function}。
 @end table
 
-The following list describes @command{gawk}-specific options:
+下面的选项是特定于 @command{gawk} 的选项：
 
 @c Have to use @asis here to get docbook to come out right.
 @table @asis
@@ -3244,30 +3122,20 @@ The following list describes @command{gawk}-specific options:
 @itemx @option{--characters-as-bytes}
 @cindex @option{-b} option
 @cindex @option{--characters-as-bytes} option
-Cause @command{gawk} to treat all input data as single-byte characters.
-In addition, all output written with @code{print} or @code{printf}
-is treated as single-byte characters.
+指定 @command{gawk} 将输入的数据按照单字节的方式对待。另外，所有的由 @code{print} 或者 @code{printf} 的输出也以单字节的方式对待。
 
-Normally, @command{gawk} follows the POSIX standard and attempts to process
-its input data according to the current locale (@pxref{Locales}). This can often involve
-converting multibyte characters into wide characters (internally), and
-can lead to problems or confusion if the input data does not contain valid
-multibyte characters. This option is an easy way to tell @command{gawk},
-``Hands off my data!''
+正常情况下，@command{gawk} 会按照 POSIX 的标准，按照当前语言设置来处理输入数据（@pxref{Locales}）。
+这常常导致将多字节字符转换为宽字符（内部处理了），当输入的数据不是有效的多字节字符时，这可能导致一些问题或者疑惑。这个选项简单地告诉 @command{gawk} ，“别碰我的数据！”
 
 @item @option{-c}
 @itemx @option{--traditional}
 @cindex @option{-c} option
 @cindex @option{--traditional} option
 @cindex compatibility mode (@command{gawk}), specifying
-Specify @dfn{compatibility mode}, in which the GNU extensions to
-the @command{awk} language are disabled, so that @command{gawk} behaves just
-like BWK @command{awk}.
-@xref{POSIX/GNU},
-which summarizes the extensions.
+指定兼容模式，在这种模式下 @command{awk} 的 GNU 扩展会被禁用，这样 @command{gawk} 的表现就跟 BWK @command{awk} 一致。
+@xref{POSIX/GNU}，其中汇总了所有的扩展。
 @ifclear FOR_PRINT
-Also see
-@ref{Compatibility Mode}.
+也可以参考 @ref{Compatibility Mode}。
 @end ifclear
 
 @item @option{-C}
@@ -3275,7 +3143,7 @@ Also see
 @cindex @option{-C} option
 @cindex @option{--copyright} option
 @cindex GPL (General Public License), printing
-Print the short version of the General Public License and then exit.
+打印简单版本的通用许可证协议（General Public License，GPL）然后退出。
 
 @item @option{-d}[@var{file}]
 @itemx @option{--dump-variables}[@code{=}@var{file}]
@@ -3285,46 +3153,26 @@ Print the short version of the General Public License and then exit.
 @cindex @file{awkvars.out} file
 @cindex files, @file{awkvars.out}
 @cindex variables, global, printing list of
-Print a sorted list of global variables, their types, and final values
-to @var{file}.  If no @var{file} is provided, print this
-list to a file named @file{awkvars.out} in the current directory.
-No space is allowed between the @option{-d} and @var{file}, if
-@var{file} is supplied.
+打印经过排序的全局变量，以及它们的类型，以及最终值到 @var{file} 中。如果没有提供 @var{file} 参数，就把这个列表打印到一个 @file{awkvars.out} 的文件中，并输出在当前目录。如果提供了 @var{file} 参数，在 @option{-d} 参数与 @var{file} 之间不能有空格。
 
 @cindex troubleshooting, typographical errors@comma{} global variables
-Having a list of all global variables is a good way to look for
-typographical errors in your programs.
-You would also use this option if you have a large program with a lot of
-functions, and you want to be sure that your functions don't
-inadvertently use global variables that you meant to be local.
-(This is a particularly easy mistake to make with simple variable
-names like @code{i}, @code{j}, etc.)
+查看全局变量列表，是一种查找程序中输入错误的一种好方法。如果你的程序很大，而函数很多时，可以使用这个选项，来确定你的函数是否有这种情况，即本来使用本地变量却错误地使用了全局变量。（这个在将变量名命令为 @code{i}，@code{j} 等等名字的情况下尤其容易出错。）
 
 @item @option{-D}[@var{file}]
 @itemx @option{--debug}[@code{=}@var{file}]
 @cindex @option{-D} option
 @cindex @option{--debug} option
 @cindex @command{awk} debugging, enabling
-Enable debugging of @command{awk} programs
-(@pxref{Debugging}).
-By default, the debugger reads commands interactively from the keyboard
-(standard input).
-The optional @var{file} argument allows you to specify a file with a list
-of commands for the debugger to execute noninteractively.
-No space is allowed between the @option{-D} and @var{file}, if
-@var{file} is supplied.
+启用 @command{awk} 程序调试（@pxref{Debugging}）。
+默认情况下，调试器从键盘中交互式地读入命令。可选参数 @var{file} 可以让你指定在文件中的命令行列表，而不是交互地输入。
+如果你提供了 @var{file} 参数，则在 @option{-D} 与 @var{file} 之间不能有空格。
 
 @item @option{-e} @var{program-text}
 @itemx @option{--source} @var{program-text}
 @cindex @option{-e} option
 @cindex @option{--source} option
 @cindex source code, mixing
-Provide program source code in the @var{program-text}.
-This option allows you to mix source code in files with source
-code that you enter on the command line.
-This is particularly useful
-when you have library functions that you want to use from your command-line
-programs (@pxref{AWKPATH Variable}).
+在 @var{program-text} 中指定源代码。这个选项可以让你混用通过文件与通过命令行来提供源代码的方式。这个选项在你有自己的库函数要使用，但是你又通过命令行来转入程序的情况下非常有用。（@pxref{AWKPATH Variable}）。
 
 @item @option{-E} @var{file}
 @itemx @option{--exec} @var{file}
@@ -3332,30 +3180,21 @@ programs (@pxref{AWKPATH Variable}).
 @cindex @option{--exec} option
 @cindex @command{awk} programs, location of
 @cindex CGI, @command{awk} scripts for
-Similar to @option{-f}, read @command{awk} program text from @var{file}.
-There are two differences from @option{-f}:
+与 @option{-f} 参数类似，@command{awk} 从 @var{file} 中读取程序。与 @option{-f} 相比，有两个不同：
 
 @itemize @value{BULLET}
 @item
-This option terminates option processing; anything
-else on the command line is passed on directly to the @command{awk} program.
+这个选项会结束选项的处理；任何在命令行上后续的其他参数都将直接传递给 @command{awk} 程序。
 
 @item
-Command-line variable assignments of the form
-@samp{@var{var}=@var{value}} are disallowed.
+命令变量赋值形式 @samp{@var{var}=@var{value}} 也将禁止。
 @end itemize
 
-This option is particularly necessary for World Wide Web CGI applications
-that pass arguments through the URL; using this option prevents a malicious
-(or other) user from passing in options, assignments, or @command{awk} source
-code (via @option{-e}) to the CGI application.@footnote{For more detail,
-please see Section 4.4 of @uref{http://www.ietf.org/rfc/rfc3875,
-RFC 3875}. Also see the
-@uref{http://lists.gnu.org/archive/html/bug-gawk/2014-11/msg00022.html,
-explanatory note sent to the @command{gawk} bug
-mailing list}.}
-This option should be used
-with @samp{#!} scripts (@pxref{Executable Scripts}), like so:
+这个选项在写 WWW CGI 程序时通过 URL 传统参数时非常有用。通过这个选项可以防止一些有害的（或者其他的）用户将选项，赋值以及 @command{awk} 源代码（通过 @option{-e} 选项）传递给 CGI 应用。
+@footnote{要获取更多的细节，请参考 @uref{http://www.ietf.org/rfc/rfc3875,
+RFC 3875} 的 Section 4.4。
+也可以查看 @uref{http://lists.gnu.org/archive/html/bug-gawk/2014-11/msg00022.html, 发送到 @command{gawk} 的 bug mailing 列表中的解释}。}
+这个选项需要与 @samp{#!} 脚本一起使用（@pxref{Executable Scripts}），例如这样：
 
 @example
 #! /usr/local/bin/gawk -E
@@ -3369,11 +3208,8 @@ with @samp{#!} scripts (@pxref{Executable Scripts}), like so:
 @cindex @option{--gen-pot} option
 @cindex portable object files, generating
 @cindex files, portable object, generating
-Analyze the source program and
-generate a GNU @command{gettext} portable object template file on standard
-output for all string constants that have been marked for translation.
-@xref{Internationalization},
-for information about this option.
+分析源程序中的已经做了翻译标志所有字串常量，并产生一个 GNU @command{gettext} 可移植的对象模板文件到标准输出上。
+@xref{Internationalization}，来取得这个选项的相关信息。
 
 @item @option{-h}
 @itemx @option{--help}
@@ -3382,39 +3218,29 @@ for information about this option.
 @cindex GNU long options, printing list of
 @cindex options, printing list of
 @cindex printing, list of options
-Print a ``usage'' message summarizing the short- and long-style options
-that @command{gawk} accepts and then exit.
+打印“使用方式”信息，汇总 @command{gawk} 接收的长、短风格的选项然后退出。
 
 @item @option{-i} @var{source-file}
 @itemx @option{--include} @var{source-file}
 @cindex @option{-i} option
 @cindex @option{--include} option
 @cindex @command{awk} programs, location of
-Read an @command{awk} source library from @var{source-file}.  This option
-is completely equivalent to using the @code{@@include} directive inside
-your program.  It is very similar to the @option{-f} option,
-but there are two important differences.  First, when @option{-i} is
-used, the program source is not loaded if it has been previously
-loaded, whereas with @option{-f}, @command{gawk} always loads the file.
-Second, because this option is intended to be used with code libraries,
-@command{gawk} does not recognize such files as constituting main program
-input.  Thus, after processing an @option{-i} argument, @command{gawk}
-still expects to find the main source code via the @option{-f} option
-or on the command line.
+从 @var{source-file} 读取 @command{awk} 源库。这个选项与在你的程序中的 @code{@@include} 等同。
+也非常类似于 @option{-f} 选项，但是有两个重要的不同。
+首先，当 @option{-i} 指定时，如果源程序之前已经装载过了，则不会再被装载，而当使用 @option{-f} 时，@command{gawk} 总是会装载源文件。
+第二，由于这个选项目的是用于库类型的代码，@command{gawk} 不会将这些文件识别成主程序的连续输入。
+因此，在处理了 @option{-i} 参数后，@command{gawk} 还是希望通过命令行的 @option{-f} 参数来取得主程序源代码。
 
 @item @option{-l} @var{ext}
 @itemx @option{--load} @var{ext}
 @cindex @option{-l} option
 @cindex @option{--load} option
 @cindex loading, extensions
-Load a dynamic extension named @var{ext}. Extensions
-are stored as system shared libraries.
-This option searches for the library using the @env{AWKLIBPATH}
-environment variable.  The correct library suffix for your platform will be
-supplied by default, so it need not be specified in the extension name.
-The extension initialization routine should be named @code{dl_load()}.
-An alternative is to use the @code{@@load} keyword inside the program to load
-a shared library.  This advanced feature is described in detail in @ref{Dynamic Extensions}.
+载入一个名为 @var{ext} 的动态扩展。扩展存储为系统的共享动态库。
+这个选项使用 @env{AWKLIBPATH} 变量来搜索库。正确的库后缀会根据系统默认提供，因此你不需要指定扩展名。
+扩展的初始化函数为 @code{dl_load()}。
+另外一个选项就是通过在程序中通过 @code{@@load} 关键字来装载共享库。
+这个高级特性的详细说明在 @ref{Dynamic Extensions}。
 
 @item @option{-L}[@var{value}]
 @itemx @option{--lint}[@code{=}@var{value}]
@@ -3422,33 +3248,21 @@ a shared library.  This advanced feature is described in detail in @ref{Dynamic 
 @cindex @option{--lint} option
 @cindex lint checking, issuing warnings
 @cindex warnings, issuing
-Warn about constructs that are dubious or nonportable to
-other @command{awk} implementations.
-No space is allowed between the @option{-L} and @var{value}, if
-@var{value} is supplied.
-Some warnings are issued when @command{gawk} first reads your program.  Others
-are issued at runtime, as your program executes.
-With an optional argument of @samp{fatal},
-lint warnings become fatal errors.
-This may be drastic, but its use will certainly encourage the
-development of cleaner @command{awk} programs.
-With an optional argument of @samp{invalid}, only warnings about things
-that are actually invalid are issued. (This is not fully implemented yet.)
+对于可疑的或者不可移植到其他 @command{awk} 实现的结果提出告警。
+如果提供了 @var{value}，则 @option{-L} 参数与 @var{value} 之间不可以有空格。
+一些警告会在第一次读入程序时就会给出。而其他的一些会在运行时给出。当可选参数的值是 @samp{fatal}，lint 警告就成了致命错误。
+这可能有点夸张，但是这确实能够刺激开发者开发出更加“干净”的 @command{awk} 程序。
+如果可选参数的值为 @samp{invalid}，则只有在确实是无效的情况下才会发出告警。（这个还没有完全实现）
 
-Some warnings are only printed once, even if the dubious constructs they
-warn about occur multiple times in your @command{awk} program.  Thus,
-when eliminating problems pointed out by @option{--lint}, you should take
-care to search for all occurrences of each inappropriate construct. As
-@command{awk} programs are usually short, doing so is not burdensome.
+有些告警只打印一次，就算这样的可疑结果在你的 @command{awk} 程序中出现多次。
+因此，当去除了由 @option{--lint} 所报告的问题时，你应该要仔细检查你的程序中所有不恰当的结构。如果你的程序不长，做这个工作也不会成为什么负担。
 
 @item @option{-M}
 @itemx @option{--bignum}
 @cindex @option{-M} option
 @cindex @option{--bignum} option
-Select arbitrary-precision arithmetic on numbers. This option has no effect
-if @command{gawk} is not compiled to use the GNU MPFR and MP libraries
-(@pxref{Arbitrary Precision Arithmetic}).
-
+强制对于数据计算使用任意精度。这个选项如果在 @command{gawk} 编译时没有使用 GNU MPFR 以及 MP 库时，不会起作用。（@pxref{Arbitrary Precision Arithmetic}）
+#TODO20171024
 @item @option{-n}
 @itemx @option{--non-decimal-data}
 @cindex @option{-n} option
