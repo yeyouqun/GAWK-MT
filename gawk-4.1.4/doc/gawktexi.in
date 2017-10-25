@@ -3261,8 +3261,7 @@ RFC 3875} 的 Section 4.4。
 @itemx @option{--bignum}
 @cindex @option{-M} option
 @cindex @option{--bignum} option
-强制对于数据计算使用任意精度。这个选项如果在 @command{gawk} 编译时没有使用 GNU MPFR 以及 MP 库时，不会起作用。（@pxref{Arbitrary Precision Arithmetic}）
-#TODO20171024
+强制对于数据计算使用任意精度。这个选项如果在 @command{gawk} 编译时没有使用 GNU MPFR 以及 MP 库时，不会起作用。（查看 @ref{Arbitrary Precision Arithmetic}）
 @item @option{-n}
 @itemx @option{--non-decimal-data}
 @cindex @option{-n} option
@@ -3270,63 +3269,44 @@ RFC 3875} 的 Section 4.4。
 @cindex hexadecimal values@comma{} enabling interpretation of
 @cindex octal values@comma{} enabling interpretation of
 @cindex troubleshooting, @code{--non-decimal-data} option
-Enable automatic interpretation of octal and hexadecimal
-values in input data
-(@pxref{Nondecimal Data}).
+启用自动的对输入数据的八进制与十六进制值的自动解释（查看 @ref{Nondecimal Data}）。
 
-@quotation CAUTION
-This option can severely break old programs.  Use with care.  Also note
-that this option may disappear in a future version of @command{gawk}.
+@quotation 注意
+这个选项有可能严重破坏旧的程序，因此要小心使用。同时也提示，这个参数可能在 @command{gawk} 的后面的版本会被取消。
 @end quotation
 
 @item @option{-N}
 @itemx @option{--use-lc-numeric}
 @cindex @option{-N} option
 @cindex @option{--use-lc-numeric} option
-Force the use of the locale's decimal point character
-when parsing numeric input data (@pxref{Locales}).
+当分析数值输入数据时，强制使用当前的语言设置（current locale）的十进制小数点字符。（查看 @ref{Locales}）
 
 @item @option{-o}[@var{file}]
 @itemx @option{--pretty-print}[@code{=}@var{file}]
 @cindex @option{-o} option
 @cindex @option{--pretty-print} option
-Enable pretty-printing of @command{awk} programs.
-By default, the output program is created in a file named @file{awkprof.out}
-(@pxref{Profiling}).
-The optional @var{file} argument allows you to specify a different
-@value{FN} for the output.
-No space is allowed between the @option{-o} and @var{file}, if
-@var{file} is supplied.
+启用 @command{awk} 程序的简单打印。默认情况下，输出程序被创建在一个文件名为 @file{awkprof.out} 文件中（查看 @ref{Profiling}）。
+可选参数 @var{file} 可以让你可以指定一个不同的@value{FN}用于输出。如果你提供了 @var{file} 参数，则 @option{-o} 选项与 @var{file} 之间不能有空格。
 
-@quotation NOTE
-Due to the way @command{gawk} has evolved, with this option
-your program still executes.  This will change in the
-next major release, such that @command{gawk} will only
-pretty-print the program and not run it.
+@quotation 提示
+由于 @command{gawk} 演化的方式，有这个参数时，你的程序依然会执行。这个会在下一个主要版本发生变化，因此 @command{gawk} 仅简化打印程序，而不是执行它。
 @end quotation
 
 @item @option{-O}
 @itemx @option{--optimize}
 @cindex @option{--optimize} option
 @cindex @option{-O} option
-Enable some optimizations on the internal representation of the program.
-At the moment, this includes just simple constant folding.
+启用某些程序内部表达式的优化。在此时，这个仅仅包括一些简单的常量折叠。 
 
 @item @option{-p}[@var{file}]
 @itemx @option{--profile}[@code{=}@var{file}]
 @cindex @option{-p} option
 @cindex @option{--profile} option
 @cindex @command{awk} profiling, enabling
-Enable profiling of @command{awk} programs
-(@pxref{Profiling}).
-By default, profiles are created in a file named @file{awkprof.out}.
-The optional @var{file} argument allows you to specify a different
-@value{FN} for the profile file.
-No space is allowed between the @option{-p} and @var{file}, if
-@var{file} is supplied.
-
-The profile contains execution counts for each statement in the program
-in the left margin, and function call counts for each function.
+启用 @command{awk} 程序采样分析（查看 @ref{Profiling}）。
+默认情况下，采样分析会生成文件名为 @file{awkprof.out}。
+可选参数 @var{file} 可以让你指定一个不同的@value{FN}。如果你指定了 @var{file} 参数，则在 @option{-p} 选项与 @var{file} 参数之间不能有空格。
+采样分析结果中在左边包括程序中的每条语句的执行次数，以及每个函数的函数调用次数。
 
 @item @option{-P}
 @itemx @option{--posix}
@@ -3334,157 +3314,94 @@ in the left margin, and function call counts for each function.
 @cindex @option{--posix} option
 @cindex POSIX mode
 @cindex @command{gawk}, extensions@comma{} disabling
-Operate in strict POSIX mode.  This disables all @command{gawk}
-extensions (just like @option{--traditional}) and
-disables all extensions not allowed by POSIX.
-@xref{Common Extensions} for a summary of the extensions
-in @command{gawk} that are disabled by this option.
-Also,
-the following additional
-restrictions apply:
+严格按 POSIX 模式来。这个禁用所有的 @command{gawk} 扩展（就像 @option{--traditional} 一样），并禁用所有不属于 POSIX 的扩展，
 
 @itemize @value{BULLET}
 
 @cindex newlines
 @cindex whitespace, newlines as
 @item
-Newlines do not act as whitespace to separate fields when @code{FS} is
-equal to a single space
-(@pxref{Fields}).
+当 @code{FS} 等于单个空格时，新行不会像空格一样用来进行域分隔（查看 @ref{Fields}）。
 
 @item
-Newlines are not allowed after @samp{?} or @samp{:}
-(@pxref{Conditional Exp}).
+在 @samp{?} 或者 @samp{:} 后不能断行（查看 @ref{Conditional Exp}）。
 
 
 @cindex @code{FS} variable, as TAB character
 @item
-Specifying @samp{-Ft} on the command line does not set the value
-of @code{FS} to be a single TAB character
-(@pxref{Field Separators}).
+指定 @samp{-Ft} 时，不能将 @code{FS} 的值设置为单一的 TAB 字符（查看 @ref{Field Separators}）。
 
 @cindex locale decimal point character
 @cindex decimal point character, locale specific
 @item
-The locale's decimal point character is used for parsing input
-data (@pxref{Locales}).
+语言设置中的十进制小数点字符用来分析输入数据（查看 @ref{Locales}）。
 @end itemize
 
 @c @cindex automatic warnings
 @c @cindex warnings, automatic
 @cindex @option{--traditional} option, @code{--posix} option and
 @cindex @option{--posix} option, @code{--traditional} option and
-If you supply both @option{--traditional} and @option{--posix} on the
-command line, @option{--posix} takes precedence. @command{gawk}
-issues a warning if both options are supplied.
+如果你即提供了 @option{--traditional} 与 @option{--posix} 参数在命令行中，@option{--posix} 会优先执行。@command{gawk} 则会输出一个警告。
 
 @item @option{-r}
 @itemx @option{--re-interval}
 @cindex @option{-r} option
 @cindex @option{--re-interval} option
 @cindex regular expressions, interval expressions and
-Allow interval expressions
-(@pxref{Regexp Operators})
-in regexps.
-This is now @command{gawk}'s default behavior.
-Nevertheless, this option remains (both for backward compatibility
-and for use in combination with @option{--traditional}).
+在 regexps 中允许区间表达式（查看 @ref{Regexp Operators}）。现在这个是 @command{gawk} 的默认行为。这个参数保留下来，即为了身后的兼容性，也为了与 @option{--traditional} 组合使用。
 
 @item @option{-S}
 @itemx @option{--sandbox}
 @cindex @option{-S} option
 @cindex @option{--sandbox} option
 @cindex sandbox mode
-Disable the @code{system()} function,
-input redirections with @code{getline},
-output redirections with @code{print} and @code{printf},
-and dynamic extensions.
-This is particularly useful when you want to run @command{awk} scripts
-from questionable sources and need to make sure the scripts
-can't access your system (other than the specified input @value{DF}).
+禁用 @code{system()} 函数，用 @code{getline} 进行输入重定向，用 @code{print}，@code{printf} 以及动态扩展来进行输出重定向。
+当你要执行来源有有疑问的 @command{awk} 源代码时，为了确保脚本不会访问你的系统（而不是通过指定输入@value{DF}），这个参数尤其有用。
 
 @item @option{-t}
 @itemx @option{--lint-old}
 @cindex @option{-L} option
 @cindex @option{--lint-old} option
-Warn about constructs that are not available in the original version of
-@command{awk} from Version 7 Unix
-(@pxref{V7/SVR3.1}).
+当相应的结构在 Version 7 Unix 起初始的 @command{awk} 版本中不可用时，发出告警（查看 @ref{V7/SVR3.1}）。
 
 @item @option{-V}
 @itemx @option{--version}
 @cindex @option{-V} option
 @cindex @option{--version} option
 @cindex @command{gawk}, versions of, information about@comma{} printing
-Print version information for this particular copy of @command{gawk}.
-This allows you to determine if your copy of @command{gawk} is up to date
-with respect to whatever the Free Software Foundation is currently
-distributing.
-It is also useful for bug reports
-(@pxref{Bugs}).
+打印这个 @command{gawk} 的版本信息。这个可以让你确定你的 @command{gawk} 版本是不是与 Free Software Foundation 发布的最新版本匹配。
+在 Bug 报告中也非常有用（查看 @ref{Bugs}）。
 @end table
 
-As long as program text has been supplied,
-any other options are flagged as invalid with a warning message but
-are otherwise ignored.
+只要提供了程序文本，如果有选项由于警告而被标志为无效，忽略它就可以了。
 
 @cindex @option{-F} option, @option{-Ft} sets @code{FS} to TAB
-In compatibility mode, as a special case, if the value of @var{fs} supplied
-to the @option{-F} option is @samp{t}, then @code{FS} is set to the TAB
-character (@code{"\t"}).  This is true only for @option{--traditional} and not
-for @option{--posix}
-(@pxref{Field Separators}).
+在兼容模式里，有个特殊的地方，如果果 @var{fs} 的值通过 @option{-F} 参数设置为 @samp{t} ，那么 @code{FS} 就会被设置成 TAB 字符（@code{"\t"}）。
+这种情况只有在使用 @option{--traditional} 时才会为真，而不是 @option{--posix}（查看 @ref{Field Separators}）。
 
 @cindex @option{-f} option, multiple uses
-The @option{-f} option may be used more than once on the command line.
-If it is, @command{awk} reads its program source from all of the named files, as
-if they had been concatenated together into one big file.  This is
-useful for creating libraries of @command{awk} functions.  These functions
-can be written once and then retrieved from a standard place, instead
-of having to be included in each individual program.
-The @option{-i} option is similar in this regard.
-(As mentioned in
-@ref{Definition Syntax},
-function names must be unique.)
+@option{-f} 参数可以在命令行中使用多次。
+@command{awk} 将从多个文件中读取程序，就好像这些文件已经合并成了一个大的文件。这种方式在创建 @command{awk} 函数库时非常有用。这些函数只需要写一次，然后从某个标准的位置取用，而不是在每个单独的文件中包含。@option{-i} 参数在这个方面的考虑也类似。（正如 @ref{Definition Syntax}，中所提到的，这些函数名必须是唯一的。）
 
-With standard @command{awk}, library functions can still be used, even
-if the program is entered at the keyboard,
-by specifying @samp{-f /dev/tty}.  After typing your program,
-type @kbd{Ctrl-d} (the end-of-file character) to terminate it.
-(You may also use @samp{-f -} to read program source from the standard
-input, but then you will not be able to also use the standard input as a
-source of data.)
+标准的 @command{awk} 中，就算程序是通过键盘输入的，通过 @samp{-f /dev/tty} 完成，库函数也还是可以使用的。
+输入程序后，键入 @kbd{Ctrl-d}（文件结束符）来结束。（你也可以使用 @samp{-f -} 来从标准输入中读取程序源代码，只是这个时候，你就不能同时使用标准输入作为数据的输入源。）
 
-Because it is clumsy using the standard @command{awk} mechanisms to mix
-source file and command-line @command{awk} programs, @command{gawk}
-provides the @option{-e} option.  This does not require you to
-preempt the standard input for your source code; it allows you to easily
-mix command-line and library source code (@pxref{AWKPATH Variable}).
-As with @option{-f}, the @option{-e} and @option{-i}
-options may also be used multiple times on the command line.
+由于标准 @command{awk} 中混用源文件与命令行 @command{awk} 程序，显得有一些笨拙，所以 @command{gawk} 提供了一个 @option{-e} 选项。
+这并不需要你抢占标准输入来输入源代码，而是让你很容易地混合使用命令行与库源代码（查看 @ref{AWKPATH Variable}）。
+与 @option{-f} 一样，@option{-e} 与 @option{-i} 选项也可以在命令中多次使用。
 
 @cindex @option{-e} option
-If no @option{-f} or @option{-e} option is specified, then @command{gawk}
-uses the first nonoption command-line argument as the text of the
-program source code.
+如果没有 @option{-f} 或者 @option{-e} 选项指定，@command{gawk} 会使用命令行中的第一个非选项参数作为程序的源代码。
 
 @cindex @env{POSIXLY_CORRECT} environment variable
 @cindex lint checking, @env{POSIXLY_CORRECT} environment variable
 @cindex POSIX mode
-If the environment variable @env{POSIXLY_CORRECT} exists,
-then @command{gawk} behaves in strict POSIX mode, exactly as if
-you had supplied @option{--posix}.
-Many GNU programs look for this environment variable to suppress
-extensions that conflict with POSIX, but @command{gawk} behaves
-differently: it suppresses all extensions, even those that do not
-conflict with POSIX, and behaves in
-strict POSIX mode. If @option{--lint} is supplied on the command line
-and @command{gawk} turns on POSIX mode because of @env{POSIXLY_CORRECT},
-then it issues a warning message indicating that POSIX
-mode is in effect.
-You would typically set this variable in your shell's startup file.
-For a Bourne-compatible shell (such as Bash), you would add these
-lines to the @file{.profile} file in your home directory:
+如果环境变量 @env{POSIXLY_CORRECT} 存在，@command{gawk} 就会严格地按照 POSIX 模式执行，就如你提供了 @option{--posix} 参数一样。
+许多的 GNU 程序都查找这个环境变量来禁用与 POSIX 标准有冲突的扩展，但是 @command{gawk} 的行为有一些不同：
+就算某个特性与 POSIX 没有冲突，它也禁用所有的扩展，然后按照严格的 POSIX 标准模式执行。
+如果指定了 @option{--lint} 选项，@command{gawk} 会因为 @env{POSIXLY_CORRECT} 而开启 POSIX 模式，然后会输出警告信息，说 POSIX 模式已经启用。
+一般来说，你可能会在你的 Shell 的启动脚本中设置这个变量。
+对于与 Bourne Shell 兼容的 Shell 来说（如 Bash），你可以将下面的行加入到用户主目录的 @file{.profile} 文件中：
 
 @example
 POSIXLY_CORRECT=true
@@ -3492,30 +3409,24 @@ export POSIXLY_CORRECT
 @end example
 
 @cindex @command{csh} utility, @env{POSIXLY_CORRECT} environment variable
-For a C shell-compatible
-shell,@footnote{Not recommended.}
-you would add this line to the @file{.login} file in your home directory:
+对于与 C shell 兼容的 shell，@footnote{不建议这么做。}你可以将下面的行加入到用户主目录的 @file{.login} 文件中：
 
 @example
 setenv POSIXLY_CORRECT true
 @end example
 
 @cindex portability, @env{POSIXLY_CORRECT} environment variable
-Having @env{POSIXLY_CORRECT} set is not recommended for daily use,
-but it is good for testing the portability of your programs to other
-environments.
+对于每日的工作环境，设置 @env{POSIXLY_CORRECT} 变量并不值得建议，但是对于测试你的程序在其他环境中的可移植性则有相当作用。
 
 @node Other Arguments
-@section Other Command-Line Arguments
+@section 其他命令行参数
 @cindex command line, arguments
 @cindex arguments, command-line
 
-Any additional arguments on the command line are normally treated as
-input files to be processed in the order specified.   However, an
-argument that has the form @code{@var{var}=@var{value}}, assigns
-the value @var{value} to the variable @var{var}---it does not specify a
-file at all.  (See @ref{Assignment Options}.) In the following example,
-@var{count=1} is a variable assignment, not a @value{FN}:
+对于命令行中的额外参数，一般都会被当作输入文件来对待，并依次处理。
+但是具有 @code{@var{var}=@var{value}}（将 @var{value} 赋值给变量 @var{var}）形式的参数，却并不作为一个输入文件指定。
+（查看 @ref{Assignment Options}。）
+在下面的例子中，@var{count=1} 是一个变量赋值，而不是@value{FN}：
 
 @example
 awk -f program.awk file1 count=1 file2
@@ -3525,54 +3436,32 @@ awk -f program.awk file1 count=1 file2
 @cindex @code{ARGIND} variable, command-line arguments
 @cindex @code{ARGV} array, indexing into
 @cindex @code{ARGC}/@code{ARGV} variables, command-line arguments
-All the command-line arguments are made available to your @command{awk} program in the
-@code{ARGV} array (@pxref{Built-in Variables}).  Command-line options
-and the program text (if present) are omitted from @code{ARGV}.
-All other arguments, including variable assignments, are
-included.   As each element of @code{ARGV} is processed, @command{gawk}
-sets @code{ARGIND} to the index in @code{ARGV} of the
-current element.
+所有命令行参数都可以通过 @code{ARGV} 数组被 @command{awk} 程序得到（查看 @ref{Built-in Variables}）。
+命令行参数与程序文本（如果有）都在 @code{ARGV} 中忽略掉了。其他的参数，包括变量赋值，都包含在了这个数组中。随着对 @code{ARGV} 参数的处理，
+@command{gawk} 会设置 @code{ARGIND} 的值为 @code{ARGV} 数组的索引，以记录当前的元素位置。
 
 @c FIXME: One day, move the ARGC and ARGV node closer to here.
-Changing @code{ARGC} and @code{ARGV} in your @command{awk} program lets
-you control how @command{awk} processes the input files; this is described
-in more detail in @ref{ARGC and ARGV}.
+通过更改 @code{ARGC} 与 @code{ARGV} 的值，你可以控制 @command{awk} 处理输入文件的方式；这个内容在 @ref{ARGC and ARGV}，会有更详细的描述。
 
 @cindex input files, variable assignments and
 @cindex variable assignments and input files
-The distinction between @value{FN} arguments and variable-assignment
-arguments is made when @command{awk} is about to open the next input file.
-At that point in execution, it checks the @value{FN} to see whether
-it is really a variable assignment; if so, @command{awk} sets the variable
-instead of reading a file.
+对文件名参数与赋值变量参数的区分是在 @command{awk} 在准备打开下一个输入文件时处理的。
+在那个执行点，@command{awk} 会检查@value{FN}，看它是一个文件还是一个变量赋值；如果是，@command{awk} 会设置那个变量而不是打开文件进行读操作。
 
-Therefore, the variables actually receive the given values after all
-previously specified files have been read.  In particular, the values of
-variables assigned in this fashion are @emph{not} available inside a
-@code{BEGIN} rule
-(@pxref{BEGIN/END}),
-because such rules are run before @command{awk} begins scanning the argument list.
+因此，在处理完所有之前的文件后，变量就会被设置成相应的值。
+特别的，以这种方式对变量进行的赋值，在 @code{BEGIN} 规则（查看 @ref{BEGIN/END}）中是@emph{不可}访问到的，
+因为这个规则在 @command{awk} 开始扫描参数列表之前就已经执行了。
 
 @cindex dark corner, escape sequences
-The variable values given on the command line are processed for escape
-sequences (@pxref{Escape Sequences}).
+在命令行上所给的赋值变量会按照转义的方式进行处理（查看 @ref{Escape Sequences}）。
 @value{DARKCORNER}
 
-In some very early implementations of @command{awk}, when a variable assignment
-occurred before any @value{FN}s, the assignment would happen @emph{before}
-the @code{BEGIN} rule was executed.  @command{awk}'s behavior was thus
-inconsistent; some command-line assignments were available inside the
-@code{BEGIN} rule, while others were not.  Unfortunately,
-some applications came to depend
-upon this ``feature.''  When @command{awk} was changed to be more consistent,
-the @option{-v} option was added to accommodate applications that depended
-upon the old behavior.
+在一些非常早期的 @command{awk} 实现中，当变量赋值参数出现在任何@value{FN}之前，
+则赋值操作会发生在 @code{BEGIN} 规则执行@emph{之前}。
+@command{awk} 的行为因此就不一致了；一些命令行赋值会在 @code{BEGIN} 规则中就可以使用，而其他的则不可以。
+非常不幸的是，一些应用程序却依赖于这样的“特性”。当 @command{awk} 变得更一致的时候，@option{-v} 选项就用来协调应用依赖于这种旧行为的代码。
 
-The variable assignment feature is most useful for assigning to variables
-such as @code{RS}, @code{OFS}, and @code{ORS}, which control input and
-output formats, before scanning the @value{DF}s.  It is also useful for
-controlling state if multiple passes are needed over a @value{DF}.  For
-example:
+变量赋值特性会在设置 @code{RS}，@code{OFS} 和 @code{ORS} 变量的值时非常有作用，这个变量用来在扫描@value{DF}时控制输入输出格式。同时，如果 @command{awk} 要多次扫描@value{DF}时，用来控制状态也非常有用。例如：
 
 @cindex files, multiple passes over
 @example
@@ -3580,47 +3469,32 @@ awk 'pass == 1  @{ @var{pass 1 stuff} @}
      pass == 2  @{ @var{pass 2 stuff} @}' pass=1 mydata pass=2 mydata
 @end example
 
-Given the variable assignment feature, the @option{-F} option for setting
-the value of @code{FS} is not
-strictly necessary.  It remains for historical compatibility.
+有了变量赋值特性后，用 @option{-F} 参数来设置 @code{FS} 的值，严格来说就不那么必要了。这里保留下来只是为了兼容历史版本。
 
 @node Naming Standard Input
-@section Naming Standard Input
+@section 命名标准输入
 
-Often, you may wish to read standard input together with other files.
-For example, you may wish to read one file, read standard input coming
-from a pipe, and then read another file.
+很多情况下，你希望同时从标准输入与文件中输入数据，你希望读一个文件，再从标准输入的管道中读入数据，然后再读另一个文件。
 
-The way to name the standard input, with all versions of @command{awk},
-is to use a single, standalone minus sign or dash, @samp{-}.  For example:
+将标准输入命名的方式，对所有版本的 @command{awk}，都是使用一个单独的减号，或者说是横杠 @samp{-} ，例如：
 
 @example
 @var{some_command} | awk -f myprog.awk file1 - file2
 @end example
 
 @noindent
-Here, @command{awk} first reads @file{file1}, then it reads
-the output of @var{some_command}, and finally it reads
-@file{file2}.
+这个例子中，@command{awk} 首先读取文件 @file{file1}，然后从 @var{some_command} 的输出中读入数据，最后从 @file{file2} 中读取数据。
 
-You may also use @code{"-"} to name standard input when reading
-files with @code{getline} (@pxref{Getline/File}).
+当你使用 @code{getline} 来读取文件时，你也可以用 @code{"-"} 来命名标准输入（查看 @ref{Getline/File}）。
 
-In addition, @command{gawk} allows you to specify the special
-@value{FN} @file{/dev/stdin}, both on the command line and
-with @code{getline}.
-Some other versions of @command{awk} also support this, but it
-is not standard.
-(Some operating systems provide a @file{/dev/stdin} file
-in the filesystem; however, @command{gawk} always processes
-this @value{FN} itself.)
+另外，@command{gawk} 也可以让你在命令行或者程序文件中指定特殊的@value{FN} @file{/dev/stdin}。
+一些版本的 @command{awk} 也支持这种方式，但这并不是标准。（有些操作系统在文件系统中提供文件 @file{/dev/stdin}；而 @command{gawk} 总是自己来处理这个文件。）
 
 @node Environment Variables
-@section The Environment Variables @command{gawk} Uses
+@section @command{gawk} 使用的环境变量 
 @cindex environment variables used by @command{gawk}
 
-A number of environment variables influence how @command{gawk}
-behaves.
+有很多的环境变量会影响到 @command{gawk} 的行为。
 
 @menu
 * AWKPATH Variable::            Searching directories for @command{awk}
@@ -3631,116 +3505,77 @@ behaves.
 @end menu
 
 @node AWKPATH Variable
-@subsection The @env{AWKPATH} Environment Variable
+@subsection 环境变量 @env{AWKPATH}
 @cindex @env{AWKPATH} environment variable
 @cindex directories, searching for source files
 @cindex search paths, for source files
 @cindex differences in @command{awk} and @command{gawk}, @env{AWKPATH} environment variable
 @ifinfo
-The previous @value{SECTION} described how @command{awk} program files can be named
-on the command line with the @option{-f} option.
+之前的@value{SECTION}中描述了 @command{awk} 程序文件怎样在命令行中用 @option{-f} 选项命名。
 @end ifinfo
-In most @command{awk}
-implementations, you must supply a precise pathname for each program
-file, unless the file is in the current directory.
-But with @command{gawk}, if the @value{FN} supplied to the @option{-f}
-or @option{-i} options
-does not contain a directory separator @samp{/}, then @command{gawk} searches a list of
-directories (called the @dfn{search path}) one by one, looking for a
-file with the specified name.
+在大多的 @command{awk} 实现中，你可以指定为每个程序文件指定确定的路径名，除非文件就在当前目录。
+但是，如果通过 @option{-f} 或者 @option{-i} 选项所提供的@value{FN}中没有包括目录分隔符 @samp{/}，@command{gawk} 则会在一系列的目录中进行搜索
+（称为@dfn{搜索路径}），一个接一个地查找是否有指定的文件名。
 
-The search path is a string consisting of directory names
-separated by colons.@footnote{Semicolons on MS-Windows and MS-DOS.}
-@command{gawk} gets its search path from the
-@env{AWKPATH} environment variable.  If that variable does not exist,
-or if it has an empty value,
-@command{gawk} uses a default path (described shortly).
+这些搜索路径包括一系列的由冒号分隔的路径名。@footnote{在 MS-Windows 与 MS-DOS 中则使用分号“;”。} 
+@command{gawk} 从 @env{AWKPATH} 环境变量中取得它的搜索路径。如果不存在这个变量，或者这个变量为空，@command{gawk} 会使用默认的路径（后面说明）。
 
-The search path feature is particularly helpful for building libraries
-of useful @command{awk} functions.  The library files can be placed in a
-standard directory in the default path and then specified on
-the command line with a short @value{FN}.  Otherwise, you would have to
-type the full @value{FN} for each file.
+搜索路径特性用来创建通用的 @command{awk} 函数库非常有用。
+库文件可以放在一个标准的默认目录中，然后在命令行中指定一个短的@value{FN}。不然的话，你需要输入每个文件的完整路径。
 
-By using the @option{-i} or @option{-f} options, your command-line
-@command{awk} programs can use facilities in @command{awk} library files
-(@pxref{Library Functions}).
-Path searching is not done if @command{gawk} is in compatibility mode.
-This is true for both @option{--traditional} and @option{--posix}.
-@xref{Options}.
+通过使用 @option{-i} 或者 @option{-f} 选项，你的命令行 @command{awk} 程序可以利用 @command{awk} 的库文件
+（查看 @ref{Library Functions}）。
+如果是在兼容模式中，路径搜索并没有实现，因此，而对于 @option{--traditional} 与 @option{--posix} 模式，搜索路径不可用。
+查看 @ref{Options}。
 
-If the source code file is not found after the initial search, the path is searched
-again after adding the suffix @samp{.awk} to the @value{FN}.
+如果源代码文件没有在初始的路径中找到，则路径搜索会在@value{FN}后面加一个 @samp{.awk} 后缀名后再执行搜索。
 
-@command{gawk}'s path search mechanism is similar
-to the shell's.
-(See @uref{http://www.gnu.org/software/bash/manual/,
-@cite{The Bourne-Again SHell manual}}.)
-It treats a null entry in the path as indicating the current
-directory.
-(A null entry is indicated by starting or ending the path with a
-colon or by placing two colons next to each other [@samp{::}].)
+@command{gawk} 的路径搜索机制与 Shell 的机制有点类似。
+（可以查看 @uref{http://www.gnu.org/software/bash/manual/,
+@cite{Bourne-Again Shell 手册}}。）
+它将空的路径项视为当前路径。（一个空项由一个冒号开始，或者以冒号结束的路径，或者两个紧接着的冒号表示 [@samp{::}]。）
 
-@quotation NOTE
-To include the current directory in the path, either place @file{.}
-as an entry in the path or write a null entry in the path.
+@quotation 提示
+要将当前路径包括在路径中，要么在项目中放一个点号 @file{.} 或者写一个空的路径项。
 
-Different past versions of @command{gawk} would also look explicitly in
-the current directory, either before or after the path search.  As of
-@value{PVERSION} 4.1.2, this no longer happens; if you wish to look
-in the current directory, you must include @file{.} either as a separate
-entry or as a null entry in the search path.
+@command{gawk} 之前的几个不同版本会显示地在当前目录进行搜索，不管是在搜索路径前还是后。
+在@value{PVERSION} 4.1.2 这个版本中，则不再这么处理；如果你希望搜索当前目录，你必须包括一个点 @file{.} 作为一个独立的项，要么在搜索路径中加入一个空项。
 @end quotation
 
-The default value for @env{AWKPATH} is
-@samp{.:/usr/local/share/awk}.@footnote{Your version of @command{gawk}
-may use a different directory; it
-will depend upon how @command{gawk} was built and installed. The actual
-directory is the value of @code{$(datadir)} generated when
-@command{gawk} was configured.  You probably don't need to worry about this,
-though.}  Since @file{.} is included at the beginning, @command{gawk}
-searches first in the current directory and then in @file{/usr/local/share/awk}.
-In practice, this means that you will rarely need to change the
-value of @env{AWKPATH}.
+@env{AWKPATH} 的默认路么是：
+@samp{.:/usr/local/share/awk}。
+@footnote{你的 @command{gawk} 版本可能使用不同的目录；这依赖于 @command{gawk} 是如何被构建与安装的。
+实际的路径是 @code{$(datadir)} 在 @command{gawk} 配置时所产生的值。尽管如此，一般来说你也不需要担心。}
+由于 @file{.} 包括在了开始处，@command{gawk} 会首先搜索当前目录，然后再搜索 @file{/usr/local/share/awk}。
+在实践中，这意味着你很少需要更改 @env{AWKPATH} 的值。
 
-@command{gawk} places the value of the search path that it used into
-@code{ENVIRON["AWKPATH"]}. This provides access to the actual search
-path value from within an @command{awk} program.
+@command{gawk} 将其使用的搜索路径的值放在 @code{ENVIRON["AWKPATH"]} 元素中。
+这提供了可以让你在 @command{awk} 程序中访问搜索路径的机制。
 
-Although you can change @code{ENVIRON["AWKPATH"]} within your @command{awk}
-program, this has no effect on the running program's behavior.  This makes
-sense: the @env{AWKPATH} environment variable is used to find the program
-source files.  Once your program is running, all the files have been
-found, and @command{gawk} no longer needs to use @env{AWKPATH}.
+尽管你可以在程序中更改 @code{ENVIRON["AWKPATH"]} 的值，但这不会影响正在执行的程序的行为。
+原因如下：@env{AWKPATH} 是用来作为搜索程序文件的环境变量。
+一旦你的程序运行起来，所有的文件都已经搜索到了，@command{gawk} 就不再需要 @env{AWKPATH} 变量了。
 
 @node AWKLIBPATH Variable
-@subsection The @env{AWKLIBPATH} Environment Variable
+@subsection 环境变量 @env{AWKLIBPATH}
 @cindex @env{AWKLIBPATH} environment variable
 @cindex directories, searching for loadable extensions
 @cindex search paths, for loadable extensions
 @cindex differences in @command{awk} and @command{gawk}, @code{AWKLIBPATH} environment variable
 
-The @env{AWKLIBPATH} environment variable is similar to the @env{AWKPATH}
-variable, but it is used to search for loadable extensions (stored as
-system shared libraries) specified with the @option{-l} option rather
-than for source files.  If the extension is not found, the path is
-searched again after adding the appropriate shared library suffix for
-the platform.  For example, on GNU/Linux systems, the suffix @samp{.so}
-is used.  The search path specified is also used for extensions loaded
-via the @code{@@load} keyword (@pxref{Loading Shared Libraries}).
+@env{AWKLIBPATH} 环境变量与 @env{AWKPATH} 变量类似，但是是由来搜索可装载的扩展（存储为系统的共享库），而不是用来搜索源代码文件，
+这些扩展由 @option{-l} 选项进行指定。如果扩展没有找到，会在搜索完成后加上恰当的共享库后缀后再次搜索。
+例如，在 GNU/Linux 系统中，后缀是 @samp{.so}。
+搜索路径也可以用于用 @code{@@load} 关键词进行的扩展装载（查看 @ref{Loading Shared Libraries}）。
 
-If @env{AWKLIBPATH} does not exist in the environment, or if it has
-an empty value, @command{gawk} uses a default path; this
-is typically @samp{/usr/local/lib/gawk}, although it can vary depending
-upon how @command{gawk} was built.
+如果 @env{AWKLIBPATH} 在环境变量中不存在，或者为空，@command{gawk} 会使用默认的路径，
+一般是 @samp{/usr/local/lib/gawk}，但这也会由于 @command{gawk} 构建的方式而有不同。
 
-@command{gawk} places the value of the search path that it used into
-@code{ENVIRON["AWKLIBPATH"]}. This provides access to the actual search
-path value from within an @command{awk} program.
+@command{gawk} 会将搜索路径的值存放于 @code{ENVIRON["AWKLIBPATH"]} 中。这样，在你的程序中可以得到实际的搜索路径。
 
 @node Other Environment Variables
-@subsection Other Environment Variables
-
+@subsection 其他的环境变量
+#TODO20171025
 A number of other environment variables affect @command{gawk}'s
 behavior, but they are more specialized. Those in the following
 list are meant to be used by regular users:
