@@ -3575,149 +3575,95 @@ awk 'pass == 1  @{ @var{pass 1 stuff} @}
 
 @node Other Environment Variables
 @subsection 其他的环境变量
-#TODO20171025
-A number of other environment variables affect @command{gawk}'s
-behavior, but they are more specialized. Those in the following
-list are meant to be used by regular users:
+还有很多的环境变量会影响 @command{gawk} 的行为，但是它们都比较特殊。下面的变量都是一般的用户使用：
 
 @table @env
 @item GAWK_MSEC_SLEEP
-Specifies the interval between connection retries,
-in milliseconds. On systems that do not support
-the @code{usleep()} system call,
-the value is rounded up to an integral number of seconds.
+指定连接重试的间隔，以毫秒为单位。在不支持 @code{usleep()} 调用的系统上，这个值为向上舍入为整数秒。
 
 @item GAWK_READ_TIMEOUT
-Specifies the time, in milliseconds, for @command{gawk} to
-wait for input before returning with an error.
-@xref{Read Timeout}.
+指定 @command{gawk} 在返回出错前，等待输入的毫秒数。查看 @ref{Read Timeout}。
 
 @item GAWK_SOCK_RETRIES
-Controls the number of times @command{gawk} attempts to
-retry a two-way TCP/IP (socket) connection before giving up.
-@xref{TCP/IP Networking}.
+控制 @command{gawk} 重试双向 TCP/IP （Socket）连接的次数。查看 @ref{TCP/IP Networking}。
 
 @item POSIXLY_CORRECT
-Causes @command{gawk} to switch to POSIX-compatibility
-mode, disabling all traditional and GNU extensions.
-@xref{Options}.
+导致 @command{gawk} 切换到 POSIX 兼容模式，并禁用所有的传统的与 GNU 扩展。查看 @ref{Options}。
 @end table
 
-The environment variables in the following list are meant
-for use by the @command{gawk} developers for testing and tuning.
-They are subject to change. The variables are:
+下面的环境变量由 @command{gawk} 的开发者用于测试与调测目的。它们会改变。这些变量是：
 
 @table @env
 @item AWKBUFSIZE
-This variable only affects @command{gawk} on POSIX-compliant systems.
-With a value of @samp{exact}, @command{gawk} uses the size of each input
-file as the size of the memory buffer to allocate for I/O. Otherwise,
-the value should be a number, and @command{gawk} uses that number as
-the size of the buffer to allocate.  (When this variable is not set,
-@command{gawk} uses the smaller of the file's size and the ``default''
-blocksize, which is usually the filesystem's I/O blocksize.)
+这个变量只影响在 POSIX 兼容系统上的 @command{gawk}。
+如果值是 @samp{exact}，@command{gawk} 会使用输入文件的大小作为内存缓存的大小，来用进行 I/O 的分配。其他情况下的值则是一个整数值，
+@command{gawk} 使用这个值进行缓存的分配。（当这个变量没有设置，@command{gawk} 使用文件大小与默认块大小两者中的小的数值，
+这一般来说者是文件系统的 I/O 块大小。）
 
 @item AWK_HASH
-If this variable exists with a value of @samp{gst}, @command{gawk}
-switches to using the hash function from GNU Smalltalk for
-managing arrays.
-This function may be marginally faster than the standard function.
+如果这个变量存在，值为 @samp{gst} ，@command{gawk} 会切换使用来自于 GNU Smalltalk 的哈希函数来管理数组。这个函数比标准的函数要稍快。
 
 @item AWKREADFUNC
-If this variable exists, @command{gawk} switches to reading source
-files one line at a time, instead of reading in blocks. This exists
-for debugging problems on filesystems on non-POSIX operating systems
-where I/O is performed in records, not in blocks.
+如果这个变量存在，@command{gawk} 会切换成一次一行地读取文件，而不是整块地读。这个变量的存在是为了调试在 non-POSIX 操作系统上文件系统的问题，在这个系统上的 I/O 是以记录来进行读取而不是以块的方式。
 
 @item GAWK_MSG_SRC
-If this variable exists, @command{gawk} includes the @value{FN}
-and line number within the @command{gawk} source code
-from which warning and/or fatal messages
-are generated.  Its purpose is to help isolate the source of a
-message, as there are multiple places that produce the
-same warning or error message.
+如果这个变量存在，@command{gawk} 会在产生的警告信息与致命信息中加入@value{FN}与行号。它的目的是帮助分离消息源，因为有可能有多个地方会产生相同的警告或者错误信息。
 
 @item GAWK_LOCALE_DIR
-Specifies the location of compiled message object files
-for @command{gawk} itself. This is passed to the @code{bindtextdomain()}
-function when @command{gawk} starts up.
+指明编译好的信息对象文件的位置。在 @command{gawk} 开始运行的时候，这个变量被传递给 @code{bindtextdomain()} 函数。
 
 @item GAWK_NO_DFA
-If this variable exists, @command{gawk} does not use the DFA regexp matcher
-for ``does it match'' kinds of tests. This can cause @command{gawk}
-to be slower. Its purpose is to help isolate differences between the
-two regexp matchers that @command{gawk} uses internally. (There aren't
-supposed to be differences, but occasionally theory and practice don't
-coordinate with each other.)
+如果这个变量存在，@command{gawk} 不会使用 DFA regexp 匹配器
+@footnote{正则引擎主要可以分为两大类：一种是 DFA（确定的有穷自动机，Deterministic finite automaton），一种是 NFA（非确定的有穷自动机，Non-deterministic finite automaton)。这两种引擎都有了很久的历史，当中也由这两种引擎产生了很多变体！于是 POSIX 的出台规避了不必要变体的继续产生。这样一来，主流的正则引擎又分为 3 类：一、DFA，二、传统型NFA，三、POSIX NFA。DFA 引擎在线性式状态下执行，因为它们不要求回溯（并因此它们永远不测试相同的字符两次）。DFA 引擎还可以确保匹配最长的可能的字符串。但是，因为 DFA 引擎只包含有限的状态，所以它不能匹配具有反向引用的模式；并且因为它不构造显式扩展，所以它不可以捕获子表达式。——译者注}
+来进行“它匹配么？”类型的匹配测试。这会导致 @command{gawk} 更慢。它的目的是帮助分隔两个 @command{gawk} 内部使用的 regexp 匹配器。（本来应该是没有什么差异的，但是偶尔有时理论与实际相互不太合拍。）
 
 @item GAWK_NO_PP_RUN
-When @command{gawk} is invoked with the @option{--pretty-print} option,
-it will not run the program if this environment variable exists.
+当 @command{gawk} 指定 @option{--pretty-print} 选项时，如果存在这个变量，它将不会执行程序。
 
-@quotation CAUTION
-This variable will not survive into the next major release.
+@quotation 注意
+这个变量在下个版本发布时不会继续存在。
 @end quotation
 
 @item GAWK_STACKSIZE
-This specifies the amount by which @command{gawk} should grow its
-internal evaluation stack, when needed.
+指定 @command{gawk} 内部求值栈的增长的大小，如果需要增长的话。
 
 @item INT_CHAIN_MAX
-This specifies intended maximum number of items @command{gawk} will maintain on a
-hash chain for managing arrays indexed by integers.
+指定 @command{gawk} 管理的由整数进行索引的数组中的哈希链的元素的最大数值。
 
 @item STR_CHAIN_MAX
-This specifies intended maximum number of items @command{gawk} will maintain on a
-hash chain for managing arrays indexed by strings.
+指定 @command{gawk} 管理的由字串进行索引的数组中的哈希链的元素的最大数值。
 
 @item TIDYMEM
-If this variable exists, @command{gawk} uses the @code{mtrace()} library
-calls from the GNU C library to help track down possible memory leaks.
+如果这个变量存在，@command{gawk} 则使用 GNU C 库中的 @code{mtrace()} 库调用来跟踪可能的内存泄露。
 @end table
 
 @node Exit Status
-@section @command{gawk}'s Exit Status
+@section @command{gawk} 的退出状态
 
 @cindex exit status, of @command{gawk}
-If the @code{exit} statement is used with a value
-(@pxref{Exit Statement}), then @command{gawk} exits with
-the numeric value given to it.
+如果使用一个数值来与 @code{exit} 语句一起使用（查看 @ref{Exit Statement}），@command{gawk} 则用这个数值做为它的退出状态数值。
 
-Otherwise, if there were no problems during execution,
-@command{gawk} exits with the value of the C constant
-@code{EXIT_SUCCESS}.  This is usually zero.
+否则，如果在执行中没有发生错误，@command{gawk} 则用 C 的常量 @code{EXIT_SUCCESS} 退出，这一般为 0。
 
-If an error occurs, @command{gawk} exits with the value of
-the C constant @code{EXIT_FAILURE}.  This is usually one.
+如果出现了错误，@command{gawk} 则使用 C 常量 @code{EXIT_FAILURE} 退出，这一般是 1。
 
-If @command{gawk} exits because of a fatal error, the exit
-status is two.  On non-POSIX systems, this value may be mapped
-to @code{EXIT_FAILURE}.
+如果 @command{gawk} 由于致命错误而退出，则退出状态为 2。在 non-POSIX 系统上，这个值可能会被影射为 @code{EXIT_FAILURE}。
 
 @node Include Files
-@section Including Other Files into Your Program
+@section 在你的程序中包含其他的文件
 
 @c Panos Papadopoulos <panos1962@gmail.com> contributed the original
 @c text for this section.
 
-This @value{SECTION} describes a feature that is specific to @command{gawk}.
+本@value{SECTION}中所描述的特性都是 @command{gawk} 所独有的。
 
 @cindex @code{@@include} directive
 @cindex file inclusion, @code{@@include} directive
 @cindex including files, @code{@@include} directive
-The @code{@@include} keyword can be used to read external @command{awk} source
-files.  This gives you the ability to split large @command{awk} source files
-into smaller, more manageable pieces, and also lets you reuse common @command{awk}
-code from various @command{awk} scripts.  In other words, you can group
-together @command{awk} functions used to carry out specific tasks
-into external files. These files can be used just like function libraries,
-using the @code{@@include} keyword in conjunction with the @env{AWKPATH}
-environment variable.  Note that source files may also be included
-using the @option{-i} option.
+@code{@@include} 关键字可以用来读取 @command{awk} 外部的源文件。这赋予了你将大的 @command{awk} 源程序拆分为更小的，可管理的代码块的能力，也可以让你复用通用的 @command{awk} 源代码。这就是说，你可以将实现特定任务的 @command{awk} 函数组织成外部文件。
+通过 @code{@@include} 关键字与 @env{AWKPATH} 环境变量搭配使用，这些文件可以像函数库一样被使用。注意，源文件也可以通过 @option{-i} 选项包含进来。
 
-Let's see an example.
-We'll start with two (trivial) @command{awk} scripts, namely
-@file{test1} and @file{test2}. Here is the @file{test1} script:
+让我们看个例子。我们启动两个小的（没啥用的）@command{awk} 脚本，名字为 @file{test1} 与 @file{test2}。这里是 @file{test1} 的脚本：
 
 @example
 BEGIN @{
@@ -3726,7 +3672,7 @@ BEGIN @{
 @end example
 
 @noindent
-and here is @file{test2}:
+这里是 @file{test2} 的：
 
 @example
 @@include "test1"
@@ -3735,8 +3681,7 @@ BEGIN @{
 @}
 @end example
 
-Running @command{gawk} with @file{test2}
-produces the following result:
+用 @command{gawk} 执行 @file{test2} 产生了下面的结果：
 
 @example
 $ @kbd{gawk -f test2}
@@ -3744,19 +3689,14 @@ $ @kbd{gawk -f test2}
 @print{} This is script test2.
 @end example
 
-@command{gawk} runs the @file{test2} script, which includes @file{test1}
-using the @code{@@include}
-keyword.  So, to include external @command{awk} source files, you just
-use @code{@@include} followed by the name of the file to be included,
-enclosed in double quotes.
+@command{gawk} 执行 @file{test2} 脚本，而这脚本通过 @code{@@include} 关键字包含了 @file{test1}。
+因此，包含外部的 @command{awk} 源代码，你可以只使用 @code{@@include}，后面加上要包含的文件名，并用双引号引起来。
 
-@quotation NOTE
-Keep in mind that this is a language construct and the @value{FN} cannot
-be a string variable, but rather just a literal string constant in double quotes.
+@quotation 提示
+要记住，这是个语言结构，并且@value{FN}不能是个串变量，而只能是一个在双引号中的代表其自身的字串常量。
 @end quotation
 
-The files to be included may be nested; e.g., given a third
-script, namely @file{test3}:
+文件包含有可能是内嵌的；例如，如果有第三个脚本，名字为 @file{test3}：
 
 @example
 @@include "test2"
@@ -3766,8 +3706,7 @@ BEGIN @{
 @end example
 
 @noindent
-Running @command{gawk} with the @file{test3} script produces the
-following results:
+用 @command{gawk} 执行脚本 @file{test3} 则会产生下面的结果：
 
 @example
 $ @kbd{gawk -f test3}
@@ -3776,70 +3715,43 @@ $ @kbd{gawk -f test3}
 @print{} This is script test3.
 @end example
 
-The @value{FN} can, of course, be a pathname. For example:
+@value{FN}也可以是一个目录名。如：
 
 @example
 @@include "../io_funcs"
 @end example
 
 @noindent
-and:
+或者：
 
 @example
 @@include "/usr/awklib/network"
 @end example
 
 @noindent
-are both valid. The @env{AWKPATH} environment variable can be of great
-value when using @code{@@include}. The same rules for the use
-of the @env{AWKPATH} variable in command-line file searches
-(@pxref{AWKPATH Variable}) apply to
-@code{@@include} also.
+上面两个格式都是正确的。@env{AWKPATH} 环境变量在使用 @code{@@include} 时会产生巨大好处。在 @code{@@include} 使用 @env{AWKPATH} 环境变量的规则，在命令行搜索中也是一样适应的（查看 @ref{AWKPATH Variable}）。
 
-This is very helpful in constructing @command{gawk} function libraries.
-If you have a large script with useful, general-purpose @command{awk}
-functions, you can break it down into library files and put those files
-in a special directory.  You can then include those ``libraries,''
-either by using the full pathnames of the files, or by setting the @env{AWKPATH}
-environment variable accordingly and then using @code{@@include} with
-just the file part of the full pathname. Of course,
-you can keep library files in more than one directory;
-the more complex the working
-environment is, the more directories you may need to organize the files
-to be included.
+用这来构建 @command{gawk} 的函数库非常有用。如果你有一个大的，非常有用的通用 @command{awk} 函数脚本，你就可以将他们拆分为一个个库文件，然后将这些文件放在一个特定目录。然后你可以将这些“库”包含进来。你可以使用文件的全路径，也可以通过设置 @env{AWKPATH} 环境变量，然后使用 @code{@@include}，并仅使用全路径名的文件名部分即可。
+当然，你也可以将库文件放在不止一个目录下；更复杂的工作环境是这样的，你用多个目录来组织需要包含的文件。
 
-Given the ability to specify multiple @option{-f} options, the
-@code{@@include} mechanism is not strictly necessary.
-However, the @code{@@include} keyword
-can help you in constructing self-contained @command{gawk} programs,
-thus reducing the need for writing complex and tedious command lines.
-In particular, @code{@@include} is very useful for writing CGI scripts
-to be run from web pages.
+由于可以通过多个 @option{-f} 选项来指定个文件，@code{@@include} 这样的机制并不严格需要。
+但是，@code{@@include} 关键字可以帮你构建自包含的 @command{gawk} 程序，这样可以避免写复杂，多余的命令行。特别是，@code{@@include} 在写 CGI 脚本来运行网络页面时非常有用。
 
-As mentioned in @ref{AWKPATH Variable}, the current directory is always
-searched first for source files, before searching in @env{AWKPATH};
-this also applies to files named with @code{@@include}.
+如在 @ref{AWKPATH Variable}，所提到的，当前的目录总是包含在文件 @env{AWKPATH} 搜索路径的第一个位置，这也同样应用于 @code{@@include} 机制。
 
 @node Loading Shared Libraries
-@section Loading Dynamic Extensions into Your Program
+@section 在你的程序装入动态扩展
 
-This @value{SECTION} describes a feature that is specific to @command{gawk}.
+本@value{SECTION}描述的也是 @command{gawk} 的特性。
 
 @cindex @code{@@load} directive
 @cindex loading extensions, @code{@@load} directive
 @cindex extensions, loading, @code{@@load} directive
-The @code{@@load} keyword can be used to read external @command{awk} extensions
-(stored as system shared libraries).
-This allows you to link in compiled code that may offer superior
-performance and/or give you access to extended capabilities not supported
-by the @command{awk} language.  The @env{AWKLIBPATH} variable is used to
-search for the extension.  Using @code{@@load} is completely equivalent
-to using the @option{-l} command-line option.
+@code{@@load} 关键字，可以用来读取外部的 @command{awk} 扩展（存储为系统共享库）。
+这个机制可以让你使用编译过的代码来实现非常高的执行性能，并且/或者使用使用一些 @command{awk} 语言所不支持的能力。
+@env{AWKLIBPATH} 变量来用进行扩展的搜索。使用 @code{@@load} 机制完全与使用命令行选项 @option{-l} 等同。
 
-If the extension is not initially found in @env{AWKLIBPATH}, another
-search is conducted after appending the platform's default shared library
-suffix to the @value{FN}.  For example, on GNU/Linux systems, the suffix
-@samp{.so} is used:
+如果扩展一开始没有在 @env{AWKLIBPATH} 中找到，会通过给@value{FN}附加上默认动态库扩展名再搜索一次。例如，在 GNU/Linux 系统中，这个后缀名是 @samp{.so} ：
 
 @example
 $ @kbd{gawk '@@load "ordchr"; BEGIN @{print chr(65)@}'}
@@ -3847,7 +3759,7 @@ $ @kbd{gawk '@@load "ordchr"; BEGIN @{print chr(65)@}'}
 @end example
 
 @noindent
-This is equivalent to the following example:
+上面的代码与下面的例子等同：
 
 @example
 $ @kbd{gawk -lordchr 'BEGIN @{print chr(65)@}'}
@@ -3855,32 +3767,24 @@ $ @kbd{gawk -lordchr 'BEGIN @{print chr(65)@}'}
 @end example
 
 @noindent
-For command-line usage, the @option{-l} option is more convenient,
-but @code{@@load} is useful for embedding inside an @command{awk} source file
-that requires access to an extension.
+对于命令行的使用，@option{-l} 选项更加方便，但是 @code{@@load} 用来在你的 @command{awk} 源代码中嵌入必须的扩展也非常有用。
 
-@ref{Dynamic Extensions}, describes how to write extensions (in C or C++)
-that can be loaded with either @code{@@load} or the @option{-l} option.
-It also describes the @code{ordchr} extension.
+@ref{Dynamic Extensions}，详细解释了如何（用 C 或者 C++）来写扩展，这些扩展可以用 @code{@@load} 来装载，也可以用 @option{-l} 选项来装载。
+在这章里也述及了 @code{ordchr} 扩展。
 
 @node Obsolete
-@section Obsolete Options and/or Features
+@section 已经取消的选项以及特性 
 
 @c update this section for each release!
 
 @cindex options, deprecated
 @cindex features, deprecated
 @cindex obsolete features
-This @value{SECTION} describes features and/or command-line options from
-previous releases of @command{gawk} that either are not available in the
-current version or are still supported but deprecated (meaning that
-they will @emph{not} be in the next release).
+本@value{SECTION}所涉及的特性以及/或者命令行选项，来自之前的 @command{gawk} 发布版本。
+这些特性，命令行选项要么已经不再可用，要么是虽然是还支持，但是已经标志为放弃状态(意味着它们在下个版本中将@emph{不再}可用)。
 
-The process-related special files @file{/dev/pid}, @file{/dev/ppid},
-@file{/dev/pgrpid}, and @file{/dev/user} were deprecated in @command{gawk}
-3.1, but still worked.  As of @value{PVERSION} 4.0, they are no longer
-interpreted specially by @command{gawk}.  (Use @code{PROCINFO} instead;
-see @ref{Auto-set}.)
+进程相关的特殊文件 @file{/dev/pid}，@file{/dev/ppid}，@file{/dev/pgrpid}，与 @file{/dev/user} 已经在 @command{gawk} 3.1 版本取消了，但是还可以使用。
+到 4.0 @value{PVERSION}的时候，它们将不再被 @command{gawk} 识别。（而是使用 @code{PROCINFO}，查看 @ref{Auto-set}。）
 
 @ignore
 This @value{SECTION}
@@ -3889,7 +3793,7 @@ in case some option becomes obsolete in a future version of @command{gawk}.
 @end ignore
 
 @node Undocumented
-@section Undocumented Options and Features
+@section 未记载的选项与特性 
 @cindex undocumented features
 @cindex features, undocumented
 @cindex Skywalker, Luke
@@ -3897,13 +3801,12 @@ in case some option becomes obsolete in a future version of @command{gawk}.
 @cindex Jedi knights
 @cindex Knights, jedi
 @quotation
-@i{Use the Source, Luke!}
+@i{使用源代码，祝好运！}
 @author Obi-Wan
 @end quotation
 
 @cindex shells, sea
-This @value{SECTION} intentionally left
-blank.
+本@value{SECTION}特意留空。
 
 @ignore
 @c If these came out in the Info file or TeX document, then they wouldn't
@@ -3958,84 +3861,58 @@ long-undocumented ``feature'' of Unix @command{awk}.
 @end ignore
 
 @node Invoking Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-Use either
-@samp{awk '@var{program}' @var{files}}
-or
-@samp{awk -f @var{program-file} @var{files}}
-to run @command{awk}.
+使用 @samp{awk '@var{program}' @var{files}} 或者 @samp{awk -f @var{program-file} @var{files}} 来运行 @command{awk}。
 
 @item
-The three standard options for all versions of @command{awk} are
-@option{-f}, @option{-F}, and @option{-v}.  @command{gawk} supplies these
-and many others, as well as corresponding GNU-style long options.
+对所有版本的 @command{awk}，有三个标准的选项，即 @option{-f}，@option{-F} 与 @option{-v}。
+@command{gawk} 支持这几个选项，也支持其他许多的选项，以及 GNU 风格的长选项。
 
 @item
-Nonoption command-line arguments are usually treated as @value{FN}s,
-unless they have the form @samp{@var{var}=@var{value}}, in which case
-they are taken as variable assignments to be performed at that point
-in processing the input.
+非选项的命令行参数通常会被当做@value{FN}对待，除非它他有 @samp{@var{var}=@var{value}} 这样的形式，这种形式下，会在 @command{awk} 处理输入文件时执行变量赋值语句。
 
 @item
-All nonoption command-line arguments, excluding the program text,
-are placed in the @code{ARGV} array.  Adjusting @code{ARGC} and @code{ARGV}
-affects how @command{awk} processes input.
+所有的非选项命令行参数，不包括程序文本，都会存放于 @code{ARGV} 数组中，调整 @code{ARGC} 与 @code{ARGV} 会影响 @command{awk} 处理输入的方式。
 
 @item
-You can use a single minus sign (@samp{-}) to refer to standard input
-on the command line. @command{gawk} also lets you use the special
-@value{FN} @file{/dev/stdin}.
+在命令行中，你可以使用一个单一的减号（@samp{-}）来指定标准输入。
+@command{gawk} 也可以让你使用特殊@value{FN} @file{/dev/stdin}。
 
 @item
-@command{gawk} pays attention to a number of environment variables.
-@env{AWKPATH}, @env{AWKLIBPATH}, and @env{POSIXLY_CORRECT} are the
-most important ones.
+@command{gawk} 会关注一系列的环境变量，@env{AWKPATH}，@env{AWKLIBPATH} 与 @env{POSIXLY_CORRECT} 是最重要的几个。
 
 @item
-@command{gawk}'s exit status conveys information to the program
-that invoked it. Use the @code{exit} statement from within
-an @command{awk} program to set the exit status.
+@command{gawk} 的退出状态向调用它的程序传递了相应的信息。在程序代码中使用 @code{exit} 语句来设置 @command{awk} 程序的退出状态。
 
 @item
-@command{gawk} allows you to include other @command{awk} source files into
-your program using the @code{@@include} statement and/or the @option{-i}
-and @option{-f} command-line options.
+@command{gawk} 可以将其他的 @command{awk} 源代码包含在到你的程序中，
+这是通过 @code{@@include} 语句以及/或者 @option{-i} 与 @option{-f} 命令行参数来实现的。
 
 @item
-@command{gawk} allows you to load additional functions written in C
-or C++ using the @code{@@load} statement and/or the @option{-l} option.
-(This advanced feature is described later, in @ref{Dynamic Extensions}.)
+通过 @code{@@load} 语句与/或者 @option{-l} 选项，你可以将使用 C 或者 C++ 编译的其他附加功能模块（扩展）引入你的程序。
+（这个高级特性会在 @ref{Dynamic Extensions}，中进行详细说明。）
 @end itemize
 
 @node Regexp
-@chapter Regular Expressions
+@chapter 正则表达式
 @cindex regexp
 @cindex regular expressions
 
-A @dfn{regular expression}, or @dfn{regexp}, is a way of describing a
-set of strings.
-Because regular expressions are such a fundamental part of @command{awk}
-programming, their format and use deserve a separate @value{CHAPTER}.
+@dfn{正则表达式}，也称为 @dfn{regexp}，是描述字串集的方法。由于正则表达式是 @command{awk} 程序最基础的部分，
+它们的格式与使用有必要用单独的@value{CHAPTER}来进行解析。
 
 @cindex forward slash (@code{/}) to enclose regular expressions
 @cindex @code{/} (forward slash) to enclose regular expressions
-A regular expression enclosed in slashes (@samp{/})
-is an @command{awk} pattern that matches every input record whose text
-belongs to that set.
-The simplest regular expression is a sequence of letters, numbers, or
-both.  Such a regexp matches any string that contains that sequence.
-Thus, the regexp @samp{foo} matches any string containing @samp{foo}.
-Thus, the pattern @code{/foo/} matches any input record containing
-the three adjacent characters @samp{foo} @emph{anywhere} in the record.  Other
-kinds of regexps let you specify more complicated classes of strings.
+在斜杠对（@samp{/}）中包括的正则表达式，在 @command{awk} 中称为模式，用以匹配那些属于这个字串集的输入记录。
+最简单的正则表达式就是一串字符序列，数字或者二者兼而有之。这样的正则表达式匹配任意具有这个字符序列的字串。
+所以正则表达式 @samp{foo} 匹配任意包含 @samp{foo} 的字串。这样，模式 @code{/foo/} 匹配任意的输入记录，
+只要这个记录在@emph{任意位置}包含这三个连续的字符序列 @samp{foo} 好可。其他类型的正则表达式可以让你指定更复杂的字串类。
 
 @ifnotinfo
-Initially, the examples in this @value{CHAPTER} are simple.
-As we explain more about how
-regular expressions work, we present more complicated instances.
+在本章的开始的例子，都是比较简单的。当我们更深入地解释正则表达式如何工作时，就会写一些更复杂的例子。
 @end ifnotinfo
 
 @menu
@@ -4051,15 +3928,10 @@ regular expressions work, we present more complicated instances.
 @end menu
 
 @node Regexp Usage
-@section How to Use Regular Expressions
+@section 如何使用正则表达式
 
 @cindex regular expressions, as patterns
-A regular expression can be used as a pattern by enclosing it in
-slashes.  Then the regular expression is tested against the
-entire text of each record.  (Normally, it only needs
-to match some part of the text in order to succeed.)  For example, the
-following prints the second field of each record where the string
-@samp{li} appears anywhere in the record:
+正则表达式通过两个斜杠包含起来进行使用。然后正则表达式就会对记录的整个文本进行测试。（正常情况下，只需要按顺序匹配文本的一部份就能够成功测试匹配与否。）例如，下面只需要记录的任意位置出现 @samp{li} 串，就打印它的第二个域：
 
 @example
 $ @kbd{awk '/li/ @{ print $2 @}' mail-list}
@@ -4084,15 +3956,12 @@ $ @kbd{awk '/li/ @{ print $2 @}' mail-list}
 @c @cindex statements, @code{if}
 @c @cindex statements, @code{while}
 @c @cindex statements, @code{do}
-Regular expressions can also be used in matching expressions.  These
-expressions allow you to specify the string to match against; it need
-not be the entire current input record.  The two operators @samp{~}
-and @samp{!~} perform regular expression comparisons.  Expressions
-using these operators can be used as patterns, or in @code{if},
-@code{while}, @code{for}, and @code{do} statements.
-(@xref{Statements}.)
-For example, the following is true if the expression @var{exp} (taken
-as a string) matches @var{regexp}:
+正则表达式也可以用于匹配表达式。这些表达式中你可以指定一个要匹配的串；而不需要整个的输入记录。
+有两个操作符来执行匹配，一个是 @samp{~}，一个是 @samp{!~}。
+这些表达式可以用作模式部分，也可以用在 @code{if} 语句，@code{while} 语句，@code{for} 语句，以及 @code{do} 语句。
+（查看 @ref{Statements}。）例如，下面的例子中，如果 @var{exp}（存有字串）匹配 @var{regexp} 则会为真：
+
+#TODO20171026
 
 @example
 @var{exp} ~ /@var{regexp}/
