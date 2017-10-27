@@ -4033,15 +4033,12 @@ $ @kbd{awk '/li/ @{ print $2 @}' mail-list}
 这些表达式可以用作模式部分，也可以用在 @code{if} 语句，@code{while} 语句，@code{for} 语句，以及 @code{do} 语句。
 （查看 @ref{Statements}。）例如，下面的例子中，如果 @var{exp}（存有字串）匹配 @var{regexp} 则会为真：
 
-#TODO20171026
-
 @example
 @var{exp} ~ /@var{regexp}/
 @end example
 
 @noindent
-This example matches, or selects, all input records with the uppercase
-letter @samp{J} somewhere in the first field:
+下面这个例子中，匹配，或者选择所有的输入记录中的第一个域中某个地方存在大字的字母 @samp{J} ：
 
 @example
 $ @kbd{awk '$1 ~ /J/' inventory-shipped}
@@ -4051,23 +4048,19 @@ $ @kbd{awk '$1 ~ /J/' inventory-shipped}
 @print{} Jan  21  36  64 620
 @end example
 
-So does this:
+下面执行一样的功能：
 
 @example
 awk '@{ if ($1 ~ /J/) print @}' inventory-shipped
 @end example
 
-This next example is true if the expression @var{exp}
-(taken as a character string)
-does @emph{not} match @var{regexp}:
+下个例子中，如果表达式 @var{exp}（存有字串）@emph{不}匹配 regexp 则为真：
 
 @example
 @var{exp} !~ /@var{regexp}/
 @end example
 
-The following example matches,
-or selects, all input records whose first field @emph{does not} contain
-the uppercase letter @samp{J}:
+下面的例子中匹配或者选择所有的，第一个域不包含大写字母 @samp{J} 的记录：
 
 @example
 $ @kbd{awk '$1 !~ /J/' inventory-shipped}
@@ -4081,93 +4074,74 @@ $ @kbd{awk '$1 !~ /J/' inventory-shipped}
 @cindex regexp constants
 @cindex constant regexps
 @cindex regular expressions, constants, See regexp constants
-When a regexp is enclosed in slashes, such as @code{/foo/}, we call it
-a @dfn{regexp constant}, much like @code{5.27} is a numeric constant and
-@code{"foo"} is a string constant.
+当 regexp 被斜杠包含时，如 @code{/foo/} 我们称之为@dfn{正则表达式常量}，就类似于 @code{5.27} 是一个数值常量以及 @code{"foo"} 是一个字串常量一样。
 
 @node Escape Sequences
-@section Escape Sequences
+@section 转义序列
 
 @cindex escape sequences, in strings
 @cindex backslash (@code{\}), in escape sequences
 @cindex @code{\} (backslash), in escape sequences
-Some characters cannot be included literally in string constants
-(@code{"foo"}) or regexp constants (@code{/foo/}).
-Instead, they should be represented with @dfn{escape sequences},
-which are character sequences beginning with a backslash (@samp{\}).
-One use of an escape sequence is to include a double-quote character in
-a string constant.  Because a plain double quote ends the string, you
-must use @samp{\"} to represent an actual double-quote character as a
-part of the string.  For example:
+有些字符不能够原样地在字串常量（@code{"foo"}）或者正则表达式常量（@code{/foo/}）中。
+相反，它们需要放在@dfn{转义序列}中，在这个序列中，字符会用一个反斜杠（@samp{\}）开始。
+其中的一个用法就是在一个双引号字串常量中包含进一个双引号。由于光双引号会结束一个串，在字串中，你必须使用 @samp{\"} 来表示一个实际的双引号。例如：
 
 @example
 $ @kbd{awk 'BEGIN @{ print "He said \"hi!\" to her." @}'}
 @print{} He said "hi!" to her.
 @end example
 
-The  backslash character itself is another character that cannot be
-included normally; you must write @samp{\\} to put one backslash in the
-string or regexp.  Thus, the string whose contents are the two characters
-@samp{"} and @samp{\} must be written @code{"\"\\"}.
+反斜杠字符自己本身也是一个不能以通常方式包含的字符；你必须输入 @samp{\\} 来将反斜杠包含进字串或者正则表达式中。因此，如果字串的内容为 @samp{"} 与 @samp{\}，则必须写成 @code{"\"\\"}。
 
-Other escape sequences represent unprintable characters
-such as TAB or newline.  There is nothing to stop you from entering most
-unprintable characters directly in a string constant or regexp constant,
-but they may look ugly.
+其他的转义字符是一些如 TAB 或者换行符这样的不可打印字符。没什么东西可以阻止你输入大多数的不可打印字符到字串常量或者正则表达式常量中，但那看起来奇丑无比。
 
-The following list presents
-all the escape sequences used in @command{awk} and
-what they represent. Unless noted otherwise, all these escape
-sequences apply to both string constants and regexp constants:
+下面的列表列出了所有的在 @command{awk} 中使用的转义的字符以及其对应的字符。除非另外提示，所有这些转义字符即可用于字串常量也用于正则表达式：
 
 @table @code
 @item \\
-A literal backslash, @samp{\}.
+ 字符反斜杠 @samp{\}。
 
 @c @cindex @command{awk} language, V.4 version
 @cindex @code{\} (backslash), @code{\a} escape sequence
 @cindex backslash (@code{\}), @code{\a} escape sequence
 @item \a
-The ``alert'' character, @kbd{Ctrl-g}, ASCII code 7 (BEL).
-(This often makes some sort of audible noise.)
+ “alert”字符，@kbd{Ctrl-g}，ASCII 代码 7（BEL，响铃）。（这通常是制造一些可以听得到的噪声。）
 
 @cindex @code{\} (backslash), @code{\b} escape sequence
 @cindex backslash (@code{\}), @code{\b} escape sequence
 @item \b
-Backspace, @kbd{Ctrl-h}, ASCII code 8 (BS).
+ 退格，@kbd{Ctrl-h}，ASCII 代码8（BS）。
 
 @cindex @code{\} (backslash), @code{\f} escape sequence
 @cindex backslash (@code{\}), @code{\f} escape sequence
 @item \f
-Formfeed, @kbd{Ctrl-l}, ASCII code 12 (FF).
+ 换页，@kbd{Ctrl-l}，ASCII 代码 12（FF）。
 
 @cindex @code{\} (backslash), @code{\n} escape sequence
 @cindex backslash (@code{\}), @code{\n} escape sequence
 @item \n
-Newline, @kbd{Ctrl-j}, ASCII code 10 (LF).
+ 换行，@kbd{Ctrl-j}，ASCII 代码 10（LF）。
 
 @cindex @code{\} (backslash), @code{\r} escape sequence
 @cindex backslash (@code{\}), @code{\r} escape sequence
 @item \r
-Carriage return, @kbd{Ctrl-m}, ASCII code 13 (CR).
+ 回车，@kbd{Ctrl-m}，ASCII 代码13（CR）。
 
 @cindex @code{\} (backslash), @code{\t} escape sequence
 @cindex backslash (@code{\}), @code{\t} escape sequence
 @item \t
-Horizontal TAB, @kbd{Ctrl-i}, ASCII code 9 (HT).
+ 水平跳格，@kbd{Ctrl-i}，ASCII 代码9（HT）。
 
 @c @cindex @command{awk} language, V.4 version
 @cindex @code{\} (backslash), @code{\v} escape sequence
 @cindex backslash (@code{\}), @code{\v} escape sequence
 @item \v
-Vertical TAB, @kbd{Ctrl-k}, ASCII code 11 (VT).
+ 垂直跳格，@kbd{Ctrl-k}，ASCII 代码11（VT）。
 
 @cindex @code{\} (backslash), @code{\}@var{nnn} escape sequence
 @cindex backslash (@code{\}), @code{\}@var{nnn} escape sequence
 @item \@var{nnn}
-The octal value @var{nnn}, where @var{nnn} stands for 1 to 3 digits
-between @samp{0} and @samp{7}.  For example, the code for the ASCII ESC
-(escape) character is @samp{\033}.
+ 八进制值 @var{nnn}，@var{nnn} 表示 1 到 3 位的 @samp{0} 到 @samp{7} 之间的数字。如，ASCII ESC 字符的代码是 @samp{\033}。
 
 @c @cindex @command{awk} language, V.4 version
 @c @cindex @command{awk} language, POSIX version
@@ -4176,67 +4150,45 @@ between @samp{0} and @samp{7}.  For example, the code for the ASCII ESC
 @cindex common extensions, @code{\x} escape sequence
 @cindex extensions, common@comma{} @code{\x} escape sequence
 @item \x@var{hh}@dots{}
-The hexadecimal value @var{hh}, where @var{hh} stands for a sequence
-of hexadecimal digits (@samp{0}--@samp{9}, and either @samp{A}--@samp{F}
-or @samp{a}--@samp{f}).  Like the same construct
-in ISO C, the escape sequence continues until the first nonhexadecimal
-digit is seen. @value{COMMONEXT}
-However, using more than two hexadecimal digits produces
-undefined results. (The @samp{\x} escape sequence is not allowed in
-POSIX @command{awk}.)
+ 十六进制值 @var{hh}，@var{hh} 表示十六进制数字（@samp{0} 到 @samp{9}，以及 @samp{A} 到 @samp{F} 或者 @samp{a} 到 @samp{f}）序列。
+类似于 ISO C 中的结构，转换序列一直延续到第一个非十六进制的数字为止。
+@value{COMMONEXT}但是，使用两个以上的十六进制的数字会产生未定义的结果。（@samp{\x} 转义序列在 POSIX @command{awk} 中不被支持。）
 
-@quotation CAUTION
-The next major release of @command{gawk} will change, such
-that a maximum of two hexadecimal digits following the
-@samp{\x} will be used.
+@quotation 注意
+下一个 @command{gawk} 的主要版本会有改变，会使用到 @samp{\x} 后面跟两个最大的十六进制数字的情况。
 @end quotation
 
 @cindex @code{\} (backslash), @code{\/} escape sequence
 @cindex backslash (@code{\}), @code{\/} escape sequence
 @item \/
 A literal slash (necessary for regexp constants only).
-This sequence is used when you want to write a regexp
-constant that contains a slash
-(such as @code{/.*:\/home\/[[:alnum:]]+:.*/}; the @samp{[[:alnum:]]}
-notation is discussed in @ref{Bracket Expressions}).
-Because the regexp is delimited by
-slashes, you need to escape any slash that is part of the pattern,
-in order to tell @command{awk} to keep processing the rest of the regexp.
+ 字面斜杠字符（在正则表达式的常量中使用）。当你要在一个正则表达式中加入有反斜杠的表达式常量时使用
+（如 @code{/.*:\/home\/[[:alnum:]]+:.*/} 符号会在 @ref{Bracket Expressions} 讨论。）
+由于正则表达式通过斜杠来分隔，所以如果斜杠是其中的一部分，你就需要进行转义，以通知 @command{awk} 继续处理正则表达式后面的部分。
 
 @cindex @code{\} (backslash), @code{\"} escape sequence
 @cindex backslash (@code{\}), @code{\"} escape sequence
 @item \"
-A literal double quote (necessary for string constants only).
-This sequence is used when you want to write a string
-constant that contains a double quote
-(such as @code{"He said \"hi!\" to her."}).
-Because the string is delimited by
-double quotes, you need to escape any quote that is part of the string,
-in order to tell @command{awk} to keep processing the rest of the string.
+ 字面双引号（仅在字串常量中使用）。这个序列当你要在一个字串常量中包含双引号时使用
+ （例如 @code{"He said \"hi!\" to her."}）。
+ 由于双引号用来分隔字串，所以当在字串中有双引号时，你需要进行转义，以通知 @command{awk} 继续处理字串后面的部分。
 @end table
 
-In @command{gawk}, a number of additional two-character sequences that begin
-with a backslash have special meaning in regexps.
-@xref{GNU Regexp Operators}.
+在 @command{gawk} 的正则表达式中，有许多的以反斜杠开始两字符序列有关特殊的意义。查看 @ref{GNU Regexp Operators}。
 
-In a regexp, a backslash before any character that is not in the previous list
-and not listed in
-@ref{GNU Regexp Operators}
-means that the next character should be taken literally, even if it would
-normally be a regexp operator.  For example, @code{/a\+b/} matches the three
-characters @samp{a+b}.
+在正则表达式中，在任意字符前的反斜杠，不在前面的列表中，也没有在 @ref{GNU Regexp Operators} 中，其下一个字符则会按字面的处理。
+就算它正常情况下是正则表达式的操作符。例如 @code{/a\+b/} 匹配3个字符的串 @samp{a+b} 。
 
 @cindex backslash (@code{\}), in escape sequences
 @cindex @code{\} (backslash), in escape sequences
 @cindex portability
-For complete portability, do not use a backslash before any character not
-shown in the previous list or that is not an operator.
+为了完全可移植，不要使用任何没有在前面列表列出的字符或者在不是正则表达式操作符字符前使用反斜杠。
 
 @c 11/2014: Moved so as to not stack sidebars
-@cindex sidebar, Backslash Before Regular Characters
+@cindex sidebar, 常规字符前的反斜杠
 @ifdocbook
 @docbook
-<sidebar><title>Backslash Before Regular Characters</title>
+<sidebar><title>常规字符前的反斜杠</title>
 @end docbook
 
 @cindex portability, backslash in escape sequences
@@ -4245,31 +4197,25 @@ shown in the previous list or that is not an operator.
 @cindex @code{\} (backslash), in escape sequences, POSIX and
 
 @cindex troubleshooting, backslash before nonspecial character
-If you place a backslash in a string constant before something that is
-not one of the characters previously listed, POSIX @command{awk} purposely
-leaves what happens as undefined.  There are two choices:
+如果你在字串常量中的某个未在前面的列表中列出的字符前使用反斜杠，POSIX @command{awk} 有意地使这种情况为未定义。有两个选择：
 
 @c @cindex automatic warnings
 @c @cindex warnings, automatic
 @cindex Brian Kernighan's @command{awk}
 @table @asis
-@item Strip the backslash out
-This is what BWK @command{awk} and @command{gawk} both do.
-For example, @code{"a\qc"} is the same as @code{"aqc"}.
-(Because this is such an easy bug both to introduce and to miss,
-@command{gawk} warns you about it.)
-Consider @samp{FS = @w{"[ \t]+\|[ \t]+"}} to use vertical bars
-surrounded by whitespace as the field separator. There should be
-two backslashes in the string: @samp{FS = @w{"[ \t]+\\|[ \t]+"}}.)
+@item 把反斜杠去掉
+这正是 BWK @command{awk} 与 @command{gawk} 两者所做的。
+例如 @code{"a\qc"} 与 @code{"aqc"} 一样。
+（因为这是很容易引入，又容易错过的 Bug，@command{gawk} 会给予警告。）
+考虑 @samp{FS = @w{"[ \t]+\|[ \t]+"}} 使用竖线 @samp{|} 以及周边的空白作为域分隔符，
+这时，需要在字串中使用两个反斜杠：@samp{FS = @w{"[ \t]+\\|[ \t]+"}}。）
 @c I did this!  This is why I added the warning.
 
 @cindex @command{gawk}, escape sequences
 @cindex Unix @command{awk}, backslashes in escape sequences
 @cindex @command{mawk} utility
-@item Leave the backslash alone
-Some other @command{awk} implementations do this.
-In such implementations, typing @code{"a\qc"} is the same as typing
-@code{"a\\qc"}.
+@item 保留反斜杠
+有一些 @command{awk} 实现会这么做。在这种实现中，输入 @code{"a\qc"} 将与输入 @code{"a\\qc"} 相同。
 @end table
 
 @docbook
@@ -4279,7 +4225,7 @@ In such implementations, typing @code{"a\qc"} is the same as typing
 
 @ifnotdocbook
 @cartouche
-@center @b{Backslash Before Regular Characters}
+@center @b{常规字符前的反斜杠}
 
 
 @cindex portability, backslash in escape sequences
@@ -4288,77 +4234,57 @@ In such implementations, typing @code{"a\qc"} is the same as typing
 @cindex @code{\} (backslash), in escape sequences, POSIX and
 
 @cindex troubleshooting, backslash before nonspecial character
-If you place a backslash in a string constant before something that is
-not one of the characters previously listed, POSIX @command{awk} purposely
-leaves what happens as undefined.  There are two choices:
+如果你在字串常量中的某个未在前面的列表中列出的字符前使用反斜杠，POSIX @command{awk} 有意地使这种情况为未定义。有两个选择：
 
 @c @cindex automatic warnings
 @c @cindex warnings, automatic
 @cindex Brian Kernighan's @command{awk}
 @table @asis
-@item Strip the backslash out
-This is what BWK @command{awk} and @command{gawk} both do.
-For example, @code{"a\qc"} is the same as @code{"aqc"}.
-(Because this is such an easy bug both to introduce and to miss,
-@command{gawk} warns you about it.)
-Consider @samp{FS = @w{"[ \t]+\|[ \t]+"}} to use vertical bars
-surrounded by whitespace as the field separator. There should be
-two backslashes in the string: @samp{FS = @w{"[ \t]+\\|[ \t]+"}}.)
+@item 把反斜杠去掉
+这正是 BWK @command{awk} 与 @command{gawk} 两者所做的。
+例如 @code{"a\qc"} 与 @code{"aqc"} 一样。
+（因为这是很容易引入，又容易错过的 Bug，@command{gawk} 会给予警告。）
+考虑 @samp{FS = @w{"[ \t]+\|[ \t]+"}} 使用竖线 @samp{|} 以及周边的空白作为域分隔符，
+这时，需要在字串中使用两个反斜杠：@samp{FS = @w{"[ \t]+\\|[ \t]+"}}。）
 @c I did this!  This is why I added the warning.
 
 @cindex @command{gawk}, escape sequences
 @cindex Unix @command{awk}, backslashes in escape sequences
 @cindex @command{mawk} utility
-@item Leave the backslash alone
-Some other @command{awk} implementations do this.
-In such implementations, typing @code{"a\qc"} is the same as typing
-@code{"a\\qc"}.
+@item 保留反斜杠
+有一些 @command{awk} 实现会这么做。在这种实现中，输入 @code{"a\qc"} 将与输入 @code{"a\\qc"} 相同。
 @end table
 @end cartouche
 @end ifnotdocbook
 
-To summarize:
+总结一下：
 
 @itemize @value{BULLET}
 @item
-The escape sequences in the preceding list are always processed first,
-for both string constants and regexp constants. This happens very early,
-as soon as @command{awk} reads your program.
+对于字串常量与正则表达式常量，前面列表中的转义序列都是会首先处理。处理的时间非常靠前，@command{awk} 一读完你的程序，就处理了。
 
 @item
-@command{gawk} processes both regexp constants and dynamic regexps
-(@pxref{Computed Regexps}),
-for the special operators listed in
-@ref{GNU Regexp Operators}.
+常量正则表达式或者动态正则表达式（查看 @ref{Computed Regexps}），@command{gawk} 都会处理列在 @ref{GNU Regexp Operators} 中的操作符。
 
 @item
-A backslash before any other character means to treat that character
-literally.
+在其他的符号前使用反斜杠，都表示把这个符号按字面处理。
 @end itemize
 
-@cindex sidebar, Escape Sequences for Metacharacters
+@cindex sidebar, 转义元字符
 @ifdocbook
 @docbook
-<sidebar><title>Escape Sequences for Metacharacters</title>
+<sidebar><title>转义元字符</title>
 @end docbook
 
 @cindex metacharacters, escape sequences for
 
-Suppose you use an octal or hexadecimal
-escape to represent a regexp metacharacter.
-(See @ref{Regexp Operators}.)
-Does @command{awk} treat the character as a literal character or as a regexp
-operator?
+假设你使用八进制或者十六进制转义来提交正则表达式的元字符（查看 @ref{Regexp Operators}），@command{awk} 是否将这些字符做为字面字符还是一个正则表达式操作符？
 
 @cindex dark corner, escape sequences, for metacharacters
-Historically, such characters were taken literally.
+由于历史原因，这样的字符是按照字面字符来处理的。
 @value{DARKCORNER}
-However, the POSIX standard indicates that they should be treated
-as real metacharacters, which is what @command{gawk} does.
-In compatibility mode (@pxref{Options}),
-@command{gawk} treats the characters represented by octal and hexadecimal
-escape sequences literally when used in regexp constants. Thus,
-@code{/a\52b/} is equivalent to @code{/a\*b/}.
+然而，POSIX 标准却表示它们应该被当成真正的元字符，@command{gawk} 则是这么处理的。
+在兼容模式下（查看 @ref{Options}），@command{gawk} 在正则表达式常中会将这些转义的八进制或者十六进制的字符按字面处理。因此 @code{/a\52b/} 与 @code{/a\*b/} 等同。
 
 @docbook
 </sidebar>
@@ -4367,74 +4293,49 @@ escape sequences literally when used in regexp constants. Thus,
 
 @ifnotdocbook
 @cartouche
-@center @b{Escape Sequences for Metacharacters}
+@center @b{转义元字符}
 
 
 @cindex metacharacters, escape sequences for
 
-Suppose you use an octal or hexadecimal
-escape to represent a regexp metacharacter.
-(See @ref{Regexp Operators}.)
-Does @command{awk} treat the character as a literal character or as a regexp
-operator?
+假设你使用八进制或者十六进制转义来提交正则表达式的元字符（查看 @ref{Regexp Operators}），@command{awk} 是否将这些字符做为字面字符还是一个正则表达式操作符？
 
 @cindex dark corner, escape sequences, for metacharacters
-Historically, such characters were taken literally.
+由于历史原因，这样的字符是按照字面字符来处理的。
 @value{DARKCORNER}
-However, the POSIX standard indicates that they should be treated
-as real metacharacters, which is what @command{gawk} does.
-In compatibility mode (@pxref{Options}),
-@command{gawk} treats the characters represented by octal and hexadecimal
-escape sequences literally when used in regexp constants. Thus,
-@code{/a\52b/} is equivalent to @code{/a\*b/}.
+然而，POSIX 标准却表示它们应该被当成真正的元字符，@command{gawk} 则是这么处理的。
+在兼容模式下（查看 @ref{Options}），@command{gawk} 在正则表达式常中会将这些转义的八进制或者十六进制的字符按字面处理。因此 @code{/a\52b/} 与 @code{/a\*b/} 等同。
 @end cartouche
 @end ifnotdocbook
 
 @node Regexp Operators
-@section Regular Expression Operators
+@section 正则表达式操作符
 @cindex regular expressions, operators
 @cindex metacharacters in regular expressions
 
-You can combine regular expressions with special characters,
-called @dfn{regular expression operators} or @dfn{metacharacters}, to
-increase the power and versatility of regular expressions.
+你可以在正则表达式中与特定字符进行组合，称为@dfn{正则表达式操作符}或者@dfn{元字符}，来给正常表达式加入更加强大的能力与多样性。
 
-The escape sequences described
-@ifnotinfo
-earlier
-@end ifnotinfo
-in @ref{Escape Sequences}
-are valid inside a regexp.  They are introduced by a @samp{\} and
-are recognized and converted into corresponding real characters as
-the very first step in processing regexps.
+在前节 @ref{Escape Sequences} 中所描述的转义字符，在正则表达式中也是有效的。
+它们通过反斜杠 @samp{\} 引入，然后在处理正则表达式第一步，被识别成或者转换成相应的真实字符。
 
-Here is a list of metacharacters.  All characters that are not escape
-sequences and that are not listed here stand for themselves:
+下面是元字符列表。所有的那些未列在此的，非转义序列，就是代表他们自己：
 
 @c Use @asis so the docbook comes out ok. Sigh.
 @table @asis
 @cindex backslash (@code{\}), regexp operator
 @cindex @code{\} (backslash), regexp operator
 @item @code{\}
-This suppresses the special meaning of a character when
-matching.  For example, @samp{\$}
-matches the character @samp{$}.
+这个取消了某个字符的在匹配时的特殊含义，如 @samp{\$} 就是匹配字符 @samp{$} 。
 
 @cindex regular expressions, anchors in
 @cindex Texinfo, chapter beginnings in files
 @cindex @code{^} (caret), regexp operator
 @cindex caret (@code{^}), regexp operator
 @item @code{^}
-This matches the beginning of a string.  @samp{^@@chapter}
-matches @samp{@@chapter} at the beginning of a string,
-for example, and can be used
-to identify chapter beginnings in Texinfo source files.
-The @samp{^} is known as an @dfn{anchor}, because it anchors the pattern to
-match only at the beginning of the string.
+这里匹配字串的开头。@samp{^@@chapter} 匹配字串开头的 @samp{@@chapter}，如可以用来识别 Texinfo 中章的开头。
+@samp{^} 也被称为@dfn{锚定符}，因为它就是将模式设定成匹配字串的开头。
 
-It is important to realize that @samp{^} does not match the beginning of
-a line (the point right after a @samp{\n} newline character) embedded in a string.
-The condition is not true in the following example:
+要了解 @samp{^} 并不是匹配内嵌在字串中行头（即 @samp{\n} 字符正右边的点）。下面的例子中条件表达式不为真：
 
 @example
 if ("line1\nLINE 2" ~ /^L/) @dots{}
@@ -4443,13 +4344,8 @@ if ("line1\nLINE 2" ~ /^L/) @dots{}
 @cindex @code{$} (dollar sign), regexp operator
 @cindex dollar sign (@code{$}), regexp operator
 @item @code{$}
-This is similar to @samp{^}, but it matches only at the end of a string.
-For example, @samp{p$}
-matches a record that ends with a @samp{p}.  The @samp{$} is an anchor
-and does not match the end of a line
-(the point right before a @samp{\n} newline character)
-embedded in a string.
-The condition in the following example is not true:
+这个与 @samp{^} 类似，但是匹配的是串尾。如 @samp{p$} 匹配以 @samp{p} 结尾的串。
+@samp{$} 是个锚定符，但是不匹配内嵌在字串中行尾（在 @samp{\n} 按行符正前的位置）。下面的例子的条件返回非真。
 
 @example
 if ("line1\nLINE 2" ~ /1$/) @dots{}
@@ -4458,19 +4354,12 @@ if ("line1\nLINE 2" ~ /1$/) @dots{}
 @cindex @code{.} (period), regexp operator
 @cindex period (@code{.}), regexp operator
 @item @code{.} (period)
-This matches any single character,
-@emph{including} the newline character.  For example, @samp{.P}
-matches any single character followed by a @samp{P} in a string.  Using
-concatenation, we can make a regular expression such as @samp{U.A}, which
-matches any three-character sequence that begins with @samp{U} and ends
-with @samp{A}.
+匹配单个字符，@emph{包括}换行符。
+如 @samp{.P} 匹配任意字符后面跟 @samp{P} 的任意字串。通过使用连接符，我们可以构造这样的正则表达式，如 @samp{U.A}， 来匹配任意的三字符序列，其以 @samp{U} 开头，以 @samp{A} 结尾。
 
 @cindex POSIX @command{awk}, period (@code{.})@comma{} using
-In strict POSIX mode (@pxref{Options}),
-@samp{.} does not match the @sc{nul}
-character, which is a character with all bits equal to zero.
-Otherwise, @sc{nul} is just another character. Other versions of @command{awk}
-may not be able to match the @sc{nul} character.
+在严格的 POSIX 模式（查看 @ref{Options}）下，@samp{.} 不匹配 @sc{nul}（空）字符，该字符所有的位都被置成了 0。
+否则，@sc{nul} 就只是另一个字符。其他版本的 @command{awk} 可能不能匹配 @sc{nul} 字符。
 
 @cindex @code{[]} (square brackets), regexp operator
 @cindex square brackets (@code{[]}), regexp operator
@@ -4479,177 +4368,113 @@ may not be able to match the @sc{nul} character.
 @cindex character lists, See bracket expressions
 @cindex character classes, See bracket expressions
 @item @code{[}@dots{}@code{]}
-This is called a @dfn{bracket expression}.@footnote{In other literature,
-you may see a bracket expression referred to as either a
-@dfn{character set}, a @dfn{character class}, or a @dfn{character list}.}
-It matches any @emph{one} of the characters that are enclosed in
-the square brackets.  For example, @samp{[MVX]} matches any one of
-the characters @samp{M}, @samp{V}, or @samp{X} in a string.  A full
-discussion of what can be inside the square brackets of a bracket expression
-is given in
-@ref{Bracket Expressions}.
+这东西叫@dfn{方括号表达式}。@footnote{在其他说法中，你可能会看到方括号表达式指的是要么是一个@dfn{字符集}，或者@dfn{字符类型}，或者是一个@dfn{字符列表}。}
+它要匹配的是包含在方括号中的任意@emph{一个}字符。
+例如，@samp{[MVX]} 匹配字符 @samp{M}，@samp{V} 或者 @samp{X} 中的一个。可以在方括号中放入什么字符的完整讨论在 @ref{Bracket Expressions}。
 
 @cindex bracket expressions, complemented
 @item @code{[^}@dots{}@code{]}
-This is a @dfn{complemented bracket expression}.  The first character after
-the @samp{[} @emph{must} be a @samp{^}.  It matches any characters
-@emph{except} those in the square brackets.  For example, @samp{[^awk]}
-matches any character that is not an @samp{a}, @samp{w},
-or @samp{k}.
+这个是@dfn{方括号相反表达式}。在字符 @samp{[} 后面的第一个字符@emph{必须}是 @samp{^}。
+这里匹配@emph{除了}方括号中列出的那些字符。例如，@samp{[^awk]}，匹配不是 @samp{a}，@samp{w}，@samp{k} 的字符。
 
 @cindex @code{|} (vertical bar)
 @cindex vertical bar (@code{|})
 @item @code{|}
-This is the @dfn{alternation operator} and it is used to specify
-alternatives.  The @samp{|} has the lowest precedence of all the regular
-expression operators.  For example, @samp{^P|[aeiouy]} matches any string
-that matches either @samp{^P} or @samp{[aeiouy]}.  This means it matches
-any string that starts with @samp{P} or contains (anywhere within it)
-a lowercase English vowel.
+这个是@dfn{选择操作符}，用来指定其他选择。
+@samp{|} 在所有的正则表达式操作符中具有最低的优先级。
+例如，@samp{^P|[aeiiouy]} 要么匹配 @samp{^P}，要么匹配 @samp{[aeiouy]}。
+就是说，匹配任意以 @samp{P} 开头的字串，或者包含（在字串中的任一位置）英语元音字母的字串。
 
-The alternation applies to the largest possible regexps on either side.
+选择操作会在正则表达式的两边取中最大可能性的一边。
 
 @cindex @code{()} (parentheses), regexp operator
 @cindex parentheses @code{()}, regexp operator
 @item @code{(}@dots{}@code{)}
-Parentheses are used for grouping in regular expressions, as in
-arithmetic.  They can be used to concatenate regular expressions
-containing the alternation operator, @samp{|}.  For example,
-@samp{@@(samp|code)\@{[^@}]+\@}} matches both @samp{@@code@{foo@}} and
-@samp{@@samp@{bar@}}.
-(These are Texinfo formatting control sequences. The @samp{+} is
-explained further on in this list.)
+圆括号用来对正则表达式进行组合，如算法中的类似。他们可以将具有选择操作符 @samp{|} 的正则表达式组合起来。
+例如 @samp{@@(samp|code)\@{[^@}]+\@}]+\@}} 
+能够匹配 @samp{@@code@{foo@}} 与 @samp{@@samp@{bar@}}。
+（这里 Texinfo 的格式控制序列。 @samp{+} 在本列表中后面解释。）
 
 @cindex @code{*} (asterisk), @code{*} operator, as regexp operator
 @cindex asterisk (@code{*}), @code{*} operator, as regexp operator
 @item @code{*}
-This symbol means that the preceding regular expression should be
-repeated as many times as necessary to find a match.  For example, @samp{ph*}
-applies the @samp{*} symbol to the preceding @samp{h} and looks for matches
-of one @samp{p} followed by any number of @samp{h}s.  This also matches
-just @samp{p} if no @samp{h}s are present.
+这个符号表达前面的正则表达式可以重复多次来找匹配。
+例如 @samp{ph*} 中将 @samp{*} 符号放在前面的 @samp{h} 后面，来查找一个 @samp{p} 后面跟跟随任意多个 @samp{h} 的匹配串。这也会匹配仅有 @samp{p}，而后面没有 @samp{h} 的情况。
 
-There are two subtle points to understand about how @samp{*} works.
-First, the @samp{*} applies only to the single preceding regular expression
-component (e.g., in @samp{ph*}, it applies just to the @samp{h}).
-To cause @samp{*} to apply to a larger subexpression, use parentheses:
-@samp{(ph)*} matches @samp{ph}, @samp{phph}, @samp{phphph}, and so on.
+在理解 @samp{*} 如何工作上面，有两个微妙的地方要注意。第一，@samp{*} 只应用在其前面的单独正则表达式组件（例如，在 @samp{ph*} 中，只作用于 @samp{h}）。
+要使 @samp{*} 应用在一个更大的子表达式中，则使用括号：@samp{(ph)*} 匹配 @samp{ph}，@samp{phph}，@samp{phphph} 等等。
 
-Second, @samp{*} finds as many repetitions as possible. If the text
-to be matched is @samp{phhhhhhhhhhhhhhooey}, @samp{ph*} matches all of
-the @samp{h}s.
+第二，@samp{*} 会查找尽可能多的重复。如果要匹配的文本为 @samp{phhhhhhhhhhhhhhooey}，则 @samp{ph*} 会匹配所有的 @samp{h} 。
 
 @cindex @code{+} (plus sign), regexp operator
 @cindex plus sign (@code{+}), regexp operator
 @item @code{+}
-This symbol is similar to @samp{*}, except that the preceding expression must be
-matched at least once.  This means that @samp{wh+y}
-would match @samp{why} and @samp{whhy}, but not @samp{wy}, whereas
-@samp{wh*y} would match all three.
+本符号类似于 @samp{*}，只是其前面的表达式至少要匹配一次。这就是说，@samp{wh+y} 会匹配 @samp{why}，以及 @samp{whhy}，但是不会匹配 @samp{wy}，而 @samp{wh*y} 则会匹配所有的三个。
 
 @cindex @code{?} (question mark), regexp operator
 @cindex question mark (@code{?}), regexp operator
 @item @code{?}
-This symbol is similar to @samp{*}, except that the preceding expression can be
-matched either once or not at all.  For example, @samp{fe?d}
-matches @samp{fed} and @samp{fd}, but nothing else.
+这个符号类似于 @samp{*}，只是其前面的表达式只能匹配要么一次，要么不匹配。例如，@samp{fe?d} 匹配 @samp{fed} 与 @samp{fd}，而不是其他的什么。
 
 @cindex interval expressions, regexp operator
 @item @code{@{}@var{n}@code{@}}
 @itemx @code{@{}@var{n}@code{,@}}
 @itemx @code{@{}@var{n}@code{,}@var{m}@code{@}}
-One or two numbers inside braces denote an @dfn{interval expression}.
-If there is one number in the braces, the preceding regexp is repeated
-@var{n} times.
-If there are two numbers separated by a comma, the preceding regexp is
-repeated @var{n} to @var{m} times.
-If there is one number followed by a comma, then the preceding regexp
-is repeated at least @var{n} times:
+在花括号中与其中的一个或者两个数值表示一种@dfn{区间表达式}。
+如果只有一个数值在花括号中，则前面的表达式重复 @var{n} 次。
+如果有两个数值，并以逗号分隔，则前面的表达式重复 @var{n} 到 @var{m} 次。
+如果只有一个数值，后面跟一个逗号，则前面的表达式至少要重复 @var{n} 次。
 
 @table @code
 @item wh@{3@}y
-Matches @samp{whhhy}, but not @samp{why} or @samp{whhhhy}.
+匹配 @samp{whhhy}， 但不匹配 @samp{why} or @samp{whhhhy} 。
 
 @item wh@{3,5@}y
-Matches @samp{whhhy}, @samp{whhhhy}, or @samp{whhhhhy} only.
+只匹配 @samp{whhhy}，@samp{whhhhy}，或者 @samp{whhhhhy} 。
 
 @item wh@{2,@}y
-Matches @samp{whhy}, @samp{whhhy}, and so on.
+匹配 @samp{whhy}，@samp{whhhy}，等等。
 @end table
 
 @cindex POSIX @command{awk}, interval expressions in
-Interval expressions were not traditionally available in @command{awk}.
-They were added as part of the POSIX standard to make @command{awk}
-and @command{egrep} consistent with each other.
+区间表达式在 @command{awk} 上历来不受支持。后面成为 POSIX 标准的一部分，使得 @command{awk} 与 @command{egrep} 之间相互保持一致。
 
 @cindex @command{gawk}, interval expressions and
-Initially, because old programs may use @samp{@{} and @samp{@}} in regexp
-constants,
-@command{gawk} did @emph{not} match interval expressions
-in regexps.
+最开始时，由于旧的程序可能在正则表达式常量中使用 @samp{@{} 与 @samp{@}}，@command{gawk} 因此在正则表达式中@emph{不}匹配区间表达式。
 
-However, beginning with @value{PVERSION} 4.0,
-@command{gawk} does match interval expressions by default.
-This is because compatibility with POSIX has become more
-important to most @command{gawk} users than compatibility with
-old programs.
+但是从 4.0 开始，@command{gawk} 开始默认匹配区间表达式。这是因为与 POSIX 标准兼容，相比于与旧的程序兼容，前者更为重要。
 
-For programs that use @samp{@{} and @samp{@}} in regexp constants,
-it is good practice to always escape them with a backslash.  Then the
-regexp constants are valid and work the way you want them to, using
-any version of @command{awk}.@footnote{Use two backslashes if you're
-using a string constant with a regexp operator or function.}
+对于在正则表达式中使用 @samp{@{} 与 @samp{@}} 的程序，好的实践是将他们用反斜杠进行转义。
+这样的话，你的正则表达式就是有效的，并在任何其他的版本中可用。@footnote{如果你在正则表达式操作符或者函数中使用字串常量，你需要使用两个反斜杠。}
 
-Finally, when @samp{@{} and @samp{@}} appear in regexp constants
-in a way that cannot be interpreted as an interval expression
-(such as @code{/q@{a@}/}), then they stand for themselves.
+最后，当 @samp{@{} 与 @samp{@}} 出现在正则表达式常量中，但不是以一种可以被解释为区间表达式的方式（如 @code{/q@{a@}/}），那么他们就只表示自己。
 @end table
 
 @cindex precedence, regexp operators
 @cindex regular expressions, operators, precedence of
-In regular expressions, the @samp{*}, @samp{+}, and @samp{?} operators,
-as well as the braces @samp{@{} and @samp{@}},
-have
-the highest precedence, followed by concatenation, and finally by @samp{|}.
-As in arithmetic, parentheses can change how operators are grouped.
+在正则表达式中，@samp{*}，@samp{+} 以及 @samp{?} 操作符，包括花括号 @samp{@{} 与 @samp{@}}，具有最高的优先级，
+然后是连接操作符，最后才是 @samp{|}，在数学上，括号可以改变操作符的组合方式。
 
 @cindex POSIX @command{awk}, regular expressions and
 @cindex @command{gawk}, regular expressions, precedence
-In POSIX @command{awk} and @command{gawk}, the @samp{*}, @samp{+}, and
-@samp{?} operators stand for themselves when there is nothing in the
-regexp that precedes them.  For example, @code{/+/} matches a literal
-plus sign.  However, many other versions of @command{awk} treat such a
-usage as a syntax error.
+在 POSIX @command{awk} 中与 @command{gawk} 中，@samp{*}，@samp{+} 以及 @samp{?} 操作符，如果在正则表达式中，它们前面没有任何字符了，那么它就代表它们自己。
+如 @code{/+/} 匹配一个字面加号。但是，很多其他的 @command{awk} 版本会把这样的用法视为语法错误。
 
-If @command{gawk} is in compatibility mode (@pxref{Options}), interval
-expressions are not available in regular expressions.
+如果 @command{gawk} 在兼容模式下（查看 @ref{Options}），区间表达式在正则表达式中是不可用的。
 
 @node Bracket Expressions
-@section Using Bracket Expressions
+@section 使用方括号表达式
 @cindex bracket expressions
 @cindex bracket expressions, range expressions
 @cindex range expressions (regexps)
 @cindex character lists in regular expression
 
-As mentioned earlier, a bracket expression matches any character among
-those listed between the opening and closing square brackets.
+如前面所提到的，方括号表达式匹配在括号中列出的任意字符。
 
-Within a bracket expression, a @dfn{range expression} consists of two
-characters separated by a hyphen.  It matches any single character that
-sorts between the two characters, based upon the system's native character
-set.  For example, @samp{[0-9]} is equivalent to @samp{[0123456789]}.
-(See @ref{Ranges and Locales} for an explanation of how the POSIX
-standard and @command{gawk} have changed over time.  This is mainly
-of historical interest.)
+在方括号表达式内，一个@dfn{范围表达式}由两个用连字符分隔的字符组成。它匹配以系统的本地字符集排序，并处于这两个字符间的符号。如 @samp{[0-9]} 与 @samp{[0123456789]} 等同。
+（查看 @ref{Ranges and Locales}，对 POSIX 标准与 @command{gawk} 变化过程的解释，这主要是有一些历史兴趣所在。）
 
-With the increasing popularity of the
-@uref{http://www.unicode.org, Unicode character standard},
-there is an additional wrinkle to consider. Octal and hexadecimal
-escape sequences inside bracket expressions are taken to represent
-only single-byte characters (characters whose values fit within
-the range 0--256).  To match a range of characters where the endpoints
-of the range are larger than 256, enter the multibyte encodings of
-the characters directly.
+@uref{http://www.unicode.org, Unicode 字符编码标准} 的流行，带来了一个新的小问题。方括号表达式内使用的八进制和十六进制的转移序列，只能表示单字节的字符（编码范围在 0-256 之间的字符）。为了匹配编码范围大于 256 的字符，请直接输入多字节字符的编码。
 
 @cindex @code{\} (backslash), in bracket expressions
 @cindex backslash (@code{\}), in bracket expressions
@@ -4657,75 +4482,53 @@ the characters directly.
 @cindex caret (@code{^}), in bracket expressions
 @cindex @code{-} (hyphen), in bracket expressions
 @cindex hyphen (@code{-}), in bracket expressions
-To include one of the characters @samp{\}, @samp{]}, @samp{-}, or @samp{^} in a
-bracket expression, put a @samp{\} in front of it.  For example:
+为了包括这些字符 @samp{\}，@samp{]}，@samp{-}，或者 @samp{^} 在方括号表达式中，将在它们之前使用 @samp{\}，如：
 
 @example
 [d\]]
 @end example
 
 @noindent
-matches either @samp{d} or @samp{]}.
-Additionally, if you place @samp{]} right after the opening
-@samp{[}, the closing bracket is treated as one of the
-characters to be matched.
+会匹配 @samp{d} 或者 @samp{]}，另外，如果你将 @samp{]} 就放在开方括号 @samp{[} 的后面，则闭方括号会以其字面字符对待并进行匹配。
 
 @cindex POSIX @command{awk}, bracket expressions and
 @cindex Extended Regular Expressions (EREs)
 @cindex EREs (Extended Regular Expressions)
 @cindex @command{egrep} utility
-The treatment of @samp{\} in bracket expressions
-is compatible with other @command{awk}
-implementations and is also mandated by POSIX.
-The regular expressions in @command{awk} are a superset
-of the POSIX specification for Extended Regular Expressions (EREs).
-POSIX EREs are based on the regular expressions accepted by the
-traditional @command{egrep} utility.
+对于在方括号中的 @samp{\} 表达式对待上，与其他的 @command{awk} 实现是兼容的，也是 POSIX 标准所要求的。
+在 @command{awk} 中的正则表达式，是 POSIX EREs（扩展正则表达式，Extended Regular Expressions）规范的一个超集。
+POSIX 的扩展正则表达式基于传统的 @command{egrep} 工具所接受的正则表达式。
 
 @cindex bracket expressions, character classes
 @cindex POSIX @command{awk}, bracket expressions and, character classes
-@dfn{Character classes} are a feature introduced in the POSIX standard.
-A character class is a special notation for describing
-lists of characters that have a specific attribute, but the
-actual characters can vary from country to country and/or
-from character set to character set.  For example, the notion of what
-is an alphabetic character differs between the United States and France.
+@dfn{字符类}是在 POSIX 标准中引入的一个特性。字符类是一种特殊的符号，用其来表述具有特定属性的一类字符的列表，但是实际的字符由于国家的不同，以及/或者字符集的不同而不同。如，对于字母类的符号，在美国与法国之间就不一样。
 
-A character class is only valid in a regexp @emph{inside} the
-brackets of a bracket expression.  Character classes consist of @samp{[:},
-a keyword denoting the class, and @samp{:]}.
-@ref{table-char-classes} lists the character classes defined by the
-POSIX standard.
+正则表达式的字符类，只有在一个方括号表达式中的方括号@emph{内部}才会有效。
+字符类由 @samp{[:}，一个代表类的关键字，以及 @samp{:]} 组成，@ref{table-char-classes} 列出了由 POSIX 标准定义的字符类。
 
 @float Table,table-char-classes
 @caption{POSIX character classes}
 @multitable @columnfractions .15 .85
-@headitem Class @tab Meaning
-@item @code{[:alnum:]} @tab Alphanumeric characters
-@item @code{[:alpha:]} @tab Alphabetic characters
-@item @code{[:blank:]} @tab Space and TAB characters
-@item @code{[:cntrl:]} @tab Control characters
-@item @code{[:digit:]} @tab Numeric characters
-@item @code{[:graph:]} @tab Characters that are both printable and visible
-(a space is printable but not visible, whereas an @samp{a} is both)
-@item @code{[:lower:]} @tab Lowercase alphabetic characters
-@item @code{[:print:]} @tab Printable characters (characters that are not control characters)
-@item @code{[:punct:]} @tab Punctuation characters (characters that are not letters, digits,
-control characters, or space characters)
-@item @code{[:space:]} @tab Space characters (such as space, TAB, and formfeed, to name a few)
-@item @code{[:upper:]} @tab Uppercase alphabetic characters
-@item @code{[:xdigit:]} @tab Characters that are hexadecimal digits
+@headitem 类 @tab 含义
+@item @code{[:alnum:]} @tab 字母数字字符
+@item @code{[:alpha:]} @tab 字母字符
+@item @code{[:blank:]} @tab 空格与 TAB 字符
+@item @code{[:cntrl:]} @tab 控制字符
+@item @code{[:digit:]} @tab 数字字符
+@item @code{[:graph:]} @tab 可见可打印的字符（空格是可打印的，但是是不可见的，而 @samp{a} 则兼而有之）
+@item @code{[:lower:]} @tab 小写字母字符
+@item @code{[:print:]} @tab 可打印字符（那些不是控制字符的字符）
+@item @code{[:punct:]} @tab 标点字符（那些不是字母，数字，控制以及空格字符的字符）
+@item @code{[:space:]} @tab 空格字符（如空格，TAB，以及回档，等）
+@item @code{[:upper:]} @tab 字母的大写字符
+@item @code{[:xdigit:]} @tab 十六进制的数字的字符
 @end multitable
 @end float
 
-For example, before the POSIX standard, you had to write @code{/[A-Za-z0-9]/}
-to match alphanumeric characters.  If your
-character set had other alphabetic characters in it, this would not
-match them.
-With the POSIX character classes, you can write
-@code{/[[:alnum:]]/} to match the alphabetic
-and numeric characters in your character set.
-
+例如，在 POSIX 标准前，你必须用这样的表达式 @code{/[A-Za-z0-9]/} 来匹配字母数字字符。
+如果你的字符集有另一套字母字符，这个就不会匹配它们。
+通过 POSIX 的字符类，你可写成这样 @code{/[[:alnum:]]/} 来匹配你的字符集中的字母与数字。
+#TODO20171027
 @c Thanks to
 @c Date: Tue, 01 Jul 2014 07:39:51 +0200
 @c From: Hermann Peifer <peifer@gmx.eu>

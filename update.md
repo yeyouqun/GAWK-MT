@@ -118,3 +118,22 @@
 > 注意在双引号中的单引号不是特殊符号。
 
 
+## 3.1
+英文原文
+> we call it a regexp constant
+
+译文原文
+> 我们称 regexp 为常量
+
+改动
+> 我们称之为正则表达式常量
+
+## 3.4
+英文原文
+> For example, before the POSIX standard, you had to write /[A-Za-z0-9]/ to match alphanumeric characters. 
+
+译文原文
+> 在 POSIX 标准前，如果你写了这样的表达式 /[A-Za-z0-9]/ 来匹配字母数字字符。
+
+改动
+> 例如，在 POSIX 标准前，你必须用这样的表达式 /[A-Za-z0-9]/ 来匹配字母数字字符。
