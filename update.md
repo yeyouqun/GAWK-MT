@@ -137,3 +137,17 @@
 
 改动
 > 例如，在 POSIX 标准前，你必须用这样的表达式 /[A-Za-z0-9]/ 来匹配字母数字字符。
+
+## 4.1.1
+英文原文
+> Because each print statement adds a newline at the end of its output,  
+> this awk program copies the input with each ‘u’ changed to a newline. 
+
+译文原文
+> 由于每条记录打印时，都添加了一个换行符在输入的末尾，
+> 所以，awk 程序就是将每个字母 u 换成了换行符。
+
+改动
+> 因为每个 print 语句都会在输出的末尾添加一个换行符，
+> 所以，下面这个 awk 程序就是将每个字母 u 换成了换行符。
+
