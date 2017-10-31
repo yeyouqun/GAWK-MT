@@ -151,3 +151,49 @@
 > 因为每个 print 语句都会在输出的末尾添加一个换行符，
 > 所以，下面这个 awk 程序就是将每个字母 u 换成了换行符。
 
+## 4.1.2
+英文原文
+> You might think that for text files, the nul character, which
+> consists of a character with all bits equal to zero, is a good
+> value to use for RS in this case:
+
+译文原文
+> 对于文本文件来说，你可能认为 nul 字符，即字符的所有位都是 0，可以用在这种情况下：
+
+改动
+> 你可能认为，在这种情况下，对于文本文件来说，所有位都由 0 组成的 nul 字符，适合作为 RS 的值： 
+
+## 4.4
+英文原文
+> Some versions of awk dont rebuild $0 when NF is decremented.
+
+译文原文
+> 一些版本的 awk 当 NF 没有递减时则不会重建 $0。
+
+改动
+> 一些版本的 awk 当 NF 递减时不会重建 $0。
+
+## 4.5
+英文原文
+> The moral is to choose your data layout and 
+> separator characters carefully to prevent such problems.
+
+译文原文
+> 终极方法是要选择你的数据外观并仔细选择分隔符以避免这样的问题。
+
+改动
+> 终极方法是要仔细选择你的数据结构和分隔符以避免这样的问题。
+
+## 4.5.1
+英文原文
+> Fields are normally separated by whitespace sequences
+> (spaces, TABs, and newlines), not by single spaces.  Two spaces in a row do not
+> delimit an empty field.
+
+译文原文
+> 通常的情况下，域是通过空白符序列进行分隔的（空格，TABs，或者换行符），而不是通过空格。
+> 一行中的两上连续字符不会分隔出一个空域。
+
+改动
+> 通常的情况下，域是通过空白符序列进行分隔的（空格，TABs，或者换行符），而不是通过单个空格。
+> 一行中的两个连续空格不会分隔出一个空域。
