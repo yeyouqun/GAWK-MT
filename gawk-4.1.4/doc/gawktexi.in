@@ -70,7 +70,7 @@
 @set CHAPTER 章
 @set APPENDIX appendix
 @set SECTION 小节
-@set SUBSECTION subsection
+@set SUBSECTION 子小节
 @set DARKCORNER @inmargin{@image{lflashlight,1cm}, @image{rflashlight,1cm}}
 @set COMMONEXT (c.e.)
 @set PAGE page
@@ -90,7 +90,7 @@
 @set CHAPTER 章
 @set APPENDIX appendix
 @set SECTION 小节
-@set SUBSECTION subsection
+@set SUBSECTION 子小节
 @set DARKCORNER (d.c.)
 @set COMMONEXT (c.e.)
 @set PAGE screen
@@ -100,7 +100,7 @@
 @set CHAPTER 章
 @set APPENDIX appendix
 @set SECTION 小节
-@set SUBSECTION subsection
+@set SUBSECTION 子小节
 @set DARKCORNER (d.c.)
 @set COMMONEXT (c.e.)
 @set PAGE page
@@ -5357,31 +5357,18 @@ FS = ", \t"
 @end example
 
 @noindent
-#TODO20170731
-makes every area of an input line that consists of a comma followed by a
-space and a TAB into a field separator.
+每一个输入行中，匹配逗号后面跟着一个空格与一个 TAB 字符的文本区，都将成为一个分隔符。
 @ifinfo
-(@samp{\t}
-is an @dfn{escape sequence} that stands for a TAB;
-@pxref{Escape Sequences},
-for the complete list of similar escape sequences.)
+（@samp{\t} 是一个@dfn{转义序列}，代表一个 TAB 字符；查看 @ref{Escape Sequences} 关于类似的转义序列的完整列表。）
 @end ifinfo
 
-For a less trivial example of a regular expression, try using
-single spaces to separate fields the way single commas are used.
-@code{FS} can be set to @w{@code{"[@ ]"}} (left bracket, space, right
-bracket).  This regular expression matches a single space and nothing else
-(@pxref{Regexp}).
+在一个不是太普通的正则表达式例子中，会尝试用单个空格来分隔域，与单个的逗号一样的方式。
+@code{FS} 可以被设置成 @w{@code{"[@ ]"}}（左方括号，空格，右方括号）。
+这个正则表达式只匹配单个空格而不是其它的（查看 @ref{Regexp}）。
 
-There is an important difference between the two cases of @samp{FS = @w{" "}}
-(a single space) and @samp{FS = @w{"[ \t\n]+"}}
-(a regular expression matching one or more spaces, TABs, or newlines).
-For both values of @code{FS}, fields are separated by @dfn{runs}
-(multiple adjacent occurrences) of spaces, TABs,
-and/or newlines.  However, when the value of @code{FS} is @w{@code{" "}},
-@command{awk} first strips leading and trailing whitespace from
-the record and then decides where the fields are.
-For example, the following pipeline prints @samp{b}:
+@samp{FS = @w{" "}}（单空格）与 @samp{FS = @w{"[ \t\n]+"}}（匹配一个或者多个空格，TABs 与换行符）之间存在一个重大的差异。
+对于 FS 的两个值，域都会被连续的（出现多个相邻的）空格、TABs、与换行符分隔。
+但是，当 @code{FS} 的值是 @w{@code{" "}} 时，@command{awk} 首先将记录的前后空白符都去掉，然后才去决定域所在的区域。例如下面的管程会打印 @samp{b} ：
 
 @example
 $ @kbd{echo ' a b c d ' | awk '@{ print $2 @}'}
@@ -5389,8 +5376,7 @@ $ @kbd{echo ' a b c d ' | awk '@{ print $2 @}'}
 @end example
 
 @noindent
-However, this pipeline prints @samp{a} (note the extra spaces around
-each letter):
+但是这个管程会打印 @samp{a}（注意一下在每个字母前后两额外空格）：
 
 @example
 $ @kbd{echo ' a  b  c  d ' | awk 'BEGIN @{ FS = "[ \t\n]+" @}}
@@ -5402,10 +5388,9 @@ $ @kbd{echo ' a  b  c  d ' | awk 'BEGIN @{ FS = "[ \t\n]+" @}}
 @cindex null strings
 @cindex strings, null
 @cindex empty strings, See null strings
-In this case, the first field is null, or empty.
+在这个例子中，第一个域是 null，或者称为空。
 
-The stripping of leading and trailing whitespace also comes into
-play whenever @code{$0} is recomputed.  For instance, study this pipeline:
+略去记录的前后空白符在 @code{$0} 是如果何来重新计算也会有作用。如，考察下面的管程：
 
 @example
 $ @kbd{echo '   a b c d' | awk '@{ print; $2 = $2; print @}'}
@@ -5414,30 +5399,22 @@ $ @kbd{echo '   a b c d' | awk '@{ print; $2 = $2; print @}'}
 @end example
 
 @noindent
-The first @code{print} statement prints the record as it was read,
-with leading whitespace intact.  The assignment to @code{$2} rebuilds
-@code{$0} by concatenating @code{$1} through @code{$NF} together,
-separated by the value of @code{OFS} (which is a space by default).
-Because the leading whitespace was ignored when finding @code{$1},
-it is not part of the new @code{$0}.  Finally, the last @code{print}
-statement prints the new @code{$0}.
+第一个 print 语句打印出被读时的内容，并且前头的空白是保留了的。
+对于 @code{$2} 域的赋值会导致 @code{$0} 的重建，并且将 @code{$1} 到 @code{$NF} 的记录合并在一起，
+相互之间用 @code{OFS} 的值进行分隔（默认情况下也是空格）。
+因为前导的空白在查找 @code{$1} 时已经被忽略了，所以它不再是新的 @code{$0} 的一部份。
+最终，最后的一个 @code{print} 语句打印的是新的 @code{$0}。
 
 @cindex @code{FS}, containing @code{^}
 @cindex @code{^} (caret), in @code{FS}
 @cindex dark corner, @code{^}, in @code{FS}
-There is an additional subtlety to be aware of when using regular expressions
-for field splitting.
-It is not well specified in the POSIX standard, or anywhere else, what @samp{^}
-means when splitting fields.  Does the @samp{^}  match only at the beginning of
-the entire record? Or is each field separator a new string?  It turns out that
-different @command{awk} versions answer this question differently, and you
-should not rely on any specific behavior in your programs.
+使用正则表达式来分隔记录时，有一个额外的细节之处要了解。
+这在 POSIX 标准在没有确定，也在没其他地方说明，到底 @samp{^} 在域分隔时表示什么。是只匹配整个记录的开始？还是域分隔出的新串？因此不同的版本的 @command{awk} 对于这个问题的回答也是不一样的。你不要依赖于你的程序中的特定行为表现。
 @value{DARKCORNER}
 
 @cindex Brian Kernighan's @command{awk}
-As a point of information, BWK @command{awk} allows @samp{^}
-to match only at the beginning of the record. @command{gawk}
-also works this way. For example:
+作为提示信息，BWK @command{awk} 允许 @samp{^} 只匹配记录的开头。
+@command{gawk} 也这么处理。如：
 
 @example
 $ @kbd{echo 'xxAA  xxBxx  C' |}
@@ -5450,19 +5427,16 @@ $ @kbd{echo 'xxAA  xxBxx  C' |}
 @end example
 
 @node Single Character Fields
-@subsection Making Each Character a Separate Field
+@subsection 各字符皆为分隔符
 
 @cindex common extensions, single character fields
 @cindex extensions, common@comma{} single character fields
 @cindex differences in @command{awk} and @command{gawk}, single-character fields
 @cindex single-character fields
 @cindex fields, single-character
-There are times when you may want to examine each character
-of a record separately.  This can be done in @command{gawk} by
-simply assigning the null string (@code{""}) to @code{FS}. @value{COMMONEXT}
-In this case,
-each individual character in the record becomes a separate field.
-For example:
+有那么几次，你可能想测试一下单独地每个字符作为分隔符的情况。这种情况下，
+在 @command{gawk} 中你只需要简单地将空串（@code{""}）赋值给 @code{FS} 即可。@value{COMMONEXT}
+在这个例子中，记录中的每一个单独的字符都将成为一个分隔符。如：
 
 @example
 $ @kbd{echo a b | gawk 'BEGIN @{ FS = "" @}}
@@ -5477,39 +5451,31 @@ $ @kbd{echo a b | gawk 'BEGIN @{ FS = "" @}}
 
 @cindex dark corner, @code{FS} as null string
 @cindex @code{FS} variable, as null string
-Traditionally, the behavior of @code{FS} equal to @code{""} was not defined.
-In this case, most versions of Unix @command{awk} simply treat the entire record
-as only having one field.
+传统上，@code{FS} 等于 @code{""} 的行为并不是确定的。
+在这个例子中，Unix @command{awk} 的大多数版本只是简单地将整个记录当做一个域。
 @value{DARKCORNER}
-In compatibility mode
-(@pxref{Options}),
-if @code{FS} is the null string, then @command{gawk} also
-behaves this way.
+在兼容模式下（查看 @ref{Options}），如果 @code{FS} 是一个空串，那么 @command{gawk} 也会按照上面的方式进行处理。
 
 @node Command Line Field Separator
-@subsection Setting @code{FS} from the Command Line
+@subsection 从命令行中设置 @code{FS}
 @cindex @option{-F} option, command-line
 @cindex field separator, on command line
 @cindex command line, @code{FS} on@comma{} setting
 @cindex @code{FS} variable, setting from command line
 
-@code{FS} can be set on the command line.  Use the @option{-F} option to
-do so.  For example:
+@code{FS} 可以在命令行中通过 @option{-F} 选项进行设置，如：
 
 @example
 awk -F, '@var{program}' @var{input-files}
 @end example
 
 @noindent
-sets @code{FS} to the @samp{,} character.  Notice that the option uses
-an uppercase @samp{F} instead of a lowercase @samp{f}. The latter
-option (@option{-f}) specifies a file containing an @command{awk} program.
+设置 @code{FS} 的值为 @samp{,}，注意选项使用的是一个大写的 @samp{F}，而不是小写的 @samp{f}。
+后者 @option{-f} 选项指定了包含 @command{awk} 程序的文件。
 
-The value used for the argument to @option{-F} is processed in exactly the
-same way as assignments to the predefined variable @code{FS}.
-Any special characters in the field separator must be escaped
-appropriately.  For example, to use a @samp{\} as the field separator
-on the command line, you would have to type:
+参数 @option{-F} 的赋值方式和预定义参数 @code{FS} 的赋值方式完全一样。
+任何在域分隔字符中的特殊字符都必须进行适当地转义。
+如使用一个 @samp{\} 用作一个域分隔符，你需要这样来输入：
 
 @example
 # same as FS = "\\"
@@ -5519,34 +5485,27 @@ awk -F\\\\ '@dots{}' files @dots{}
 @noindent
 @cindex @code{\} (backslash), as field separator
 @cindex backslash (@code{\}), as field separator
-Because @samp{\} is used for quoting in the shell, @command{awk} sees
-@samp{-F\\}.  Then @command{awk} processes the @samp{\\} for escape
-characters (@pxref{Escape Sequences}), finally yielding
-a single @samp{\} to use for the field separator.
+由于 @samp{\} 要在 shell 中用引号引起来，@command{awk} 会看到 @samp{-F\\}。
+之后 @command{awk} 会处理 @samp{\\} 转义字符，
+（查看 @ref{Escape Sequences}），最后，产生一个单独的 @samp{\} 用作域分隔符。
 
 @c @cindex historical features
-As a special case, in compatibility mode
-(@pxref{Options}),
-if the argument to @option{-F} is @samp{t}, then @code{FS} is set to
-the TAB character.  If you type @samp{-F\t} at the
-shell, without any quotes, the @samp{\} gets deleted, so @command{awk}
-figures that you really want your fields to be separated with TABs and
-not @samp{t}s.  Use @samp{-v FS="t"} or @samp{-F"[t]"} on the command line
-if you really do want to separate your fields with @samp{t}s.
-Use @samp{-F '\t'} when not in compatibility mode to specify that TABs
-separate fields.
+有一个特殊的例子，在兼容模式下（查看 @ref{Options}），
+如果 @option{-F} 的参数是 @samp{t}，则 @code{FS} 会被设置成 TAB 符号。
+如果你在 Shell 中输入 @samp{-F\t}，没有进行任何转义，则 @samp{\} 会被删除掉。
+所以，@command{awk} 会了解到你是真的想用 TABs 来分隔记录，而不是 @samp{t} 。
+如果你确实是要用 @samp{t} 来分隔记录，则在命令行中使用 @samp{-v FS="t"} 或者 @samp{-F"[t]"} 。
+如果不是在兼容模式下，使用 @samp{-F '\t'} 来指定 TABs 来做域分隔符。
 
-As an example, let's use an @command{awk} program file called @file{edu.awk}
-that contains the pattern @code{/edu/} and the action @samp{print $1}:
+下面的例子中，我们利用一个名为 @file{edu.awk} 的程序文件，其中包括了 @code{/edu/} 模式，
+以及动作 @samp{print $1}：
 
 @example
 /edu/   @{ print $1 @}
 @end example
 
-Let's also set @code{FS} to be the @samp{-} character and run the
-program on the file @file{mail-list}.  The following command prints a
-list of the names of the people that work at or attend a university, and
-the first three digits of their phone numbers:
+我们将 @code{FS} 的值设置成 @samp{-} 字符，并把程序运行在文件 @file{mail-list} 上。
+下面的命令打印出那些工作在大学或者在上大学的人的名字列表，以及他们电话号码的前三个数字：
 
 @example
 $ @kbd{awk -F- -f edu.awk mail-list}
@@ -5556,144 +5515,112 @@ $ @kbd{awk -F- -f edu.awk mail-list}
 @end example
 
 @noindent
-Note the third line of output.  The third line
-in the original file looked like this:
+注意第三行输出，第三行内容在原文件是这样的：
 
 @example
 Jean-Paul    555-2127     jeanpaul.campanorum@@nyu.edu     R
 @end example
 
-The @samp{-} as part of the person's name was used as the field
-separator, instead of the @samp{-} in the phone number that was
-originally intended.  This demonstrates why you have to be careful in
-choosing your field and record separators.
+@samp{-} 是人名的一部分，但是却被用来作了域分隔符，而不是按照预想的那样用电话号码中的 @samp{-} 来做分隔符。这说明了，你需要仔细地选择你的域分隔符。
 
 @cindex Unix @command{awk}, password files@comma{} field separators and
-Perhaps the most common use of a single character as the field separator
-occurs when processing the Unix system password file.  On many Unix
-systems, each user has a separate entry in the system password file, with one
-line per user.  The information in these lines is separated by colons.
-The first field is the user's login name and the second is the user's
-encrypted or shadow password.  (A shadow password is indicated by the
-presence of a single @samp{x} in the second field.)  A password file
-entry might look like this:
+也许，大多数使用单字符作为域分隔的情况下出现在处理 Unix 系统的密码文件。在许多的 Unix 系统中，每个用户在系统的密码文件中都有一个项，一行一用户。这些行中的信息是用冒号分隔的。第一个域是用户的登录名，第二项是用户已经加密过的密码，或者是影子密码（影子密码就是在第二个域中用 @samp{x} 代替的密码。）密码文件的项看起来可能如下：
 
 @cindex Robbins, Arnold
 @example
 arnold:x:2076:10:Arnold Robbins:/home/arnold:/bin/bash
 @end example
 
-The following program searches the system password file and prints
-the entries for users whose full name is not indicated:
+下面的程序搜索系统的密码文件并搜打印那些用户的全名没有存在的项：
 
 @example
 awk -F: '$5 == ""' /etc/passwd
 @end example
 
 @node Full Line Fields
-@subsection Making the Full Line Be a Single Field
+@subsection 一行即一域 
 
-Occasionally, it's useful to treat the whole input line as a
-single field.  This can be done easily and portably simply by
-setting @code{FS} to @code{"\n"} (a newline):@footnote{Thanks to
-Andrew Schorr for this tip.}
+有时候，将整行当成一个域非常有用，这只要简单地将 @code{FS} 设置成 @samp{\n}（换行符）即可，这也是可移植的：
+@footnote{感谢 Andrew Schorr 所做的提示。}
 
 @example
 awk -F'\n' '@var{program}' @var{files @dots{}}
 @end example
 
 @noindent
-When you do this, @code{$1} is the same as @code{$0}.
+当你这么做时，@code{$1} 与 @code{$0} 一样。
 
-@sidebar Changing @code{FS} Does Not Affect the Fields
+@sidebar 改变 @code{FS} 不会影响域
 
 @cindex POSIX @command{awk}, field separators and
 @cindex field separator, POSIX and
-According to the POSIX standard, @command{awk} is supposed to behave
-as if each record is split into fields at the time it is read.
-In particular, this means that if you change the value of @code{FS}
-after a record is read, the values of the fields (i.e., how they were split)
-should reflect the old value of @code{FS}, not the new one.
+根据 POSIX 标准，@command{awk} 的行为起来就就像记录在被读取的时候就已经分隔了。
+这意思就是说，如果你在记录读取后再更改 @code{FS} 的值，域的值（如他们如何被分割）应该反映的是旧的 @code{FS} 的情况，
+而不是新的。
 
 @cindex dark corner, field separators
 @cindex @command{sed} utility
 @cindex stream editors
-However, many older implementations of @command{awk} do not work this way.  Instead,
-they defer splitting the fields until a field is actually
-referenced.  The fields are split
-using the @emph{current} value of @code{FS}!
+但是，许多的旧的 @command{awk} 实现不是这么处理的。
+相反，这些实现是当要使用域时，才开始进行分割。域使用@emph{当前}的 @code{FS} 值来进行分割。
 @value{DARKCORNER}
-This behavior can be difficult
-to diagnose. The following example illustrates the difference
-between the two methods:
+这个行为很难进行识别。
+下面的例子解释了两种方法的差异：
 
 @example
 sed 1q /etc/passwd | awk '@{ FS = ":" ; print $1 @}'
 @end example
 
 @noindent
-which usually prints:
+一般都打印：
 
 @example
 root
 @end example
 
 @noindent
-on an incorrect implementation of @command{awk}, while @command{gawk}
-prints the full first line of the file, something like:
+这是在一个不正确的 @command{awk} 实现中的行为，而 @command{gawk} 则会打印文件的第一行的整行，如：
 
 @example
 root:x:0:0:Root:/:
 @end example
 
-(The @command{sed}@footnote{The @command{sed} utility is a ``stream editor.''
-Its behavior is also defined by the POSIX standard.}
-command prints just the first line of @file{/etc/passwd}.)
+（sed 命令
+@footnote{@command{sed} 工具称为“流编辑器”。它的行为也由 POSIX 标准来定义。}
+打印文件 @file{/etc/passwd} 的第一行。）
 @end sidebar
 
 @node Field Splitting Summary
-@subsection Field-Splitting Summary
+@subsection 域分割总结 
 
-It is important to remember that when you assign a string constant
-as the value of @code{FS}, it undergoes normal @command{awk} string
-processing.  For example, with Unix @command{awk} and @command{gawk},
-the assignment @samp{FS = "\.."} assigns the character string @code{".."}
-to @code{FS} (the backslash is stripped).  This creates a regexp meaning
-``fields are separated by occurrences of any two characters.''
-If instead you want fields to be separated by a literal period followed
-by any single character, use @samp{FS = "\\.."}.
+当你给 @code{FS} 赋值为一个字串常量的时候，要记住这个非常重要，其与 @command{awk} 正常的字符处理是不一样的。
+例如：Unix @command{awk} 与 @command{gawk}，这样的赋值 @samp{FS = "\.."} 会将 @code{".."} 赋值给 @code{FS}
+（反斜杠会被去掉）。
+这个赋值创建了一个正则表达式表示“域由两个字符进行分割。”
+如果你确实想用一个点号（@samp{.}）后面跟一个字符来分割域，使用 @samp{FS = "\\.."}。
 
-The following list summarizes how fields are split, based on the value
-of @code{FS} (@samp{==} means ``is equal to''):
+下面是基于 @code{FS} 的值的域分割的总结（@samp{==} 表示等于）：
 
 @table @code
 @item FS == " "
-Fields are separated by runs of whitespace.  Leading and trailing
-whitespace are ignored.  This is the default.
+域由连续的空格进行分割。记录的前后的空白会被忽略。这是默认分割方式。
 
-@item FS == @var{any other single character}
-Fields are separated by each occurrence of the character.  Multiple
-successive occurrences delimit empty fields, as do leading and
-trailing occurrences.
-The character can even be a regexp metacharacter; it does not need
-to be escaped.
+@item FS == @var{任意单个字符}
+域由单个字符进行分割。
+多个连续的字符会分割出空域，头、尾的出现也一样。字符甚至可以是正则表达式的元字符，并且也不需要进行转义。
 
 @item FS == @var{regexp}
-Fields are separated by occurrences of characters that match @var{regexp}.
-Leading and trailing matches of @var{regexp} delimit empty fields.
+域由匹配 @var{regexp} 的正则表达式字符串进行分割。前后匹配会分割出空字符。
 
 @item FS == ""
-Each individual character in the record becomes a separate field.
-(This is a common extension; it is not specified by the POSIX standard.)
+记录中的每个字符都是分隔符。（这是一个通用扩展；但是没有由 POSIX 标准定义。）
 @end table
 
-@sidebar @code{FS} and @code{IGNORECASE}
+@sidebar @code{FS} 与 @code{IGNORECASE}
 
-The @code{IGNORECASE} variable
-(@pxref{User-modified})
-affects field splitting @emph{only} when the value of @code{FS} is a regexp.
-It has no effect when @code{FS} is a single character, even if
-that character is a letter.  Thus, in the following code:
+@emph{仅仅}当域分割符 @code{FS} 的值是正则表达式时，@code{IGNORECASE} 变量（查看 @ref{User-modified}）
+会影响到分割。
+当 @code{FS} 是一个单独的字符时，则没有影响，即使字符是一个字母。因此下面的代码：
 
 @example
 FS = "c"
@@ -5703,52 +5630,39 @@ print $1
 @end example
 
 @noindent
-The output is @samp{aCa}.  If you really want to split fields on an
-alphabetic character while ignoring case, use a regexp that will
-do it for you (e.g., @samp{FS = "[c]"}).  In this case, @code{IGNORECASE}
-will take effect.
+输出为 @samp{cCa}。
+如果你确实想用字母字符来分割域而忽略大小写，就使用正则表达式，并由它来为你处理这样的问题
+（如，@samp{FS = "[c]"}）。
+在这个例子，@code{IGNORECASE} 会产生效果。
 @end sidebar
 
 
 @node Constant Size
-@section Reading Fixed-Width Data
+@section 读取固定宽度数据
 
 @cindex data, fixed-width
 @cindex fixed-width data
 @cindex advanced features, fixed-width data
 
 @c O'Reilly doesn't like it as a note the first thing in the section.
-This @value{SECTION} discusses an advanced
-feature of @command{gawk}.  If you are a novice @command{awk} user,
-you might want to skip it on the first reading.
+本@value{SECTION}讨论 @command{gawk} 一个高级特性。如果你是 @command{awk} 新手，你可以第一次阅读时跳过。
 
-@command{gawk} provides a facility for dealing with fixed-width fields
-with no distinctive field separator.  For example, data of this nature
-arises in the input for old Fortran programs where numbers are run
-together, or in the output of programs that did not anticipate the use
-of their output as input for other programs.
+@command{gawk} 提供了处理固定宽度域的功能，而不需要特别的域分割符。
+例如，这种特性可能出现在旧的 Fortran 程序的输入数据中，其中数字都是连续出现的；
+或者是出现在一些程序的输出结果中，这些程序的设计不考虑将它的输出结果作为其他程序的输入数据。
 
-An example of the latter is a table where all the columns are lined up by
-the use of a variable number of spaces and @emph{empty fields are just
-spaces}.  Clearly, @command{awk}'s normal field splitting based on @code{FS}
-does not work well in this case.  Although a portable @command{awk} program
-can use a series of @code{substr()} calls on @code{$0}
-(@pxref{String Functions}),
-this is awkward and inefficient for a large number of fields.
+作为后者的一个例子就是表，它的每一列通过利用可变的数字或者空格来对齐，@emph{空的域则全是空格}。
+很明显的，@command{awk} 的一般域分割是基于 @code{FS} 的值，不会在这样的例子中工作得好。
+尽管一个可移植的 @command{awk} 程序可以使用一系列的 @code{substr()} 调用来处理 @code{$0}（查看 @ref{String Functions}），在处理有很多域，并且数据量巨大时，这是一很蹩脚也低效的方法。
 
 @cindex troubleshooting, fatal errors, field widths@comma{} specifying
 @cindex @command{w} utility
 @cindex @code{FIELDWIDTHS} variable
 @cindex @command{gawk}, @code{FIELDWIDTHS} variable in
-The splitting of an input record into fixed-width fields is specified by
-assigning a string containing space-separated numbers to the built-in
-variable @code{FIELDWIDTHS}.  Each number specifies the width of the field,
-@emph{including} columns between fields.  If you want to ignore the columns
-between fields, you can specify the width as a separate field that is
-subsequently ignored.
-It is a fatal error to supply a field width that has a negative value.
-The following data is the output of the Unix @command{w} utility.  It is useful
-to illustrate the use of @code{FIELDWIDTHS}:
+将输入记录分割成固定宽度的域，通过指定一个包含空格分割的数字到内建变量 @code{FIELDWIDTHS} 来实现。
+每一个数字表示了域的宽度，@emph{包含}了域之间的列。
+如果你想忽略域之间的列，则可以指定分离的域宽度，则后面的处理会忽略掉它。指定一个负的域宽是一个致命错误。
+下面的数据是 Unix 工具 @command{w} 的输出。这个用来演示 @code{FIELDWIDTHS} 的使用非常有用：
 
 @example
 @group
@@ -5765,9 +5679,7 @@ dave     ttyq4    26Jun9115days     46     46  wnewmail
 @end group
 @end example
 
-The following program takes this input, converts the idle time to
-number of seconds, and prints out the first two fields and the calculated
-idle time:
+下面的程序使用上面的输入，将空闲时间转换为秒数，并打印输出头两个域并计算空闲时间：
 
 @example
 BEGIN  @{ FIELDWIDTHS = "9 6 10 6 7 7 35" @}
@@ -5787,12 +5699,11 @@ NR > 2 @{
 @}
 @end example
 
-@quotation NOTE
-The preceding program uses a number of @command{awk} features that
-haven't been introduced yet.
+@quotation 提示
+上面的程序使用了一些 @command{awk} 我们目前还没有讨论的特性。
 @end quotation
 
-Running the program on the data produces the following results:
+执行上面的程序，产生了如下输出：
 
 @example
 hzuo      ttyV0  0
@@ -5805,25 +5716,20 @@ brent     ttyp0  286
 dave      ttyq4  1296000
 @end example
 
-Another (possibly more practical) example of fixed-width input data
-is the input from a deck of balloting cards.  In some parts of
-the United States, voters mark their choices by punching holes in computer
-cards.  These cards are then processed to count the votes for any particular
-candidate or on any particular issue.  Because a voter may choose not to
-vote on some issue, any column on the card may be empty.  An @command{awk}
-program for processing such data could use the @code{FIELDWIDTHS} feature
-to simplify reading the data.  (Of course, getting @command{gawk} to run on
-a system with card readers is another story!)
+另一个固定宽度输入数据例子（可能更复杂）是来自于投票站。
+在美国的一些地区，投票者会将他们的选择在计算机卡上打上孔。
+然后处理这些卡，从而统计特定的候选者或者特定的问题。
+由于投票者可以不选择某些问题，因此卡上的某些列可能是空的。
+处理这类数据的 @command{awk} 程序可以使用 @code{FIELDWIDTHS} 特性来简化数据的读取。
+（当然，让 @command{gawk} 选择在选举卡阅读器上的系统是另一个问题！）
 
 @cindex @command{gawk}, splitting fields and
-Assigning a value to @code{FS} causes @command{gawk} to use
-@code{FS} for field splitting again.  Use @samp{FS = FS} to make this happen,
-without having to know the current value of @code{FS}.
-In order to tell which kind of field splitting is in effect,
-use @code{PROCINFO["FS"]}
-(@pxref{Auto-set}).
-The value is @code{"FS"} if regular field splitting is being used,
-or @code{"FIELDWIDTHS"} if fixed-width field splitting is being used:
+向 @code{FS} 赋值会让 @command{gawk} 使用 @code{FS} 来进行域分割。
+使用 @samp{FS = FS} 来完成这样的功能，而不需要知道当前的 @code{FS} 值。
+为了了解当前正在使用的域分割策略，可以使用 @code{PROCINFO["FS"]}
+（查看 @ref{Auto-set}）。
+如果是常规的分割策略，则返回的值是 @code{"FS"}，
+如果是固定宽度的分割策略则返回的是 @code{"FIELDWIDTHS"}：
 
 @example
 if (PROCINFO["FS"] == "FS")
@@ -5834,39 +5740,30 @@ else
     @var{content-based field splitting} @dots{} @ii{(see next @value{SECTION})}
 @end example
 
-This information is useful when writing a function
-that needs to temporarily change @code{FS} or @code{FIELDWIDTHS},
-read some records, and then restore the original settings
-(@pxref{Passwd Functions}
-for an example of such a function).
+当要写一个需要临时改变 @code{FS} 或者 @code{FIELDWIDTHS} 策略的函数时，
+这个功能则非常有用。这个函数读一些记录后，然后恢复初始配置
+（查看 @ref{Passwd Functions}，有这种函数的例子）。
 
 @node Splitting By Content
-@section Defining Fields by Content
+@section 以内容定义域
 
 @c O'Reilly doesn't like it as a note the first thing in the section.
-This @value{SECTION} discusses an advanced
-feature of @command{gawk}.  If you are a novice @command{awk} user,
-you might want to skip it on the first reading.
+本@value{SECTION}中，讨论一个 @command{gawk} 的高级特性。如果你是一 @command{awk} 新手，第一次阅读时，你可以路过这一节。
 
 @cindex advanced features, specifying field content
-Normally, when using @code{FS}, @command{gawk} defines the fields as the
-parts of the record that occur in between each field separator. In other
-words, @code{FS} defines what a field @emph{is not}, instead of what a field
-@emph{is}.
-However, there are times when you really want to define the fields by
-what they are, and not by what they are not.
+通常情况下，当使用 @code{FS} 策略时，@command{gawk} 将域定义为记录的一部份，它们出现在每个域分割符之间。
+换言之，@code{FS} 定义了域@emph{不是什么}，而不是域@emph{是什么}。
+但是，有那么一些时候，你确实需要按照域是什么来定义它们，而不是它们不是什么来定义。
 
-The most notorious such case
-is so-called @dfn{comma-separated values} (CSV) data. Many spreadsheet programs,
-for example, can export their data into text files, where each record is
-terminated with a newline, and fields are separated by commas. If
-commas only separated the data, there wouldn't be an issue. The problem comes when
-one of the fields contains an @emph{embedded} comma.
-In such cases, most programs embed the field in double quotes.@footnote{The
-CSV format lacked a formal standard definition for many years.
-@uref{http://www.ietf.org/rfc/rfc4180.txt, RFC 4180}
-standardizes the most common practices.}
-So, we might have data like this:
+最臭的例子就是所谓的@dfn{逗号分隔}数据（CSV）。
+许多的表单程序，都可以将他们的数据输出为文本文件，
+这些记录都以换行符结束，同时通过逗号分隔。
+如果只有逗号来分割数据，这个就不是问题。
+问题是，当其中的某个域中@emph{有}逗号时。
+在这样的状况下，大多数据的程序都将域用双引号引起来。
+@footnote{CSV 格式缺乏正式的标准定义多年，
+@uref{http://www.ietf.org/rfc/rfc4180.txt, RFC 4180} 标准化了多数的通用实践。}
+所以，我们可能有如下这样的数据：
 
 @example
 @c file eg/misc/addresses.csv
@@ -5876,22 +5773,19 @@ Robbins,Arnold,"1234 A Pretty Street, NE",MyTown,MyState,12345-6789,USA
 
 @cindex @command{gawk}, @code{FPAT} variable in
 @cindex @code{FPAT} variable
-The @code{FPAT} variable offers a solution for cases like this.
-The value of @code{FPAT} should be a string that provides a regular expression.
-This regular expression describes the contents of each field.
+@code{FPAT} 变量为这样的问题提供了解决方案。@code{FPAT} 的值应该是一个正则表达式字串。这个表达式描述了每个域的内容。
 
-In the case of CSV data as presented here, each field is either ``anything that
-is not a comma,'' or ``a double quote, anything that is not a double quote, and a
-closing double quote.''  If written as a regular expression constant
-(@pxref{Regexp}),
-we would have @code{/([^,]+)|("[^"]+")/}.
-Writing this as a string requires us to escape the double quotes, leading to:
+在上面所列的 CSV 数据中，
+每个域要么是“一切都不是逗号，”或者“一个双引号，一切不是双引号，一个闭双引号。”
+如果写这样的一个正则表达式常量（查看 @ref{Regexp}），
+我们有这样的正则表达式 @code{/([^,]+)|("[^"]+")/}。
+把这个正则表达式作为字符串，需要我们转义其中的双引号，于是它就变成了这样：
 
 @example
 FPAT = "([^,]+)|(\"[^\"]+\")"
 @end example
 
-Putting this to use, here is a simple program to parse the data:
+是骡子是马，拉出来溜溜，这是来分析上面数据的简单程序：
 
 @example
 @c file eg/misc/simple-csv.awk
@@ -5908,7 +5802,7 @@ BEGIN @{
 @c endfile
 @end example
 
-When run, we get the following:
+当运行时，我们可以得到下面的结果：
 
 @example
 $ @kbd{gawk -f simple-csv.awk addresses.csv}
@@ -5922,10 +5816,9 @@ $6 = <12345-6789>
 $7 = <USA>
 @end example
 
-Note the embedded comma in the value of @code{$3}.
+注意含在 @code{$3} 里的逗号。
 
-A straightforward improvement when processing CSV data of this sort
-would be to remove the quotes when they occur, with something like this:
+这种处理 CSV 数据类型的直接提升是在双引号出现时，会自动移除它们，如像这样的：
 
 @example
 if (substr($i, 1, 1) == "\"") @{
@@ -5934,26 +5827,20 @@ if (substr($i, 1, 1) == "\"") @{
 @}
 @end example
 
-As with @code{FS}, the @code{IGNORECASE} variable (@pxref{User-modified})
-affects field splitting with @code{FPAT}.
+与 @code{FS} 一起，@code{IGNORECASE} 变量会影响 @code{FPAT} 类型的域分割策略
+（查看 @ref{User-modified}）。
 
-Assigning a value to @code{FPAT} overrides field splitting
-with @code{FS} and with @code{FIELDWIDTHS}.
-Similar to @code{FIELDWIDTHS}, the value of @code{PROCINFO["FS"]}
-will be @code{"FPAT"} if content-based field splitting is being used.
+给 @code{FPAT} 赋值，会覆盖 @code{FS} 与 @code{FIELDWIDTHS} 策略。
+与 @code{FIELDWIDTHS}, 中的 @code{PROCINFO["FS"]} 的值类似，
+如果采用的是基于内容的域分割策略，其值将是 @code{"FPAT"}。
 
-@quotation NOTE
-Some programs export CSV data that contains embedded newlines between
-the double quotes.  @command{gawk} provides no way to deal with this.
-Even though a formal specification for CSV data exists, there isn't much
-more to be done;
-the @code{FPAT} mechanism provides an elegant solution for the majority
-of cases, and the @command{gawk} developers are satisfied with that.
+@quotation 提示
+有一些程序输出的 CSV 数据会包含换行符在双引号之间。
+@command{gawk} 没办法处理这个问题。就算是符号正规的 CSV 规范的数据，也无能为力。
+@code{FPAT} 机制为大多数情形提供了一种优雅的解决方法，@command{gawk} 的开发者对此也非常满意。
 @end quotation
 
-As written, the regexp used for @code{FPAT} requires that each field
-contain at least one character.  A straightforward modification
-(changing the first @samp{+} to @samp{*}) allows fields to be empty:
+正如所写的，@code{FPAT} 所使用的正则表达式，要示每个域包含至少一个字符。直接更改（更改第一个 @samp{+} 为 @samp{*}）允许域可为空：
 
 @example
 FPAT = "([^,]*)|(\"[^\"]+\")"
@@ -5964,101 +5851,68 @@ FPAT = "([^,]*)|(\"[^\"]+\")"
 @c (star in latter part of value) to allow quoted strings to be empty.
 @c Per email from Ed Morton <mortoneccc@comcast.net>
 
-Finally, the @code{patsplit()} function makes the same functionality
-available for splitting regular strings (@pxref{String Functions}).
+最后，@code{patsplit()} 函数也实现相同的功能，
+用来对常规的字符进行分割（查看 @ref{String Functions}）。
 
-To recap, @command{gawk} provides three independent methods
-to split input records into fields.
-The mechanism used is based on which of the three
-variables---@code{FS}, @code{FIELDWIDTHS}, or @code{FPAT}---was
-last assigned to.
+总结一下，@command{gawk} 提供三种独立的方法来将输入记录分割成记录。
+这些机制通过三个变量来实现，即 @code{FS}，@code{FIELDWIDTHS}，或者 @code{FPAT}，
+谁最后被赋值，则采用相应的对应的机制。
 
 @node Multiple Line
-@section Multiple-Line Records
+@section 多行记录
 
 @cindex multiple-line records
 @cindex records, multiline
 @cindex input, multiline records
 @cindex files, reading, multiline records
 @cindex input, files, See input files
-In some databases, a single line cannot conveniently hold all the
-information in one entry.  In such cases, you can use multiline
-records.  The first step in doing this is to choose your data format.
+在一些数据中，单行无法方便地包含所有的信息在一个项中。在这样的情况下，你可以使用多行记录。实现这个方式的第一步是选择你的数据格式。
 
 @cindex record separators, with multiline records
-One technique is to use an unusual character or string to separate
-records.  For example, you could use the formfeed character (written
-@samp{\f} in @command{awk}, as in C) to separate them, making each record
-a page of the file.  To do this, just set the variable @code{RS} to
-@code{"\f"} (a string containing the formfeed character).  Any
-other character could equally well be used, as long as it won't be part
-of the data in a record.
+其中一个技巧是使用一个不常用的字符或者字串来分割数据。
+例如，你可以使用换页符（在 @command{awk} 中写成 @samp{\f}，同 C 语言）来分割他们，
+使得每个记录是文件中的一个页。
+接着，将变量 @code{RS} 的值设置成 @samp{\f}（只包含一个换页符的字串）。
+任意其他的字符也是可以用的，只要它们不是记录数据的一部分。
 
 @cindex @code{RS} variable, multiline records and
-Another technique is to have blank lines separate records.  By a special
-dispensation, an empty string as the value of @code{RS} indicates that
-records are separated by one or more blank lines.  When @code{RS} is set
-to the empty string, each record always ends at the first blank line
-encountered.  The next record doesn't start until the first nonblank
-line that follows.  No matter how many blank lines appear in a row, they
-all act as one record separator.
-(Blank lines must be completely empty; lines that contain only
-whitespace do not count.)
+另一个技巧是用一个空行来分隔记录，然后通过一个特殊的值，即一个空串赋值给 @code{RS}，
+以提示记录是通过一个或者多个空行来进行分隔的。
+当 @code{RS} 被设置成空串，每条记录就是结束于第一个空行。下一个记录直到后续遇到的第一个非空行开始。不管在行中出现多少空行，它们都实际分隔一个记录。（空行必须是完全空的，包含空格的也不算。）
 
 @cindex leftmost longest match
 @cindex matching, leftmost longest
-You can achieve the same effect as @samp{RS = ""} by assigning the
-string @code{"\n\n+"} to @code{RS}. This regexp matches the newline
-at the end of the record and one or more blank lines after the record.
-In addition, a regular expression always matches the longest possible
-sequence when there is a choice
-(@pxref{Leftmost Longest}).
-So, the next record doesn't start until
-the first nonblank line that follows---no matter how many blank lines
-appear in a row, they are considered one record separator.
+你可以通过将串 @code{"\n\n+"} 赋值给 @code{RS}，取得与 @samp{RS = ""} 一样的效果。
+这个正则表达式匹配记录结尾一个到多个换行符。
+另外，正则表达式总是匹配最长的可能序列（查看 @ref{Leftmost Longest}）。
+因此，下一个记录开始于后续的第一个非空行，不管一行中出现多少的空行，他们都会认为是一个记录分隔符。
 
 @cindex dark corner, multiline records
-However, there is an important difference between @samp{RS = ""} and
-@samp{RS = "\n\n+"}. In the first case, leading newlines in the input
-@value{DF} are ignored, and if a file ends without extra blank lines
-after the last record, the final newline is removed from the record.
-In the second case, this special processing is not done.
+但是，@samp{RS = ""} 与 @samp{RS = "\n\n+"} 两者之间有一个重要的差别。
+第一个情形下，输入的@value{DF}的前导空行会被忽略，并且如果文件的最后一条记录后面没有额外的一个空行，最后的换行符会被从记录中删除。但是在第二种情况下，这个特殊处理过程不会执行。
 @value{DARKCORNER}
 
 @cindex field separator, in multiline records
 @cindex @code{FS}, in multiline records
-Now that the input is separated into records, the second step is to
-separate the fields in the records.  One way to do this is to divide each
-of the lines into fields in the normal manner.  This happens by default
-as the result of a special feature.  When @code{RS} is set to the empty
-string @emph{and} @code{FS} is set to a single character,
-the newline character @emph{always} acts as a field separator.
-This is in addition to whatever field separations result from
-@code{FS}.@footnote{When @code{FS} is the null string (@code{""})
-or a regexp, this special feature of @code{RS} does not apply.
-It does apply to the default field separator of a single space:
-@samp{FS = @w{" "}}.}
+现在，输入已经被分割成记录，第二步是将记录分割成域。
+一种方法是用通常的方式是将记录分割成域。
+在下面这种特殊情况下，这是一种默认处理方式。
+当 @code{RS} 被设置成了空串，@emph{并且} @code{FS} 被设置成单个字符的时候，换行符总是被作为域分隔符。
+无论由 @code{FS} 分割的结果是什么，这都会被加入最终的域分割结果里面。
+@footnote{当 @code{FS} 为空串（@code{""}）或者正则表达式，
+这个特殊的特性没有应用在 @code{RS} 中。
+但是却可以应用在当域分隔符为默认空格时：@samp{FS = @w{" "}} 情况中。}
 
-The original motivation for this special exception was probably to provide
-useful behavior in the default case (i.e., @code{FS} is equal
-to @w{@code{" "}}).  This feature can be a problem if you really don't
-want the newline character to separate fields, because there is no way to
-prevent it.  However, you can work around this by using the @code{split()}
-function to break up the record manually
-(@pxref{String Functions}).
-If you have a single-character field separator, you can work around
-the special feature in a different way, by making @code{FS} into a
-regexp for that single character.  For example, if the field
-separator is a percent character, instead of
-@samp{FS = "%"}, use @samp{FS = "[%]"}.
+这个特殊的例外的原始动机可能是为了提供在默认场景下有用的行为（例如 @code{FS} 等于 @w{@code{" "}} 时）。当
+你确实不想用换行符来分隔域时，这个特性可能就会有问题，因为没有方法可以避免它。
+但是，你可以通过 @code{split()} 函数来手工分解记录来修复这个问题
+（查看 @ref{String Functions}）。
+如果你有一个单字符的域分隔符，你可以用另外一种方式来解决这个特性带来的问题，只需要将 @code{FS} 设置成这个单字符的正则表达式。
+例如，如果域分隔符是一个百号，要使用 @samp{FS = "%"}，而不要使用 @samp{FS = "[%]"}。
 
-Another way to separate fields is to
-put each field on a separate line: to do this, just set the
-variable @code{FS} to the string @code{"\n"}.
-(This single-character separator matches a single newline.)
-A practical example of a @value{DF} organized this way might be a mailing
-list, where blank lines separate the entries.  Consider a mailing
-list in a file named @file{addresses}, which looks like this:
+对域进行分割的另外一个方法是将每个域放在一个行中：为了实现这个功能，只需要将变量 @code{FS} 设置成字串 @code{"\n"}。
+（这个单字符分隔符匹配一个换行符。）一个实际的以这种方式进行组织的@value{DF}可能就是邮件列表，
+在这个列表中，空行用来分隔项目。考虑一个名字为 @file{addresses} 的邮件列表，看起来像下面这样：
 
 @example
 Jane Doe
@@ -6072,7 +5926,7 @@ Smallville, MW 98765-4321
 @end example
 
 @noindent
-A simple program to process this file is as follows:
+下面则是一个处理该文件的简单的程序：
 
 @example
 # addrs.awk --- simple mailing list program
@@ -6089,7 +5943,7 @@ BEGIN @{ RS = "" ; FS = "\n" @}
 @}
 @end example
 
-Running the program produces the following output:
+执行后，产生如下的输出：
 
 @example
 $ @kbd{awk -f addrs.awk addresses}
@@ -6104,78 +5958,65 @@ $ @kbd{awk -f addrs.awk addresses}
 @dots{}
 @end example
 
-@xref{Labels Program} for a more realistic program dealing with
-address lists.  The following list summarizes how records are split,
-based on the value of
+在 @ref{Labels Program}，查看一个更实际的程序来处理邮件列表。
+下面的列表总结了记录基于 
 @ifinfo
-@code{RS}.
-(@samp{==} means ``is equal to.'')
+@code{RS}
+（@samp{==} 的意思是“等于”）
 @end ifinfo
 @ifnotinfo
-@code{RS}:
+@code{RS}
 @end ifnotinfo
+ 的值的记录分割方式：
 
 @table @code
 @item RS == "\n"
-Records are separated by the newline character (@samp{\n}).  In effect,
-every line in the @value{DF} is a separate record, including blank lines.
-This is the default.
+记录通过换来符来进行分割（@samp{\n}）。
+在效果上，@value{DF}中的每一行都是一个记录，包括空行。这是默认行为。
 
-@item RS == @var{any single character}
-Records are separated by each occurrence of the character.  Multiple
-successive occurrences delimit empty records.
+@item RS == @var{任意单独字符}
+记录通过字符来进行分割。多个连续的字符会分割出空记录。
 
 @item RS == ""
-Records are separated by runs of blank lines.
-When @code{FS} is a single character, then
-the newline character
-always serves as a field separator, in addition to whatever value
-@code{FS} may have. Leading and trailing newlines in a file are ignored.
+记录通过一连串的空行进行分割。当 @code{FS} 是一个单独的字符时，则换行符总会表现为域分隔符，
+不管 @code{FS} 有什么样的值。文件的头尾的换行符会被忽略掉。
 
 @item RS == @var{regexp}
-Records are separated by occurrences of characters that match @var{regexp}.
-Leading and trailing matches of @var{regexp} delimit empty records.
-(This is a @command{gawk} extension; it is not specified by the
-POSIX standard.)
+记录通过匹配 @var{regexp} 正则表达式的字符串来进行分割。
+文件头尾的空行会分割出空的记录。（这是 @command{gawk} 的扩展；在 POSIX 中没有对这种情形进行定义。）
 @end table
 
 @cindex @command{gawk}, @code{RT} variable in
 @cindex @code{RT} variable
-If not in compatibility mode (@pxref{Options}), @command{gawk} sets
-@code{RT} to the input text that matched the value specified by @code{RS}.
-But if the input file ended without any text that matches @code{RS},
-then @command{gawk} sets @code{RT} to the null string.
+如果不是在兼容模式下（查看 @ref{Options}），
+@command{gawk} 设置 @code{RT} 的值为输入数据中匹配由 @code{RS} 指定的值的文本。
+但是，如果输入文件结束输入而没有匹配 @code{RS}，则 @command{gawk} 会将 @code{RT} 的值设置成空串。
 
 @node Getline
-@section Explicit Input with @code{getline}
+@section 用 @code{getline} 输入数据
 
 @cindex @code{getline} command, explicit input with
 @cindex input, explicit
-So far we have been getting our input data from @command{awk}'s main
-input stream---either the standard input (usually your keyboard, sometimes
-the output from another program) or the
-files specified on the command line.  The @command{awk} language has a
-special built-in command called @code{getline} that
-can be used to read input under your explicit control.
+到目前为止，我们都是从 @command{awk} 的主要输入流中获取数据，
+要么是标准输入（通常是你的键盘，有时是其他程序的输出）或者通过命令行指定的文件。
+@command{awk} 语言有一个特殊的内建命令 @code{getline} 可以用来显式地在你的控制下读取输入。
 
-The @code{getline} command is used in several different ways and should
-@emph{not} be used by beginners.
-The examples that follow the explanation of the @code{getline} command
-include material that has not been covered yet.  Therefore, come back
-and study the @code{getline} command @emph{after} you have reviewed the
-rest of
+@code{getline} 命令有几种不同的使用方式，并且初学者最好@emph{不要}使用。
+下面的 @code{getline} 使用例子以及相应的解释包括了一些目前还没有涉及的知识。
+因此，当你阅读了
 @ifinfo
-this @value{DOCUMENT}
+本@value{DOCUMENT}
 @end ifinfo
 @ifhtml
-this @value{DOCUMENT}
+本@value{DOCUMENT}
 @end ifhtml
 @ifnotinfo
 @ifnothtml
-Parts I and II
+的第一、二部分
 @end ifnothtml
 @end ifnotinfo
-and have a good knowledge of how @command{awk} works.
+的剩下的部分@emph{之后}，再回过头来学习 @code{getline} ，
+则你会更了解 @command{awk} 是如何进行工作的。
 
 @cindex @command{gawk}, @code{ERRNO} variable in
 @cindex @code{ERRNO} variable, with @command{getline} command
@@ -6183,18 +6024,14 @@ and have a good knowledge of how @command{awk} works.
 @cindex @code{getline} command, return values
 @cindex @option{--sandbox} option, input redirection with @code{getline}
 
-The @code{getline} command returns 1 if it finds a record and 0 if
-it encounters the end of the file.  If there is some error in getting
-a record, such as a file that cannot be opened, then @code{getline}
-returns @minus{}1.  In this case, @command{gawk} sets the variable
-@code{ERRNO} to a string describing the error that occurred.
+@code{getline} 命令查看到一个记录时则返回 1， 如果遇到文件结束时则返回 0。
+如果在读取数据时发生了错误，如文件不能被打开，则 @code{getline} 返回 @minus{}1。
+在这个情况下，@command{gawk} 将变量 @code{ERRNO} 的值设置成所遇到的错误的描述字串。
 
-In the following examples, @var{command} stands for a string value that
-represents a shell command.
+在下面的例子中，@var{command} 代表 shell 命令的字串值。
 
-@quotation NOTE
-When @option{--sandbox} is specified (@pxref{Options}),
-reading lines from files, pipes, and coprocesses is disabled.
+@quotation 提示
+当 @option{--sandbox} 指定时（查看 @ref{Options}），从文件，管道或者并程 中读取行数据是被禁止的。
 @end quotation
 
 @menu
@@ -6214,13 +6051,11 @@ reading lines from files, pipes, and coprocesses is disabled.
 @end menu
 
 @node Plain Getline
-@subsection Using @code{getline} with No Arguments
+@subsection 不带参数调用 @code{getline}
 
-The @code{getline} command can be used without arguments to read input
-from the current input file.  All it does in this case is read the next
-input record and split it up into fields.  This is useful if you've
-finished processing the current record, but want to do some special
-processing on the next record @emph{right now}.  For example:
+@code{getline} 命令可以不带参数来从当前文件中读取输入。
+在这种情形下，就是读取下一个输入记录并将其分割为域。当你已经完成当前记录的处理，
+但是对于下一个记录想@emph{马上}做一些处理的情况下非常有用。例如：
 
 @example
 # Remove text between /* and */, inclusive
@@ -6264,33 +6099,23 @@ part 1 /*comment*/part 2 /*comment*/part 3
 no comment
 @end ignore
 
-This @command{awk} program deletes C-style comments (@samp{/* @dots{}
-*/}) from the input.
-It uses a number of features we haven't covered yet, including
-string concatenation
-(@pxref{Concatenation})
-and the @code{index()} and @code{substr()} built-in
-functions
-(@pxref{String Functions}).
-By replacing the @samp{print $0} with other
-statements, you could perform more complicated processing on the
-decommented input, such as searching for matches of a regular
-expression.  (This program has a subtle problem---it does not work if one
-comment ends and another begins on the same line.)
+这个 @command{awk} 程序从输入中删除 C 风格的注释（@samp{/* @dots{} */}）。
+其中用到的一些特性我们还没有讲到，包括字串合并
+（查看 @ref{Concatenation}），
+以及 @code{index()}，@code{substr()} 内建函数等
+（查看 @ref{String Functions}）。
+通过替换 @samp{print $0} 为其他的语句，你可以执行更为复杂的从输入中删除注释的处理，例如搜索正则表达式等。
+（这个程序有一个很微小的细节——就是如果一个注释在本行结束，同时在同一行又开启另一个注释，这个程序不会生效。）
 
-This form of the @code{getline} command sets @code{NF},
-@code{NR}, @code{FNR}, @code{RT}, and the value of @code{$0}.
+这种使用 @code{getline} 的方式，会设置 @code{$0} 的 @code{NF}，@code{NR}，@code{FNR}，@code{RT} 变量。
 
-@quotation NOTE
-The new value of @code{$0} is used to test
-the patterns of any subsequent rules.  The original value
-of @code{$0} that triggered the rule that executed @code{getline}
-is lost.
-By contrast, the @code{next} statement reads a new record
-but immediately begins processing it normally, starting with the first
-rule in the program.  @xref{Next Statement}.
+@quotation 提示
+@code{$0} 的新值用于测试接所有接下来的模式。
+@code{$0} 在触发执行 @code{getline} 调用的规则的最初始就会丢失。
+另一方面，@code{next} 语句读取一个新的记录，并且立即从程序中的第一个规则开始处理它。
+查看 @xref{Next Statement}。
 @end quotation
-
+#TODO20171101
 @node Getline/Variable
 @subsection Using @code{getline} into a Variable
 @cindex @code{getline} into a variable

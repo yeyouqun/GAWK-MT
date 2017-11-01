@@ -86,15 +86,15 @@
 > I would like to thank Marshall and Elaine Hartholz of Seattle and
 > Dr.@: Bert and Rita Schreiber of Detroit for large amounts of quiet vacation
 > time in their homes, which allowed me to make significant progress on
-> this @value{DOCUMENT} and on @command{gawk} itself.
+> this web page and on gawk itself.
 
 译文原文
 > 我也要感谢 Marshall 与 Seattle 的Elaine Hartholz ，还有 Detroit 的 Bert and Rita Schreiber 博士，
-> 他们牺牲了大量的假期时间，安安静解地呆在他们的家里，使得我能够写作神速，也包括在 @command{gawk} 上的工作。
+> 他们牺牲了大量的假期时间，安安静解地呆在他们的家里，使得我能够写作神速，也包括在 gawk 上的工作。
 
 改动
 > 我也要感谢 Marshall 与 Seattle 的Elaine Hartholz ，还有 Detroit 的 Bert and Rita Schreiber 博士，
-> 他们牺牲了大量的假期时间——他们本可以安安静解地在家里度过——使得我在本网页的制作和 @command{gawk} 上的工作都能进展神速。
+> 他们牺牲了大量的假期时间——他们本可以安安静解地在家里度过——使得我在本网页的制作和 gawk 上的工作都能进展神速。
 
 2.
 英文原文
@@ -197,3 +197,70 @@
 改动
 > 通常的情况下，域是通过空白符序列进行分隔的（空格，TABs，或者换行符），而不是通过单个空格。
 > 一行中的两个连续空格不会分隔出一个空域。
+
+## 4.5.2
+英文原文
+> For both values of FS, fields are separated by runs
+> (multiple adjacent occurrences) of spaces, TABs,
+> and/or newlines. 
+
+译文原文
+> 对于 FS 的两个值，域都会被一系列的空格、TABs、与换行符分隔。
+
+改动
+> 对于 FS 的两个值，域都会被连续的（出现多个相邻的）空格、TABs、与换行符分隔。
+
+## 4.5.4
+英文原文
+> The value used for the argument to -F is processed in exactly the
+> same way as assignments to the predefined variable FS.
+
+译文原文
+> 用来 -F 参数的值按照命令行上的赋值参数的方式一样处理。
+
+改动
+> 参数 -F 的赋值方式和预定义参数 FS 的赋值方式完全一样。
+
+## 4.6
+英文原文
+> For example, data of this nature
+> arises in the input for old Fortran programs where numbers are run
+> together, or in the output of programs that did not anticipate the use
+> of their output as input for other programs. 
+
+译文原文
+> 例如，这种数据可能由旧的 Fortran 程序处理数据时出现，
+> 或者是程序的输出不参与将其输出作为输入的程序。
+
+改动
+> 例如，这种特性可能出现在旧的 Fortran 程序的输入数据中，其中数字都是连续出现的；
+> 或者是出现在一些程序的输出结果中，这些程序的设计不考虑将它的输出结果作为其他程序的输入数据。
+
+## 4.8
+1.
+英文原文
+> You can achieve the same effect as ‘RS = ""’ by assigning the string "\n\n+" to RS. 
+
+译文原文
+> 你可以通过将串 RS = "" 赋值给 RS，可以取得与 "\n\n+" 一样的效果。
+
+改动
+> 你可以通过将串 "\n\n+" 赋值给 RS，取得与 RS = "" 一样的效果。
+
+2.
+英文原文
+> This happens by default as the result of a special feature. 
+> When RS is set to the empty string and FS is set to a single character,
+> the newline character always acts as a field separator.
+> This is in addition to whatever field separations result from
+> FS.
+
+译文原文
+> 在这种特殊情况下，这是一种默认情况。
+> 当 RS 被设置成了空串，FS被设置成单个字符，域分隔符总是换行符。
+> 同时也包含由 FS 产生的任意分割结果。 
+
+改动
+> 在下面这种特殊情况下，这是一种默认处理方式。
+> 当 RS 被设置成了空串，并且 FS 被设置成单个字符的时候，换行符总是被作为域分隔符。
+> 无论由 FS 分割的结果是什么，这都会被加入最终的域分割结果里面。
