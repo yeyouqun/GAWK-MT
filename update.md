@@ -36,7 +36,9 @@
 > 使用恰当的参数或者环境变量，它完全与 POSIX 标准的，由 Brian Kemighan 维护的 Unix 版本的 awk 语言兼容。
 
 改动
-> 
+> GNU 版本的 awk 称为 gawk。在使用恰当的参数或者环境变量的情况下，
+> 它完全与 POSIX 标准 awk 语言兼容，同时与 Brian Kemighan 维护的 Unix 版本的 awk 语言兼容。
+ 
 
 2.
 英文原文
@@ -264,3 +266,23 @@
 > 在下面这种特殊情况下，这是一种默认处理方式。
 > 当 RS 被设置成了空串，并且 FS 被设置成单个字符的时候，换行符总是被作为域分隔符。
 > 无论由 FS 分割的结果是什么，这都会被加入最终的域分割结果里面。
+
+## 4.11
+英文原文
+> This makes it easier to use shell wildcards with your awk program
+
+译文原文
+> 这样的知，可能很容易使用右 awk 程序中使用 Shell 通配符
+
+改动
+> 这让你在 awk 程序中使用 shell 通配符变得更容易
+
+## 5
+英文原文
+> The print statement is not limited when computing which values to print.
+
+译文原文
+> print 语句并不仅限于何时计算哪个值要进行打印。
+
+改动
+> 在决定打印哪个值的场景下，print 语句没什么限制。

@@ -6305,7 +6305,7 @@ $ @kbd{awk -f addrs.awk addresses}
 （@samp{==} 的意思是“等于”）
 @end ifinfo
 @ifnotinfo
-@code{RS}:
+@code{RS}
 @end ifnotinfo
  的值的记录分割方式：
 
@@ -6455,21 +6455,16 @@ no comment
 另一方面，@code{next} 语句读取一个新的记录，并且立即从程序中的第一个规则开始处理它。
 查看 @xref{Next Statement}。
 @end quotation
-#TODO
 @node Getline/Variable
-@subsection Using @code{getline} into a Variable
+@subsection 将 @code{getline} 赋值给变量
 @cindex @code{getline} into a variable
 @cindex variables, @code{getline} command into@comma{} using
 
-You can use @samp{getline @var{var}} to read the next record from
-@command{awk}'s input into the variable @var{var}.  No other processing is
-done.
-For example, suppose the next line is a comment or a special string,
-and you want to read it without triggering
-any rules.  This form of @code{getline} allows you to read that line
-and store it in a variable so that the main
-read-a-line-and-check-each-rule loop of @command{awk} never sees it.
-The following example swaps every two lines of input:
+你也可以使用 @samp{getline @var{var}} 将从 @command{awk} 的输入的下一个记录赋值给一个变量。
+这没有做任何针对数据的处理。例如，假设下一行是一个注释或者一个特殊字串，你想读取它的同时，不触发任何规则。
+这种形式的 @code{getline} 调用可以让你读取行并且将其存在一个变量中，
+因此，主循环中 read-a-line-and-check-each-rule（读取一行并检查每个规则）的 @command{awk} 循环就看不到这个记录了。
+下面的例子交换输入中的两行：
 
 @example
 @{
@@ -6482,7 +6477,7 @@ The following example swaps every two lines of input:
 @end example
 
 @noindent
-It takes the following list:
+例子中使用下面的输入：
 
 @example
 wan
@@ -6492,7 +6487,7 @@ phore
 @end example
 
 @noindent
-and produces these results:
+并产生如下的结果：
 
 @example
 tew
@@ -6501,14 +6496,11 @@ phore
 free
 @end example
 
-The @code{getline} command used in this way sets only the variables
-@code{NR}, @code{FNR}, and @code{RT} (and, of course, @var{var}).
-The record is not
-split into fields, so the values of the fields (including @code{$0}) and
-the value of @code{NF} do not change.
+这么使用 @code{getline} 命令仅设置变量 @code{NR}，@code{FNR} 以及 @code{RT}（当然还有变量 @var{var}）。
+记录不会被分割成域，因此域的值（包括 @code{$0}）以及 @code{NF} 的值都不会改变。
 
 @node Getline/File
-@subsection Using @code{getline} from a File
+@subsection 使用 @code{getline} 读取文件
 
 @cindex @code{getline} from a file
 @cindex input redirection
@@ -6516,14 +6508,12 @@ the value of @code{NF} do not change.
 @cindex @code{<} (left angle bracket), @code{<} operator (I/O)
 @cindex left angle bracket (@code{<}), @code{<} operator (I/O)
 @cindex operators, input/output
-Use @samp{getline < @var{file}} to read the next record from @var{file}.
+使用 @samp{getline < @var{file}} 来从 @var{file} 中读取记录。
+在这里，@var{file} 是一个求值为字串的表达式，并用其指定@value{FN}。
+@samp{< @var{file}} 称为重定向，因为它将输入定向为另一个不同的位置。
+例如，下面的程序当它遇到从当前输入文件输入的记录中的第一个域的值为 10 时，
+则从文件 @file{secondary.input} 中读取输入记录：
 Here, @var{file} is a string-valued expression that
-specifies the @value{FN}.  @samp{< @var{file}} is called a @dfn{redirection}
-because it directs input to come from a different place.
-For example, the following
-program reads its input record from the file @file{secondary.input} when it
-encounters a first field with a value equal to 10 in the current input
-file:
 
 @example
 @{
@@ -6535,38 +6525,28 @@ file:
 @}
 @end example
 
-Because the main input stream is not used, the values of @code{NR} and
-@code{FNR} are not changed. However, the record it reads is split into fields in
-the normal manner, so the values of @code{$0} and the other fields are
-changed, resulting in a new value of @code{NF}.
-@code{RT} is also set.
+由于主输入流没有被使用，变量 @code{NR} 以及 @code{FNR} 的值是不会改变的。但是，它所读取的记录会被正常地分割成域，
+因此 @code{$0} 以及其他域的值是会改变的，因此导致 @code{NF} 与 @code{RT} 的值是会改变的。
 
 @cindex POSIX @command{awk}, @code{<} operator and
 @c Thanks to Paul Eggert for initial wording here
-According to POSIX, @samp{getline < @var{expression}} is ambiguous if
-@var{expression} contains unparenthesized operators other than
-@samp{$}; for example, @samp{getline < dir "/" file} is ambiguous
-because the concatenation operator (not discussed yet; @pxref{Concatenation})
-is not parenthesized.  You should write it as @samp{getline < (dir "/" file)} if
-you want your program to be portable to all @command{awk} implementations.
+根据 POSIX 标准，@samp{getline < @var{expression}} 如果 @samp{$} 中包含未括起来的除 @samp{$} 的操作符时，
+则会产生歧义。例如 @samp{getline < dir "/" file} 就是有歧义的，因为连接操作符
+（还未讨论到，查看 @ref{Concatenation}）是没有被括起来的。
+如果你的程序要能够移植到所有的 @command{awk} 实现中，你应该这么写 @samp{getline < (dir "/" file)}。
 
 @node Getline/Variable/File
-@subsection Using @code{getline} into a Variable from a File
+@subsection 从文件中 @code{getline} 到变量
 @cindex variables, @code{getline} command into@comma{} using
 
-Use @samp{getline @var{var} < @var{file}} to read input
-from the file
-@var{file}, and put it in the variable @var{var}.  As earlier, @var{file}
-is a string-valued expression that specifies the file from which to read.
+使用 @samp{getline @var{var} < @var{file}} 来从文件 @var{file} 中读取输入，
+并且将其存放在变量 @var{var} 中。如前所示，文件 @var{file} 是一个求值为字串的变量，结果中包括要被读取的文件。
 
-In this version of @code{getline}, none of the predefined variables are
-changed and the record is not split into fields.  The only variable
-changed is @var{var}.@footnote{This is not quite true. @code{RT} could
-be changed if @code{RS} is a regular expression.}
-For example, the following program copies all the input files to the
-output, except for records that say @w{@samp{@@include @var{filename}}}.
-Such a record is replaced by the contents of the file
-@var{filename}:
+在这个版本的 @code{getline} 中，没有一个预定义的变量会改变，记录也不会被分割成域。
+唯一改变的就是 @var{var} 变量。
+@footnote{这个不太是这么回事。@code{RT} 在 @code{RS} 是一个正则表达式时可能会改变。}
+例如，下面的程序复制所有的输入文件到输出，除了如果记录内容为 @w{@samp{@@include @var{filename}}}。
+这样的记录会被文件 @var{filename} 替换：
 
 @example
 @{
@@ -6579,30 +6559,25 @@ Such a record is replaced by the contents of the file
 @}
 @end example
 
-Note here how the name of the extra input file is not built into
-the program; it is taken directly from the data, specifically from the second field on
-the @code{@@include} line.
+注意这里的另外的输入文件的名字是如何构建到程序中的；
+它是直接从数据中来的，通过 @code{@@include} 行的第 2 个域来指定的。
 
-The @code{close()} function is called to ensure that if two identical
-@code{@@include} lines appear in the input, the entire specified file is
-included twice.
-@xref{Close Files And Pipes}.
+@code{close()} 函数的调用是为了保证如果 @code{@@include} 在输入文件中出现两次，文件的内容也会被指定两次。
+查看 @ref{Close Files And Pipes}。
 
-One deficiency of this program is that it does not process nested
-@code{@@include} statements
-(i.e., @code{@@include} statements in included files)
-the way a true macro preprocessor would.
-@xref{Igawk Program} for a program
-that does handle nested @code{@@include} statements.
+这个程序的不足就是不能处理内嵌 @code{@@include} 的情况
+（例如，@code{@@include} 语句包含在被包含的文件中），
+如一个真正的宏处理器所执行的功能。在 @ref{Igawk Program}，查看处理内嵌 @code{@@include} 语句的程序。
 
 @node Getline/Pipe
-@subsection Using @code{getline} from a Pipe
+@subsection 从管道中使用 @code{getline} 
 
 @c From private email, dated October 2, 1988. Used by permission, March 2013.
 @cindex Kernighan, Brian
 @quotation
-@i{Omniscience has much to recommend it.
-Failing that, attention to details would be useful.}
+@i{
+全知全能太遥远，还是关注细节更有用。
+}
 @author Brian Kernighan
 @end quotation
 
@@ -6611,14 +6586,10 @@ Failing that, attention to details would be useful.}
 @cindex input pipeline
 @cindex pipe, input
 @cindex operators, input/output
-The output of a command can also be piped into @code{getline}, using
-@samp{@var{command} | getline}.  In
-this case, the string @var{command} is run as a shell command and its output
-is piped into @command{awk} to be used as input.  This form of @code{getline}
-reads one record at a time from the pipe.
-For example, the following program copies its input to its output, except for
-lines that begin with @samp{@@execute}, which are replaced by the output
-produced by running the rest of the line as a shell command:
+命令的输入也可以被通过使用 @samp{@var{command} | getline} 来以管道输出给 @code{getline}。
+在这种情形中，@var{command} 是一个 Shell 命令，
+同时，它的输出会被以管道形式输出给 @command{awk} 来作为输入。这种形式的 @code{getline} 从管道中一次读取一个记录。
+如，下面的程序复制它的输入到输出中，排除那些以 @samp{@@execute} 开头的行，这些行会被替换为将行的剩下的内容当做 Shell 命令执行时产生的输出：
 
 @example
 @{
@@ -6633,16 +6604,14 @@ produced by running the rest of the line as a shell command:
 @end example
 
 @noindent
-The @code{close()} function is called to ensure that if two identical
-@samp{@@execute} lines appear in the input, the command is run for
-each one.
+@code{close()} 函数保证两个相同的 @samp{@@execute} 行，命令会执行相应次数。
 @ifnottex
 @ifnotdocbook
-@xref{Close Files And Pipes}.
+查看 @ref{Close Files And Pipes}。
 @end ifnotdocbook
 @end ifnottex
 @c This example is unrealistic, since you could just use system
-Given the input:
+假设有下面的输入：
 
 @example
 foo
@@ -6653,7 +6622,7 @@ bletch
 @end example
 
 @noindent
-the program might produce:
+程序可能产生如下的输出：
 
 @cindex Robbins, Bill
 @cindex Robbins, Miriam
@@ -6669,49 +6638,35 @@ bletch
 @end example
 
 @noindent
-Notice that this program ran the command @command{who} and printed the result.
-(If you try this program yourself, you will of course get different results,
-depending upon who is logged in on your system.)
+注意这个程序会执行命令 @command{who} 然后打印出结果。
+（如果你测试这个程序，你可能会得到不同的结果，这依赖于你所登入的系统。）
 
-This variation of @code{getline} splits the record into fields, sets the
-value of @code{NF}, and recomputes the value of @code{$0}.  The values of
-@code{NR} and @code{FNR} are not changed.
-@code{RT} is set.
+这样的 @code{getline} 形式会将记录分割成域，并设置 @code{NF} 的值，并重新计算 @code{$0} 的值。@code{NR} 与 @code{FNR} 的值不会改变，@code{RT} 的值则会被设置。
 
 @cindex POSIX @command{awk}, @code{|} I/O operator and
 @c Thanks to Paul Eggert for initial wording here
-According to POSIX, @samp{@var{expression} | getline} is ambiguous if
-@var{expression} contains unparenthesized operators other than
-@samp{$}---for example, @samp{@w{"echo "} "date" | getline} is ambiguous
-because the concatenation operator is not parenthesized.  You should
-write it as @samp{(@w{"echo "} "date") | getline} if you want your program
-to be portable to all @command{awk} implementations.
+根据 POSIX 标准，@samp{@var{expression} | getline} 表达式中，
+如果 @var{expression} 包含了未被括起来的除 @samp{$} 之外的操作符时，则会是有歧义的。
+例如，@samp{@w{"echo "} "date" | getline} 由于连接操作符没有被括起来， 因此这个语句是有歧义的。
+如果你想你的程序可以有移植到所有的 @command{awk} 实现里，你应该这么写： @samp{(@w{"echo "} "date") | getline}。
 
 @cindex Brian Kernighan's @command{awk}
 @cindex @command{mawk} utility
-@quotation NOTE
-Unfortunately, @command{gawk} has not been consistent in its treatment
-of a construct like @samp{@w{"echo "} "date" | getline}.
-Most versions, including the current version, treat it at as
-@samp{@w{("echo "} "date") | getline}.
-(This is also how BWK @command{awk} behaves.)
-Some versions instead treat it as
-@samp{@w{"echo "} ("date" | getline)}.
-(This is how @command{mawk} behaves.)
-In short, @emph{always} use explicit parentheses, and then you won't
-have to worry.
+@quotation 提示
+不幸的是，@command{gawk} 在对待像这样的结构 @samp{@w{"echo "} "date" | getline} 时是不一致的。
+大多数的版本，包括目前的版本，都将其看成 @samp{@w{("echo "} "date") | getline}。
+（这也是 BWK @command{awk} 的行为）
+有一些版本则会将其看成 @samp{@w{"echo "} ("date" | getline)}。（这是 @command{mawk} 的行为）
+简单地说。显式地使用括号，就不用担心这些问题。
 @end quotation
 
 @node Getline/Variable/Pipe
-@subsection Using @code{getline} into a Variable from a Pipe
+@subsection 从管道中 @code{getline} 到变量
 @cindex variables, @code{getline} command into@comma{} using
 
-When you use @samp{@var{command} | getline @var{var}}, the
-output of @var{command} is sent through a pipe to
-@code{getline} and into the variable @var{var}.  For example, the
-following program reads the current date and time into the variable
-@code{current_time}, using the @command{date} utility, and then
-prints it:
+当使用 @samp{@var{command} | getline @var{var}} 这种形式，即 @var{command} 命令的输出通过管道发送给 @code{getline}，
+并将其存储在变量 @var{var} 中。例如，下面的程序利用 @command{date} 工具，
+读取当前的日期与时间到变量 @code{current_time} 中，然后打印它：
 
 @example
 BEGIN @{
@@ -6721,8 +6676,7 @@ BEGIN @{
 @}
 @end example
 
-In this version of @code{getline}, none of the predefined variables are
-changed and the record is not split into fields. However, @code{RT} is set.
+在这个版本的 @code{getline} 中，没有任何预定义的变量会改变，记录也不会分割成域，但是 @code{RT} 会被设定。
 
 @ifinfo
 @c Thanks to Paul Eggert for initial wording here
@@ -6735,7 +6689,7 @@ program to be portable to other @command{awk} implementations.
 @end ifinfo
 
 @node Getline/Coprocess
-@subsection Using @code{getline} from a Coprocess
+@subsection 从并程中使用 @code{getline}
 @cindex coprocesses, @code{getline} from
 @cindex @code{getline} command, coprocesses@comma{} using from
 @cindex @code{|} (vertical bar), @code{|&} operator (I/O)
@@ -6743,17 +6697,12 @@ program to be portable to other @command{awk} implementations.
 @cindex operators, input/output
 @cindex differences in @command{awk} and @command{gawk}, input/output operators
 
-Reading input into @code{getline} from a pipe is a one-way operation.
-The command that is started with @samp{@var{command} | getline} only
-sends data @emph{to} your @command{awk} program.
+从管道中 @code{getline} 读取输入是单向操作。
+通过 @samp{@var{command} | getline} 启动的命令 command 只会将数据发送@emph{到}你的 @command{awk} 程序。
 
-On occasion, you might want to send data to another program
-for processing and then read the results back.
-@command{gawk} allows you to start a @dfn{coprocess}, with which two-way
-communications are possible.  This is done with the @samp{|&}
-operator.
-Typically, you write data to the coprocess first and then
-read the results back, as shown in the following:
+有时候，你可能会想发送数据到另一个程序用于处理，并将结果返回来。
+@command{gawk} 可以启动一个@dfn{并程}，同时允许双向通信。
+这是通过 @samp{|&} 操作符来实现的。典型的情况中，你首先将数据写到并程中，然后将结果读取回来，如下面所示：
 
 @example
 print "@var{some query}" |& "db_server"
@@ -6761,32 +6710,22 @@ print "@var{some query}" |& "db_server"
 @end example
 
 @noindent
-which sends a query to @command{db_server} and then reads the results.
+上面的例子中将请求发送到 @command{db_server} 中然后读取结果。
 
-The values of @code{NR} and
-@code{FNR} are not changed,
-because the main input stream is not used.
-However, the record is split into fields in
-the normal manner, thus changing the values of @code{$0}, of the other fields,
-and of @code{NF} and @code{RT}.
+@code{NR} 与 @code{FNR} 的值不会变更，因为主输入流没有被使用。但是，记录会按正常方式分割成域，因此会改变 @code{$0} 的值，其他域的值，以及 @code{NF} 跟 @code{RT} 的值。
 
-Coprocesses are an advanced feature. They are discussed here only because
-this is the @value{SECTION} on @code{getline}.
-@xref{Two-way I/O},
-where coprocesses are discussed in more detail.
+并程是一个高级特性。在这里讨论是因为这@value{SECTION}跟 @code{getline} 有关。
+查看 @ref{Two-way I/O}，这里并程会更讨论得更深入一些。
 
 @node Getline/Variable/Coprocess
-@subsection Using @code{getline} into a Variable from a Coprocess
+@subsection 使用并程 @code{getline} 到变量 
 @cindex variables, @code{getline} command into@comma{} using
 
-When you use @samp{@var{command} |& getline @var{var}}, the output from
-the coprocess @var{command} is sent through a two-way pipe to @code{getline}
-and into the variable @var{var}.
+当你使用 @samp{@var{command} |& getline @var{var}}，
+并程 @var{command} 的输出会通过一个双向管斗管道发送到 @code{getline} 中，并保存在变量 @var{var} 中。
 
-In this version of @code{getline}, none of the predefined variables are
-changed and the record is not split into fields.  The only variable
-changed is @var{var}.
-However, @code{RT} is set.
+在这个版本的 @code{getline} 中，没有任何预定义的变量会改变，记录也不会分割成域。
+唯一变化的是变量 @var{var}，但是 @code{RT} 的值会被设定。
 
 @ifinfo
 Coprocesses are an advanced feature. They are discussed here only because
@@ -6796,26 +6735,20 @@ where coprocesses are discussed in more detail.
 @end ifinfo
 
 @node Getline Notes
-@subsection Points to Remember About @code{getline}
-Here are some miscellaneous points about @code{getline} that
-you should bear in mind:
+@subsection 回顾 @code{getline}
+这下面有几点关于 @code{getline} 的内容需要留意：
 
 @itemize @value{BULLET}
 @item
-When @code{getline} changes the value of @code{$0} and @code{NF},
-@command{awk} does @emph{not} automatically jump to the start of the
-program and start testing the new record against every pattern.
-However, the new record is tested against any subsequent rules.
+当 @code{getline} 改变了 @code{$0} 与 @code{NF} 的值时，@command{awk} 不会自动跳到程序的开始并测试新的记录与模式。但是新的记录会匹配任意后后续规则。
 
 @cindex differences in @command{awk} and @command{gawk}, implementation limitations
 @cindex implementation issues, @command{gawk}, limits
 @cindex @command{awk}, implementations, limits
 @cindex @command{gawk}, implementation issues, limits
 @item
-Some very old @command{awk} implementations limit the number of pipelines that an @command{awk}
-program may have open to just one.  In @command{gawk}, there is no such limit.
-You can open as many pipelines (and coprocesses) as the underlying operating
-system permits.
+一些非常老的 @command{awk} 实现限制了 @command{awk} 程序可以打开的管线的数量就是 1 个。
+在 @command{gawk} 中，没有这样的限制。你可以打开你想要的在操作系统限制下的管线（以及并程）数量。
 
 @cindex side effects, @code{FILENAME} variable
 @cindex @code{FILENAME} variable, @code{getline}@comma{} setting with
@@ -6823,45 +6756,35 @@ system permits.
 @cindex @code{getline} command, @code{FILENAME} variable and
 @cindex @code{BEGIN} pattern, @code{getline} and
 @item
-An interesting side effect occurs if you use @code{getline} without a
-redirection inside a @code{BEGIN} rule. Because an unredirected @code{getline}
-reads from the command-line @value{DF}s, the first @code{getline} command
-causes @command{awk} to set the value of @code{FILENAME}. Normally,
-@code{FILENAME} does not have a value inside @code{BEGIN} rules, because you
-have not yet started to process the command-line @value{DF}s.
+如果你在 @code{BEGIN} 规则中使用 @code{getline} 而没有重定向符，则会出现一个有趣的副作用。
+由于一个未重定向的 @code{getline} 会从命令行中的数据文件中读取数据，
+第一个 @code{getline} 命令会导致 @command{awk} 设置 @code{FILENAME} 的值。
+正常情况下。@code{FILENAME} 不会在 @code{BEGIN} 规则内有值，由于你还没有开始处理命令行@value{DF}。
 @value{DARKCORNER}
-(See @ref{BEGIN/END};
-also @pxref{Auto-set}.)
+（查看 @ref{BEGIN/END} 与 @ref{Auto-set}。）
 
 @item
-Using @code{FILENAME} with @code{getline}
-(@samp{getline < FILENAME})
-is likely to be a source of
-confusion.  @command{awk} opens a separate input stream from the
-current input file.  However, by not using a variable, @code{$0}
-and @code{NF} are still updated.  If you're doing this, it's
-probably by accident, and you should reconsider what it is you're
-trying to accomplish.
+在 @code{getline} 中使用 @code{FILENAME}（@samp{getline < FILENAME}）有可能导致困惑。
+@command{awk} 利用当前文件打开一个独立的输入流。
+但是不通过使用变量，@code{$0} 与 @code{NF} 的值也还会改变。
+如果你这么做，有可能是偶然，你应该重新考虑你到底想要什么结果。
 
 @item
 @ifdocbook
-The next @value{SECTION}
+下一@value{SECTION}
 @end ifdocbook
 @ifnotdocbook
 @ref{Getline Summary},
 @end ifnotdocbook
-presents a table summarizing the
-@code{getline} variants and which variables they can affect.
-It is worth noting that those variants that do not use redirection
-can cause @code{FILENAME} to be updated if they cause
-@command{awk} to start reading a new input file.
+，提供了 @code{getline} 不同变体及在相应情况下受影响的变量的总结表。
+也值得注意，那些变体不使用重定向，如果导致了 @command{awk} 重新读取一个新的输入文件，也可以导致 @code{FILENAME} 的更新。
 
 @item
 @cindex Moore, Duncan
-If the variable being assigned is an expression with side effects,
-different versions of @command{awk} behave differently upon encountering
-end-of-file.  Some versions don't evaluate the expression; many versions
-(including @command{gawk}) do.  Here is an example, courtesy of Duncan Moore:
+如果正在被赋值的变量是一个带副效应的表达式，则不同的 @command{awk} 版本会有不同的表现。
+这依赖于怎样碰到“end-of-file”。
+一些版本中不这些表达式不生效；许多版本（包括 @command{gawk}）会生效。
+这是一个例子，感谢Duncan Moore：
 
 @ignore
 Date: Sun, 01 Apr 2012 11:49:33 +0100
@@ -6877,27 +6800,21 @@ BEGIN @{
 @end example
 
 @noindent
-Here, the side effect is the @samp{++c}.  Is @code{c} incremented if
-end-of-file is encountered before the element in @code{a} is assigned?
+这里，副效应是 @samp{++c} 。如果文件结束时，@code{c} 是否是在 @code{a} 的元素被赋值之前进行递增么？
 
-@command{gawk} treats @code{getline} like a function call, and evaluates
-the expression @samp{a[++c]} before attempting to read from @file{f}.
-However, some versions of @command{awk} only evaluate the expression once they
-know that there is a string value to be assigned.
+@command{gawk} 将 @code{getline} 按照函数调用来对待，并在尝试读取 @file{f} 之前对表达式 @samp{a[++c]} 进行求值。
+但是，在 @command{awk} 的某些版本中，当它知道有字串值要进行赋值时，才会对表达式求值。
 @end itemize
 
 @node Getline Summary
-@subsection Summary of @code{getline} Variants
+@subsection @code{getline} 变体总结
 @cindex @code{getline} command, variants
 
-@ref{table-getline-variants}
-summarizes the eight variants of @code{getline},
-listing which predefined variables are set by each one,
-and whether the variant is standard or a @command{gawk} extension.
-Note: for each variant, @command{gawk} sets the @code{RT} predefined variable.
+@ref{table-getline-variants} 总结了 @code{getline} 的8个变体，并列举了在每种变体下会被设置的预定义变量，以及变体是否是 @command{gawk} 的标准扩展。
+提示：对每个变体，@command{gawk} 都会设置预定义变量 @code{RT}。
 
 @float Table,table-getline-variants
-@caption{@code{getline} variants and what they set}
+@caption{@code{getline} 变体及其设置的变量}
 @multitable @columnfractions .33 .38 .27
 @headitem Variant @tab Effect @tab @command{awk} / @command{gawk}
 @item @code{getline} @tab Sets @code{$0}, @code{NF}, @code{FNR}, @code{NR}, and @code{RT} @tab @command{awk}
@@ -6912,25 +6829,22 @@ Note: for each variant, @command{gawk} sets the @code{RT} predefined variable.
 @end float
 
 @node Read Timeout
-@section Reading Input with a Timeout
+@section 带超时的输入读取
 @cindex timeout, reading input
 
 @cindex differences in @command{awk} and @command{gawk}, read timeouts
-This @value{SECTION} describes a feature that is specific to @command{gawk}.
+本@value{SECTION}讨论的特性是 @command{gawk} 所独有的。
 
-You may specify a timeout in milliseconds for reading input from the keyboard,
-a pipe, or two-way communication, including TCP/IP sockets. This can be done
-on a per-input, per-command, or per-connection basis, by setting a special
-element in the @code{PROCINFO} array (@pxref{Auto-set}):
+在读取键盘上、管道、双向通信，包括 TCP/IP 套接字中读取输入的时候，你可以指定一个为毫秒单位超时时间。
+这可以在每个输入，每个命令或者每个连接的基础上来指定。所有这些都可以指定 @code{PROCINFO} 数组中的某个元素的值来实现
+（查看 @ref{Auto-set}）：
 
 @example
 PROCINFO["input_name", "READ_TIMEOUT"] = @var{timeout in milliseconds}
 @end example
 
-When set, this causes @command{gawk} to time out and return failure
-if no data is available to read within the specified timeout period.
-For example, a TCP client can decide to give up on receiving
-any response from the server after a certain amount of time:
+如果设置了这样的时间，@command{gawk} 超时后，如果没有在指定的超时时间内读取到数据，则会返回一个失败状态。
+例如，TCP 客户端可以在指定时间后，决定是放弃接收从服务器返回的响应。
 
 @example
 Service = "/inet/tcp/0/localhost/daytime"
@@ -6941,9 +6855,9 @@ else if (ERRNO != "")
     print ERRNO
 @end example
 
-Here is how to read interactively from the user@footnote{This assumes
-that standard input is the keyboard.} without waiting
-for more than five seconds:
+下面则是从 user 那里
+@footnote{这里假设标准输入就是键盘。}
+进行交互式读写，并且不等待超过 5 秒：
 
 @example
 PROCINFO["/dev/stdin", "READ_TIMEOUT"] = 5000
@@ -6951,15 +6865,10 @@ while ((getline < "/dev/stdin") > 0)
     print $0
 @end example
 
-@command{gawk} terminates the read operation if input does not
-arrive after waiting for the timeout period, returns failure,
-and sets @code{ERRNO} to an appropriate string value.
-A negative or zero value for the timeout is the same as specifying
-no timeout at all.
+如果没有数据输入，@command{gawk} 会在等待指定的超时时期后，结束读操作，并返回失败，
+同时设置 @code{ERRNO} 的值为恰当的值。负值或者 0 的超时时间，与不指定超时时间一样。
 
-A timeout can also be set for reading from the keyboard in the implicit
-loop that reads input records and matches them against patterns,
-like so:
+超时时间也可以设置在在显式的循环中来读取键盘输入，通过读取这些输入来对模式进行匹配，如：
 
 @example
 $ @kbd{gawk 'BEGIN @{ PROCINFO["-", "READ_TIMEOUT"] = 5000 @}}
@@ -6968,18 +6877,14 @@ $ @kbd{gawk 'BEGIN @{ PROCINFO["-", "READ_TIMEOUT"] = 5000 @}}
 @print{} You entered: gawk
 @end example
 
-In this case, failure to respond within five seconds results in the following
-error message:
+在这个情形下，如果在5秒之内反应失败，会导致如下错误信息：
 
 @example
 @error{} gawk: cmd. line:2: (FILENAME=- FNR=1) fatal: error reading input file `-': Connection timed out
 @end example
 
-The timeout can be set or changed at any time, and will take effect on the
-next attempt to read from the input device. In the following example,
-we start with a timeout value of one second, and progressively
-reduce it by one-tenth of a second until we wait indefinitely
-for the input to arrive:
+超时或者变更超时可以在任意时间，并在下次从输入设备中读取时产生效果。
+在下面的例子中，我们从 1 秒开始，并不断按 1/10 秒的时间递减，直到有输入到达：
 
 @example
 PROCINFO[Service, "READ_TIMEOUT"] = 1000
@@ -6989,68 +6894,47 @@ while ((Service |& getline) > 0) @{
 @}
 @end example
 
-@quotation NOTE
-You should not assume that the read operation will block
-exactly after the tenth record has been printed. It is possible that
-@command{gawk} will read and buffer more than one record's
-worth of data the first time. Because of this, changing the value
-of timeout like in the preceding example is not very useful.
+@quotation 提示
+你不可以假设读操作在读取了第 10 个记录后会阻塞。
+有可能 @command{gawk} 第一次读取时就读取了多于一个的记录并缓存起来。
+因为这个原因，在上面的例子中，改变超时值不是特别有用。
 @end quotation
 
-If the @code{PROCINFO} element is not present and the
-@env{GAWK_READ_TIMEOUT} environment variable exists,
-@command{gawk} uses its value to initialize the timeout value.
-The exclusive use of the environment variable to specify timeout
-has the disadvantage of not being able to control it
-on a per-command or per-connection basis.
+如果 @code{PROCINFO} 元素没有设置，并且 @env{GAWK_READ_TIMEOUT} 环境变量存在，
+@command{gawk} 会使用这个变量的值来初始化超时值。唯一地使用环境变量来指定超时值有这样的一个缺陷，就是不能够按照每命令或者每个连接地进行控制。
 
-@command{gawk} considers a timeout event to be an error even though
-the attempt to read from the underlying device may
-succeed in a later attempt. This is a limitation, and it also
-means that you cannot use this to multiplex input from
-two or more sources.
+@command{gawk} 会认为超时事件是一个错误。
+就算后续对于输入设备的读取是成功的。这是一个限制，这也表示你不可以用这个来复用两个或者更多的输入源。
 
-Assigning a timeout value prevents read operations from
-blocking indefinitely. But bear in mind that there are other ways
-@command{gawk} can stall waiting for an input device to be ready.
-A network client can sometimes take a long time to establish
-a connection before it can start reading any data,
-or the attempt to open a FIFO special file for reading can block
-indefinitely until some other process opens it for writing.
+赋值一个超时值，可以避免读操作一直被阻塞。但是要记住，还有其他的方法来等待输入设置准备就绪。一个网络客户端在可以读取数据之前可能需要等待很长的时间来建立连接，或者要很长的时间来打开 FIFO 特殊文件以进行读取，这时会一直阻塞，直到其他的进程打开这个特殊文件并进行写。
 
 @node Command-line directories
-@section Directories on the Command Line
+@section 命令行中的目录
 @cindex differences in @command{awk} and @command{gawk}, command-line directories
 @cindex directories, command-line
 @cindex command line, directories on
 
-According to the POSIX standard, files named on the @command{awk}
-command line must be text files; it is a fatal error if they are not.
-Most versions of @command{awk} treat a directory on the command line as
-a fatal error.
+根据 POSIX 标准，在 @command{awk} 命令行中指定的文件名必须是文本文件；如果不是则会是一个致命错误。
+大多数 @command{awk} 版本将命令行上指定目录看成是一个致命错误。
 
-By default, @command{gawk} produces a warning for a directory on the
-command line, but otherwise ignores it.  This makes it easier to use
-shell wildcards with your @command{awk} program:
+在默认情况下，@command{gawk} 在命令行上指定目录会产生一个告警，但是会忽略它。
+这让你在 awk 程序中使用 shell 通配符变得更容易：
 
 @example
 $ @kbd{gawk -f whizprog.awk *}        @ii{Directories could kill this program}
 @end example
 
-If either of the @option{--posix}
-or @option{--traditional} options is given, then @command{gawk} reverts
-to treating a directory on the command line as a fatal error.
+如果指定了 @option{--posix} 或者 @option{--traditional} 选项，
+@command{gawk} 则会将在命令行上指定目录视为致命错误。
 
-@xref{Extension Sample Readdir} for a way to treat directories
-as usable data from an @command{awk} program.
+查看 @ref{Extension Sample Readdir}，有一个方式来在 @command{awk} 程序将目录视为有用的数据。
 
 @node Input Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-Input is split into records based on the value of @code{RS}.
-The possibilities are as follows:
+根据 @code{RS} 的值，输入会被分割成记录，可能如下：
 
 @multitable @columnfractions .25 .35 .40
 @headitem Value of @code{RS} @tab Records are split on @dots{} @tab @command{awk} / @command{gawk}
@@ -7060,29 +6944,22 @@ The possibilities are as follows:
 @end multitable
 
 @item
-@code{FNR} indicates how many records have been read from the current input file;
-@code{NR} indicates how many records have been read in total.
+@code{FNR} 表示已经从当前输入文件中读取了多少记录，@code{NR} 则表则从所有的文件总读取了多少记录。
 
 @item
-@command{gawk} sets @code{RT} to the text matched by @code{RS}.
+@command{gawk} 设置 @code{RT} 的值为通过 @code{RS} 匹配的文本。
 
 @item
-After splitting the input into records, @command{awk} further splits
-the records into individual fields, named @code{$1}, @code{$2}, and so
-on. @code{$0} is the whole record, and @code{NF} indicates how many
-fields there are.  The default way to split fields is between whitespace
-characters.
+将输入分割成记录后，@command{awk} 会进一步将记录分割成不同的域，称为 @code{$1}，@code{$2} 等等。
+@code{$0} 是整个记录，@code{NF} 表示有多少个域。默认的分割域的方式是在空白符之间的字符。
 
 @item
-Fields may be referenced using a variable, as in @code{$NF}.  Fields
-may also be assigned values, which causes the value of @code{$0} to be
-recomputed when it is later referenced. Assigning to a field with a number
-greater than @code{NF} creates the field and rebuilds the record, using
-@code{OFS} to separate the fields.  Incrementing @code{NF} does the same
-thing. Decrementing @code{NF} throws away fields and rebuilds the record.
+域可以通过变量来进行参考，如 @code{$NF}。域也可以被赋值，这会导致 @code{$0} 再次被使用时，会被重新计算。
+对大于 @code{NF} 的值的域进行赋值可以创建新的域，并重建记录，通过 @code{OFS} 来分割域。
+增大 @code{NF} 的值也产生相同的结果。减少 @code{NF} 的值，会丢弃超过 @code{NF} 之外的域，并重建记录。
 
 @item
-Field splitting is more complicated than record splitting:
+域分割比记录分割要复杂一些：
 
 @multitable @columnfractions .40 .40 .20
 @headitem Field separator value @tab Fields are split @dots{} @tab @command{awk} / @command{gawk}
@@ -7095,76 +6972,59 @@ Field splitting is more complicated than record splitting:
 @end multitable
 
 @item
-Using @samp{FS = "\n"} causes the entire record to be a single field
-(assuming that newlines separate records).
+使用 @samp{FS = "\n"} 会使整个记录成为一个域（假设用换行符来分隔记录）。
 
 @item
-@code{FS} may be set from the command line using the @option{-F} option.
-This can also be done using command-line variable assignment.
+@code{FS} 可以通过命令行选项 @option{-F} 进行设置，也可以通过命令行中的变量赋值方式进行设置。
 
 @item
-Use @code{PROCINFO["FS"]} to see how fields are being split.
+通过 @code{PROCINFO["FS"]} 来查看正在被用于进行域分割的方式。
 
 @item
-Use @code{getline} in its various forms to read additional records
-from the default input stream, from a file, or from a pipe or coprocess.
+使用 @code{getline} 及其不同的格式来从默认的输入流之外的文件，管道或者并程等地方读取记录。
 
 @item
-Use @code{PROCINFO[@var{file}, "READ_TIMEOUT"]} to cause reads to time out
-for @var{file}.
+使用 @code{PROCINFO[@var{file}, "READ_TIMEOUT"]} 来对从 @var{file} 文件读进行超时设置。
 
 @item
-Directories on the command line are fatal for standard @command{awk};
-@command{gawk} ignores them if not in POSIX mode.
+标准的 @command{awk} 中，在命令行中指定目录是一个致命错误；
+@command{gawk} 在非 POSIX 模式中会忽略它们。
 
 @end itemize
 
 @c EXCLUDE START
 @node Input Exercises
-@section Exercises
+@section 练习
 
 @enumerate
 @item
-Using the @code{FIELDWIDTHS} variable (@pxref{Constant Size}),
-write a program to read election data, where each record represents
-one voter's votes.  Come up with a way to define which columns are
-associated with each ballot item, and print the total votes,
-including abstentions, for each item.
+使用 @code{FIELDWIDTHS} 变量（查看 @ref{Constant Size}），写一个程序来读取选举数据，
+这些数据中每个记录代表一个投票者的选票。构造一个方式来定义列如何来与每个投票项进行关联，并打印总的票数，
+包括每个项的弃权票数。
 
 @item
-@ref{Plain Getline}, presented a program to remove C-style
-comments (@samp{/* @dots{} */}) from the input.  That program
-does not work if one comment ends on one line and another one
-starts later on the same line.
-That can be fixed by making one simple change. What is it?
+在 @ref{Plain Getline} 中，有一个程序来从输入中移除 C 风格的注释（@samp{/* @dots{} */})。
+那个程序在一个行中结束一个注释，同时开启另一个注释时工作不正确。可以做一些很小的变更就可以来修复它，如何来做？
 
 @end enumerate
 @c EXCLUDE END
 
 @node Printing
-@chapter Printing Output
+@chapter 打印输出
 
 @cindex printing
 @cindex output, printing, See printing
-One of the most common programming actions is to @dfn{print}, or output,
-some or all of the input.  Use the @code{print} statement
-for simple output, and the @code{printf} statement
-for fancier formatting.
-The @code{print} statement is not limited when
-computing @emph{which} values to print. However, with two exceptions,
-you cannot specify @emph{how} to print them---how many
-columns, whether to use exponential notation or not, and so on.
-(For the exceptions, @pxref{Output Separators} and
-@ref{OFMT}.)
-For printing with specifications, you need the @code{printf} statement
-(@pxref{Printf}).
+大多数编程行为就是@dfn{打印}或者说是输出一些或者全部的输入。
+使用 @code{print} 语句进行简单的输出，利用 @code{printf} 语句进行格式化输出。
+在决定打印@emph{哪个}值的场景下，@code{print} 语句没什么限制。
+但是有两个例外，你无法指定它们@emph{如何}来打印它们——多少列，是否使用幂方式等等。
+（对于这些例外，查看 @ref{Output Separators} 和 @ref{OFMT}）
+对于规范的打印，你需要 @code{printf} 语句（查看 @ref{Printf}）。
 
 @cindex @code{print} statement
 @cindex @code{printf} statement
-Besides basic and formatted printing, this @value{CHAPTER}
-also covers I/O redirections to files and pipes, introduces
-the special @value{FN}s that @command{gawk} processes internally,
-and discusses the @code{close()} built-in function.
+除了基本的与格式化的打印，本@value{CHAPTER}还会讨论 I/O 重定向到文件与管道的相关问题，
+介绍一些 @command{gawk} 内部使用的特殊的@value{FN}，还讨论 @code{close()} 这个内建函数。
 
 @menu
 * Print::                       The @code{print} statement.
@@ -7184,68 +7044,52 @@ and discusses the @code{close()} built-in function.
 @end menu
 
 @node Print
-@section The @code{print} Statement
+@section @code{print} 语句
 
-Use the @code{print} statement to produce output with simple, standardized
-formatting.  You specify only the strings or numbers to print, in a
-list separated by commas.  They are output, separated by single spaces,
-followed by a newline.  The statement looks like this:
+利用 @code{print} 进行简单的，标准化的输出。只需要指定要打印的字串以及数字，并用逗号分隔它们。它们输出时用简单的空格进行分隔，并在最后附加上换行符。语句看起来如下：
 
 @example
 print @var{item1}, @var{item2}, @dots{}
 @end example
 
 @noindent
-The entire list of items may be optionally enclosed in parentheses.  The
-parentheses are necessary if any of the item expressions uses the @samp{>}
-relational operator; otherwise it could be confused with an output redirection
-(@pxref{Redirection}).
+整个的项目列表可以用括号括起来，但是可选的。
+如果项目表达式使用了 @samp{>} 这样的关系操作符，则括号是必须的；否则会产生令人困惑的输出重定向
+（查看 @ref{Redirection}）。
 
-The items to print can be constant strings or numbers, fields of the
-current record (such as @code{$1}), variables, or any @command{awk}
-expression.  Numeric values are converted to strings and then printed.
+要打印的项，可以是常量字串，数值，当前记录的域（如 @code{$1}），变量，以及任意的 @command{awk} 表达式。数值会被转换成字串，然后再打印。
 
 @cindex records, printing
 @cindex lines, blank, printing
 @cindex text, printing
-The simple statement @samp{print} with no items is equivalent to
-@samp{print $0}: it prints the entire current record.  To print a blank
-line, use @samp{print ""}.
-To print a fixed piece of text, use a string constant, such as
-@w{@code{"Don't Panic"}}, as one item.  If you forget to use the
-double-quote characters, your text is taken as an @command{awk}
-expression, and you will probably get an error.  Keep in mind that a
-space is printed between any two items.
+简单的 @samp{print} 语句，同时没有带任何打印项，等同于 @samp{print $0}：即打印整个的当前记录。
+要打印一个空行，则使用 @samp{print ""}。
+要打字固定的文本片，使用字串常量，如 @w{@code{"Don't Panic"}} 这样的项。
+如果你忘记使用双引号字符，则文件会被当成 @command{awk} 表达式，这样有可能会产生一个错误。要记住，在任意两个要打印的项目之间空格是要打印的。
 
-Note that the @code{print} statement is a statement and not an
-expression---you can't use it in the pattern part of a
-pattern--action statement, for example.
+注意 @code{print} 语句是一个语句，而不是一个表达式——你不能使用在模式-动作语句中的模式部分。
 
 @node Print Examples
-@section @code{print} Statement Examples
+@section @code{print} 语句例子
 
-Each @code{print} statement makes at least one line of output.  However, it
-isn't limited to only one line.  If an item value is a string containing a
-newline, the newline is output along with the rest of the string.  A
-single @code{print} statement can make any number of lines this way.
+每一个 @code{print} 语句至少会产生一行输出。但是不限于只输出一行。如是项目中的值是一个字串，并包含一个换行符，则换行符会与剩下的串一起输出。一个单一的 @code{print} 语句可以按这种方式首先任意行数。
 
 @cindex newlines, printing
-The following is an example of printing a string that contains embedded
+下面是一个打印内嵌了
 @ifinfo
-newlines
-(the @samp{\n} is an escape sequence, used to represent the newline
-character; @pxref{Escape Sequences}):
+换行符
+（@samp{\n} 是一个转义序列，用来表示换行符；参考 @ref{Escape Sequences} ）
 @end ifinfo
 @ifhtml
-newlines
-(the @samp{\n} is an escape sequence, used to represent the newline
-character; @pxref{Escape Sequences}):
+换行符
+（@samp{\n} 是一个转义序列，用来表示换行符；参考 @ref{Escape Sequences} ）
 @end ifhtml
 @ifnotinfo
 @ifnothtml
-newlines:
+换行符
 @end ifnothtml
 @end ifnotinfo
+的字符串的例子：
 
 @example
 $ @kbd{awk 'BEGIN @{ print "line one\nline two\nline three" @}'}
@@ -7255,9 +7099,7 @@ $ @kbd{awk 'BEGIN @{ print "line one\nline two\nline three" @}'}
 @end example
 
 @cindex fields, printing
-The next example, which is run on the @file{inventory-shipped} file,
-prints the first two fields of each input record, with a space between
-them:
+下一个例子，会运行在文件 @file{inventory-shipped} 上，并打印每个输入记录的前两个域，它们之间有空格：
 
 @example
 $ @kbd{awk '@{ print $1, $2 @}' inventory-shipped}
@@ -7269,11 +7111,7 @@ $ @kbd{awk '@{ print $1, $2 @}' inventory-shipped}
 
 @cindex @code{print} statement, commas, omitting
 @cindex troubleshooting, @code{print} statement@comma{} omitting commas
-A common mistake in using the @code{print} statement is to omit the comma
-between two items.  This often has the effect of making the items run
-together in the output, with no space.  The reason for this is that
-juxtaposing two string expressions in @command{awk} means to concatenate
-them.  Here is the same program, without the comma:
+常见的使用 @code{print} 语句的错误是省略了项目之间的逗号。这常会导致在输出中所有的项目挤在了一些，相互之间没有空格。原因在于在 @command{awk} 中，并列两个字串表示的是合并它们。这是相同的程序，但是没有逗号的情况：
 
 @example
 $ @kbd{awk '@{ print $1 $2 @}' inventory-shipped}
@@ -7284,12 +7122,10 @@ $ @kbd{awk '@{ print $1 $2 @}' inventory-shipped}
 @end example
 
 @cindex @code{BEGIN} pattern, headings@comma{} adding
-To someone unfamiliar with the @file{inventory-shipped} file, neither
-example's output makes much sense.  A heading line at the beginning
-would make it clearer.  Let's add some headings to our table of months
-(@code{$1}) and green crates shipped (@code{$2}).  We do this using
-a @code{BEGIN} rule (@pxref{BEGIN/END}) so that the headings are only
-printed once:
+对于不熟悉 @file{inventory-shipped} 文件的读者，
+上面的两个例子的输出没什么意义。开头的行可能更清楚。
+让我们在我们的月份（@code{$1}）表以及已经发送的蓝包（@code{$2}）中添加一些头部信息：
+我们使用 @code{BEGIN} （参考 @ref{BEGIN/END}）来实现，这样头部只会打印一次：
 
 @example
 awk 'BEGIN @{  print "Month Crates"
@@ -7298,7 +7134,7 @@ awk 'BEGIN @{  print "Month Crates"
 @end example
 
 @noindent
-When run, the program prints the following:
+当执行时，程序打印如下：
 
 @example
 Month Crates
@@ -7310,9 +7146,7 @@ Mar 15
 @end example
 
 @noindent
-The only problem, however, is that the headings and the table data
-don't line up!  We can fix this by printing some spaces between the
-two fields:
+然而，唯一的问题是头部信息与表数据并没有对齐。我们可以在其中打印一些空格来修复这个问题：
 
 @example
 @group
@@ -7324,56 +7158,40 @@ awk 'BEGIN @{ print "Month Crates"
 
 @cindex @code{printf} statement, columns@comma{} aligning
 @cindex columns, aligning
-Lining up columns this way can get pretty
-complicated when there are many columns to fix.  Counting spaces for two
-or three columns is simple, but any more than this can take up
-a lot of time. This is why the @code{printf} statement was
-created (@pxref{Printf});
-one of its specialties is lining up columns of data.
+如果要修复的列有很多，这样的修复方式会非常繁琐。计算两三个列是很简单的，
+但是超过这个数的时候，所耗的时间就很多了。
+这就是为什么要使用 @code{printf} 语句原因（查看 @ref{Printf}）；它的其中一个特别功能就是对齐数据列。
 
 @cindex line continuations, in @code{print} statement
 @cindex @code{print} statement, line continuations and
-@quotation NOTE
-You can continue either a @code{print} or
-@code{printf} statement simply by putting a newline after any comma
-(@pxref{Statements/Lines}).
+@quotation 提示
+你可以对 @code{print} 或者 @code{printf} 进行续行，只需要简单地在任意的逗号后面放置一个换行符即可。
+（查看 @ref{Statements/Lines}）。
 @end quotation
 
 @node Output Separators
-@section Output Separators
+@section 输出分隔符
 
 @cindex @code{OFS} variable
-As mentioned previously, a @code{print} statement contains a list
-of items separated by commas.  In the output, the items are normally
-separated by single spaces.  However, this doesn't need to be the case;
-a single space is simply the default.  Any string of
-characters may be used as the @dfn{output field separator} by setting the
-predefined variable @code{OFS}.  The initial value of this variable
-is the string @w{@code{" "}} (i.e., a single space).
+如前所述，@code{print} 语句包含了由逗号分隔的项目列表。
+在输出中，项目一般是用空格进行分隔。但是也不一定非要这样，空格只是默认情况。
+任意的字串都可以用来当成是输出分隔会，只需要设定预定义的变量 @code{OFS}。
+这个变量初始值就是串 @w{@code{" "}}（一个空格）。
 
-The output from an entire @code{print} statement is called an @dfn{output
-record}.  Each @code{print} statement outputs one output record, and
-then outputs a string called the @dfn{output record separator} (or
-@code{ORS}).  The initial value of @code{ORS} is the string @code{"\n"}
-(i.e., a newline character).  Thus, each @code{print} statement normally
-makes a separate line.
+整个的 @code{print} 语句输出称为一个@dfn{输出记录（output record）}。
+每一个 @code{print} 语句输出一个输出记录，然后输出一个@dfn{输出记录分隔符}（或者 @code{ORS}）。
+@code{ORS} 的初始值为串 @code{"\n"}（一个换行符）。因此，每一个 @code{print} 语句产生一个单独的行。
 
 @cindex output, records
 @cindex output record separator, See @code{ORS} variable
 @cindex @code{ORS} variable
 @cindex @code{BEGIN} pattern, @code{OFS}/@code{ORS} variables, assigning values to
-In order to change how output fields and records are separated, assign
-new values to the variables @code{OFS} and @code{ORS}.  The usual
-place to do this is in the @code{BEGIN} rule
-(@pxref{BEGIN/END}), so
-that it happens before any input is processed.  It can also be done
-with assignments on the command line, before the names of the input
-files, or using the @option{-v} command-line option
-(@pxref{Options}).
-The following example prints the first and second fields of each input
-record, separated by a semicolon, with a blank line added after each
-newline:
-
+为了改变输出域以及记录的分隔方式，给变量 @code{OFS} 以及 @code{ORS} 赋值即可。
+通常做这件事的地方就是 @code{BEGIN} 规则里（查看 @ref{BEGIN/END}），
+因此，在任意的输入被处理之前就可以就绪。也可以在命令行中的对其进行赋值，需要放在输入文件之前，
+或者使用 @option{-v} 命令行选项（查看 @ref{Options}）。
+下面的例子打印记录的第一与第二个域，并用分号分隔，并在每个换行符的后面增加一个空行：
+#TODO20171102
 
 @example
 $ @kbd{awk 'BEGIN @{ OFS = ";"; ORS = "\n\n" @}}
