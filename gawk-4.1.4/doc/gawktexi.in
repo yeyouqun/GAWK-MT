@@ -6880,34 +6880,24 @@ $ @kbd{awk 'BEGIN @{ OFS = ";"; ORS = "\n\n" @}}
 @end example
 
 如果 @code{ORS} 的值中不包含换行符，程序的输出就会挤在一行中。
-#TODO20171102
 
 @node OFMT
-@section Controlling Numeric Output with @code{print}
+@section 控制 @code{print} 的数字输出 
 @cindex numeric, output format
 @cindex formats@comma{} numeric output
-When printing numeric values with the @code{print} statement,
-@command{awk} internally converts each number to a string of characters
-and prints that string.  @command{awk} uses the @code{sprintf()} function
-to do this conversion
-(@pxref{String Functions}).
-For now, it suffices to say that the @code{sprintf()}
-function accepts a @dfn{format specification} that tells it how to format
-numbers (or strings), and that there are a number of different ways in which
-numbers can be formatted.  The different format specifications are discussed
-more fully in
-@ref{Control Letters}.
+当用 @code{print} 语句打印数值时，@command{awk} 内部会将每一个数值转换成一个字符串，然后打印它。
+@command{awk} 使用 sprintf 函数来做这样的转换（查看 @ref{String Functions}）。
+目前，只需要知道 @code{sprintf()} 接受一个格式规范（字串）用以告诉如何来对数字或者字串如何进行格式化，并且数字有很多种方式来进行格式化。
+不同的格式规范会在 
+@ref{Control Letters} 
+中讨论得更加详细。
 
 @cindexawkfunc{sprintf}
 @cindex @code{OFMT} variable
 @cindex output, format specifier@comma{} @code{OFMT}
-The predefined variable @code{OFMT} contains the format specification
-that @code{print} uses with @code{sprintf()} when it wants to convert a
-number to a string for printing.
-The default value of @code{OFMT} is @code{"%.6g"}.
-The way @code{print} prints numbers can be changed
-by supplying a different format specification
-for the value of @code{OFMT}, as shown in the following example:
+预定义的变量 @code{OFMT} 包含了 @code{print} 时想将数值转换成字串，
+使用 @code{sprintf} 时的格式规范。@code{OFMT} 的默认的值是 @code{"%.6g"}。
+@code{print} 打印数字的格式可能通过给 @code{OFMT} 赋予不同的格式规范来改变，如下面的例子所示：
 
 @example
 $ @kbd{awk 'BEGIN @{}
@@ -6920,23 +6910,16 @@ $ @kbd{awk 'BEGIN @{}
 @cindex dark corner, @code{OFMT} variable
 @cindex POSIX @command{awk}, @code{OFMT} variable and
 @cindex @code{OFMT} variable, POSIX @command{awk} and
-According to the POSIX standard, @command{awk}'s behavior is undefined
-if @code{OFMT} contains anything but a floating-point conversion specification.
+根据 POSIX 标准，如果 @code{OFMT} 包含的不是浮点转换规范的其他任意数值，会产生未定义的 @command{awk} 行为。
 @value{DARKCORNER}
 
 @node Printf
-@section Using @code{printf} Statements for Fancier Printing
+@section 使用 @code{printf} 语句美化打印
 
 @cindex @code{printf} statement
 @cindex output, formatted
 @cindex formatting output
-For more precise control over the output format than what is
-provided by @code{print}, use @code{printf}.
-With @code{printf} you can
-specify the width to use for each item, as well as various
-formatting choices for numbers (such as what output base to use, whether to
-print an exponent, whether to print a sign, and how many digits to print
-after the decimal point).
+为了比 @code{print} 提供更加精准地控制输出格式，可以使用 @code{printf}。@code{printf} 可以指定每个项目的宽度，以及一系列的数值输出格式（如使用的是什么基数，是否打印幂指数形式，是否打印符号，以及在小数点后要打印多个位等）。
 
 @menu
 * Basic Printf::                Syntax of the @code{printf} statement.
@@ -6946,38 +6929,28 @@ after the decimal point).
 @end menu
 
 @node Basic Printf
-@subsection Introduction to the @code{printf} Statement
+@subsection 使用 @code{printf} 语句美化打印
 
 @cindex @code{printf} statement, syntax of
-A simple @code{printf} statement looks like this:
+一个简单的 @code{printf} 语句是这样的：
 
 @example
 printf @var{format}, @var{item1}, @var{item2}, @dots{}
 @end example
 
 @noindent
-As for @code{print}, the entire list of arguments may optionally be
-enclosed in parentheses. Here too, the parentheses are necessary if any
-of the item expressions uses the @samp{>} relational operator; otherwise,
-it can be confused with an output redirection (@pxref{Redirection}).
+与 @code{print} 相似，整个的参数列表可以使用括号括起来。这里也是一样，
+如果项目表达式中包含了 @samp{>} 关系表达操作符，则括号是必须的，否则会导致一个输出重定向而使用困惑
+（查看 @ref{Redirection}）。
 
 @cindex format specifiers
-The difference between @code{printf} and @code{print} is the @var{format}
-argument.  This is an expression whose value is taken as a string; it
-specifies how to output each of the other arguments.  It is called the
-@dfn{format string}.
+在 @code{print} 与 @code{printf} 之间的不同，就是 @var{format} 参数。
+这是一个会被当成字串识别的表达式，它指定了每个参数的输出格式。它称为@dfn{格式字串}。
 
-The format string is very similar to that in the ISO C library function
-@code{printf()}.  Most of @var{format} is text to output verbatim.
-Scattered among this text are @dfn{format specifiers}---one per item.
-Each format specifier says to output the next item in the argument list
-at that place in the format.
+格式字串与 ISO C 库中的函数 @code{printf()} 非常类似。
+大多的格式文本都输出来说都是字面的。在这些文本之间分散着@dfn{格式指定符}。每个项目一个。每个格式指定符都定义了下一个输出的项目在相应位置的格式。
 
-The @code{printf} statement does not automatically append a newline
-to its output.  It outputs only what the format string specifies.
-So if a newline is needed, you must include one in the format string.
-The output separator variables @code{OFS} and @code{ORS} have no effect
-on @code{printf} statements. For example:
+@code{printf} 不会自动地在输出中附加一个换行符。它只输出格式串所定义的串。因此，如果需要换行符，你需要在格式中加入。输出分隔符变量 @code{OFS} 以及 @code{ORS} 在 @code{printf} 语句中没有作用。例如：
 
 @example
 $ @kbd{awk 'BEGIN @{}
@@ -6989,150 +6962,104 @@ $ @kbd{awk 'BEGIN @{}
 @end example
 
 @noindent
-Here, neither the @samp{+} nor the @samp{OUCH!} appears in
-the output message.
+例子中，无论是 @samp{+} 还是 @samp{OUCH!} 都没有出现在输出信息中。
 
 @node Control Letters
-@subsection Format-Control Letters
+@subsection 格式控制字母
 @cindex @code{printf} statement, format-control characters
 @cindex format specifiers, @code{printf} statement
 
-A format specifier starts with the character @samp{%} and ends with
-a @dfn{format-control letter}---it tells the @code{printf} statement
-how to output one item.  The format-control letter specifies what @emph{kind}
-of value to print.  The rest of the format specifier is made up of
-optional @dfn{modifiers} that control @emph{how} to print the value, such as
-the field width.  Here is a list of the format-control letters:
+格式指定符以字符 @samp{%} 开始，并以@dfn{格式控制字母}结束——整个格式指定符告诉 @code{printf} 语句如何来输出项目。
+格式字母指定了要打印的值的@emph{类型}。格式指定符的其余部分则由可选的@dfn{修饰符}组成，
+这些修饰符控制@emph{如何}来打印这些值，如域宽度。下面是格式控制字母：
 
 @c @asis for docbook to come out right
 @table @asis
 @item @code{%c}
-Print a number as a character; thus, @samp{printf "%c",
-65} outputs the letter @samp{A}. The output for a string value is
-the first character of the string.
+将数字打印成一个字符，所在 @samp{printf "%c", 65} 输出字母 @samp{A}。
+如果是一个字串，则输出字串的第一个字符。
 
 @cindex dark corner, format-control characters
 @cindex @command{gawk}, format-control characters
-@quotation NOTE
-The POSIX standard says the first character of a string is printed.
-In locales with multibyte characters, @command{gawk} attempts to
-convert the leading bytes of the string into a valid wide character
-and then to print the multibyte encoding of that character.
-Similarly, when printing a numeric value, @command{gawk} allows the
-value to be within the numeric range of values that can be held
-in a wide character.
-If the conversion to multibyte encoding fails, @command{gawk}
-uses the low eight bits of the value as the character to print.
+@quotation 提示
+POSIX 标准说是打印字中的第一个字符。在多字节语言中，@command{gawk} 会尝试将字串的首字节转换成一个有效的宽字节，然后打印那个字符的多字节编码。相似地，当打印一个数值时，@command{gawk} 允许数值的值在一个宽字符所允许的值范围内。如果转换成多字节编码出错，@command{gawk} 会使用数值的低 8 位来打成字符打印。
 
-Other @command{awk} versions generally restrict themselves to printing
-the first byte of a string or to numeric values within the range of
-a single byte (0--255).
+其他版本的 @command{awk} 一般严格限制为打印字串的第一个字节，或者数值的范围在一个字节的所表示的范围内（0-255）。
 @end quotation
 
 
 @item @code{%d}, @code{%i}
-Print a decimal integer.
-The two control letters are equivalent.
-(The @samp{%i} specification is for compatibility with ISO C.)
+打印一个十进制整数。两个控制字母是等同的。（@samp{%i} 规范主要是为了兼容 ISO C。）
 
 @item @code{%e}, @code{%E}
-Print a number in scientific (exponential) notation.
-For example:
+将数值打印成科学计算方式（幂指数），例如：
 
 @example
 printf "%4.3e\n", 1950
 @end example
 
 @noindent
-prints @samp{1.950e+03}, with a total of four significant figures, three of
-which follow the decimal point.
-(The @samp{4.3} represents two modifiers,
-discussed in the next @value{SUBSECTION}.)
-@samp{%E} uses @samp{E} instead of @samp{e} in the output.
+会打印 @samp{1.950e+03}，带有 4 个有效位，其中 3 个在小数点的后面。
+（@samp{4.3} 表示两个修饰符，会在下个@value{SUBSECTION}中进行讨论。）
+@samp{%E} 表示在输出中使用 @samp{E} 而不是 @samp{e} 。
 
 @item @code{%f}
-Print a number in floating-point notation.
-For example:
+打印一个浮点数，例如：
 
 @example
 printf "%4.3f", 1950
 @end example
 
 @noindent
-prints @samp{1950.000}, with a total of four significant figures, three of
-which follow the decimal point.
-(The @samp{4.3} represents two modifiers,
-discussed in the next @value{SUBSECTION}.)
+会打印 @samp{1950.000}，带有 4 个有效位，3 个在小数点后面。
+（@samp{4.3} 表示两个修饰符，会在下个@value{SUBSECTION}中进行讨论。）
 
-On systems supporting IEEE 754 floating-point format, values
-representing negative
-infinity are formatted as
-@samp{-inf} or @samp{-infinity},
-and positive infinity as
-@samp{inf} or @samp{infinity}.
-The special ``not a number'' value formats as @samp{-nan} or @samp{nan}
-(@pxref{Math Definitions}).
+在支持 IEEE 754 浮点格式的系统上，代表负无穷会格式化为 @samp{-inf}，或者 @samp{-infinity}，
+正无穷则为 @samp{inf} 或者 @samp{infinity}。对于“不是数值”这种特殊情况，则格式化为 @samp{-nan} 或者 @samp{ nan}
+（查看 @ref{Math Definitions}）。
 
 @item @code{%F}
-Like @samp{%f}, but the infinity and ``not a number'' values are spelled
-using uppercase letters.
+类似于 @samp{%f}，只是无穷大，以及“不是数值” 会使用大写字母输出。
 
-The @samp{%F} format is a POSIX extension to ISO C; not all systems
-support it.  On those that don't, @command{gawk} uses @samp{%f} instead.
+@samp{%F} 是一个 ISO C 的一个扩展，不是所有的系统都支持。对于不支持的系统，@command{gawk} 会使用 @samp{%f} 来代替。
 
 @item @code{%g}, @code{%G}
-Print a number in either scientific notation or in floating-point
-notation, whichever uses fewer characters; if the result is printed in
-scientific notation, @samp{%G} uses @samp{E} instead of @samp{e}.
+以科学方式或者浮点数方式打印浮数值，看哪个使用更少的字符，如果结果是以科学计数方式，@samp{%G} 则使用 @samp{E} 而不是使用 @samp{e} 。
 
 @item @code{%o}
-Print an unsigned octal integer
-(@pxref{Nondecimal-numbers}).
+打印一个无符号八进制整数（查看 @ref{Nondecimal-numbers}）。
 
 @item @code{%s}
-Print a string.
+打印一个字串。
 
 @item @code{%u}
-Print an unsigned decimal integer.
-(This format is of marginal use, because all numbers in @command{awk}
-are floating point; it is provided primarily for compatibility with C.)
+打印一个无符号整数。（使用这个格式要注意，因此在 @command{awk} 中的所有数值都是浮点数，这个只是为了与 ISO C 保持兼容。）
 
 @item @code{%x}, @code{%X}
-Print an unsigned hexadecimal integer;
-@samp{%X} uses the letters @samp{A} through @samp{F}
-instead of @samp{a} through @samp{f}
-(@pxref{Nondecimal-numbers}).
+打印一个无符号的十六进制整数，@samp{%X} 使用字母 @samp{A} 到 @samp{F} 而不是 @samp{a} 到 @samp{f}
+（查看 @ref{Nondecimal-numbers}）。
 
 @item @code{%%}
-Print a single @samp{%}.
-This does not consume an
-argument and it ignores any modifiers.
+打印 @samp{%}。这个不会消耗后面的参数，并且忽略掉所有的修饰符。
 @end table
 
 @cindex dark corner, format-control characters
 @cindex @command{gawk}, format-control characters
-@quotation NOTE
-When using the integer format-control letters for values that are
-outside the range of the widest C integer type, @command{gawk} switches to
-the @samp{%g} format specifier. If @option{--lint} is provided on the
-command line (@pxref{Options}), @command{gawk}
-warns about this.  Other versions of @command{awk} may print invalid
-values or do something else entirely.
+@quotation 提示
+当使用整数的控制字母来打印其值超过 C 整数的最大的范围时，@command{gawk} 会切换到 @samp{%g} 这个格式指定符。
+如果在命令行中使用了 @option{--lint} 选项（查看 @ref{Options}），
+@command{gawk} 会生成一个告警。其他版本的 @command{awk} 有可能打印一个无效的值，或者产生完全不同的其他结果。
 @value{DARKCORNER}
 @end quotation
 
 @node Format Modifiers
-@subsection Modifiers for @code{printf} Formats
+@subsection @code{printf} 的修饰符
 
 @cindex @code{printf} statement, modifiers
 @cindex modifiers@comma{} in format specifiers
-A format specification can also include @dfn{modifiers} that can control
-how much of the item's value is printed, as well as how much space it gets.
-The modifiers come between the @samp{%} and the format-control letter.
-We use the bullet symbol ``@bullet{}'' in the following examples to
-represent
-spaces in the output. Here are the possible modifiers, in the order in
-which they may appear:
+一个格式指示符功能包括一些修饰符以控制项目的值如何来进行打印，以及其需要多少的空间。
+修饰符处于 @samp{%} 与格式控制字母之间。我们使用子弹符“@bullet{}”来表示输出中的空格。
+下面是可能的修饰符，以出现的顺序排序：
 
 @table @asis
 @cindex differences in @command{awk} and @command{gawk}, @code{print}/@code{printf} statements
@@ -7140,12 +7067,10 @@ which they may appear:
 @c the code{} does NOT start a secondary
 @cindex positional specifiers, @code{printf} statement
 @item @code{@var{N}$}
-An integer constant followed by a @samp{$} is a @dfn{positional specifier}.
-Normally, format specifications are applied to arguments in the order
-given in the format string.  With a positional specifier, the format
-specification is applied to a specific argument, instead of what
-would be the next argument in the list.  Positional specifiers begin
-counting with one. Thus:
+一个整数后面带一个 @samp{$} 是一个位置指定符。
+一般情况下，格式字串中的格式指定符是按顺序应用到后面的参数的。通过@dfn{位置指定符}，格式指定符则应用到指定的参数中，
+而不是原来本应该应用在列表中的参数。
+位置指定符从 0 开始计算。因此：
 
 @example
 printf "%s %s\n", "don't", "panic"
@@ -7153,61 +7078,42 @@ printf "%2$s %1$s\n", "panic", "don't"
 @end example
 
 @noindent
-prints the famous friendly message twice.
+打印两次最有名的友好信息。
 
-At first glance, this feature doesn't seem to be of much use.
-It is in fact a @command{gawk} extension, intended for use in translating
-messages at runtime.
-@xref{Printf Ordering},
-which describes how and why to use positional specifiers.
-For now, we ignore them.
+初看之下，这个特性没有什么特别的用处。事实上，这是 @command{gawk} 的一个扩展，
+主要用于在运行时进行信息翻译。查看 @ref{Printf Ordering}，
+当中所描述的为什么以及如何来使用位置指定符。目前，我们可以先忽略它。
 
 @item @code{-} (Minus)
-The minus sign, used before the width modifier (see later on in
-this list),
-says to left-justify
-the argument within its specified width.  Normally, the argument
-is printed right-justified in the specified width.  Thus:
+一个减号 @samp{-}，用在宽度指定符之前（看本列表之后），
+告诉对指定的宽度内进行左对齐。一般情况下，在指定的宽度内，参数是右对齐。因此：
 
 @example
 printf "%-4s", "foo"
 @end example
 
 @noindent
-prints @samp{foo@bullet{}}.
+打印 @samp{foo@bullet{}} 。
 
 @item @var{space}
-For numeric conversions, prefix positive values with a space and
-negative values with a minus sign.
+对于数值转换，表示正值之前缀一个空格，或者负值之间带一个减号 @samp{-} 。
 
 @item @code{+}
-The plus sign, used before the width modifier (see later on in
-this list),
-says to always supply a sign for numeric conversions, even if the data
-to format is positive. The @samp{+} overrides the space modifier.
+加号，用在宽度指定符前（看本列表之后），告诉在数值转换上总是使用符号，就算数值格式是正数。
+@samp{+} 号重载了空格指定符。
 
 @item @code{#}
-Use an ``alternative form'' for certain control letters.
-For @samp{%o}, supply a leading zero.
-For @samp{%x} and @samp{%X}, supply a leading @samp{0x} or @samp{0X} for
-a nonzero result.
-For @samp{%e}, @samp{%E}, @samp{%f}, and @samp{%F}, the result always
-contains a decimal point.
-For @samp{%g} and @samp{%G}, trailing zeros are not removed from the result.
+对于特定的控制字母使用“候选格式”。
+对于 @samp{%o} 则提供一个前导的 0。对于 @samp{%x} 与 @samp{%X}，则使用 @samp{0x} 或者 @samp{0X} 在非零的结果之前。
+对于 @samp{%e}，@samp{%E}，@samp{%f}，@samp{%F}，结果中总是包含小数点。对于 @samp{%g} 与 @samp{%G}，后面的零不会从结果中移除。
 
 @item @code{0}
-A leading @samp{0} (zero) acts as a flag indicating that output should be
-padded with zeros instead of spaces.
-This applies only to the numeric output formats.
-This flag only has an effect when the field width is wider than the
-value to print.
+前导的 @samp{0}（零）是一个标志指示符，指定输出中使用 0 来填充而不是使用空格。
+这只用在数值格式中。这个标志也应用在如果宽度指定符中指定的宽度大于要打印的数值的宽度的情况。
 
 @item @code{'}
-A single quote or apostrophe character is a POSIX extension to ISO C.
-It indicates that the integer part of a floating-point value, or the
-entire part of an integer decimal value, should have a thousands-separator
-character in it.  This only works in locales that support such characters.
-For example:
+单引号或者撇号是 ISO C 的 POSIX 扩展。它表示的是浮点数值中的整数部分，或者整数的全部，
+应该包含有一个百分位分隔符。这个只在支持这样的格式的语言中有用。例如：
 
 @example
 $ @kbd{cat thousands.awk}          @ii{Show source program}
@@ -7219,75 +7125,64 @@ $ @kbd{LC_ALL=en_US.UTF-8 gawk -f thousands.awk}
 @end example
 
 @noindent
-For more information about locales and internationalization issues,
-see @ref{Locales}.
+要获取关于语言设置与国际化问题的更多信息，请查看 @ref{Locales}。
 
-@quotation NOTE
-The @samp{'} flag is a nice feature, but its use complicates things: it
-becomes difficult to use it in command-line programs.  For information
-on appropriate quoting tricks, see @ref{Quoting}.
+@quotation 提示
+@samp{'} 标志是一个非常好的特性，但是使用起来会导致一些事情复杂起来：在命令行程序中用起来非常困难。要了解引号技巧的一些信息，请看 @ref{Quoting}。
 @end quotation
 
 @item @var{width}
-This is a number specifying the desired minimum width of a field.  Inserting any
-number between the @samp{%} sign and the format-control character forces the
-field to expand to this width.  The default way to do this is to
-pad with spaces on the left.  For example:
+这是一个数值指定符，指定一个域所需要的最小宽度。
+在 @samp{%} 与格式控制字母之间插入一个数值，强制域的宽度扩展到指定的大小。默认的情况下会在左边的位置在空闲位置以空格填充。例如：
 
 @example
 printf "%4s", "foo"
 @end example
 
 @noindent
-prints @samp{@bullet{}foo}.
+会打印 @samp{@bullet{}foo} 。
 
-The value of @var{width} is a minimum width, not a maximum.  If the item
-value requires more than @var{width} characters, it can be as wide as
-necessary.  Thus, the following:
+@var{width} 的值是最小宽度，不是最大。如果值所需要的 @var{width} 更大，会扩展到必要的宽度。因此下面：
 
 @example
 printf "%4s", "foobar"
 @end example
 
 @noindent
-prints @samp{foobar}.
+会打印 @samp{foobar} 。
 
-Preceding the @var{width} with a minus sign causes the output to be
-padded with spaces on the right, instead of on the left.
+如果在 @var{width} 的面前加一个减号（@samp{-}），则输出中的填充会在右边，而不是在左边。
 
 @item @code{.@var{prec}}
-A period followed by an integer constant
-specifies the precision to use when printing.
-The meaning of the precision varies by control letter:
+一个点后面跟一个整数常量指定了打印时所使用的精度。其含义根据控制字母不同。
 
 @table @asis
 @item @code{%d}, @code{%i}, @code{%o}, @code{%u}, @code{%x}, @code{%X}
-Minimum number of digits to print.
+要打印的最小数字个数。
 
 @item @code{%e}, @code{%E}, @code{%f}, @code{%F}
-Number of digits to the right of the decimal point.
+在小数点后面的数值个数。
 
 @item @code{%g}, @code{%G}
-Maximum number of significant digits.
+有效数字位的最大个数。
 
 @item @code{%s}
-Maximum number of characters from the string that should print.
+从要打印的字串中打印的最大字符数。
 @end table
 
-Thus, the following:
+因此下面的代码：
 
 @example
 printf "%.4s", "foobar"
 @end example
 
 @noindent
-prints @samp{foob}.
+会打印 @samp{foob} 。
 @end table
 
-The C library @code{printf}'s dynamic @var{width} and @var{prec}
-capability (e.g., @code{"%*.*s"}) is supported.  Instead of
-supplying explicit @var{width} and/or @var{prec} values in the format
-string, they are passed in the argument list.  For example:
+C 库中的 @code{printf} 的动态 @var{width} 与 @var{prec} 能力（例如，@code{"%*.*s"}）也被支持。
+不需要显式地在格式字串中指定一个 @var{width} 与/或者 @var{prec} 的值，
+它们也可以在参数列表中进行处理，如：
 
 @example
 w = 5
@@ -7297,7 +7192,7 @@ printf "%*.*s\n", w, p, s
 @end example
 
 @noindent
-is exactly equivalent to:
+与下面的完全一致：
 
 @example
 s = "abcdefg"
@@ -7305,10 +7200,8 @@ printf "%5.3s\n", s
 @end example
 
 @noindent
-Both programs output @samp{@w{@bullet{}@bullet{}abc}}.
-Earlier versions of @command{awk} did not support this capability.
-If you must use such a version, you may simulate this feature by using
-concatenation to build up the format string, like so:
+两个程序都输出 @samp{@w{@bullet{}@bullet{}abc}}。
+@command{awk} 早期的版本不支持这样的能力。如果你必需使用这样的版本，你可以通过（字串）连接的方式来构建格式格式字串来模拟这个特性：
 
 @example
 w = 5
@@ -7318,35 +7211,29 @@ printf "%" w "." p "s\n", s
 @end example
 
 @noindent
-This is not particularly easy to read, but it does work.
+在实践中这个代码不是很好读，但是确实可以工作。
 
 @c @cindex lint checks
 @cindex troubleshooting, fatal errors, @code{printf} format strings
 @cindex POSIX @command{awk}, @code{printf} format strings and
-C programmers may be used to supplying additional modifiers (@samp{h},
-@samp{j}, @samp{l}, @samp{L}, @samp{t}, and @samp{z}) in @code{printf}
-format strings. These are not valid in @command{awk}.  Most @command{awk}
-implementations silently ignore them.  If @option{--lint} is provided
-on the command line (@pxref{Options}), @command{gawk} warns about their
-use. If @option{--posix} is supplied, their use is a fatal error.
+C 程序员还可以在 @code{printf} 的格式字串中使用一些额外的修饰符（@samp{h}，@samp{j}，@samp{l}，@samp{L}，@samp{t}，
+与 @samp{z}）。
+这些在 @command{awk} 中都是无效的。大多数 @command{awk} 实现都是默默地忽略它们。
+如果 @option{--lint} 在命令行中指定了（查看 @ref{Options}），
+@command{gawk} 会产生告警。如果指定了 @option{--posix}，则会产生一个致命错误。
 
 @node Printf Examples
-@subsection Examples Using @code{printf}
+@subsection @code{printf} 范例
 
-The following simple example shows
-how to use @code{printf} to make an aligned table:
+下面是一个简单的如何来使用 @code{printf} 实现对齐表格的例子：
 
 @example
 awk '@{ printf "%-10s %s\n", $1, $2 @}' mail-list
 @end example
 
 @noindent
-This command
-prints the names of the people (@code{$1}) in the file
-@file{mail-list} as a string of 10 characters that are left-justified.  It also
-prints the phone numbers (@code{$2}) next on the line.  This
-produces an aligned two-column table of names and phone numbers,
-as shown here:
+这个命令打印文件 @file{mail-list} 中的人名（@code{$1}）为 10 个字符的串，并且左对齐。
+同时也打印电话号码（@code{$2}）在同一行的后面。这会产生一个两行对齐的名字与电话的列表，如：
 
 @example
 $ @kbd{awk '@{ printf "%-10s %s\n", $1, $2 @}' mail-list}
@@ -7363,20 +7250,11 @@ $ @kbd{awk '@{ printf "%-10s %s\n", $1, $2 @}' mail-list}
 @print{} Jean-Paul  555-2127
 @end example
 
-In this case, the phone numbers had to be printed as strings because
-the numbers are separated by dashes.  Printing the phone numbers as
-numbers would have produced just the first three digits: @samp{555}.
-This would have been pretty confusing.
+在这例子中，电话号码要以字串的方式打印，因为号码是以横杠进行分隔的。如果将电话号码打印成数值，则产生的输出只有三个数字： @samp{555} 。这就有点蛋疼了。
 
-It wasn't necessary to specify a width for the phone numbers because
-they are last on their lines.  They don't need to have spaces
-after them.
+没有必要指定电话号码的长度，因为它们是一行中的最后一项。不需要在它们的后面填上空格。
 
-The table could be made to look even nicer by adding headings to the
-tops of the columns.  This is done using a @code{BEGIN} rule
-(@pxref{BEGIN/END})
-so that the headers are only printed once, at the beginning of
-the @command{awk} program:
+如果在列的上面打印一些头部，看起来就更加漂亮了。这可以通过 @code{BEGIN} 规则来实现（查看 @ref{BEGIN/END}），这样的话，头部就只会在 @command{awk} 程序开始打印一次：
 
 @example
 awk 'BEGIN @{ print "Name      Number"
@@ -7384,9 +7262,7 @@ awk 'BEGIN @{ print "Name      Number"
            @{ printf "%-10s %s\n", $1, $2 @}' mail-list
 @end example
 
-The preceding example mixes @code{print} and @code{printf} statements in
-the same program.  Using just @code{printf} statements can produce the
-same results:
+在前面的例子中混合了 @code{print} 与 @code{printf} 语句。只使用 @code{printf} 也可以产生相同的结果：
 
 @example
 awk 'BEGIN @{ printf "%-10s %s\n", "Name", "Number"
@@ -7395,12 +7271,9 @@ awk 'BEGIN @{ printf "%-10s %s\n", "Name", "Number"
 @end example
 
 @noindent
-Printing each column heading with the same format specification
-used for the column elements ensures that the headings
-are aligned just like the columns.
+在打印头部时，使用与列一样的格式指定符，可以保证头部也列一样地对齐。
 
-The fact that the same format specification is used three times can be
-emphasized by storing it in a variable, like this:
+其中的格式指定串被使用了三个，因此可以将其存储在一个变量中，如：
 
 @example
 awk 'BEGIN @{ format = "%-10s %s\n"
@@ -7411,52 +7284,40 @@ awk 'BEGIN @{ format = "%-10s %s\n"
 
 
 @node Redirection
-@section Redirecting Output of @code{print} and @code{printf}
+@section 重定向 @code{print} 与 @code{printf} 的输出
 
 @cindex output redirection
 @cindex redirection of output
 @cindex @option{--sandbox} option, output redirection with @code{print}, @code{printf}
-So far, the output from @code{print} and @code{printf} has gone
-to the standard
-output, usually the screen.  Both @code{print} and @code{printf} can
-also send their output to other places.
-This is called @dfn{redirection}.
+到目前，从 @code{print} 与 @code{printf} 的输出都打印在标准输出上，一般就是屏幕。@code{print} 与 @code{printf} 都可以将其输出定向到其他的地方，这就称为@dfn{重定向}。
 
-@quotation NOTE
-When @option{--sandbox} is specified (@pxref{Options}),
-redirecting output to files, pipes, and coprocesses is disabled.
+@quotation 提示
+当在命令行中指定了 @option{--sandbox}（查看 @ref{Options}），
+将输出定向到文件，管道与并程会被禁用。
 @end quotation
 
-A redirection appears after the @code{print} or @code{printf} statement.
-Redirections in @command{awk} are written just like redirections in shell
-commands, except that they are written inside the @command{awk} program.
+重定向出现在 @code{print} 与 @code{printf} 语句之后。@command{awk} 中的重定向如 Shell 脚本中的重定向一样，区别只是它们是写在 @command{awk} 程序中。
 
 @c the commas here are part of the see also
 @cindex @code{print} statement, See Also redirection@comma{} of output
 @cindex @code{printf} statement, See Also redirection@comma{} of output
-There are four forms of output redirection: output to a file, output
-appended to a file, output through a pipe to another command, and output
-to a coprocess.  We show them all for the @code{print} statement,
-but they work identically for @code{printf}:
+有 4 种重定向方式：定向到文件，定向附加到文件的末尾；定向到另一个命令的管道中，与定向到一个并程。
+我们将其展示在 @code{print} 语句中，但也可以应用在 @code{printf} 语句：
 
 @table @code
 @cindex @code{>} (right angle bracket), @code{>} operator (I/O)
 @cindex right angle bracket (@code{>}), @code{>} operator (I/O)
 @cindex operators, input/output
 @item print @var{items} > @var{output-file}
-This redirection prints the items into the output file named
-@var{output-file}.  The @value{FN} @var{output-file} can be any
-expression.  Its value is changed to a string and then used as a
-@value{FN} (@pxref{Expressions}).
+这个类型的定向会将项目输出到一个名字为 @var{output-file} 的文件中。
+文件名 @var{output-file} 可以是任意表达式。它的值会被转换成字串并用作@value{FN}
+（查看 @ref{Expressions}）。
 
-When this type of redirection is used, the @var{output-file} is erased
-before the first output is written to it.  Subsequent writes to the same
-@var{output-file} do not erase @var{output-file}, but append to it.
-(This is different from how you use redirections in shell scripts.)
-If @var{output-file} does not exist, it is created.  For example, here
-is how an @command{awk} program can write a list of peoples' names to one
-file named @file{name-list}, and a list of phone numbers to another file
-named @file{phone-list}:
+当使用这种重定向时，@var{output-file} 在第一个输出写入前会将文件清空。
+后续对同一个文件的写不再进行内容擦除，只会附加。（这与你在 Shell 中使用重定向不同。）
+如果 @var{output-file} 不存在，则创建它。
+例如下面是一个 @command{awk} 程序，其会将人名列表写到名为 @file{name-list} 的文件中，
+并将电话号码写入到另一个名为 @file{phone-list} 的文件中：
 
 @example
 $ @kbd{awk '@{ print $2 > "phone-list"}
@@ -7472,36 +7333,27 @@ $ @kbd{cat name-list}
 @end example
 
 @noindent
-Each output file contains one name or number per line.
+输出的文件中，每行包含一个名字或者一个电话号码。
 
 @cindex @code{>} (right angle bracket), @code{>>} operator (I/O)
 @cindex right angle bracket (@code{>}), @code{>>} operator (I/O)
 @item print @var{items} >> @var{output-file}
-This redirection prints the items into the preexisting output file
-named @var{output-file}.  The difference between this and the
-single-@samp{>} redirection is that the old contents (if any) of
-@var{output-file} are not erased.  Instead, the @command{awk} output is
-appended to the file.
-If @var{output-file} does not exist, then it is created.
+这个类型的重定向将项目输出到一个已经存在的名为 @var{output-file} 的文件中。
+这个用法与单个的 @samp{>} 的重定向有不同时，@var{output-file} 文件中的旧内容（如果有）不会被清空。
+@command{awk} 的输出会附加到文件中。如果 @var{output-file} 文件不存在，则创建它。
 
 @cindex @code{|} (vertical bar), @code{|} operator (I/O)
 @cindex pipe, output
 @cindex output, pipes
 @item print @var{items} | @var{command}
-It is possible to send output to another program through a pipe
-instead of into a file.   This redirection opens a pipe to
-@var{command}, and writes the values of @var{items} through this pipe
-to another process created to execute @var{command}.
+通过管道可以将输出定向到一个另一个程序而不是文件。这个方式的重定向会向 @var{command} 打开一个管道，
+然后将 @var{items} 的值通过为执行的 @var{command} 创建的管道写到咖一个程序中。
 
-The redirection argument @var{command} is actually an @command{awk}
-expression.  Its value is converted to a string whose contents give
-the shell command to be run.  For example, the following produces two
-files, one unsorted list of peoples' names, and one list sorted in reverse
-alphabetical order:
+重定向参数 @var{command} 实际是是一个 @command{awk} 表达式。
+它的值会被转换成要执行的 Shell 命令的字串。例如，下面的代码会产生两个文件，一个是未排序的人名，一个按字母倒序对人名进行排列：
 
 @ignore
 10/2000:
-This isn't the best style, since COMMAND is assigned for each
 record.  It's done to avoid overfull hboxes in TeX.  Leave it
 alone for now and let's hope no-one notices.
 @end ignore
@@ -7512,12 +7364,9 @@ awk '@{ print $1 > "names.unsorted"
        print $1 | command @}' mail-list
 @end example
 
-The unsorted list is written with an ordinary redirection, while
-the sorted list is written by piping through the @command{sort} utility.
+未排序的列表按照常规的方式进行重定向，而排序的列表则通过管道向 @command{sort} 工具输出。
 
-The next example uses redirection to mail a message to the mailing
-list @code{bug-system}.  This might be useful when trouble is encountered
-in an @command{awk} script run periodically for system maintenance:
+下个例子利用重定向将消息通过邮件列表系统邮寄出去。这个功能在一个周期执行的系统维护 @command{awk} 脚本中遇到问题时，非常有用：
 
 @example
 report = "mail bug-system"
@@ -7526,54 +7375,37 @@ print("at record number", FNR, "of", FILENAME) | report
 close(report)
 @end example
 
-The @code{close()} function is called here because it's a good idea to close
-the pipe as soon as all the intended output has been sent to it.
-@xref{Close Files And Pipes}
-for more information.
+@code{close()} 函数在这里调用，是因为在将所有的输出写到管道后关闭它是一个好的编程实践。
+查看 @ref{Close Files And Pipes}，来获取更多的信息。
 
-This example also illustrates the use of a variable to represent
-a @var{file} or @var{command}---it is not necessary to always
-use a string constant.  Using a variable is generally a good idea,
-because (if you mean to refer to that same file or command)
-@command{awk} requires that the string value be written identically
-every time.
+这个例子也说明了利用变量来表示 @var{file} 文件或者 @var{command} 命令
+——没有必要总是用字串常量来表示它们。
+使用变量一般来说是个好主意，因为（如果你要用相同的名字或者命令）@command{awk} 需要每次都要写相同的字串。
 
 @cindex coprocesses
 @cindex @code{|} (vertical bar), @code{|&} operator (I/O)
 @cindex operators, input/output
 @cindex differences in @command{awk} and @command{gawk}, input/output operators
 @item print @var{items} |& @var{command}
-This redirection prints the items to the input of @var{command}.
-The difference between this and the
-single-@samp{|} redirection is that the output from @var{command}
-can be read with @code{getline}.
-Thus, @var{command} is a @dfn{coprocess}, which works together with
-but is subsidiary to the @command{awk} program.
+这个重定向将项目打印到 @var{command} 的输入中。
+这个方式与单个 @samp{|} 重定向的不同是，这里的 @var{command} 输出可以用 @code{getline} 进行读取。
+因此，command 是一个@dfn{并程}，即与 @command{awk} 一起执行，但是只作为 @command{awk} 程序的补充。
 
-This feature is a @command{gawk} extension, and is not available in
-POSIX @command{awk}.
+这个特性是 @command{gawk} 的扩展，在 POSIX 类型的 @command{awk} 是不可用的。
 @ifnotdocbook
-@xref{Getline/Coprocess},
-for a brief discussion.
-@xref{Two-way I/O},
-for a more complete discussion.
+查看 @ref{Getline/Coprocess}，来获取简单的说明，查看 @ref{Two-way I/O}，来获取更全面的讨论。
 @end ifnotdocbook
 @ifdocbook
-@xref{Getline/Coprocess}
-for a brief discussion and
-@ref{Two-way I/O}
-for a more complete discussion.
+查看 @ref{Getline/Coprocess} 中有简要的讨论，以及
+ @ref{Two-way I/O} 中有更完整的讨论。
 @end ifdocbook
 @end table
 
-Redirecting output using @samp{>}, @samp{>>}, @samp{|}, or @samp{|&}
-asks the system to open a file, pipe, or coprocess only if the particular
-@var{file} or @var{command} you specify has not already been written
-to by your program or if it has been closed since it was last written to.
+使用 @samp{>}，@samp{>>}，@samp{|} 或者 @samp{|&} 请示系统打开一个文件、管道或者并程，
+只要你所指定的 @var{file} 文件或者 @var{command} 命令还没有被你的程序写入，又或者它已经在最后一次写入后关闭了。
 
 @cindex troubleshooting, printing
-It is a common error to use @samp{>} redirection for the first @code{print}
-to a file, and then to use @samp{>>} for subsequent output:
+使用 @samp{>} 重定向先打印到文件，然后用 @samp{>>} 为后续的输出是一个常见的错误：
 
 @example
 # clear the file
@@ -7584,42 +7416,24 @@ print "Avoid improbability generators" >> "guide.txt"
 @end example
 
 @noindent
-This is indeed how redirections must be used from the shell.  But in
-@command{awk}, it isn't necessary.  In this kind of case, a program should
-use @samp{>} for all the @code{print} statements, because the output file
-is only opened once. (It happens that if you mix @samp{>} and @samp{>>}
-output is produced in the expected order. However, mixing the operators
-for the same file is definitely poor style, and is confusing to readers
-of your program.)
+在 Shell 中确实是这么重定向的。但是在 @command{awk} 中，却没有必要。
+在这咱情况下，程序应该在所有的 @code{print} 语句上使用 @samp{>}，因为输出文件只会打开一次。
+（在混合使用 @samp{>} 与 @samp{>>} 时，也是打开一次。但是，混用操作符是一种糟糕的编程习惯，会让你程序的读取困惑。）
 
 @cindex differences in @command{awk} and @command{gawk}, implementation limitations
 @cindex implementation issues, @command{gawk}, limits
 @cindex @command{awk}, implementation issues, pipes
 @cindex @command{gawk}, implementation issues, pipes
 @ifnotinfo
-As mentioned earlier
-(@pxref{Getline Notes}),
-many
-@end ifnotinfo
-@ifnottex
-@ifnotdocbook
-Many
-@end ifnotdocbook
-@end ifnottex
-older
-@command{awk} implementations limit the number of pipelines that an @command{awk}
-program may have open to just one!  In @command{gawk}, there is no such limit.
-@command{gawk} allows a program to
-open as many pipelines as the underlying operating system permits.
+如早前所述（查看 @ref{Getline Notes}），许多的 @command{awk} 实现限制了 @command{awk} 程序可以打开的管线数量为一个！
+@command{gawk} 则没有这个限制。@command{gawk} 可以打开的管线的数量只能所在的操作系统的限制。
 
-@sidebar Piping into @command{sh}
+@sidebar 管道输出到 @command{sh}
 @cindex shells, piping commands into
 
-A particularly powerful way to use redirection is to build command lines
-and pipe them into the shell, @command{sh}.  For example, suppose you
-have a list of files brought over from a system where all the @value{FN}s
-are stored in uppercase, and you wish to rename them to have names in
-all lowercase.  The following program is both simple and efficient:
+一种使用重定向的强大方式是构造一个命令行，然后将用管道输出到 Shell，sh 中。
+例如，你有一堆的文件是从其他系统中取来的，并且@value{FN}都以大写存储，
+而你想把他们全部改成小写的。下面的程序即简单也很高效：
 
 @c @cindex @command{mv} utility
 @example
@@ -7628,19 +7442,14 @@ all lowercase.  The following program is both simple and efficient:
 END @{ close("sh") @}
 @end example
 
-The @code{tolower()} function returns its argument string with all
-uppercase characters converted to lowercase
-(@pxref{String Functions}).
-The program builds up a list of command lines,
-using the @command{mv} utility to rename the files.
-It then sends the list to the shell for execution.
+@code{tolower()} 函数返回参数字串中所有的大写字母被转换为小写的串（查看 @ref{String Functions}）。
+程序构建了一系列的命令行，并使用 @command{mv} 工具对文件进行改名，然后将这些命令列表发送给 Shell 执行。
 
-@xref{Shell Quoting} for a function that can help in generating
-command lines to be fed to the shell.
+查看 @ref{Shell Quoting}，了解可以辅助产生可以发送到 Shell 的命令行函数。
 @end sidebar
 
 @node Special FD
-@section Special Files for Standard Preopened Data Streams
+@section 标准的预打开的特殊文件数据流
 @cindex standard input
 @cindex input, standard
 @cindex standard output
@@ -7650,61 +7459,40 @@ command lines to be fed to the shell.
 @cindex file descriptors
 @cindex files, descriptors, See file descriptors
 
-Running programs conventionally have three input and output streams
-already available to them for reading and writing.  These are known
-as the @dfn{standard input}, @dfn{standard output}, and @dfn{standard
-error output}.  These open streams (and any other open files or pipes)
-are often referred to by the technical term @dfn{file descriptors}.
+一般地，正在执行的程序有三个输入输出游戏已经可以用来进行读写。
+这就是众所周知的@dfn{标准输入}，@dfn{标准输出}以及@dfn{标准错误输出}。
+这些已经打开的流（以及任意已经打开的文件或者管道）技术上可以由所谓的@dfn{文件描述符}来表示。
 
-These streams are, by default, connected to your keyboard and screen, but
-they are often redirected with the shell, via the @samp{<}, @samp{<<},
-@samp{>}, @samp{>>}, @samp{>&}, and @samp{|} operators.  Standard error
-is typically used for writing error messages; the reason there are two separate
-streams, standard output and standard error, is so that they can be
-redirected separately.
+默认情况下，这些流是你的键盘与你的屏幕，但是他们常常通过 @samp{<}，@samp{<<}，@samp{>}，@samp{>>}，@samp{>&} 与 @samp{|} 操作符，在 Shell 中被重定向。
+标准错误一股用于写错误信息，有两个分离流（标准输出与标准错误输出）的原因是它们可以被单独地进行重定向。
 
 @cindex differences in @command{awk} and @command{gawk}, error messages
 @cindex error handling
-In traditional implementations of @command{awk}, the only way to write an error
-message to standard error in an @command{awk} program is as follows:
+在 @command{awk} 的传统实现中，在 @command{awk} 程序中将错误信息写到标准错误输出的唯一方式如下：
 
 @example
 print "Serious error detected!" | "cat 1>&2"
 @end example
 
 @noindent
-This works by opening a pipeline to a shell command that can access the
-standard error stream that it inherits from the @command{awk} process.
+通过打开一个到 Shell 命令的管线，而该命令可以访问从 @command{awk} 继承而来的标准错误流。
 @c 8/2014: Mike Brennan says not to cite this as inefficient. So, fixed.
-This is far from elegant, and it also requires a
-separate process.  So people writing @command{awk} programs often
-don't do this.  Instead, they send the error messages to the
-screen, like this:
+这样写没那么优雅，而且也需要开启一个独立的进程。因此，人们在 @command{awk} 程序不常这么干，而是通过下面的方式来输出信息到屏幕：
 
 @example
 print "Serious error detected!" > "/dev/tty"
 @end example
 
 @noindent
-(@file{/dev/tty} is a special file supplied by the operating system
-that is connected to your keyboard and screen. It represents the
-``terminal,''@footnote{The ``tty'' in @file{/dev/tty} stands for
-``Teletype,'' a serial terminal.} which on modern systems is a keyboard
-and screen, not a serial console.)
-This generally has the same effect, but not always: although the
-standard error stream is usually the screen, it can be redirected; when
-that happens, writing to the screen is not correct.  In fact, if
-@command{awk} is run from a background job, it may not have a
-terminal at all.
-Then opening @file{/dev/tty} fails.
+（@file{/dev/tty} 是一个由操作系统提供的特殊文件，该文件与你的键盘与屏幕连接。它表示的是“终端” （Terminal），
+@footnote{在 @file{/dev/tty} 中的“tty”代表的是“Teletype”（电传打字机），是一种串行终端}
+在现在系统中是键盘与屏幕，而不是串行控制台。）这一般有相同的效果，但是并不总是如此：
+尽管标准错误输出一般就是屏幕，但是它可以被重定向。当发生这种情况时，写到屏幕就不正确了。事实上，如果 @command{awk} 是一个后台任务，它根本主没有终端。这样，打开 @file{/dev/tty} 就会失败。
 
-@command{gawk}, BWK @command{awk}, and @command{mawk} provide
-special @value{FN}s for accessing the three standard streams.
-If the @value{FN} matches one of these special names when @command{gawk}
-(or one of the others) redirects input or output, then it directly uses
-the descriptor that the @value{FN} stands for.  These special
-@value{FN}s work for all operating systems that @command{gawk}
-has been ported to, not just those that are POSIX-compliant:
+@command{gawk}，BWK @command{awk} 以及 @command{mawk} 提供了访问三个标准流的特殊@value{FN}。
+如果 @command{gawk} 在重定向输入输出时，@value{FN}匹配这其中之一，它就直接使用这个@value{FN}所代表的文件描述符。
+这此特殊@value{FN}在所有的 @command{gawk} 已经移植到的操作系统中都有效，并不仅仅是 POSIX 兼容的系统：
+#TODO20171103
 
 @cindex common extensions, @code{/dev/stdin} special file
 @cindex common extensions, @code{/dev/stdout} special file
