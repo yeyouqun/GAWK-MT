@@ -7866,7 +7866,6 @@ print "Serious error detected!" > "/dev/tty"
 @command{gawk}，BWK @command{awk} 以及 @command{mawk} 提供了访问三个标准流的特殊@value{FN}。
 如果 @command{gawk} 在重定向输入输出时，@value{FN}匹配这其中之一，它就直接使用这个@value{FN}所代表的文件描述符。
 这此特殊@value{FN}在所有的 @command{gawk} 已经移植到的操作系统中都有效，并不仅仅是 POSIX 兼容的系统：
-#TODO20171103
 
 @cindex common extensions, @code{/dev/stdin} special file
 @cindex common extensions, @code{/dev/stdout} special file
@@ -7880,41 +7879,34 @@ print "Serious error detected!" > "/dev/tty"
 @cindex @code{/dev/fd/@var{N}} special files (@command{gawk})
 @table @file
 @item /dev/stdin
-The standard input (file descriptor 0).
+标准输入（文件描述符为 0）。
 
 @item /dev/stdout
-The standard output (file descriptor 1).
+标准输出（文件描述符为 1）。
 
 @item /dev/stderr
-The standard error output (file descriptor 2).
+标准错误输出（文件描述符 2）。
 @end table
 
-With these facilities,
-the proper way to write an error message then becomes:
+复用这些工具，恰当的将错误信息输出的方式就如下：
 
 @example
 print "Serious error detected!" > "/dev/stderr"
 @end example
 
 @cindex troubleshooting, quotes with file names
-Note the use of quotes around the @value{FN}.
-Like with any other redirection, the value must be a string.
-It is a common error to omit the quotes, which leads
-to confusing results.
+注意在文件上使用的双引号。如其他的重定向，其值必须是字串。常见的错误就是省略了引号，没有引号会产生令人疑惑的结果。
 
-@command{gawk} does not treat these @value{FN}s as special when
-in POSIX-compatibility mode. However, because BWK @command{awk}
-supports them, @command{gawk} does support them even when
-invoked with the @option{--traditional} option (@pxref{Options}).
+@command{gawk} 在 POSIX 兼容模式下，并不将这些文句特殊对待。但是，因为 BWK @command{awk} 支持它们，
+@command{gawk} 也支持它们，就算使用了 @option{--traditional} 选项也是一样
+（查看 @ref{Options}）。
 
 @node Special Files
-@section Special @value{FFN}s in @command{gawk}
+@section @command{gawk} 中的特殊@value{FFN}
 @cindex @command{gawk}, file names in
 
-Besides access to standard input, standard output, and standard error,
-@command{gawk} provides access to any open file descriptor.
-Additionally, there are special @value{FN}s reserved for
-TCP/IP networking.
+除了标准输入，标准输出与标准错误输出，
+@command{gawk} 还提供了访问任意已经打开文件描述符的方法。另外，还保留了用于 TCP/IP 网络的特殊@value{FN}。
 
 @menu
 * Other Inherited Files::       Accessing other open files with
@@ -7924,84 +7916,62 @@ TCP/IP networking.
 @end menu
 
 @node Other Inherited Files
-@subsection Accessing Other Open Files with @command{gawk}
+@subsection 在 @command{gawk} 访问其他已开文件
 
-Besides the @code{/dev/stdin}, @code{/dev/stdout}, and @code{/dev/stderr}
-special @value{FN}s mentioned earlier, @command{gawk} provides syntax
-for accessing any other inherited open file:
+除了 @code{/dev/stdin}，@code{/dev/stdout}，与 @code{/dev/stderr} 这些早前提过的特殊@value{FN}外，
+@command{gawk} 还提供了访问已经打开的文件的语法：
 
 @table @file
 @item /dev/fd/@var{N}
-The file associated with file descriptor @var{N}.  Such a file must
-be opened by the program initiating the @command{awk} execution (typically
-the shell).  Unless special pains are taken in the shell from which
-@command{gawk} is invoked, only descriptors 0, 1, and 2 are available.
+与文件描述符 @var{N} 关联的文件。该文件必须由启动 @command{awk} 程序执行的程序（一般是 Shell ）打开的文件。
+除非在调用 @command{gawk} 的 Shell 中多花一些功夫，不然只会有描述符 0，1 与 2 是打开的。
 @end table
 
-The @value{FN}s @file{/dev/stdin}, @file{/dev/stdout}, and @file{/dev/stderr}
-are essentially aliases for @file{/dev/fd/0}, @file{/dev/fd/1}, and
-@file{/dev/fd/2}, respectively. However, those names are more self-explanatory.
+@value{FN} @file{/dev/stdin}，@file{/dev/stdout}，与 @file{/dev/stderr} 实际上就是 @file{/dev/fd/0}，@file{/dev/fd/1}，
+与 @file{/dev/fd/2} 的别名。但是，这些名字更有说明性。
 
-Note that using @code{close()} on a @value{FN} of the
-form @code{"/dev/fd/@var{N}"}, for file descriptor numbers
-above two, does actually close the given file descriptor.
+注意，对于文件描述符号大于 2 以上的@value{FN}形式 @code{"/dev/fd/@var{N}"} 执行 @code{close()} 函数，
+才会真正地执行关闭（close）操作。
 
 @node Special Network
-@subsection Special Files for Network Communications
+@subsection 用于网络的特殊文件
 @cindex networks, support for
 @cindex TCP/IP, support for
 
-@command{gawk} programs
-can open a two-way
-TCP/IP connection, acting as either a client or a server.
-This is done using a special @value{FN} of the form:
+@command{gawk} 程序可以打开双向通信的 TCP/IP 连接，正如一个客户端与一个服务端一样。
+这可以通过下面形式的特殊@value{FN}来实现：
 
 @example
 @file{/@var{net-type}/@var{protocol}/@var{local-port}/@var{remote-host}/@var{remote-port}}
 @end example
 
-The @var{net-type} is one of @samp{inet}, @samp{inet4}, or @samp{inet6}.
-The @var{protocol} is one of @samp{tcp} or @samp{udp},
-and the other fields represent the other essential pieces of information
-for making a networking connection.
-These @value{FN}s are used with the @samp{|&} operator for communicating
-with a coprocess
-(@pxref{Two-way I/O}).
-This is an advanced feature, mentioned here only for completeness.
-Full discussion is delayed until
-@ref{TCP/IP Networking}.
+@var{net-type} 是 @samp{inet}，@samp{inet4}， 或者 @samp{inet6} 之一。
+@var{protocol} 是 @samp{tcp} 或者 @samp{udp} 之一，其他的参数则代表了要启动一个网络连接所需要的其他信息。
+这些文件名与 @samp{|&} 一起使用用来进行并程通信（查看 @ref{Two-way I/O}）。这是一个高级特性，为了完整性在这里先说明一下。完整的讨论要到 @ref{TCP/IP Networking}。
 
 @node Special Caveats
-@subsection Special @value{FFN} Caveats
+@subsection 特殊@value{FFN}说明
 
-Here are some things to bear in mind when using the
-special @value{FN}s that @command{gawk} provides:
+如果要使用 @command{gawk} 提供的一些特殊@value{FN}，则下面有一些要记住的点：
 
 @itemize @value{BULLET}
 @cindex compatibility mode (@command{gawk}), file names
 @cindex file names, in compatibility mode
 @item
-Recognition of the @value{FN}s for the three standard preopened
-files is disabled only in POSIX mode.
+对于三个预打开的标准@value{FN}的识别只有在 POSIX 模式下才会被禁止。
 
 @item
-Recognition of the other special @value{FN}s is disabled if @command{gawk} is in
-compatibility mode (either @option{--traditional} or @option{--posix};
-@pxref{Options}).
+对于其他特殊文件名的识别，只有 @command{gawk} 处于兼容模式时才会被禁止（要么使用 @option{--traditional} ，
+要么是使用 @option{--posix} 选项，查看 @ref{Options}）。
 
 @item
-@command{gawk} @emph{always}
-interprets these special @value{FN}s.
-For example, using @samp{/dev/fd/4}
-for output actually writes on file descriptor 4, and not on a new
-file descriptor that is @code{dup()}ed from file descriptor 4.  Most of
-the time this does not matter; however, it is important to @emph{not}
-close any of the files related to file descriptors 0, 1, and 2.
-Doing so results in unpredictable behavior.
+@command{gawk} @emph{总是}会解释这些特殊文件名。
+例如，使用 @samp{/dev/fd/4} 为输出，实际上写入的是描述符为 4 的文件，而不是使用 @code{dup()} 复制 4 描述符的新文件。
+大多数情况下，这没有什么问题。但是，@emph{不要}关闭任意与文件描述符 0，1，2 相关的文件，这个相当重要。这么做的话，会导致不可预知的行为。
 @end itemize
 
 @node Close Files And Pipes
-@section Closing Input and Output Redirections
+@section 关闭输入输出重定向
 @cindex files, output, See output files
 @cindex input files, closing
 @cindex output, files@comma{} closing
@@ -8009,59 +7979,45 @@ Doing so results in unpredictable behavior.
 @cindex coprocesses, closing
 @cindex @code{getline} command, coprocesses@comma{} using from
 
-If the same @value{FN} or the same shell command is used with @code{getline}
-more than once during the execution of an @command{awk} program
-(@pxref{Getline}),
-the file is opened (or the command is executed) the first time only.
-At that time, the first record of input is read from that file or command.
-The next time the same file or command is used with @code{getline},
-another record is read from it, and so on.
+在 @command{awk} 程序执行期间，如果同样的文件名或者同一个 Shell 命令被 @code{getline} 使用过多于一次
+（查看 @ref{Getline}），则文件（或者命令的执行）只在第一次发生。从那以后，从中读取第一个输入记录。
+通过 @code{getline} 再次读取同一个文件或者命令时，第二条记录从其中获取，以此类推。
 
-Similarly, when a file or pipe is opened for output, @command{awk} remembers
-the @value{FN} or command associated with it, and subsequent
-writes to the same file or command are appended to the previous writes.
-The file or pipe stays open until @command{awk} exits.
+相似地，当文件或者管道被打开用于输出时，@command{awk} 会记录@value{FN}或者与其相关的命令，后续对于同一个文件或者命令写入，会被附加到前一个写操作之后。真到 @command{awk} 退出后，文件或者管道才会被关闭。
 
 @cindexawkfunc{close}
-This implies that special steps are necessary in order to read the same
-file again from the beginning, or to rerun a shell command (rather than
-reading more output from the same command).  The @code{close()} function
-makes these things possible:
+这意思是说，为了再次从头开始读取同一个文件，或者重新执行一个 Shell 命令，你需要一些特别步骤（而不是从同一个命令中读取更多的输出）。
+@code{close()} 函数就是用来执行这个步骤：
 
 @example
 close(@var{filename})
 @end example
 
 @noindent
-or:
+或者：
 
 @example
 close(@var{command})
 @end example
 
-The argument @var{filename} or @var{command} can be any expression.  Its
-value must @emph{exactly} match the string that was used to open the file or
-start the command (spaces and other ``irrelevant'' characters
-included). For example, if you open a pipe with this:
+@var{filename} 与 @var{command} 参数可以是任意的表达式。
+它的值必须@emph{完全}匹配用以打开的文件或者启动的命令行的字串（空格与其他“无关”的字符也包括在内）。例如，如果你像这样打开一个管道：
 
 @example
 "sort -r names" | getline foo
 @end example
 
 @noindent
-then you must close it with this:
+然后你必须这样来关闭它：
 
 @example
 close("sort -r names")
 @end example
 
-Once this function call is executed, the next @code{getline} from that
-file or command, or the next @code{print} or @code{printf} to that
-file or command, reopens the file or reruns the command.
-Because the expression that you use to close a file or pipeline must
-exactly match the expression used to open the file or run the command,
-it is good practice to use a variable to store the @value{FN} or command.
-The previous example becomes the following:
+只要函数调用执行过，下一个从那个文件或者管道进行 @code{getline} 时，
+或者下一个 @code{print} 与 @code{printf} 到那个文件或者管道，会被重新打开或者重新执行命令。
+由于你用来关闭的文件或者管线必须完全匹配你用来打开的文件或者执行的命令，
+所以用一个变量来存储@value{FN}或者命令是一个好的编程实践。上面的例子因此可以变成这样：
 
 @example
 sortcom = "sort -r names"
@@ -8071,51 +8027,35 @@ close(sortcom)
 @end example
 
 @noindent
-This helps avoid hard-to-find typographical errors in your @command{awk}
-programs.  Here are some of the reasons for closing an output file:
+这可以帮助你避免 @command{awk} 程序中那些很难查找的输出错误。这也有一些理由为什么要关闭输出文件：
 
 @itemize @value{BULLET}
 @item
-To write a file and read it back later on in the same @command{awk}
-program.  Close the file after writing it, then
-begin reading it with @code{getline}.
+为了写这样一个文件，这个文件之后会在同一个 @command{awk} 程序中读取它。
+在写完之后要关闭它，然后再使用 @code{getline} 进行读取。
 
 @item
-To write numerous files, successively, in the same @command{awk}
-program.  If the files aren't closed, eventually @command{awk} may exceed a
-system limit on the number of open files in one process.  It is best to
-close each one when the program has finished writing it.
+为了在 @command{awk} 程序中，连续地写大量的文件。
+如果文件没有被关闭，@command{awk} 有可能最终会超过系统对于同一个进程中所能打开的文件数的限制。因此最好是在写完每个文件时关闭它。
 
 @item
-To make a command finish.  When output is redirected through a pipe,
-the command reading the pipe normally continues to try to read input
-as long as the pipe is open.  Often this means the command cannot
-really do its work until the pipe is closed.  For example, if
-output is redirected to the @command{mail} program, the message is not
-actually sent until the pipe is closed.
+为了完成一个命令。当输出重定向是通过管道进行的。
+从这个管道读取的命令会持续尝试从管道中读取，只要管道是打开的。通常情况下，相关的命令直到管道关闭的情况下才能继续干自己的事情。
+例如，如果输出被重定向到了 @command{mail} 程序，消息直到管道被关闭了才实际地发送完。
 
 @item
-To run the same program a second time, with the same arguments.
-This is not the same thing as giving more input to the first run!
+为了执行第二次，利用相同的参数，执行相同的程序。这与比第一次执行输入更多的数据不是一件事情！
 
-For example, suppose a program pipes output to the @command{mail} program.
-If it outputs several lines redirected to this pipe without closing
-it, they make a single message of several lines.  By contrast, if the
-program closes the pipe after each line of output, then each line makes
-a separate message.
+例如，假设一种程序会将输出通过管道输出给 @command{mail} 程序。如果输出了几行重定向到了这个管道而没有关闭，
+则它们会生成一个包括几行数据的简单的消息（邮件）。另一方面，如果程序每输出一行就关闭一次管道，则每一行都成一个一独立的消息（邮件）。
 @end itemize
 
 @cindex differences in @command{awk} and @command{gawk}, @code{close()} function
 @cindex portability, @code{close()} function and
 @cindex @code{close()} function, portability
-If you use more files than the system allows you to have open,
-@command{gawk} attempts to multiplex the available open files among
-your @value{DF}s.  @command{gawk}'s ability to do this depends upon the
-facilities of your operating system, so it may not always work.  It is
-therefore both good practice and good portability advice to always
-use @code{close()} on your files when you are done with them.
-In fact, if you are using a lot of pipes, it is essential that
-you close commands when done. For example, consider something like this:
+如果你使了比系统所允许你打开的文件数更多的文件，@command{gawk} 会尝试复用你的@value{DF}中已经打开的文件。
+@command{gawk} 这样的能力依赖于你的操作系统所提供的工具，因此并不一定总是会有用。所以，无论对于是好的实践也好，还是好的可移植性建议也好，当处理完一个文件时，
+就应该通过 @code{close()} 将它们关闭。事实上，如果你使用了大量的管道，在使用完后进行关闭是很重要的。例如，考虑下面的代码：
 
 @example
 @{
@@ -8128,52 +8068,31 @@ you close commands when done. For example, consider something like this:
 @}
 @end example
 
-This example creates a new pipeline based on data in @emph{each} record.
-Without the call to @code{close()} indicated in the comment, @command{awk}
-creates child processes to run the commands, until it eventually
-runs out of file descriptors for more pipelines.
+在这个例子中创建了基于每个记录的管线，如注释中所述的，没有调用 @code{close()} 函数，
+则 @command{awk} 会创建一个子进程来执行命令，直到最终由于请求更多的管线而耗尽文件描述符。
 
-Even though each command has finished (as indicated by the end-of-file
-return status from @code{getline}), the child process is not
-terminated;@footnote{The technical terminology is rather morbid.
-The finished child is called a ``zombie,'' and cleaning up after
-it is referred to as ``reaping.''}
+尽管每个命令都已经执行完成（通过 @code{getline} 的 end-of-file 的返回值指示），子进程却没有结束；
+@footnote{技术术语应该是病态进程（morbid），已经完成的子进程称为“僵尸进程（zombie）”，通过“回收（reaping）”后，进程就会被清理。}
 @c Good old UNIX: give the marketing guys fits, that's the ticket
-more importantly, the file descriptor for the pipe
-is not closed and released until @code{close()} is called or
-@command{awk} exits.
+更重要的是，与管道关联的描述符真到 @command{awk} 退出后，才会调用 @code{close()} 进行关闭释放。
 
-@code{close()} silently does nothing if given an argument that
-does not represent a file, pipe, or coprocess that was opened with
-a redirection.  In such a case, it returns a negative value,
-indicating an error. In addition, @command{gawk} sets @code{ERRNO}
-to a string indicating the error.
+@code{close()} 如果接收的不是一个文件、管道或者并程这样的打开用于重定向的参数，则默默地什么也不干。
+在这种情况下，它的返回值是负值，表示错误。另外，@command{gawk} 会设置 @code{ERRNO} 的值为指示对应的错误。
 
-Note also that @samp{close(FILENAME)} has no ``magic'' effects on the
-implicit loop that reads through the files named on the command line.
-It is, more likely, a close of a file that was never opened with a
-redirection, so @command{awk} silently does nothing, except return
-a negative value.
+也要注意到 @samp{close(FILENAME)}，针对从命令行中读取文件名这样的隐式循环没有什么“魔法”效应。
+更有可能的是，对于文件的关闭，在重定向中不会再打开，因此 @command{awk} 会什么也不做，而是返回一个负值。
 
 @cindex @code{|} (vertical bar), @code{|&} operator (I/O), pipes@comma{} closing
-When using the @samp{|&} operator to communicate with a coprocess,
-it is occasionally useful to be able to close one end of the two-way
-pipe without closing the other.
-This is done by supplying a second argument to @code{close()}.
-As in any other call to @code{close()},
-the first argument is the name of the command or special file used
-to start the coprocess.
-The second argument should be a string, with either of the values
-@code{"to"} or @code{"from"}.  Case does not matter.
-As this is an advanced feature, discussion is
-delayed until
-@ref{Two-way I/O},
-which describes it in more detail and gives an example.
+当使用 @samp{|&} 操作符与并程进行通信时，关闭双向通信中的一端偶尔的情况下会非常有用。
+这只需要在调用 @code{close()} 时提供第二个参数就可以完成。
+如其他地方调用 @code{close()} 类似，第一个参数是命令名，或者是用于开启并程的特殊文件。
+而第二个参数是一个字串，其值是 @code{"to"} 或者是 @code{"from"}，大小写无关。这是一个高级特性，
+会到 @ref{Two-way I/O}，进行详细的讨论，并提供更多的实际例子。
 
-@cindex sidebar, Using @code{close()}'s Return Value
+@cindex sidebar, 使用 @code{close()} 的返回值
 @ifdocbook
 @docbook
-<sidebar><title>Using @code{close()}'s Return Value</title>
+<sidebar><title>使用 @code{close()} 的返回值</title>
 @end docbook
 
 @cindex dark corner, @code{close()} function
@@ -8182,11 +8101,9 @@ which describes it in more detail and gives an example.
 @cindex differences in @command{awk} and @command{gawk}, @code{close()} function
 @cindex Unix @command{awk}, @code{close()} function and
 
-In many older versions of Unix @command{awk}, the @code{close()} function
-is actually a statement.
+在许多 Unix @command{awk} 的老版本中，@code{close()} 函数实际上是一条语句。
 @value{DARKCORNER}
-It is a syntax error to try and use the return
-value from @code{close()}:
+尝试利用 @code{close()} 的返回值是一个语法错误：
 
 @example
 command = "@dots{}"
@@ -8196,32 +8113,19 @@ retval = close(command)  # syntax error in many Unix awks
 
 @cindex @command{gawk}, @code{ERRNO} variable in
 @cindex @code{ERRNO} variable, with @command{close()} function
-@command{gawk} treats @code{close()} as a function.
-The return value is @minus{}1 if the argument names something
-that was never opened with a redirection, or if there is
-a system problem closing the file or process.
-In these cases, @command{gawk} sets the predefined variable
-@code{ERRNO} to a string describing the problem.
+@command{gawk} 将 @code{close()} 当成一个函数。如果其参数表示从未打开的东西（文件、管道、并程），则返回值 @minus{}1 ，
+或者是系统问题导致文件或者进程的关闭，则也会返回 @minus{}1 。
+在这个情况下，@command{gawk} 将预定义的变量 @code{ERRNO} 的值设定为描述问题的字串。
 
-In @command{gawk},
-when closing a pipe or coprocess (input or output),
-the return value is the exit status of the command.@footnote{
-This is a full 16-bit value as returned by the @code{wait()}
-system call. See the system manual pages for information on
-how to decode this value.}
-Otherwise, it is the return value from the system's @code{close()} or
-@code{fclose()} C functions when closing input or output
-files, respectively.
-This value is zero if the close succeeds, or @minus{}1 if
-it fails.
+在 @command{gawk} 中，当关闭管道或者并程时（输入或输出），其返回值就是命令的退出状态。
+@footnote{这是一个全 16 位的由 @code{wait()} 系统调用返回的值。查看系统手册来获取如何解码这个值的相关信息。}
+否则，它就是从系统的 @code{close()} 或者 C 函数 @code{close()} 的关闭输入输出文件时的返回值。
+如果成功，则值返回为 0，失败下返回 @minus{}1 。
 
-The POSIX standard is very vague; it says that @code{close()}
-returns zero on success and a nonzero value otherwise.  In general,
-different implementations vary in what they report when closing
-pipes; thus, the return value cannot be used portably.
+POSIX 标准非常模糊地说，@code{close()} 在成功的时候返回 0，而失败时返回非零值。
+一般情况下，不同的实现在关闭管道时会报告不同的结果，因此，返回值是不可移植的。
 @value{DARKCORNER}
-In POSIX mode (@pxref{Options}), @command{gawk} just returns zero
-when closing a pipe.
+在 POSIX 模式下（查看 @ref{Options}），@command{gawk} 在关闭管道时，只返回 0。
 
 @docbook
 </sidebar>
@@ -8230,7 +8134,7 @@ when closing a pipe.
 
 @ifnotdocbook
 @cartouche
-@center @b{Using @code{close()}'s Return Value}
+@center @b{使用 @code{close()} 的返回值}
 
 
 @cindex dark corner, @code{close()} function
@@ -8239,11 +8143,9 @@ when closing a pipe.
 @cindex differences in @command{awk} and @command{gawk}, @code{close()} function
 @cindex Unix @command{awk}, @code{close()} function and
 
-In many older versions of Unix @command{awk}, the @code{close()} function
-is actually a statement.
+在许多 Unix @command{awk} 的老版本中，@code{close()} 函数实际上是一条语句。
 @value{DARKCORNER}
-It is a syntax error to try and use the return
-value from @code{close()}:
+尝试利用 @code{close()} 的返回值是一个语法错误：
 
 @example
 command = "@dots{}"
@@ -8253,73 +8155,51 @@ retval = close(command)  # syntax error in many Unix awks
 
 @cindex @command{gawk}, @code{ERRNO} variable in
 @cindex @code{ERRNO} variable, with @command{close()} function
-@command{gawk} treats @code{close()} as a function.
-The return value is @minus{}1 if the argument names something
-that was never opened with a redirection, or if there is
-a system problem closing the file or process.
-In these cases, @command{gawk} sets the predefined variable
-@code{ERRNO} to a string describing the problem.
+@command{gawk} 将 @code{close()} 当成一个函数。如果其参数表示从未打开的东西（文件、管道、并程），则返回值 @minus{}1 ，
+或者是系统问题导致文件或者进程的关闭，则也会返回 @minus{}1 。
+在这个情况下，@command{gawk} 将预定义的变量 @code{ERRNO} 的值设定为描述问题的字串。
 
-In @command{gawk},
-when closing a pipe or coprocess (input or output),
-the return value is the exit status of the command.@footnote{
-This is a full 16-bit value as returned by the @code{wait()}
-system call. See the system manual pages for information on
-how to decode this value.}
-Otherwise, it is the return value from the system's @code{close()} or
-@code{fclose()} C functions when closing input or output
-files, respectively.
-This value is zero if the close succeeds, or @minus{}1 if
-it fails.
+在 @command{gawk} 中，当关闭管道或者并程时（输入或输出），其返回值就是命令的退出状态。
+@footnote{这是一个全 16 位的由 @code{wait()} 系统调用返回的值。查看系统手册来获取如何解码这个值的相关信息。}
+否则，它就是从系统的 @code{close()} 或者 C 函数 @code{close()} 的关闭输入输出文件时的返回值。
+如果成功，则值返回为 0，失败下返回 @minus{}1 。
 
-The POSIX standard is very vague; it says that @code{close()}
-returns zero on success and a nonzero value otherwise.  In general,
-different implementations vary in what they report when closing
-pipes; thus, the return value cannot be used portably.
+POSIX 标准非常模糊地说，@code{close()} 在成功的时候返回 0，而失败时返回非零值。
+一般情况下，不同的实现在关闭管道时会报告不同的结果，因此，返回值是不可移植的。
 @value{DARKCORNER}
-In POSIX mode (@pxref{Options}), @command{gawk} just returns zero
-when closing a pipe.
+在 POSIX 模式下（查看 @ref{Options}），@command{gawk} 在关闭管道时，只返回 0。
 @end cartouche
 @end ifnotdocbook
 
 
 @node Output Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-The @code{print} statement prints comma-separated expressions. Each
-expression is separated by the value of @code{OFS} and terminated by
-the value of @code{ORS}.  @code{OFMT} provides the conversion format
-for numeric values for the @code{print} statement.
+@code{print} 打印逗号分隔的表达式。每个表达式在输出时都由 @code{OFS} 的值进行分隔，并以 @code{ORS} 的值结束。@code{OFMT} 提供了对数值 @code{print} 输出时的格式转换。
 
 @item
-The @code{printf} statement provides finer-grained control over output,
-with format-control letters for different data types and various flags
-that modify the behavior of the format-control letters.
+@code{printf} 语句提供了非常好的输出控制粒度，通过格式控制字母来输出不同的数据类型。同时，用不同的标志来修改格式控制字母的行为。
 
 @item
-Output from both @code{print} and @code{printf} may be redirected to
-files, pipes, and coprocesses.
+@code{print} 与 @code{printf} 的输出都可以重定向到文件、管道与并程。
 
 @item
-@command{gawk} provides special @value{FN}s for access to standard input,
-output, and error, and for network communications.
+@command{gawk} 提供了特殊的@value{FN}用于访问标准输入、标准输出与标准错误输出，以及进行网络通信。
 
 @item
-Use @code{close()} to close open file, pipe, and coprocess redirections.
-For coprocesses, it is possible to close only one direction of the
-communications.
+使用 @code{close()} 来关闭打开的文件、管道以并并程的重定向。对于并程来说，可以通过关闭某个方向的通信。
 
 @end itemize
 
 @c EXCLUDE START
 @node Output Exercises
-@section Exercises
+@section 练习
 
 @enumerate
 @item
-Rewrite the program:
+重写下面的程序：
 
 @example
 awk 'BEGIN @{ print "Month Crates"
@@ -8328,15 +8208,13 @@ awk 'BEGIN @{ print "Month Crates"
 @end example
 
 @noindent
-from @ref{Output Separators}, by using a new value of @code{OFS}.
+它来自于 @ref{Output Separators}，并在输出中使用 @code{OFS} 变量。
 
 @item
-Use the @code{printf} statement to line up the headings and table data
-for the @file{inventory-shipped} example that was covered in @ref{Print}.
+使用 @code{printf} 语句来对齐头部与数据表，例子来自由 @ref{Print}，@file{inventory-shipped} 文件。
 
 @item
-What happens if you forget the double quotes when redirecting
-output, as follows:
+在下面的代码中，如果你没有用双引号在重定向输出时会发生什么：
 
 @example
 BEGIN @{ print "Serious error detected!" > /dev/stderr @}
@@ -8347,20 +8225,13 @@ BEGIN @{ print "Serious error detected!" > /dev/stderr @}
 
 
 @node Expressions
-@chapter Expressions
+@chapter 表达式
 @cindex expressions
 
-Expressions are the basic building blocks of @command{awk} patterns
-and actions.  An expression evaluates to a value that you can print, test,
-or pass to a function.  Additionally, an expression
-can assign a new value to a variable or a field by using an assignment operator.
+表达式是 @command{awk} 模式与动作的基本构造块。表达试求值后可用于打印，测试或者传递给函数。另外，表达式还可以通过赋值操作符将一个新值赋给一个变量。
 
-An expression can serve as a pattern or action statement on its own.
-Most other kinds of
-statements contain one or more expressions that specify the data on which to
-operate.  As in other languages, expressions in @command{awk} can include
-variables, array references, constants, and function calls, as well as
-combinations of these with various operators.
+表达式本身可以成为一个模式，或者动作语句。多数其他类型的语句包含一个或者多个表达式，来指定要操作的数据。如在其他语言中一样，
+@command{awk} 中的表达式可以包含变量、数组参考、常量以及函数调用，还可以是这些内容与不同的操作符的各种组合。
 
 @menu
 * Values::                      Constants, Variables, and Regular Expressions.
@@ -8373,11 +8244,9 @@ combinations of these with various operators.
 @end menu
 
 @node Values
-@section Constants, Variables, and Conversions
+@section 常量、变量与转换
 
-Expressions are built up from values and the operations performed
-upon them. This @value{SECTION} describes the elementary objects
-that provide the values used in expressions.
+表达式由值与处理这些值的操作组成。本@value{SECTION}描述在表达式中使用的基本元素对象。
 
 @menu
 * Constants::                   String, numeric and regexp constants.
@@ -8388,17 +8257,13 @@ that provide the values used in expressions.
 @end menu
 
 @node Constants
-@subsection Constant Expressions
+@subsection 常量表达式
 
 @cindex constants, types of
 
-The simplest type of expression is the @dfn{constant}, which always has
-the same value.  There are three types of constants: numeric,
-string, and regular expression.
+最简单的表达式类型就是@dfn{常量}，它们总是有不变的值。有三个常量：数值常量、字串常量与表达式常量。
 
-Each is used in the appropriate context when you need a data
-value that isn't going to change.  Numeric constants can
-have different forms, but are internally stored in an identical manner.
+如果你所需要的值不需要变化，那么你可以在适当的上下文中使用它们。数值常量又有不同的形式，但是在内部，它们都以相同的方式进行存储。
 
 @menu
 * Scalar Constants::            Numeric and string constants.
@@ -8407,18 +8272,14 @@ have different forms, but are internally stored in an identical manner.
 @end menu
 
 @node Scalar Constants
-@subsubsection Numeric and String Constants
+@subsubsection 数值与字串常量
 
 @cindex constants, numeric
 @cindex numeric constants
-A @dfn{numeric constant} stands for a number.  This number can be an
-integer, a decimal fraction, or a number in scientific (exponential)
-notation.@footnote{The internal representation of all numbers,
-including integers, uses double-precision floating-point numbers.
-On most modern systems, these are in IEEE 754 standard format.
-@xref{Arbitrary Precision Arithmetic}, for much more information.}
-Here are some examples of numeric constants that all
-have the same value:
+@dfn{数值常量}表示数值。此数值可以是整数，十进制小数或者是科学计数形式（幂指数）的形式。
+@footnote{所有的数值，包括整数，在内部都表示成双精度的浮点数。
+在多数的现代系统中，使用的都是 IEEE754 的标准格式。查看 @ref{Arbitrary Precision Arithmetic}，来取得更多的信息。}
+下面的例子只所有形式的常量的值都是一样的：
 
 @example
 105
@@ -8427,8 +8288,7 @@ have the same value:
 @end example
 
 @cindex string constants
-A @dfn{string constant} consists of a sequence of characters enclosed in
-double quotation marks.  For example:
+@dfn{字串常量}由双引号括起来的字符序列组成。如：
 
 @example
 "parrot"
@@ -8437,83 +8297,57 @@ double quotation marks.  For example:
 @noindent
 @cindex differences in @command{awk} and @command{gawk}, strings
 @cindex strings, length limitations
-represents the string whose contents are @samp{parrot}.  Strings in
-@command{gawk} can be of any length, and they can contain any of the possible
-eight-bit ASCII characters, including ASCII @sc{nul} (character code zero).
-Other @command{awk}
-implementations may have difficulty with some character codes.
+表示字串内容为 @samp{parrot} 。在 @command{gawk} 中的字串可以有任意长度，
+可以包括任何可能的 8 比特的 ASCII 字符，包括 ASCII 的 @sc{nul} 字符（字符编码为 0）。
+其他的 @command{awk} 实现有可能在处理一些字符编码时存在一些困难。
 
 @node Nondecimal-numbers
-@subsubsection Octal and Hexadecimal Numbers
+@subsubsection 八进制与十六进制数值
 @cindex octal numbers
 @cindex hexadecimal numbers
 @cindex numbers, octal
 @cindex numbers, hexadecimal
 
-In @command{awk}, all numbers are in decimal (i.e., base 10).  Many other
-programming languages allow you to specify numbers in other bases, often
-octal (base 8) and hexadecimal (base 16).
-In octal, the numbers go 0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, and so on.
-Just as @samp{11} in decimal is 1 times 10 plus 1, so
-@samp{11} in octal is 1 times 8 plus 1. This equals 9 in decimal.
-In hexadecimal, there are 16 digits. Because the everyday decimal
-number system only has ten digits (@samp{0}--@samp{9}), the letters
-@samp{a} through @samp{f} are used to represent the rest.
-(Case in the letters is usually irrelevant; hexadecimal @samp{a} and @samp{A}
-have the same value.)
-Thus, @samp{11} in
-hexadecimal is 1 times 16 plus 1, which equals 17 in decimal.
+在 @command{awk} 中，所有的数值都小十进制数（以 10 为进制）。很多的其他编程变速器允许你指定其他进制的数，
+一般为八进制（以 8 为进制）和十六进制（以 16 为进制）。在八进制中，数值为 0，1，2，4，5，6，7，10，11，12 等等。
+正如十进制中的 @samp{11}，是 1 乘 10，然后加 1，因此八进制中的 @samp{11}，表示是 1 乘 8，然后加 1。
+在十进制中它等于 9。对于十六进制，有 16 个数字位。由于我们日常的十进制数值系统中只有 10 个数字位（@samp{0} - @samp{9}），
+因此，@samp{a} 到 @samp{f} 这 6 个字符用来表示剩下的部分。
+（大小写通常是无关的，十六进制的 @samp{a} 与 @samp{A} 有相同的值。）因此，十六进制中的 @samp{11} 表示的是 1 乘 16，然后加1，在进制中则是 17。
 
-Just by looking at plain @samp{11}, you can't tell what base it's in.
-So, in C, C++, and other languages derived from C,
-@c such as PERL, but we won't mention that....
-there is a special notation to signify the base.
-Octal numbers start with a leading @samp{0},
-and hexadecimal numbers start with a leading @samp{0x} or @samp{0X}:
+通过 @samp{11} 这个普通字串，你无法知道它是什么进制的。
+因此，在 C，C++ 以及其他的从 C 派生出来的语言中。有一个特殊的符号用来指明进制。八进制以 @samp{0} 开头，而十六进制则以 @samp{0x} 或者 @samp{0X} 开头。
 
 @table @code
 @item 11
-Decimal value 11
+十进制值的 11
 
 @item 011
-Octal 11, decimal value 9
+八进制的 11，十进制的 9
 
 @item 0x11
-Hexadecimal 11, decimal value 17
+十六进制的 11，十进制的 17
 @end table
 
-This example shows the difference:
+这个例子体现了其中的不同：
 
 @example
 $ @kbd{gawk 'BEGIN @{ printf "%d, %d, %d\n", 011, 11, 0x11 @}'}
 @print{} 9, 11, 17
 @end example
 
-Being able to use octal and hexadecimal constants in your programs is most
-useful when working with data that cannot be represented conveniently as
-characters or as regular numbers, such as binary data of various sorts.
+当在你的程序中，所处理的数据不能方便地进行表示成字串或者正则表达式时，使用这些的八进制或者十六进制常数则非常有用，例如各种不同的二进制数据。
 
 @cindex @command{gawk}, octal numbers and
 @cindex @command{gawk}, hexadecimal numbers and
-@command{gawk} allows the use of octal and hexadecimal
-constants in your program text.  However, such numbers in the input data
-are not treated differently; doing so by default would break old
-programs.
-(If you really need to do this, use the @option{--non-decimal-data}
-command-line option;
-@pxref{Nondecimal Data}.)
-If you have octal or hexadecimal data,
-you can use the @code{strtonum()} function
-(@pxref{String Functions})
-to convert the data into a number.
-Most of the time, you will want to use octal or hexadecimal constants
-when working with the built-in bit-manipulation functions;
-see @ref{Bitwise Functions}
-for more information.
+@command{gawk} 可以让你在程序文件中使用八进制或者十六进制数值。但是，这样的数值在输入时会区别对待，
+默认这么做会导致旧的程序无法正常执行。（如果你确实要这么做，使用 @option{--non-decimal-data} 这个命令行选项，
+查看 @ref{Nondecimal Data}）如果你有八进制或者十六进制的数据，你可以使用 @code{strtonum()}
+（查看 @ref{String Functions}）函数来将这些数据转换为数值。
+大多数时候，你在使用内建的位操作函数时，你都会使用八进制或者十六进制数据。
+可以查看 @ref{Bitwise Functions}，来获取更多的信息。
 
-Unlike in some early C implementations, @samp{8} and @samp{9} are not
-valid in octal constants.  For example, @command{gawk} treats @samp{018}
-as decimal 18:
+不像早期的 C 实现，@samp{8} 与 @samp{9} 不是有效的八进制常数。例如，@command{gawk} 会将 @samp{018} 当成是十进制的 18：
 
 @example
 $ @kbd{gawk 'BEGIN @{ print "021 is", 021 ; print 018 @}'}
@@ -8523,24 +8357,17 @@ $ @kbd{gawk 'BEGIN @{ print "021 is", 021 ; print 018 @}'}
 
 @cindex compatibility mode (@command{gawk}), octal numbers
 @cindex compatibility mode (@command{gawk}), hexadecimal numbers
-Octal and hexadecimal source code constants are a @command{gawk} extension.
-If @command{gawk} is in compatibility mode
-(@pxref{Options}),
-they are not available.
+八进制与十六进制源代码常量是 @command{gawk} 的扩展。如果 @command{gawk} 处于兼容模式（查看 @ref{Options}），
+则它们是不可用的。
 
-@cindex sidebar, A Constant's Base Does Not Affect Its Value
+@cindex sidebar, 常量的进制不会影响它的值
 @ifdocbook
 @docbook
-<sidebar><title>A Constant's Base Does Not Affect Its Value</title>
+<sidebar><title>常量的进制不会影响它的值</title>
 @end docbook
 
 
-Once a numeric constant has
-been converted internally into a number,
-@command{gawk} no longer remembers
-what the original form of the constant was; the internal value is
-always used.  This has particular consequences for conversion of
-numbers to strings:
+只要数值常量被转换成了数值的内部表示，@command{gawk} 就不再记住常量的原始格式，@command{gawk} 总是会使用内部的值。这在将数值转换成字串时有一个特殊的结果：
 
 @example
 $ @kbd{gawk 'BEGIN @{ printf "0x11 is <%s>\n", 0x11 @}'}
@@ -8554,16 +8381,11 @@ $ @kbd{gawk 'BEGIN @{ printf "0x11 is <%s>\n", 0x11 @}'}
 
 @ifnotdocbook
 @cartouche
-@center @b{A Constant's Base Does Not Affect Its Value}
+@center @b{常量的进制不会影响它的值}
 
 
 
-Once a numeric constant has
-been converted internally into a number,
-@command{gawk} no longer remembers
-what the original form of the constant was; the internal value is
-always used.  This has particular consequences for conversion of
-numbers to strings:
+只要数值常量被转换成了数值的内部表示，@command{gawk} 就不再记住常量的原始格式，@command{gawk} 总是会使用内部的值。这在将数值转换成字串时有一个特殊的结果：
 
 @example
 $ @kbd{gawk 'BEGIN @{ printf "0x11 is <%s>\n", 0x11 @}'}
@@ -8573,34 +8395,26 @@ $ @kbd{gawk 'BEGIN @{ printf "0x11 is <%s>\n", 0x11 @}'}
 @end ifnotdocbook
 
 @node Regexp Constants
-@subsubsection Regular Expression Constants
+@subsubsection 正则表达式常量
 
 @cindex regexp constants
 @cindex @code{~} (tilde), @code{~} operator
 @cindex tilde (@code{~}), @code{~} operator
 @cindex @code{!} (exclamation point), @code{!~} operator
 @cindex exclamation point (@code{!}), @code{!~} operator
-A @dfn{regexp constant} is a regular expression description enclosed in
-slashes, such as @code{@w{/^beginning and end$/}}.  Most regexps used in
-@command{awk} programs are constant, but the @samp{~} and @samp{!~}
-matching operators can also match computed or dynamic regexps
-(which are typically just ordinary strings or variables that contain a regexp,
-but could be more complex expressions).
+@dfn{正则表达式常量}是一个包含在一对斜杠中的正则表达式描述。
+例如 @code{@w{/^beginning and end$/}}。
+@command{awk} 程序中使用的大多数正则表达式都是常量，但是 @samp{~} 与 @samp{!~} 匹配操作符也可以匹配计算型，即动态型正则表大式（典型的情况下，它们就是包含正则表达式的普通的字串或者变量，但是是更复杂的表达式而已）。
 
 @node Using Constant Regexps
-@subsection Using Regular Expression Constants
+@subsection 使用正则表达式常量
 
 @cindex dark corner, regexp constants
-When used on the righthand side of the @samp{~} or @samp{!~}
-operators, a regexp constant merely stands for the regexp that is to be
-matched.
-However, regexp constants (such as @code{/foo/}) may be used like simple expressions.
-When a
-regexp constant appears by itself, it has the same meaning as if it appeared
-in a pattern (i.e., @samp{($0 ~ /foo/)}).
+当在 @samp{~} 或者 @samp{!~} 操作的右手边时，正则表达式仅权表示要匹配的正则表达式。
+但是正则表达式常量（例如 @code{/foo/}）可以当成简单的表达式来使用。
+当正则表达式常量单独出现时，与它在模式中出现时有相同的含义（如 @samp{($0 ~ /foo/)}）
 @value{DARKCORNER}
-@xref{Expression Patterns}.
-This means that the following two code segments:
+查看 @ref{Expression Patterns}。这表示下面的两个代码片段：
 
 @example
 if ($0 ~ /barfly/ || $0 ~ /camelot/)
@@ -8608,7 +8422,7 @@ if ($0 ~ /barfly/ || $0 ~ /camelot/)
 @end example
 
 @noindent
-and:
+与：
 
 @example
 if (/barfly/ || /camelot/)
@@ -8616,10 +8430,7 @@ if (/barfly/ || /camelot/)
 @end example
 
 @noindent
-are exactly equivalent.
-One rather bizarre consequence of this rule is that the following
-Boolean expression is valid, but does not do what its author probably
-intended:
+是完全等同的。这个规则的一个非常奇怪的结果就是下面的布林表达式是有效的，但是并不是作者所认为的那样执行：
 
 @example
 # Note that /foo/ is on the left of the ~
@@ -8631,42 +8442,30 @@ if (/foo/ ~ $1) print "found foo"
 @cindex @command{gawk}, regexp constants and
 @cindex regexp constants, in @command{gawk}
 @noindent
-This code is ``obviously'' testing @code{$1} for a match against the regexp
-@code{/foo/}.  But in fact, the expression @samp{/foo/ ~ $1} really means
-@samp{($0 ~ /foo/) ~ $1}.  In other words, first match the input record
-against the regexp @code{/foo/}.  The result is either zero or one,
-depending upon the success or failure of the match.  That result
-is then matched against the first field in the record.
-Because it is unlikely that you would ever really want to make this kind of
-test, @command{gawk} issues a warning when it sees this construct in
-a program.
-Another consequence of this rule is that the assignment statement:
+这个代码“很明显”地是要测试 @code{$1} 是不是匹配正则表达式 @code{/foo/}。
+但是实际上，表达式 @samp{/foo/ ~ $1} 表示的是 @samp{($0 ~ /foo/) ~ $1}。
+换句话说，首先匹配输入记录与正则表达式 @code{/foo/}，所得到的结果要么是 0，要么是 1。
+这就要看匹配的是成功还是失败。匹配的结果然后再与记录的第一个域进行匹配。
+由于你不可能是想做这样的测试，@command{gawk} 会针对程序中这样的结构发出一个告警。这个规则的另一个结果就是如下的匹配语句：
 
 @example
 matches = /foo/
 @end example
 
 @noindent
-assigns either zero or one to the variable @code{matches}, depending
-upon the contents of the current input record.
+是要么将 0，要么是将 1 赋值给变量 @code{matches}，内容依赖于当前的输入记录。
 
 @cindex differences in @command{awk} and @command{gawk}, regexp constants
 @cindex dark corner, regexp constants, as arguments to user-defined functions
 @cindexgawkfunc{gensub}
 @cindexawkfunc{sub}
 @cindexawkfunc{gsub}
-Constant regular expressions are also used as the first argument for
-the @code{gensub()}, @code{sub()}, and @code{gsub()} functions, as the
-second argument of the @code{match()} function,
-and as the third argument of the @code{split()} and @code{patsplit()} functions
-(@pxref{String Functions}).
-Modern implementations of @command{awk}, including @command{gawk}, allow
-the third argument of @code{split()} to be a regexp constant, but some
-older implementations do not.
+正则表达式也可以用于 @code{gensub()}，@code{sub()} 与 @code{gsub()} 函数的第一个参数，
+或者是 @code{match()} 函数的第二个参数，以及 @code{split()} 与 @code{patsplit()} 函数的第三个参数
+（查看 @ref{String Functions}）。@command{awk} 的现代版本，包括 @command{gawk}，
+允许 @code{split()} 的第三个参数是一个正则表达式常量，但是旧一点的版本不允许。
 @value{DARKCORNER}
-Because some built-in functions accept regexp constants as arguments,
-confusion can arise when attempting to use regexp constants as arguments
-to user-defined functions (@pxref{User-defined}).  For example:
+由于一些内置的函数接受正则表达式会它的参数，因此将其作为用户自定义函数（查看 @ref{User-defined}）的参数时，使用正则表达式会带来困惑。如：
 
 @example
 function mysub(pat, repl, str, global)
@@ -8688,24 +8487,18 @@ function mysub(pat, repl, str, global)
 
 @c @cindex automatic warnings
 @c @cindex warnings, automatic
-In this example, the programmer wants to pass a regexp constant to the
-user-defined function @code{mysub()}, which in turn passes it on to
-either @code{sub()} or @code{gsub()}.  However, what really happens is that
-the @code{pat} parameter is assigned a value of either one or zero, depending upon whether
-or not @code{$0} matches @code{/hi/}.
-@command{gawk} issues a warning when it sees a regexp constant used as
-a parameter to a user-defined function, because passing a truth value in
-this way is probably not what was intended.
+在这个例子中，程序员想将正则表达式常量传递给用户自定义函数 @code{mysub()}，
+该函数又将其传给 @code{sub()} 或者 @code{gsub()}。
+但是真正发生的事情是，@code{pat} 参数会被赋值为 1 或者 0，这就要看 @code{$0} 是否匹配 @code{/hi/}。
+@command{gawk} 会针对正则表达式常旦传递给用户自定义函数这种情况发出一个警告，因此将一个真值通过这种方式来传递有可能不是有意的。
 
 @node Variables
-@subsection Variables
+@subsection 变量
 
 @cindex variables, user-defined
 @cindex user-defined, variables
-@dfn{Variables} are ways of storing values at one point in your program for
-use later in another part of your program.  They can be manipulated
-entirely within the program text, and they can also be assigned values
-on the @command{awk} command line.
+@dfn{变量}是在你程序的某个点存储值，以备程序的其他部分后续使用的方式。它们可以在程序文本的整个部分被操作，
+也可以在 @command{awk} 的命令行中被赋值。
 
 @menu
 * Using Variables::             Using variables in your programs.
@@ -8715,44 +8508,28 @@ on the @command{awk} command line.
 @end menu
 
 @node Using Variables
-@subsubsection Using Variables in a Program
+@subsubsection 在程序中使用变量
 
-Variables let you give names to values and refer to them later.  Variables
-have already been used in many of the examples.  The name of a variable
-must be a sequence of letters, digits, or underscores, and it may not begin
-with a digit.
-Here, a @dfn{letter} is any one of the 52 upper- and lowercase
-English letters.  Other characters that may be defined as letters
-in non-English locales are not valid in variable names.
-Case is significant in variable names; @code{a} and @code{A}
-are distinct variables.
 
-A variable name is a valid expression by itself; it represents the
-variable's current value.  Variables are given new values with
-@dfn{assignment operators}, @dfn{increment operators}, and
-@dfn{decrement operators}
-(@pxref{Assignment Ops}).
-In addition, the @code{sub()} and @code{gsub()} functions can
-change a variable's value, and the @code{match()}, @code{split()},
-and @code{patsplit()} functions can change the contents of their
-array parameters (@pxref{String Functions}).
+变量可让你给值赋予一个名字，然后通过这个名字来使用它。变量在多个例子中都使用到了。变量的名字必须是一个字母、数字或者下划线的序列，并且不可以以数字开头。
+在这里，@dfn{字母}是任何的 52 个大小与小字的英文字母。其他的在非英语语言设置中定义的字符不可用于变量句。大小写在变量名中是区分的，@code{a} 与 @code{A} 是不同的变量。
+
+变量本身就是一个有效的表达式：
+因为它代表了变量的当前值。变量通过@dfn{赋值操作符}、@dfn{递增操作符}与@dfn{递减操作符}可以赋予一个新值
+（查看 @ref{Assignment Ops}）。
+另外，@code{sub()} 与 @code{gsub()} 函数可以改变变量的值，
+而 @code{match()}，@code{split()} 与 @code{patsplit()} 函数可以改变数组参数的值（查看 @ref{String Functions}）。
 
 @cindex variables, built-in
 @cindex variables, initializing
-A few variables have special built-in meanings, such as @code{FS} (the
-field separator) and @code{NF} (the number of fields in the current input
-record).  @xref{Built-in Variables} for a list of the predefined variables.
-These predefined variables can be used and assigned just like all other
-variables, but their values are also used or changed automatically by
-@command{awk}.  All predefined variables' names are entirely uppercase.
+少数几个变量有一些内置的含义，如 @code{FS}（域分隔符）以及 @code{NF}（当前记录的域数目）。
+查看 @ref{Built-in Variables}，可获取预定义的变量列表。这些预定义的变量可以像其他变量一样被使用与赋值，但是它们的值也可以被 @command{awk} 自动使用与更改。所有的预定义的变量的名字都是大写的。
 
-Variables in @command{awk} can be assigned either numeric or string values.
-The kind of value a variable holds can change over the life of a program.
-By default, variables are initialized to the empty string, which
-is zero if converted to a number.  There is no need to explicitly
-initialize a variable in @command{awk},
-which is what you would do in C and in most other traditional languages.
+@command{awk} 的变量可以被赋值为数值与字串。某个变量所持有值的类型在程序的生命期中是可以改变的。
+默认情况下，没有初始化的变量的值是一个空串，如果转换为数值则为 0。
+没有必要显式地在 @command{awk} 中初始化变量，这些是在 C 语言中以及其他传统语言中才需要做的。
 
+#TODO20171106
 @node Assignment Options
 @subsubsection Assigning Variables on the Command Line
 @cindex variables, assigning on command line

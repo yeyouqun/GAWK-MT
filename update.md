@@ -286,3 +286,13 @@
 
 改动
 > 在决定打印哪个值的场景下，print 语句没什么限制。
+
+## 5.9 
+英文原文
+> To write a file and read it back later on in the same awk program
+
+译文原文
+> 为了写一个文件，之后不久，在同一个程序中，从其中读取
+
+改动
+> 为了写这样一个文件，这个文件之后会在同一个 awk 程序中读取它
