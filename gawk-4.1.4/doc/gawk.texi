@@ -1421,8 +1421,7 @@ John Woods 也贡献了部分代码。在 1988 年和 1989 年，David Trueman �
 
 John Haque 重写了 @command{gawk} 的内部实现，以提供 @command{awk} 级的调试器，这个版本在 2011 年的 @command{gawk} 4.0 @value{PVERSION} 可用。
 
-@xref{Contributors}
-查看 @command{gawk} 的主要贡献者。
+查看 @ref{Contributors}。
 
 @node Names
 @unnumberedsec 玫瑰别名
@@ -1715,7 +1714,7 @@ $ @kbd{echo hello on stderr 1>&2}
 对于一些特别的“控制字符”，这些字符是需要你同时键入 @kbd{CONTROL} 键以及另一个键来输入。
 比如 @kbd{Ctrl-d} 需要首先按下并保持 @kbd{CONTROL} 键，然后敲击 @kbd{d} 键，然后再释放两个键。
 
-为了简单处理，在本@value{DOCUMENT}中，我们把 Brian Kernighan 版本的 @command{awk} 称为“BWK @command{awk}”（@xref{Other Versions}，查看这个版本与其他版本的信息）。
+为了简单处理，在本@value{DOCUMENT}中，我们把 Brian Kernighan 版本的 @command{awk} 称为“BWK @command{awk}”（@ref{Other Versions}，查看这个版本与其他版本的信息）。
 @ifset FOR_PRINT
 @quotation NOTE
 Notes of interest look like this.
@@ -1833,7 +1832,7 @@ FSF 4.0 版的内容完全校对和更新了。所有 4.0 版本之前的 @comma
 重新组织了文档内容，主要的更新是增加了 @ref{Arbitrary Precision Arithmetic} 以及 @ref{Dynamic Extensions}。
 
 这个@value{DOCUMENT}未来一定会持续优化。如果你在这个@value{DOCUMENT}发现了错误，请报告它。
-@xref{Bugs} ，你可以找到关于提交电子版问题报告的信息。 
+@ref{Bugs} ，你可以找到关于提交电子版问题报告的信息。 
 
 @ifset FOR_PRINT
 @c fakenode --- for prepinfo
@@ -1989,7 +1988,7 @@ Corinna Vinschen，
 （按字母顺序）
 组成了目前的 @command{gawk} “霹雳移植性小组”。如果没有他们的艰苦工作与帮助，@command{gawk} 不会今天有如此稳定，可移植的程序。与这样的一群好人小组一起工作曾经是也将一直是件快乐的事情。
 
-许多人贡献了相当多的代码与文档，@xref{Contributors} ，其中有完整的列表。
+许多人贡献了相当多的代码与文档，@ref{Contributors} ，其中有完整的列表。
 
 @ifset FOR_PRINT
 @cindex Oram, Andy
@@ -3018,7 +3017,7 @@ $ @kbd{gawk 'BEGIN @{ print "dont panic" # a friendly \}
 
 @cindex @command{awk}, uses for
 目前，我们已经了解了一些 @command{awk} 可以做的事情，你可能有疑问 @command{awk} 对你有什么用处。通过使用其他工具程序，更高级的模式，域分隔符，算术语句以及其他的选择方案，你可以产生更为复杂的输出。
-@command{awk} 对于从大量的原始数据产生报表的场景中非常用有，如从其他的工具，如 @command{ls} 的输出中汇总信息。（@xref{More Complex}）
+@command{awk} 对于从大量的原始数据产生报表的场景中非常用有，如从其他的工具，如 @command{ls} 的输出中汇总信息。（@ref{More Complex}）
 
 用 @command{awk} 语言写的程序一般会比较其他的语言所写的程序要短。这使得 @command{awk} 程序非常容易组合与使用。
 @command{awk} 常常在“用后即丢”的场景中快速实现你的代码。由于 @command{awk} 是解释型的，这就避免了在编辑-编译-测试-调试这样的程序开发流程的编译流程，而这个流程通常都比较长。
@@ -3205,7 +3204,7 @@ Set the @code{FS} variable to @var{fs}
 @cindex @option{--traditional} option
 @cindex compatibility mode (@command{gawk}), specifying
 指定兼容模式，在这种模式下 @command{awk} 的 GNU 扩展会被禁用，这样 @command{gawk} 的表现就跟 BWK @command{awk} 一致。
-@xref{POSIX/GNU}，其中汇总了所有的扩展。
+@ref{POSIX/GNU}，其中汇总了所有的扩展。
 @ifclear FOR_PRINT
 也可以参考 @ref{Compatibility Mode}。
 @end ifclear
@@ -3281,7 +3280,7 @@ RFC 3875} 的 Section 4.4。
 @cindex portable object files, generating
 @cindex files, portable object, generating
 分析源程序中的已经做了翻译标志所有字串常量，并产生一个 GNU @command{gettext} 可移植的对象模板文件到标准输出上。
-@xref{Internationalization}，来取得这个选项的相关信息。
+@ref{Internationalization}，来取得这个选项的相关信息。
 
 @item @option{-h}
 @itemx @option{--help}
@@ -5367,7 +5366,7 @@ $ @kbd{awk '@{ nboxes = $3 ; $3 = $3 - 10}
 然后打印第三个域的旧值与新值（库房中有人出错了，导致在盘点红盒子时导致了不一致。）
 
 要使这个能够工作，则 @code{$3} 的文件必须是一个数值；而字符串也必须转换成数值以进行算法计算。而减法所得的结果也会转化成字串，并成为第三个域的值。
-查看 @xref{Conversion}。
+查看 @ref{Conversion}。
 
 当某个域的值被更改了后（如 @command{awk} 所见的），输入记录的文本就会被重新计算，以将新的域包含在旧的域所在的位置。
 换句话说，@code{$0} 会变更以反映变化的域。因此，这个程序会打印输入文件的复本，同时，每行中的第二个域会减去 10：
@@ -6453,7 +6452,7 @@ no comment
 @code{$0} 的新值用于测试接所有接下来的模式。
 @code{$0} 在触发执行 @code{getline} 调用的规则的最初始就会丢失。
 另一方面，@code{next} 语句读取一个新的记录，并且立即从程序中的第一个规则开始处理它。
-查看 @xref{Next Statement}。
+查看 @ref{Next Statement}。
 @end quotation
 @node Getline/Variable
 @subsection 将 @code{getline} 赋值给变量
@@ -8199,7 +8198,7 @@ POSIX 标准非常模糊地说，@code{close()} 在成功的时候返回 0，而
 
 @enumerate
 @item
-重写下面的程序：
+通过在输出中使用 @code{OFS} 变量，重写下面的程序：
 
 @example
 awk 'BEGIN @{ print "Month Crates"
@@ -8208,7 +8207,7 @@ awk 'BEGIN @{ print "Month Crates"
 @end example
 
 @noindent
-它来自于 @ref{Output Separators}，并在输出中使用 @code{OFS} 变量。
+它来自于 @ref{Output Separators}。
 
 @item
 使用 @code{printf} 语句来对齐头部与数据表，例子来自由 @ref{Print}，@file{inventory-shipped} 文件。
@@ -8529,16 +8528,12 @@ function mysub(pat, repl, str, global)
 默认情况下，没有初始化的变量的值是一个空串，如果转换为数值则为 0。
 没有必要显式地在 @command{awk} 中初始化变量，这些是在 C 语言中以及其他传统语言中才需要做的。
 
-#TODO20171106
 @node Assignment Options
-@subsubsection Assigning Variables on the Command Line
+@subsubsection 在命令行中进行变量赋值
 @cindex variables, assigning on command line
 @cindex command line, variables@comma{} assigning on
 
-Any @command{awk} variable can be set by including a @dfn{variable assignment}
-among the arguments on the command line when @command{awk} is invoked
-(@pxref{Other Arguments}).
-Such an assignment has the following form:
+@command{awk} 变量可以在命令行上通过@dfn{赋值操作符}来设置（查看 @ref{Other Arguments}）。这样的赋值有如下形式：
 
 @example
 @var{variable}=@var{text}
@@ -8546,36 +8541,26 @@ Such an assignment has the following form:
 
 @cindex @option{-v} option
 @noindent
-With it, a variable is set either at the beginning of the
-@command{awk} run or in between input files.
-When the assignment is preceded with the @option{-v} option,
-as in the following:
+通过这样的方式，变量要么在 @command{awk} 程序运行开始或者在输入文件之间进行设置。当 @option{-v} 选项先于赋值，如下面的形式：
 
 @example
 -v @var{variable}=@var{text}
 @end example
 
 @noindent
-the variable is set at the very beginning, even before the
-@code{BEGIN} rules execute.  The @option{-v} option and its assignment
-must precede all the @value{FN} arguments, as well as the program text.
-(@xref{Options} for more information about
-the @option{-v} option.)
-Otherwise, the variable assignment is performed at a time determined by
-its position among the input file arguments---after the processing of the
-preceding input file argument.  For example:
+则变量将在程序的开始，甚至在 @code{BEGIN} 规则执行之间就设置了。
+@option{-v} 选项以及他的赋值必须在所有的文件名参数以及程序代码之前。
+（查看 @ref{Options}，来获取关于 @option{-v} 选项的更多信息。）
+否则，变量赋值的执行决定于它在输入文件中的位置——要先处理先于该选项之前的文件。如：
 
 @example
 awk '@{ print $n @}' n=4 inventory-shipped n=2 mail-list
 @end example
 
 @noindent
-prints the value of field number @code{n} for all input records.  Before
-the first file is read, the command line sets the variable @code{n}
-equal to four.  This causes the fourth field to be printed in lines from
-@file{inventory-shipped}.  After the first file has finished,
-but before the second file is started, @code{n} is set to two, so that the
-second field is printed in lines from @file{mail-list}:
+会打印所有输入记录的域数值 @code{n}。在第一个文件读取之前，命令行参数设置变量 @code{n} 的值为 4。
+这会打印来自 @file{inventory-shipped} 文件行中的第 4 个域。当处理完第一个文件后，但是在开始第 2 个文件之前，
+@code{n} 被设置成 2，因此会打印来自 @file{mail-list} 文件的行的第2个域：
 
 @example
 $ @kbd{awk '@{ print $n @}' n=4 inventory-shipped n=2 mail-list}
@@ -8588,20 +8573,15 @@ $ @kbd{awk '@{ print $n @}' n=4 inventory-shipped n=2 mail-list}
 @end example
 
 @cindex dark corner, command-line arguments
-Command-line arguments are made available for explicit examination by
-the @command{awk} program in the @code{ARGV} array
-(@pxref{ARGC and ARGV}).
-@command{awk} processes the values of command-line assignments for escape
-sequences
-(@pxref{Escape Sequences}).
+命令行参数还可以在 @code{ARGV} 数组中获取，并利用 @command{awk} 程序进行显示检查（查看 @ref{ARGC and ARGV}）。
+@command{awk} 会处理命令行赋值参数的值中转义序列（查看 @ref{Escape Sequences}）。
 @value{DARKCORNER}
 
 @node Conversion
-@subsection Conversion of Strings and Numbers
+@subsection 在字串与数值之间进行转换
 
-Number-to-string and string-to-number conversion are generally
-straightforward.  There can be subtleties to be aware of;
-this @value{SECTION} discusses this important facet of @command{awk}.
+“数值到字串”以及“字串到数值”的转换一般都是直接的。但是要了解几个细微的地方，
+通过这@value{SECTION}来说明 @command{awk} 中这些重要的细节。
 
 @menu
 * Strings And Numbers::         How @command{awk} Converts Between Strings And
@@ -8610,18 +8590,15 @@ this @value{SECTION} discusses this important facet of @command{awk}.
 @end menu
 
 @node Strings And Numbers
-@subsubsection How @command{awk} Converts Between Strings and Numbers
+@subsubsection @command{awk} 如何转换字串与数值
 
 @cindex converting, strings to numbers
 @cindex strings, converting
 @cindex numbers, converting
 @cindex converting, numbers to strings
-Strings are converted to numbers and numbers are converted to strings, if the context
-of the @command{awk} program demands it.  For example, if the value of
-either @code{foo} or @code{bar} in the expression @samp{foo + bar}
-happens to be a string, it is converted to a number before the addition
-is performed.  If numeric values appear in string concatenation, they
-are converted to strings.  Consider the following:
+如果 @command{awk} 程序上下文要求，字串会转换成数值，数值也可以转换成字串。例如，
+在表达式 @samp{foo + bar} 中如果 @code{foo} 或者 @code{bar} 如果是一个串，它就会转在执行加操作之前转换成数值。
+如果数值出现在字串的连接操作里，它们就会转换成字串。考虑如下的代码：
 
 @example
 two = 2; three = 3
@@ -8629,47 +8606,30 @@ print (two three) + 4
 @end example
 
 @noindent
-This prints the (numeric) value 27.  The numeric values of
-the variables @code{two} and @code{three} are converted to strings and
-concatenated together.  The resulting string is converted back to the
-number 23, to which 4 is then added.
+这个代码会打印（数值）值 27。@code{two} 与 @code{three} 的数值值被转换成字串并连接在一起。
+结果字串被转换成数值 23，用于与 4 进行相加。
 
 @cindex null strings, converting numbers to strings
 @cindex type conversion
-If, for some reason, you need to force a number to be converted to a
-string, concatenate that number with the empty string, @code{""}.
-To force a string to be converted to a number, add zero to that string.
-A string is converted to a number by interpreting any numeric prefix
-of the string as numerals:
-@code{"2.5"} converts to 2.5, @code{"1e3"} converts to 1,000, and @code{"25fix"}
-has a numeric value of 25.
-Strings that can't be interpreted as valid numbers convert to zero.
+由于某种原因，如果你需要强制数值被转换成字串，则将这个数值与空串（@code{""}）连接。
+强制一个字串要转换成数值，则半这个字串加上 0 即可。
+字串转换成数值是通过将字串的数字形式的前缀串解释当成数值：@code{"2.5"} 会被转换成 2.5，@code{"1e3"} 会被转换成 1000，
+@code{"25fix"} 会被转换 25。无法转换成数值的字串则会转换成 0。
 
 @cindex @code{CONVFMT} variable
-The exact manner in which numbers are converted into strings is controlled
-by the @command{awk} predefined variable @code{CONVFMT} (@pxref{Built-in Variables}).
-Numbers are converted using the @code{sprintf()} function
-with @code{CONVFMT} as the format
-specifier
-(@pxref{String Functions}).
+将数值转换成字串上的准确方式是由 @command{awk} 的预定义变量 @code{CONVFMT} 进行控制的
+（查看 @ref{Built-in Variables}）。数值转换成字串是使用 @code{sprintf()} 函数并将 @code{CONVFMT} 当做模式指定符
+（查看 @ref{String Functions}）。
 
-@code{CONVFMT}'s default value is @code{"%.6g"}, which creates a value with
-at most six significant digits.  For some applications, you might want to
-change it to specify more precision.
-On most modern machines,
-17 digits is usually enough to capture a floating-point number's
-value exactly.@footnote{Pathological cases can require up to
-752 digits (!), but we doubt that you need to worry about this.}
+@code{CONVFMT} 的值默认是 @code{"%.6g"}，表示的是创建的值最多有 6 个有效数字位。
+对于一些应用来说，你可以将其更改得更加精确。在大多数现在机器上，17 位的数值通常足够将捕获浮点数的值了。 
+@footnote{在病理学情况下需要多达 752 位数（！），但是我们认为你不需要为此担心（你平时用不到这么长的有效位）。}
 
 @cindex dark corner, @code{CONVFMT} variable
-Strange results can occur if you set @code{CONVFMT} to a string that doesn't
-tell @code{sprintf()} how to format floating-point numbers in a useful way.
-For example, if you forget the @samp{%} in the format, @command{awk} converts
-all numbers to the same constant string.
+如果你将 @code{CONVFMT} 的值设置成一个无法告知 @code{sprintf()} 如何来以一种有用的方式格式化浮点数的字串，
+则会产生奇怪的结果。例如，如果你忘记了格式指定符中的 @samp{%}，@command{awk} 会将所有数值转换成一样的字串常量。
 
-As a special case, if a number is an integer, then the result of converting
-it to a string is @emph{always} an integer, no matter what the value of
-@code{CONVFMT} may be.  Given the following code fragment:
+作为一个特殊例子，如果数值是一个整数，转换成字串的结果@emph{总是}一个整数，无论 @code{CONVFMT} 的值是什么。如下面的代码片段：
 
 @example
 CONVFMT = "%2.2f"
@@ -8678,7 +8638,7 @@ b = a ""
 @end example
 
 @noindent
-@code{b} has the value @code{"12"}, not @code{"12.00"}.
+@code{b} 的值为 @code{"12"}，而不是 @code{"12.00"}。
 @value{DARKCORNER}
 
 @cindex sidebar, Pre-POSIX @command{awk} Used @code{OFMT} for String Conversion
@@ -8691,14 +8651,12 @@ b = a ""
 @cindex @code{OFMT} variable
 @cindex portability, new @command{awk} vs.@: old @command{awk}
 @cindex @command{awk}, new vs.@: old, @code{OFMT} variable
-Prior to the POSIX standard, @command{awk} used the value
-of @code{OFMT} for converting numbers to strings.  @code{OFMT}
-specifies the output format to use when printing numbers with @code{print}.
-@code{CONVFMT} was introduced in order to separate the semantics of
-conversion from the semantics of printing.  Both @code{CONVFMT} and
-@code{OFMT} have the same default value: @code{"%.6g"}.  In the vast majority
-of cases, old @command{awk} programs do not change their behavior.
-@xref{Print} for more information on the @code{print} statement.
+在 POSIX 标准之前，@command{awk} 用 @code{OFMT} 的值来把数字转换成字符串。
+当用 @code{print} 打印数字的时候，@code{OFMT} 指定了输出格式。
+@code{CONVFMT} 是为了把打印操作和转换操作的区分开而引入的。
+@code{CONVFMT} 和 @code{OFMT} 都有相同的默认值：@code{"%.6g"}。
+在大部分的 case 中，旧的 @command{awk} 程序不改变他们的行为。
+查看 @ref{Print} 关于更多 @code{print} 的描述。
 
 @docbook
 </sidebar>
@@ -8714,40 +8672,29 @@ of cases, old @command{awk} programs do not change their behavior.
 @cindex @code{OFMT} variable
 @cindex portability, new @command{awk} vs.@: old @command{awk}
 @cindex @command{awk}, new vs.@: old, @code{OFMT} variable
-Prior to the POSIX standard, @command{awk} used the value
-of @code{OFMT} for converting numbers to strings.  @code{OFMT}
-specifies the output format to use when printing numbers with @code{print}.
-@code{CONVFMT} was introduced in order to separate the semantics of
-conversion from the semantics of printing.  Both @code{CONVFMT} and
-@code{OFMT} have the same default value: @code{"%.6g"}.  In the vast majority
-of cases, old @command{awk} programs do not change their behavior.
-@xref{Print} for more information on the @code{print} statement.
+在 POSIX 标准之前，@command{awk} 用 @code{OFMT} 的值来把数字转换成字符串。
+当用 @code{print} 打印数字的时候，@code{OFMT} 指定了输出格式。
+@code{CONVFMT} 是为了把打印操作和转换操作的区分开而引入的。
+@code{CONVFMT} 和 @code{OFMT} 都有相同的默认值：@code{"%.6g"}。
+在大部分的 case 中，旧的 @command{awk} 程序不改变他们的行为。
+查看 @ref{Print} 关于更多 @code{print} 的描述。
 @end cartouche
 @end ifnotdocbook
 
 @node Locale influences conversions
-@subsubsection Locales Can Influence Conversion
+@subsubsection 语言设置会影响转换
 
-Where you are can matter when it comes to converting between numbers and
-strings.  The local character set and language---the @dfn{locale}---can
-affect numeric formats.  In particular, for @command{awk} programs,
-it affects the decimal point character and the thousands-separator
-character.  The @code{"C"} locale, and most English-language locales,
-use the period character (@samp{.}) as the decimal point and don't
-have a thousands separator.  However, many (if not most) European and
-non-English locales use the comma (@samp{,}) as the decimal point
-character. European locales often use either a space or a period as
-the thousands separator, if they have one.
+当要在字串与数值之间进行转换时，什么地方会对此产生影响？本地字符设置与语言，即 @dfn{locale}，会影响数值的格式。
+特别是，对于 @command{awk} 程序，它还会影响十进制小数点字符以及百分位字符。
+@code{"C"} 语言设置或者大多数的英语语言，使用点符号（@samp{.}）当做为十进制数小数点，并且没有百分位。
+但是，许多（如果不是大多数）的欧洲以及非英语语言区域使用逗号（@samp{,}）作为十进制小数点字符。
+欧洲语言通常在需要的时候使用空格或者点来作为百分位。
 
 @cindex dark corner, locale's decimal point character
-The POSIX standard says that @command{awk} always uses the period as the decimal
-point when reading the @command{awk} program source code, and for
-command-line variable assignments (@pxref{Other Arguments}).  However,
-when interpreting input data, for @code{print} and @code{printf} output,
-and for number-to-string conversion, the local decimal point character
-is used.  @value{DARKCORNER} In all cases, numbers in source code and
-in input data cannot have a thousands separator.  Here are some examples
-indicating the difference in behavior, on a GNU/Linux system:
+POSIX 标准规定，当读取 @command{awk} 程序源代码，以及在读取命令行赋值变量时，总是使用点号作为十进制小数点
+（查看 @ref{Other Arguments}）。但是，当解释输入数据时、进行 @code{print} 或者 @code{printf} 输出，以及进行数值与字串转换时，则使用本地的十进制小数点。
+@value{DARKCORNER} 
+在所有的情况下，源代码中的数值，以及输入数据不可以有百分位分隔符。下面的代码在 GNU/Linux 系统解释了这些差异：
 
 @example
 $ @kbd{export POSIXLY_CORRECT=1}                        @ii{Force POSIX behavior}
@@ -8762,27 +8709,21 @@ $ @kbd{echo 4,321 | LC_ALL=en_DK.utf-8 gawk '@{ print $1 + 1 @}'}
 @end example
 
 @noindent
-The @code{en_DK.utf-8} locale is for English in Denmark, where the comma acts as
-the decimal point separator.  In the normal @code{"C"} locale, @command{gawk}
-treats @samp{4,321} as 4, while in the Danish locale, it's treated
-as the full number including the fractional part, 4.321.
+@code{en_DK.utf-8} 是丹麦英语语言，在这个设置中，逗号是作为小数点使用的。
+在正常的 @code{"C"} 语言设置中，@command{gawk} 将 @samp{4,321} 当成是 4，
+而在丹麦语言设置中，则被完全当成了一个数值，其包含分数为 4.321。
 
-Some earlier versions of @command{gawk} fully complied with this aspect
-of the standard.  However, many users in non-English locales complained
-about this behavior, because their data used a period as the decimal
-point, so the default behavior was restored to use a period as the
-decimal point character.  You can use the @option{--use-lc-numeric}
-option (@pxref{Options}) to force @command{gawk} to use the locale's
-decimal point character.  (@command{gawk} also uses the locale's decimal
-point character when in POSIX mode, either via @option{--posix} or the
-@env{POSIXLY_CORRECT} environment variable, as shown previously.)
+一些早期的 @command{gawk} 版本完全按照标准进行编译。但是很多的非英语语言的用户抱怨这样的行为，
+因为他们用点表示十进制里的小数点，所以，默认的行为又恢复到使用点来做为小数点符号。你可以使用 @option{--use-lc-numeric}
+（查看 @ref{Options}）选项来强制 @command{gawk} 使用本地语言设置中的十进制小数点。
+（@command{gawk} 在 POSIX 模式中也使用本地语言设置中的十进制小数点，不管是通过 @option{--posix} 选项或者
+是 @env{POSIXLY_CORRECT} 环境变量来指定。）
 
-@ref{table-locale-affects} describes the cases in which the locale's decimal
-point character is used and when a period is used. Some of these
-features have not been described yet.
+@ref{table-locale-affects} 说明了什么时候会使用本地语言设置中的十进制小数点符号，
+什么时候使用点作为十进制小数点符号。还有一些特性还没有涉及到。
 
 @float Table,table-locale-affects
-@caption{Locale decimal point versus a period}
+@caption{本地语言设置中的十进制小数点与圆点}
 @multitable @columnfractions .15 .20 .45
 @headitem Feature @tab Default @tab @option{--posix} or @option{--use-lc-numeric}
 @item @code{%'g} @tab Use locale @tab Use locale
@@ -8792,16 +8733,13 @@ features have not been described yet.
 @end multitable
 @end float
 
-Finally, modern-day formal standards and the IEEE standard floating-point
-representation can have an unusual but important effect on the way
-@command{gawk} converts some special string values to numbers.  The details
-are presented in @ref{POSIX Floating Point Problems}.
+最后，现在的正式标准以及 IEEE 标准的浮点数表示法对于 @command{gawk} 转换一些特定的字串为数值的方式，
+都有一些不常见但是非常重要的影响。相关的细节呈现在 @ref{POSIX Floating Point Problems}。
 
 @node All Operators
-@section Operators: Doing Something with Values
+@section 操作符：对值进行处理
 
-This @value{SECTION} introduces the @dfn{operators} that make use
-of the values provided by constants and variables.
+这一@value{SECTION}介绍利用常量与变量值的@dfn{操作符}。
 
 @menu
 * Arithmetic Ops::              Arithmetic operations (@samp{+}, @samp{-},
@@ -8812,7 +8750,7 @@ of the values provided by constants and variables.
 @end menu
 
 @node Arithmetic Ops
-@subsection Arithmetic Operators
+@subsection 算术操作符
 @cindex arithmetic operators
 @cindex operators, arithmetic
 @c @cindex addition
@@ -8823,13 +8761,10 @@ of the values provided by constants and variables.
 @c @cindex quotient
 @c @cindex exponentiation
 
-The @command{awk} language uses the common arithmetic operators when
-evaluating expressions.  All of these arithmetic operators follow normal
-precedence rules and work as you would expect them to.
+@command{awk} 语言使用常用的算术操作符来对表达式求值。
+所有的这些算术表达式都具有正常的优先级，并按你所期望的方式工作。
 
-The following example uses a file named @file{grades}, which contains
-a list of student names as well as three test scores per student (it's
-a small class):
+下面的例子使用一个文件名为 @file{grades} 的文件，其中包含了学生名字与每个学生的三个测试成绩（班级确实小）：
 
 @example
 Pat   100 97 58
@@ -8838,8 +8773,7 @@ Chris  72 92 89
 @end example
 
 @noindent
-This program takes the file @file{grades} and prints the average
-of the scores:
+下面的程序读取文件 @file{grades} 并打印平均成绩：
 
 @example
 $ @kbd{awk '@{ sum = $2 + $3 + $4 ; avg = sum / 3}
@@ -8849,8 +8783,7 @@ $ @kbd{awk '@{ sum = $2 + $3 + $4 ; avg = sum / 3}
 @print{} Chris 84.3333
 @end example
 
-The following list provides the arithmetic operators in @command{awk},
-in order from the highest precedence to the lowest:
+下面的列表列出了 @command{awk} 中的算术操作符，并按优先级降序排序：
 
 @table @code
 @cindex common extensions, @code{**} operator
@@ -8858,90 +8791,76 @@ in order from the highest precedence to the lowest:
 @cindex POSIX @command{awk}, arithmetic operators and
 @item @var{x} ^ @var{y}
 @itemx @var{x} ** @var{y}
-Exponentiation; @var{x} raised to the @var{y} power.  @samp{2 ^ 3} has
-the value eight; the character sequence @samp{**} is equivalent to
-@samp{^}. @value{COMMONEXT}
+幂乘，表示 @var{x} 的 @var{y} 次幂。
+@samp{2 ^ 3} 的值为 8，字符序列 @samp{**} 与 @samp{^} 等同。@value{COMMONEXT}
 
 @item - @var{x}
-Negation.
+取负。
 
 @item + @var{x}
-Unary plus; the expression is converted to a number.
+一元加，表达式会被转换成数值。
 
 @item @var{x} * @var{y}
-Multiplication.
+乘。
 
 @cindex troubleshooting, division
 @cindex division
 @item @var{x} / @var{y}
-Division;  because all numbers in @command{awk} are floating-point
-numbers, the result is @emph{not} rounded to an integer---@samp{3 / 4} has
-the value 0.75.  (It is a common mistake, especially for C programmers,
-to forget that @emph{all} numbers in @command{awk} are floating point,
-and that division of integer-looking constants produces a real number,
-not an integer.)
+除。由于在 @command{awk} 中的所有数值都是浮点数，结果@emph{不会}舍入输出为整数——@samp{3 / 4} 的值为 0.75。
+（这很容易出错，尤其对 C 程序员，会忘记 @command{awk} 中的@emph{所有}数值都是浮点数，看起来是整数的除，产生一个实数，而不是整数。）
 
 @item @var{x} % @var{y}
-Remainder; further discussion is provided in the text, just
-after this list.
+求余，进一步的讨论会在下面。
 
 @item @var{x} + @var{y}
-Addition.
+加。
 
 @item @var{x} - @var{y}
-Subtraction.
+减。
 @end table
 
-Unary plus and minus have the same precedence,
-the multiplication operators all have the same precedence, and
-addition and subtraction have the same precedence.
+一元加以减都有相同的优先级，乘法操作符都有相同优先级，加与减具有相同的优先级。
 
 @cindex differences in @command{awk} and @command{gawk}, trunc-mod operation
 @cindex trunc-mod operation
-When computing the remainder of @samp{@var{x} % @var{y}},
-the quotient is rounded toward zero to an integer and
-multiplied by @var{y}. This result is subtracted from @var{x};
-this operation is sometimes known as ``trunc-mod.''  The following
-relation always holds:
+当计算 @samp{@var{x} % @var{y}} 的余数时，商会向零舍入舍出，并被 @var{y} 乘。
+这个结果再被从 @var{x} 减去。本操作有时候会称为 “trunc-mode” 操作，下面的关系总是会成立：
 
 @example
 b * int(a / b) + (a % b) == a
 @end example
 
-One possibly undesirable effect of this definition of remainder is that
-@samp{@var{x} % @var{y}} is negative if @var{x} is negative.  Thus:
+这种定义下，如果在 @samp{@var{x} % @var{y}} 在 @var{x} 为负值时，其也为负值，
+这可能不是预期的结果：
 
 @example
 -17 % 8 = -1
 @end example
 
-In other @command{awk} implementations, the signedness of the remainder
-may be machine-dependent.
+在其他的 @command{awk} 实现中，余数的符号可能跟机器有关。
 @c FIXME !!! what does posix say?
 
 @cindex portability, @code{**} operator and
 @cindex @code{*} (asterisk), @code{**} operator
 @cindex asterisk (@code{*}), @code{**} operator
-@quotation NOTE
-The POSIX standard only specifies the use of @samp{^}
-for exponentiation.
-For maximum portability, do not use the @samp{**} operator.
+@quotation 提示
+POSIX 标准中只指定了 @samp{^} 作为幂乘。为了最大的可移植性，不要使用 @samp{**} 操作符。
 @end quotation
 
 @node Concatenation
-@subsection String Concatenation
+@subsection 字串连接
 @cindex Kernighan, Brian
 @quotation
-@i{It seemed like a good idea at the time.}
+@i{
+在那个时候看起来确实是个好主意。
+}
 @author Brian Kernighan
 @end quotation
 
 @cindex string operators
 @cindex operators, string
 @cindex concatenating
-There is only one string operation: concatenation.  It does not have a
-specific operator to represent it.  Instead, concatenation is performed by
-writing expressions next to one another, with no operator.  For example:
+只有一个字串操作符：连接。实际上并没有特定的操作符来表示它。相反，连接操作是通过将表达式写成两两相邻。例如：
 
 @example
 $ @kbd{awk '@{ print "Field number one: " $1 @}' mail-list}
@@ -8950,8 +8869,7 @@ $ @kbd{awk '@{ print "Field number one: " $1 @}' mail-list}
 @dots{}
 @end example
 
-Without the space in the string constant after the @samp{:}, the line
-runs together.  For example:
+在字串常量 @samp{:} 后面没有空格，整行输出在一起。比如：
 
 @example
 $ @kbd{awk '@{ print "Field number one:" $1 @}' mail-list}
@@ -8961,11 +8879,8 @@ $ @kbd{awk '@{ print "Field number one:" $1 @}' mail-list}
 @end example
 
 @cindex troubleshooting, string concatenation
-Because string concatenation does not have an explicit operator, it is
-often necessary to ensure that it happens at the right time by using
-parentheses to enclose the items to concatenate.  For example,
-you might expect that the
-following code fragment concatenates @code{file} and @code{name}:
+由于字串连接没有显式的操作符，因此通常需要保证这发生成合适的时间，这是通过将要连接的项用括号包起来。
+例如，你可能想要下面的代码来连接起 @code{file} 与 @code{name}：
 
 @example
 file = "file"
@@ -8976,11 +8891,9 @@ print "something meaningful" > file name
 @cindex Brian Kernighan's @command{awk}
 @cindex @command{mawk} utility
 @noindent
-This produces a syntax error with some versions of Unix
-@command{awk}.@footnote{It happens that BWK
-@command{awk}, @command{gawk}, and @command{mawk} all ``get it right,''
-but you should not rely on this.}
-It is necessary to use the following:
+这在 Unix @command{awk} 中会产生一个语法错误。
+@footnote{这在 BWK @command{awk} 中会发生，@command{gawk} 以及 @command{mawk} 都“执行正确”，但是别依赖于这个结果。}
+应该如下使用：
 
 @example
 print "something meaningful" > (file name)
@@ -8989,11 +8902,7 @@ print "something meaningful" > (file name)
 @cindex order of evaluation, concatenation
 @cindex evaluation order, concatenation
 @cindex side effects
-Parentheses should be used around concatenation in all but the
-most common contexts, such as on the righthand side of @samp{=}.
-Be careful about the kinds of expressions used in string concatenation.
-In particular, the order of evaluation of expressions used for concatenation
-is undefined in the @command{awk} language.  Consider this example:
+在字串连接两边，括号在除了 @samp{=} 右边的所有情况下都应该使用。在特别注意在字串连接中所使用的表达式。特别是，表达式的求值顺序用来进行字串连接，在 @command{awk} 语言中是没有定义的。如下面的例子：
 
 @example
 BEGIN @{
@@ -9003,14 +8912,11 @@ BEGIN @{
 @end example
 
 @noindent
-It is not defined whether the second assignment to @code{a} happens
-before or after the value of @code{a} is retrieved for producing the
-concatenated value.  The result could be either @samp{don't panic},
-or @samp{panic panic}.
+是否是第二个赋值操作发生在 @code{a} 的值返回之前还是之后这是不确定的。
+结果可以是 @samp{don't panic}，或者是 @samp{panic panic}。
 @c see test/nasty.awk for a worse example
 
-The precedence of concatenation, when mixed with other operators, is often
-counter-intuitive.  Consider this example:
+在与其他的操作符混合时，连接操作的优先级通常是反直觉的。如下面的例子：
 
 @ignore
 > To: bug-gnu-utils@@gnu.org
@@ -9040,19 +8946,15 @@ $ @kbd{awk 'BEGIN @{ print -12 " " -24 @}'}
 @print{} -12-24
 @end example
 
-This ``obviously'' is concatenating @minus{}12, a space, and @minus{}24.
-But where did the space disappear to?
-The answer lies in the combination of operator precedences and
-@command{awk}'s automatic conversion rules.  To get the desired result,
-write the program this way:
+很“明显”的是要连接 @minus{}12，一个空格与 @minus{}24。
+但是空格消失到哪里去了呢？答案是在操作符的优先组合与 @command{awk} 的自动转换规则里。为了得到所想要的结果，像下面这样写：
 
 @example
 $ @kbd{awk 'BEGIN @{ print -12 " " (-24) @}'}
 @print{} -12 -24
 @end example
 
-This forces @command{awk} to treat the @samp{-} on the @samp{-24} as unary.
-Otherwise, it's parsed as follows:
+这强制 @command{awk} 将 @samp{-24} 中的 @samp{-} 当成是一元操作符。否则，它会这么来分析：
 
 @display
     @minus{}12 (@code{"@ "} @minus{} 24)
@@ -9061,31 +8963,25 @@ Otherwise, it's parsed as follows:
 @result{} @minus{}12@minus{}24
 @end display
 
-As mentioned earlier,
-when mixing concatenation with other operators, @emph{parenthesize}.  Otherwise,
-you're never quite sure what you'll get.
+如早先所提，当连接操作与其他操作符混合时，@emph{用括号括起来}。否则，你无法确认你会得到什么结果。
 
 @node Assignment Ops
-@subsection Assignment Expressions
+@subsection 赋值表达式
 @cindex assignment operators
 @cindex operators, assignment
 @cindex expressions, assignment
 @cindex @code{=} (equals sign), @code{=} operator
 @cindex equals sign (@code{=}), @code{=} operator
-An @dfn{assignment} is an expression that stores a (usually different)
-value into a variable.  For example, let's assign the value one to the variable
-@code{z}:
+@dfn{赋值表达式}是将一个（通常不一样的）值存入某个变量的表达式。
+例如，我们将变量 @code{z} 的值赋为 1：
 
 @example
 z = 1
 @end example
 
-After this expression is executed, the variable @code{z} has the value one.
-Whatever old value @code{z} had before the assignment is forgotten.
+当这个表达式执行后，变量 @code{z} 的值就为 1。不管 @code{z} 的旧值是什么，都将丢弃。
 
-Assignments can also store string values.  For example, the
-following stores
-the value @code{"this food is good"} in the variable @code{message}:
+赋值也可以存储字串值。例如，下面将值 @code{"this food is good"} 存储到变量 @code{message} 中：
 
 @example
 thing = "food"
@@ -9095,36 +8991,20 @@ message = "this " thing " is " predicate
 
 @noindent
 @cindex side effects, assignment expressions
-This also illustrates string concatenation.
-The @samp{=} sign is called an @dfn{assignment operator}.  It is the
-simplest assignment operator because the value of the righthand
-operand is stored unchanged.
-Most operators (addition, concatenation, and so on) have no effect
-except to compute a value.  If the value isn't used, there's no reason to
-use the operator.  An assignment operator is different; it does
-produce a value, but even if you ignore it, the assignment still
-makes itself felt through the alteration of the variable.  We call this
-a @dfn{side effect}.
+这个例子也呈现了字串连接操作。
+@samp{=} 符号称为@dfn{赋值操作符}。这也是最简单的操作符，因为其右边的操作数的值会原封不动地存下来。大多数操作符（加，连接等）除非要计算值，否则都没有实际效果。如果值没有被使用，也没有理由使用这个操作符。赋值操作符则不同：因为它确实产生一个值，但是就算你忽略它，赋值仍然使自己走完变量的变化过程。我们称这个效应为@dfn{副作用}。
 
 @cindex lvalues/rvalues
 @cindex rvalues/lvalues
 @cindex assignment operators, lvalues/rvalues
 @cindex operators, assignment
-The lefthand operand of an assignment need not be a variable
-(@pxref{Variables}); it can also be a field
-(@pxref{Changing Fields}) or
-an array element (@pxref{Arrays}).
-These are all called @dfn{lvalues},
-which means they can appear on the lefthand side of an assignment operator.
-The righthand operand may be any expression; it produces the new value
-that the assignment stores in the specified variable, field, or array
-element. (Such values are called @dfn{rvalues}.)
+赋值左边的操作数不需要是一个变量（查看 @ref{Variables}），其也可以是一个域（查看 @ref{Changing Fields}）
+或者一个数组元素（查看 @ref{Arrays}）。所有这些都称为值，这意味着它们可以出现在赋值操作符左边。
+右边的操作数可以是表达式，其会产生一个新的值来赋值存储在指定的变量、域或者数组元素。（这样的值称为@dfn{右值（rvalues）}。）
 
 @cindex variables, types of
-It is important to note that variables do @emph{not} have permanent types.
-A variable's type is simply the type of whatever value was last assigned
-to it.  In the following program fragment, the variable
-@code{foo} has a numeric value at first, and a string value later on:
+要注意的是，变量@emph{没有}固定的类型。变量的类型就是其最后被赋值的数据的类型。
+在下面的程序片段中，变量 @code{foo} 先具有数值类型，然后具有字串类型：
 
 @example
 foo = 1
@@ -9134,71 +9014,56 @@ print foo
 @end example
 
 @noindent
-When the second assignment gives @code{foo} a string value, the fact that
-it previously had a numeric value is forgotten.
+当第二个赋值给了 @code{foo} 一个字串值，而这之前其具有数值类型就丢弃了。
 
-String values that do not begin with a digit have a numeric value of
-zero. After executing the following code, the value of @code{foo} is five:
+字串值中，如果不是一个以一个数值开头的话，其对应的数值值为0。在执行了下面的代码后，@code{foo} 的值为 5：
 
 @example
 foo = "a string"
 foo = foo + 5
 @end example
 
-@quotation NOTE
-Using a variable as a number and then later as a string
-can be confusing and is poor programming style.  The previous two examples
-illustrate how @command{awk} works, @emph{not} how you should write your
-programs!
+@quotation 提示
+将变量作为一个数值，然后作为字串有时候会产生困惑，而且也是一个不好的编程风格。
+前面的两个例子只是用来说明 @command{awk} 如何工作，而@emph{不是}告诉大家这么来写程序的！
 @end quotation
 
-An assignment is an expression, so it has a value---the same value that
-is assigned.  Thus, @samp{z = 1} is an expression with the value one.
-One consequence of this is that you can write multiple assignments together,
-such as:
+赋值是一个表达式，因此它有值——一个与其被赋予的相同的值。
+因此 @samp{z = 1} 是一个具有值为 1 的表达式。这个特性的一个结果就是你可以将多个赋值写在一起，如：
 
 @example
 x = y = z = 5
 @end example
 
 @noindent
-This example stores the value five in all three variables
-(@code{x}, @code{y}, and @code{z}).
-It does so because the
-value of @samp{z = 5}, which is five, is stored into @code{y} and then
-the value of @samp{y = z = 5}, which is five, is stored into @code{x}.
+这个例子中，5 这个值被赋给了三个变量（@code{x}，@code{y} 与 @code{z}）。
+这是因为 @samp{z = 5} 的值为 5，然后再存于 @code{y} 中，因此 @samp{y = z = 5} 的值为 5，最后存到 @code{x} 中。
 
-Assignments may be used anywhere an expression is called for.  For
-example, it is valid to write @samp{x != (y = 1)} to set @code{y} to one,
-and then test whether @code{x} equals one.  But this style tends to make
-programs hard to read; such nesting of assignments should be avoided,
-except perhaps in a one-shot program.
+赋值可以被用于任何可称为表达式的地方。例如，
+这么写 @samp{x != (y = 1)} 是有效的形式，其将 @code{y} 的值设成 1，然后测试 @code{x} 是否等于 1。
+但是这样的风格会导致程序难以阅读，这样的赋值嵌套应该要避免，除非是在一次性的程序里。
 
 @cindex @code{+} (plus sign), @code{+=} operator
 @cindex plus sign (@code{+}), @code{+=} operator
-Aside from @samp{=}, there are several other assignment operators that
-do arithmetic with the old value of the variable.  For example, the
-operator @samp{+=} computes a new value by adding the righthand value
-to the old value of the variable.  Thus, the following assignment adds
-five to the value of @code{foo}:
+除了 @samp{=} 外，还有几个其他的操作符用于执行与变量旧值的算术运算。
+例如，操作符 @samp{+=} 将右边的值加到变量的旧值以生成新值。所以，
+下面的赋值会在 @code{foo} 值的基础上加上5：
 
 @example
 foo += 5
 @end example
 
 @noindent
-This is equivalent to the following:
+这与下面的代码是等同的：
 
 @example
 foo = foo + 5
 @end example
 
 @noindent
-Use whichever makes the meaning of your program clearer.
+用哪一种形式，都可以清晰地表示你程序的意图。
 
-There are situations where using @samp{+=} (or any assignment operator)
-is @emph{not} the same as simply repeating the lefthand operand in the
-righthand expression.  For example:
+有几个种情况使用 @samp{+=} （或者任意的赋值表操作符）与简单地将左边的操作数作为右边的表达式的重复是@emph{不}一样的，如：
 
 @cindex Rankin, Pat
 @example
@@ -9217,24 +9082,18 @@ BEGIN  @{
 @cindex operators, assignment, evaluation order
 @cindex assignment operators, evaluation order
 @noindent
-The indices of @code{bar} are practically guaranteed to be different, because
-@code{rand()} returns different values each time it is called.
-(Arrays and the @code{rand()} function haven't been covered yet.
-@xref{Arrays},
-and
+@code{bar} 这个下标一般在实际中都是不相同的，因为 @code{rand()} 每次调用时都产生不同的值。
+（数组与 @code{rand()} 函数都还没有讨论到，查看 @ref{Arrays}，与 
 @ifnotdocbook
-@pxref{Numeric Functions}
+@ref{Numeric Functions}
 @end ifnotdocbook
 @ifdocbook
 @ref{Numeric Functions}
 @end ifdocbook
-for more information.)
-This example illustrates an important fact about assignment
-operators: the lefthand expression is only evaluated @emph{once}.
+，来获取更多的信息。）
+这个例子说明了赋值操作符的一个重要事实：表达式的左边只会求值@emph{一次}。
 
-It is up to the implementation as to which expression is evaluated
-first, the lefthand or the righthand.
-Consider this example:
+但是对于表达式的求值顺序，是先左边还是右边则是依赖于实现的。如下面：
 
 @example
 i = 1
@@ -9242,11 +9101,9 @@ a[i += 2] = i + 1
 @end example
 
 @noindent
-The value of @code{a[3]} could be either two or four.
+@code{a[3]} 的值可以是 2， 也可以是 4。
 
-@ref{table-assign-ops} lists the arithmetic assignment operators.  In each
-case, the righthand operand is an expression whose value is converted
-to a number.
+@ref{table-assign-ops} 列出了所有的算术赋值操作符，在每种情况下，右边的操作数是一个值会被转换为值的表达式。
 
 @cindex @code{-} (hyphen), @code{-=} operator
 @cindex hyphen (@code{-}), @code{-=} operator
@@ -9261,34 +9118,33 @@ to a number.
 @cindex @code{*} (asterisk), @code{**=} operator
 @cindex asterisk (@code{*}), @code{**=} operator
 @float Table,table-assign-ops
-@caption{Arithmetic assignment operators}
+@caption{算术赋值操作符}
 @multitable @columnfractions .30 .70
-@headitem Operator @tab Effect
-@item @var{lvalue} @code{+=} @var{increment} @tab Add @var{increment} to the value of @var{lvalue}.
-@item @var{lvalue} @code{-=} @var{decrement} @tab Subtract @var{decrement} from the value of @var{lvalue}.
-@item @var{lvalue} @code{*=} @var{coefficient} @tab Multiply the value of @var{lvalue} by @var{coefficient}.
-@item @var{lvalue} @code{/=} @var{divisor} @tab Divide the value of @var{lvalue} by @var{divisor}.
-@item @var{lvalue} @code{%=} @var{modulus} @tab Set @var{lvalue} to its remainder by @var{modulus}.
+@headitem 操作符 @tab 效果
+@item @var{lvalue} @code{+=} @var{increment} @tab 将 @var{increment} 添加到 @var{lvalue} 的值上。
+@item @var{lvalue} @code{-=} @var{decrement} @tab 在 @var{lvalue} 的值上减去 decrement。
+@item @var{lvalue} @code{*=} @var{coefficient} @tab 将 @var{lvalue} 的值乘上一个 coefficient。
+@item @var{lvalue} @code{/=} @var{divisor} @tab 将 @var{lvalue} 的值除上一个 divisor。
+@item @var{lvalue} @code{%=} @var{modulus} @tab 设置 @var{lvalue} 的值与其值与 @var{modulus} 求模。
 @cindex common extensions, @code{**=} operator
 @cindex extensions, common@comma{} @code{**=} operator
 @cindex @command{awk} language, POSIX version
 @cindex POSIX @command{awk}
-@item @var{lvalue} @code{^=} @var{power} @tab Raise @var{lvalue} to the power @var{power}.
-@item @var{lvalue} @code{**=} @var{power} @tab Raise @var{lvalue} to the power @var{power}. @value{COMMONEXT}
+@item @var{lvalue} @code{^=} @var{power} @tab 将 @var{lvalue} 的值进行幂乘 power。
+@item @var{lvalue} @code{**=} @var{power} @tab 将 @var{lvalue} 的值进行幂乘 power。@value{COMMONEXT}
 @end multitable
 @end float
 
 @cindex POSIX @command{awk}, @code{**=} operator and
 @cindex portability, @code{**=} operator and
-@quotation NOTE
-Only the @samp{^=} operator is specified by POSIX.
-For maximum portability, do not use the @samp{**=} operator.
+@quotation 提示
+POSIX 中只指定了 @samp{^=} 。为了移植性，不要使用 @samp{**=} 操作符。
 @end quotation
 
-@cindex sidebar, Syntactic Ambiguities Between @samp{/=} and Regular Expressions
+@cindex sidebar, @samp{/=} 与正则表达式之间的二义性
 @ifdocbook
 @docbook
-<sidebar><title>Syntactic Ambiguities Between @samp{/=} and Regular Expressions</title>
+<sidebar><title>@samp{/=} 与正则表达式之间的二义性</title>
 @end docbook
 
 @cindex dark corner, regexp constants, @code{/=} operator and
@@ -9303,11 +9159,9 @@ For maximum portability, do not use the @samp{**=} operator.
 @cindex ambiguity, syntactic: @code{/=} operator vs. @code{/=@dots{}/} regexp constant
 @cindex syntactic ambiguity: @code{/=} operator vs. @code{/=@dots{}/} regexp constant
 @cindex @code{/=} operator vs. @code{/=@dots{}/} regexp constant
-There is a syntactic ambiguity between the @code{/=} assignment
-operator and regexp constants whose first character is an @samp{=}.
+在 @code{/=} 赋值操作符与正则表达式常量（哪个记录的第一个字符是 @samp{=}）之间有一个语法上的二义性。
 @value{DARKCORNER}
-This is most notable in some commercial @command{awk} versions.
-For example:
+这在一些商业性的 @command{awk} 版本里更显眼。例如：
 
 @example
 $ @kbd{awk /==/ /dev/null}
@@ -9318,14 +9172,13 @@ $ @kbd{awk /==/ /dev/null}
 @end example
 
 @noindent
-A workaround is:
+解决方法是：
 
 @example
 awk '/[=]=/' /dev/null
 @end example
 
-@command{gawk} does not have this problem; BWK @command{awk}
-and @command{mawk} also do not.
+@command{gawk} 没有这个问题，BWK @command{awk} 与 @command{mawk} 也没有。
 
 @docbook
 </sidebar>
@@ -9334,7 +9187,7 @@ and @command{mawk} also do not.
 
 @ifnotdocbook
 @cartouche
-@center @b{Syntactic Ambiguities Between @samp{/=} and Regular Expressions}
+@center @b{@samp{/=} 与正则表达式之间的二义性}
 
 
 @cindex dark corner, regexp constants, @code{/=} operator and
@@ -9349,11 +9202,9 @@ and @command{mawk} also do not.
 @cindex ambiguity, syntactic: @code{/=} operator vs. @code{/=@dots{}/} regexp constant
 @cindex syntactic ambiguity: @code{/=} operator vs. @code{/=@dots{}/} regexp constant
 @cindex @code{/=} operator vs. @code{/=@dots{}/} regexp constant
-There is a syntactic ambiguity between the @code{/=} assignment
-operator and regexp constants whose first character is an @samp{=}.
+在 @code{/=} 赋值操作符与正则表达式常量（哪个记录的第一个字符是 @samp{=}）之间有一个语法上的二义性。
 @value{DARKCORNER}
-This is most notable in some commercial @command{awk} versions.
-For example:
+这在一些商业性的 @command{awk} 版本里更显眼。例如：
 
 @example
 $ @kbd{awk /==/ /dev/null}
@@ -9364,104 +9215,83 @@ $ @kbd{awk /==/ /dev/null}
 @end example
 
 @noindent
-A workaround is:
+解决方法是：
 
 @example
 awk '/[=]=/' /dev/null
 @end example
 
-@command{gawk} does not have this problem; BWK @command{awk}
-and @command{mawk} also do not.
+@command{gawk} 没有这个问题，BWK @command{awk} 与 @command{mawk} 也没有。
 @end cartouche
 @end ifnotdocbook
 
 @node Increment Ops
-@subsection Increment and Decrement Operators
+@subsection 递增与递减操作符
 
 @cindex increment operators
 @cindex operators, decrement/increment
-@dfn{Increment} and @dfn{decrement operators} increase or decrease the value of
-a variable by one.  An assignment operator can do the same thing, so
-the increment operators add no power to the @command{awk} language; however, they
-are convenient abbreviations for very common operations.
+@dfn{递增}与@dfn{递减操作符}对变量的值进行递增与递减 1。
+赋值操作符可以做相同的事情，因此递增操作符并没有给 @command{awk} 带来额外的功能，
+但是它们对于一些常见的操作的缩写非常方便。
 
 @cindex side effects
 @cindex @code{+} (plus sign), @code{++} operator
 @cindex plus sign (@code{+}), @code{++} operator
 @cindex side effects, decrement/increment operators
-The operator used for adding one is written @samp{++}.  It can be used to increment
-a variable either before or after taking its value.
-To @dfn{pre-increment} a variable @code{v}, write @samp{++v}.  This adds
-one to the value of @code{v}---that new value is also the value of the
-expression. (The assignment expression @samp{v += 1} is completely equivalent.)
-Writing the @samp{++} after the variable specifies @dfn{post-increment}.  This
-increments the variable value just the same; the difference is that the
-value of the increment expression itself is the variable's @emph{old}
-value.  Thus, if @code{foo} has the value four, then the expression @samp{foo++}
-has the value four, but it changes the value of @code{foo} to five.
-In other words, the operator returns the old value of the variable,
-but with the side effect of incrementing it.
+用于@dfn{加一}的操作符写作 @samp{++} 。它可以用在递增的变量的前面与后面。在变量 @code{v} 前面递增写成 @samp{++v}，
+这会对 @code{v} 值进行加一——新的值也是一个表达式。（赋值表达式 @samp{v += 1} 与其赞同。）
+在变量后面递增为后缀递增。这与前面的形式一样，不同的是递增表达式的值是变量的@emph{旧}值。
+因此，如果 @code{foo} 的值 为 4，则表达式 @samp{foo++} 的值为 4，但是变量的值会变成 5。
+换句话说，操作符返回变量的旧值，但是作为副作用会对其递增。
 
-The post-increment @samp{foo++} is nearly the same as writing @samp{(foo
-+= 1) - 1}.  It is not perfectly equivalent because all numbers in
-@command{awk} are floating point---in floating point, @samp{foo + 1 - 1} does
-not necessarily equal @code{foo}.  But the difference is minute as
+后缀递增 @samp{foo++} 几乎与 @samp{(foo += 1) - 1} 相同。
+但是又不完全相同，因为在 @command{awk} 中所有的数值都是浮点数——在浮点数中，@samp{foo + 1 - 1} 不一定与 @code{foo} 相同。
+但是这个差异非常小，只要你要处理的的值非常小（小于
 long as you stick to numbers that are fairly small (less than
 @iftex
-@math{10^{12}}).
+@math{10^{12}}）。
 @end iftex
 @ifinfo
-10e12).
+10e12）。
 @end ifinfo
 @ifnottex
 @ifnotinfo
-10@sup{12}).
+10@sup{12}）。
 @end ifnotinfo
 @end ifnottex
 
 @cindex @code{$} (dollar sign), incrementing fields and arrays
 @cindex dollar sign (@code{$}), incrementing fields and arrays
-Fields and array elements are incremented
-just like variables.  (Use @samp{$(i++)} when you want to do a field reference
-and a variable increment at the same time.  The parentheses are necessary
-because of the precedence of the field reference operator @samp{$}.)
+域与数组元素也可以像变量一样递增。（当你想执行一个域参考，又对变量进行递增时，使用 @samp{$(i++)} 。
+括号是必须的，因为域操作符 @samp{$} 先于递增操作符。）
 
 @cindex decrement operators
-The decrement operator @samp{--} works just like @samp{++}, except that
-it subtracts one instead of adding it.  As with @samp{++}, it can be used before
-the lvalue to pre-decrement or after it to post-decrement.
-Following is a summary of increment and decrement expressions:
+递增操作符 @samp{--} 与 @samp{++} 类型，只是其用于减而不是用于加。
+与 @samp{++} 一样，其用可用在左传的前面进行前缀递减，在后面进行后缀递减。下面是对于递增与递减操作符表达式的汇总：
 
 @table @code
 @cindex @code{+} (plus sign), @code{++} operator
 @cindex plus sign (@code{+}), @code{++} operator
 @item ++@var{lvalue}
-Increment @var{lvalue}, returning the new value as the
-value of the expression.
+给 @var{lvalue} 递增 1，并返回新值作为表达式的值。
 
 @item @var{lvalue}++
-Increment @var{lvalue}, returning the @emph{old} value of @var{lvalue}
-as the value of the expression.
+给 @var{lvalue} 递增 1，并返回@emph{旧}值作为表达式的值。
 
 @cindex @code{-} (hyphen), @code{--} operator
 @cindex hyphen (@code{-}), @code{--} operator
 @item --@var{lvalue}
-Decrement @var{lvalue}, returning the new value as the
-value of the expression.
-(This expression is
-like @samp{++@var{lvalue}}, but instead of adding, it subtracts.)
+给 @var{lvalue} 递减 1，并返回新值作为表达式的值。（这个与表达式 @samp{++@var{lvalue}} 一样，只是用于减，而不是用于加。）
 
 @item @var{lvalue}--
-Decrement @var{lvalue}, returning the @emph{old} value of @var{lvalue}
-as the value of the expression.
-(This expression is
-like @samp{@var{lvalue}++}, but instead of adding, it subtracts.)
+给 @var{lvalue} 递减1，并返回@emph{旧}值作为表达式的值。（这个与表达式 @samp{@var{lvalue}++} 一样，
+只是用于减，而不是用于加。）
 @end table
 
-@cindex sidebar, Operator Evaluation Order
+@cindex sidebar, 操作符求值顺序
 @ifdocbook
 @docbook
-<sidebar><title>Operator Evaluation Order</title>
+<sidebar><title>操作符求值顺序</title>
 @end docbook
 
 @cindex precedence
@@ -9470,13 +9300,13 @@ like @samp{@var{lvalue}++}, but instead of adding, it subtracts.)
 @cindex evaluation order
 @cindex Marx, Groucho
 @quotation
-@i{Doctor, it hurts when I do this!@*
-Then don't do that!}
+@i{医生，当我这么干的时候就会受伤！@*
+那么你就别这么干啊！}
 @author Groucho Marx
 @end quotation
 
 @noindent
-What happens for something like the following?
+当我们像下面这样做，会发生什么？
 
 @example
 b = 6
@@ -9484,7 +9314,7 @@ print b += b++
 @end example
 
 @noindent
-Or something even stranger?
+或者一些更奇怪的：
 
 @example
 b = 6
@@ -9493,16 +9323,10 @@ print b
 @end example
 
 @cindex side effects
-In other words, when do the various side effects prescribed by the
-postfix operators (@samp{b++}) take effect?
-When side effects happen is @dfn{implementation-defined}.
-In other words, it is up to the particular version of @command{awk}.
-The result for the first example may be 12 or 13, and for the second, it
-may be 22 or 23.
+换句话说，当执行不同的后缀操作符（@samp{b++}）时，会有哪些副作用产生？产生的副作用是@dfn{由实现来定义的}，
+即依赖于 @command{awk} 的特定版本。第一个例子的结果可能是 12 或者 13，对于第二个例子则可能是 22 或者是 23。
 
-In short, doing things like this is not recommended and definitely
-not anything that you can rely upon for portability.
-You should avoid such things in your own programs.
+一句话，这么干是不建议的并且其移植性完全不可依赖。你要在你的程序中避免这样的代码。
 @c You'll sleep better at night and be able to look at yourself
 @c in the mirror in the morning.
 
@@ -9513,7 +9337,7 @@ You should avoid such things in your own programs.
 
 @ifnotdocbook
 @cartouche
-@center @b{Operator Evaluation Order}
+@center @b{操作符求值顺序}
 
 
 @cindex precedence
@@ -9522,13 +9346,13 @@ You should avoid such things in your own programs.
 @cindex evaluation order
 @cindex Marx, Groucho
 @quotation
-@i{Doctor, it hurts when I do this!@*
-Then don't do that!}
+@i{医生，当我这么干的时候就会受伤！@*
+那么你就别这么干啊！}
 @author Groucho Marx
 @end quotation
 
 @noindent
-What happens for something like the following?
+当我们像下面这样做，会发生什么？
 
 @example
 b = 6
@@ -9536,7 +9360,7 @@ print b += b++
 @end example
 
 @noindent
-Or something even stranger?
+或者一些更奇怪的：
 
 @example
 b = 6
@@ -9545,28 +9369,20 @@ print b
 @end example
 
 @cindex side effects
-In other words, when do the various side effects prescribed by the
-postfix operators (@samp{b++}) take effect?
-When side effects happen is @dfn{implementation-defined}.
-In other words, it is up to the particular version of @command{awk}.
-The result for the first example may be 12 or 13, and for the second, it
-may be 22 or 23.
+换句话说，当执行不同的后缀操作符（@samp{b++}）时，会有哪些副作用产生？产生的副作用是@dfn{由实现来定义的}，
+即依赖于 @command{awk} 的特定版本。第一个例子的结果可能是 12 或者 13，对于第二个例子则可能是 22 或者是 23。
 
-In short, doing things like this is not recommended and definitely
-not anything that you can rely upon for portability.
-You should avoid such things in your own programs.
+一句话，这么干是不建议的并且其移植性完全不可依赖。你要在你的程序中避免这样的代码。
 @c You'll sleep better at night and be able to look at yourself
 @c in the mirror in the morning.
 @end cartouche
 @end ifnotdocbook
 
 @node Truth Values and Conditions
-@section Truth Values and Conditions
+@section 真值与条件
 
-In certain contexts, expression values also serve as ``truth values''; i.e.,
-they determine what should happen next as the program runs. This
-@value{SECTION} describes how @command{awk} defines ``true'' and ``false''
-and how values are compared.
+在特定的上下文中，表达式的值会用来作为“真值”，如，用来决定接下来程序应该执行什么。
+这一@value{SECTION}中会描述 @command{awk} 如何定义 @samp{true} 与 @samp{false} 以及值如何进行比较。
 
 @menu
 * Truth Values::                What is ``true'' and what is ``false''.
@@ -9582,23 +9398,18 @@ and how values are compared.
 @end menu
 
 @node Truth Values
-@subsection True and False in @command{awk}
+@subsection @command{awk} 的真与假
 @cindex truth values
 @cindex logical false/true
 @cindex false, logical
 @cindex true, logical
 
 @cindex null strings
-Many programming languages have a special representation for the concepts
-of ``true'' and ``false.''  Such languages usually use the special
-constants @code{true} and @code{false}, or perhaps their uppercase
-equivalents.
-However, @command{awk} is different.
-It borrows a very simple concept of true and
-false from C.  In @command{awk}, any nonzero numeric value @emph{or} any
-nonempty string value is true.  Any other value (zero or the null
-string, @code{""}) is false.  The following program prints @samp{A strange
-truth value} three times:
+许多的编程语言对于“true”与“false”概念都有特殊的表示方式。
+这样的语言通常使用特殊的常量 @code{true} 与 @code{false}，以及对应的大写。
+但是 @command{awk} 却不同。它从 C 中借鉴了 true 与 false 的概念。
+在 @command{awk} 中，所有非 0 的数值@emph{或者}非空串都是 true。
+而其他的值（0 或者空串，@code{""}）都是 false。下面的程序会打印 @samp{A strange truth value} 三次：
 
 @example
 BEGIN @{
@@ -9612,14 +9423,13 @@ BEGIN @{
 @end example
 
 @cindex dark corner, @code{"0"} is actually true
-There is a surprising consequence of the ``nonzero or non-null'' rule:
-the string constant @code{"0"} is actually true, because it is non-null.
+这个“非 0 非空”的规则有一个令人惊讶的结果：字串 @code{"0"} 为真，因为它非空。
 @value{DARKCORNER}
 
 @node Typing and Comparison
-@subsection Variable Typing and Comparison Expressions
+@subsection 变量类型与比较表达式
 @quotation
-@i{The Guide is definitive. Reality is frequently inaccurate.}
+@i{指南都是确定的，但是现实常常不精确。}
 @author Douglas Adams, @cite{The Hitchhiker's Guide to the Galaxy}
 @end quotation
 @c 2/2015: Antonio Colombo points out that this is really from
@@ -9634,11 +9444,9 @@ the string constant @code{"0"} is actually true, because it is non-null.
 @cindex operators, relational, See operators@comma{} comparison
 @cindex variable typing
 @cindex variables, types of, comparison expressions and
-Unlike in other programming languages, in @command{awk} variables do not have a
-fixed type. Instead, they can be either a number or a string, depending
-upon the value that is assigned to them.
-We look now at how variables are typed, and how @command{awk}
-compares variables.
+与其他的语言不同，@command{awk} 中的变量没有固定的类型。
+相反，它们即可以是数值，也可以是字串，这主要依赖于所赋给它的值来确定。我们现在来看看变量是如何来确定类型的，
+以及 @command{awk} 如何来比较这些变量。
 
 @menu
 * Variable Typing::             String type versus numeric type.
@@ -9647,49 +9455,38 @@ compares variables.
 @end menu
 
 @node Variable Typing
-@subsubsection String Type versus Numeric Type
+@subsubsection 字串类型与数值类型
 
 @cindex numeric, strings
 @cindex strings, numeric
 @cindex POSIX @command{awk}, numeric strings and
-The POSIX standard introduced
-the concept of a @dfn{numeric string}, which is simply a string that looks
-like a number---for example, @code{@w{" +2"}}.  This concept is used
-for determining the type of a variable.
-The type of the variable is important because the types of two variables
-determine how they are compared.
-Variable typing follows these rules:
+POSIX 标准中引入了@dfn{数值式字串}的概念，
+简单地说就是看起来像是一个数值的字串——如 @code{@w{" +2"}}。
+这个概念也用来确定变量的类型。变量的类型是非常重要的，因为两变量的类型决定了它们之间如何进行比较。变量类型的确定依赖下面的规则：
 
 
 @itemize @value{BULLET}
 @item
-A numeric constant or the result of a numeric operation has the @dfn{numeric}
-attribute.
+数值常量或者是数值操作结果具有@dfn{数值}属性。
 
 @item
-A string constant or the result of a string operation has the @dfn{string}
-attribute.
+字串常量或者字串操作结果具有@dfn{字串}属性。
 
 @item
-Fields, @code{getline} input, @code{FILENAME}, @code{ARGV} elements,
-@code{ENVIRON} elements, and the elements of an array created by
-@code{match()}, @code{split()}, and @code{patsplit()} that are numeric
-strings have the @dfn{strnum} attribute.  Otherwise, they have
-the @dfn{string} attribute.  Uninitialized variables also have the
-@dfn{strnum} attribute.
+域，@code{getline} 输出，@code{FILENAME}，@code{ARGV} 元素，
+@code{ENVIRON} 元素以及由 @code{match()}，@code{split()} 与 @code{patsplit()} 生成的数组的元素，
+如果是数值字串，则具有 @dfn{strnum} 属性。否则就具有@dfn{字串}属性。
+未初始化的变量也具有 @dfn{strnum} 属性。
 
 @item
-Attributes propagate across assignments but are not changed by
-any use.
+属性通过赋值操作符进行传递，但是使用则不会改变。
 @c (Although a use may cause the entity to acquire an additional
 @c value such that it has both a numeric and string value, this leaves the
 @c attribute unchanged.)
 @c This is important but not relevant
 @end itemize
 
-The last rule is particularly important. In the following program,
-@code{a} has numeric type, even though it is later used in a string
-operation:
+最后的规则尤其重要。在下面的程序中，@code{a} 具有数值类型，就算之后它被用于字串操作中：
 
 @example
 BEGIN @{
@@ -9699,9 +9496,7 @@ BEGIN @{
 @}
 @end example
 
-When two operands are compared, either string comparison or numeric comparison
-may be used. This depends upon the attributes of the operands, according to the
-following symmetric matrix:
+当两个操作数进行比较时，要么是进行字串比较，要么是进行数值比较。这依赖于操作数的属性，如下面的对称阵列：
 
 @c thanks to Karl Berry, kb@cs.umb.edu, for major help with TeX tables
 @tex
@@ -9806,27 +9601,16 @@ STRNUM  |       string          numeric         numeric
 
 @end docbook
 
-The basic idea is that user input that looks numeric---and @emph{only}
-user input---should be treated as numeric, even though it is actually
-made of characters and is therefore also a string.
-Thus, for example, the string constant @w{@code{" +3.14"}},
-when it appears in program source code,
-is a string---even though it looks numeric---and
-is @emph{never} treated as a number for comparison
-purposes.
+基本的思想就是，用户的输入看起来像数值——也@emph{仅仅}在用户输入中——就会被当成数值对待，
+就算它实际上是由字符组成的字串。所以，如这样的字串常量 @w{@code{" +3.14"}}，
+当它出现在程序原代码中，是一个字串——就算它是一个数值——也@emph{永远}不会在比较目的中被当成数值。
 
-In short, when one operand is a ``pure'' string, such as a string
-constant, then a string comparison is performed.  Otherwise, a
-numeric comparison is performed.
+简单地说，当操作数是一个“纯粹”的字串，如字串常量，则就会执行字串比较。否则就会执行数值比较。
 
-This point bears additional emphasis: All user input is made of characters,
-and so is first and foremost of string type; input strings
-that look numeric are additionally given the strnum attribute.
-Thus, the six-character input string @w{@samp{ +3.14}} receives the
-strnum attribute. In contrast, the eight characters
-@w{@code{" +3.14"}} appearing in program text comprise a string constant.
-The following examples print @samp{1} when the comparison between
-the two different constants is true, and @samp{0} otherwise:
+对此还要强调一下：所有的用户输入都由字符组成，因此首先它是字串类型，输出的字串看起来像是数值的就会赋给 strnum 属性。
+所以，下面这个6字符的输出串 @w{@samp{ +3.14}} 会具有 strnum 属性。
+相反地，下面的 8 字符串 @w{@code{" +3.14"}} 出现在程序文本中则组成了一个字串常量。
+下面的例子中，当比较两个不同的常量时为真，因此打印 @samp{1}，否则打印 @samp{0} ：
 
 @c 22.9.2014: Tested with mawk and BWK awk, got same results.
 @example
@@ -9849,12 +9633,10 @@ $ @kbd{echo ' +3.14' | awk '@{ print($1 == 3.14) @}'}        @ii{True}
 @end example
 
 @node Comparison Operators
-@subsubsection Comparison Operators
+@subsubsection 比较操作符
 
-@dfn{Comparison expressions} compare strings or numbers for
-relationships such as equality.  They are written using @dfn{relational
-operators}, which are a superset of those in C.
-@ref{table-relational-ops} describes them.
+@dfn{比较表达式}在数值或者字串中进行比较，比如说相等性。它们通常使用@dfn{关系操作符}来表现，
+这些操作是 C 中对应的操作的超集。表 @ref{table-relational-ops} 中有说明。
 
 @cindex @code{<} (left angle bracket), @code{<} operator
 @cindex left angle bracket (@code{<}), @code{<} operator
@@ -9874,36 +9656,30 @@ operators}, which are a superset of those in C.
 @cindex exclamation point (@code{!}), @code{!~} operator
 @cindex @code{in} operator
 @float Table,table-relational-ops
-@caption{Relational operators}
+@caption{关系操作符}
 @multitable @columnfractions .25 .75
 @headitem Expression @tab Result
-@item @var{x} @code{<} @var{y} @tab True if @var{x} is less than @var{y}
-@item @var{x} @code{<=} @var{y} @tab True if @var{x} is less than or equal to @var{y}
-@item @var{x} @code{>} @var{y} @tab True if @var{x} is greater than @var{y}
-@item @var{x} @code{>=} @var{y} @tab True if @var{x} is greater than or equal to @var{y}
-@item @var{x} @code{==} @var{y} @tab True if @var{x} is equal to @var{y}
-@item @var{x} @code{!=} @var{y} @tab True if @var{x} is not equal to @var{y}
-@item @var{x} @code{~} @var{y} @tab True if the string @var{x} matches the regexp denoted by @var{y}
-@item @var{x} @code{!~} @var{y} @tab True if the string @var{x} does not match the regexp denoted by @var{y}
-@item @var{subscript} @code{in} @var{array} @tab True if the array @var{array} has an element with the subscript @var{subscript}
+@item @var{x} @code{<} @var{y} @tab 如果 @var{x} 小于 @var{y} 则为真
+@item @var{x} @code{<=} @var{y} @tab 如果 @var{x} 小于或者等于 @var{y} 则为真
+@item @var{x} @code{>} @var{y} @tab 如果 @var{x} 大于 @var{y} 则为真
+@item @var{x} @code{>=} @var{y} @tab 如果 @var{x} 大于或者等于 @var{y} 则为真
+@item @var{x} @code{==} @var{y} @tab 如果 @var{x} 等于 @var{y} 则为真
+@item @var{x} @code{!=} @var{y} @tab 如果 @var{x} 不等于 @var{y} 则为真
+@item @var{x} @code{~} @var{y} @tab 如果字串 @var{x} 与 @var{y} 所代表的正则表达式匹配则为真
+@item @var{x} @code{!~} @var{y} @tab 如果字串 @var{x} 与 @var{y} 表示的正则表达式不匹配则为真
+@item @var{subscript} @code{in} @var{array} @tab 如果数组 @var{array} 在下存在下标 @var{subscript} 所指明的元素则为真
 @end multitable
 @end float
 
-Comparison expressions have the value one if true and zero if false.
-When comparing operands of mixed types, numeric operands are converted
-to strings using the value of @code{CONVFMT}
-(@pxref{Conversion}).
+比较表达式的结果为 true，则值为 1，反之则为 0。
+当不同的类型之间进行比较时，数值类型的操作符会按照 @code{CONVFMT} （查看 @ref{Conversion}）的格式转换为字串。
 
-Strings are compared
-by comparing the first character of each, then the second character of each,
-and so on.  Thus, @code{"10"} is less than @code{"9"}.  If there are two
-strings where one is a prefix of the other, the shorter string is less than
-the longer one.  Thus, @code{"abc"} is less than @code{"abcd"}.
+字串的比较每个串的第一个字符，然后第二个字符，依次进行比较。因此，@code{"10"} 小于 @code{"9"}。
+如果两个串中，一个串是另一个串的前缀，短的串小于长的串。所以，@code{"abc"} 小于 @code{"abcd"}。
 
 @cindex troubleshooting, @code{==} operator
-It is very easy to accidentally mistype the @samp{==} operator and
-leave off one of the @samp{=} characters.  The result is still valid
-@command{awk} code, but the program does not do what is intended:
+很容易不小将 @samp{==} 操作符少打一个 @samp{=} 符号。
+结果还是一个有效的 @command{awk} 代码，但是程序执行的可就不是你的意图了：
 
 @example
 if (a = b)   # oops! should be a == b
@@ -9913,37 +9689,35 @@ else
 @end example
 
 @noindent
-Unless @code{b} happens to be zero or the null string, the @code{if}
-part of the test always succeeds.  Because the operators are
-so similar, this kind of error is very difficult to spot when
-scanning the source code.
+除非 @code{b} 碰巧为 0 或者是空串，否则 @code{if} 的测试部分总会是成功的（为 true）。
+因此操作符看起来这么像，此类的错误会非常难发现。
 
-The following list of expressions illustrates the kinds of comparisons
-@command{awk} performs, as well as what the result of each comparison is:
+下面的表达式列表说明了 @command{awk} 执行的比较类型，以及比较的结果：
 
 @table @code
 @item 1.5 <= 2.0
-Numeric comparison (true)
+数值比较（true）
 
 @item "abc" >= "xyz"
-String comparison (false)
+字串比较（false）
 
 @item 1.5 != " +2"
-String comparison (true)
+字串比较（true）
+
 
 @item "1e2" < "3"
-String comparison (true)
+字串比较（true）
 
 @item a = 2; b = "2"
 @itemx a == b
-String comparison (true)
+字串比较（true）
 
 @item a = 2; b = " +2"
 @itemx a == b
-String comparison (false)
+字串比较（false）
 @end table
 
-In this example:
+在下面的例子中：
 
 @example
 $ @kbd{echo 1e2 3 | awk '@{ print ($1 < $2) ? "true" : "false" @}'}
@@ -9954,74 +9728,54 @@ $ @kbd{echo 1e2 3 | awk '@{ print ($1 < $2) ? "true" : "false" @}'}
 @c @cindex string comparison vs.@: regexp comparison
 @c @cindex regexp comparison vs.@: string comparison
 @noindent
-the result is @samp{false} because both @code{$1} and @code{$2}
-are user input.  They are numeric strings---therefore both have
-the strnum attribute, dictating a numeric comparison.
-The purpose of the comparison rules and the use of numeric strings is
-to attempt to produce the behavior that is ``least surprising,'' while
-still ``doing the right thing.''
+结果为 @samp{false} ，因为 @code{$1} 与 @code{$2} 都是用户输入。它们都是数值字串——因此两个都有 strnum 属性，
+所以执行的是数值比较。比较规则的目的以及数值字串的使用是试图产生“最少惊讶”的行为，同时还会“做正确的事”。
 
-String comparisons and regular expression comparisons are very different.
-For example:
+字串比较与正则表达式比较是非常不同的，如：
 
 @example
 x == "foo"
 @end example
 
 @noindent
-has the value one, or is true if the variable @code{x}
-is precisely @samp{foo}.  By contrast:
+具有值 1，或者 true，如果变量 @code{x} 确实为 @samp{foo} 。相反：
 
 @example
 x ~ /foo/
 @end example
 
 @noindent
-has the value one if @code{x} contains @samp{foo}, such as
-@code{"Oh, what a fool am I!"}.
+则当 @code{x} 包含 @samp{foo} 时为 1，如 @code{"Oh, what a fool am I!"}（天啊，我真是蠢得要死！）
 
 @cindex @code{~} (tilde), @code{~} operator
 @cindex tilde (@code{~}), @code{~} operator
 @cindex @code{!} (exclamation point), @code{!~} operator
 @cindex exclamation point (@code{!}), @code{!~} operator
-The righthand operand of the @samp{~} and @samp{!~} operators may be
-either a regexp constant (@code{/}@dots{}@code{/}) or an ordinary
-expression. In the latter case, the value of the expression as a string is used as a
-dynamic regexp (@pxref{Regexp Usage}; also
-@pxref{Computed Regexps}).
+@samp{~} 与 @samp{!~} 右边的操作数可以是正则表达式常量（@code{/}@dots{}@code{/}），
+也可以是一个普通的表达式。在后面的情况下，表达式的值会当成字串，并作为动态正则表达式（查看 @ref{Regexp Usage}，
+与 @ref{Computed Regexps}）。
 
 @cindex @command{awk}, regexp constants and
 @cindex regexp constants
-A constant regular
-expression in slashes by itself is also an expression.
-@code{/@var{regexp}/} is an abbreviation for the following comparison expression:
+带斜杠的正则表达式常量其本身也是一个表达式。@code{/@var{regexp}/} 是下面比较操作表达式的缩写形式：
 
 @example
 $0 ~ /@var{regexp}/
 @end example
 
-One special place where @code{/foo/} is @emph{not} an abbreviation for
-@samp{$0 ~ /foo/} is when it is the righthand operand of @samp{~} or
-@samp{!~}.
-@xref{Using Constant Regexps},
-where this is discussed in more detail.
+@code{/foo/} @emph{不是} @samp{$0 ~ /foo/} 的缩写的一个特殊地方就是它在操作符 @samp{~} 或者 @samp{!~} 的右边。
+查看 @ref{Using Constant Regexps}，在此处会有更详细的讨论。
 
 @node POSIX String Comparison
-@subsubsection String Comparison with POSIX Rules
+@subsubsection POSIX 中的字串比较规则
 
-The POSIX standard says that string comparison is performed based
-on the locale's @dfn{collating order}. This is the order in which
-characters sort, as defined by the locale (for more discussion,
-@pxref{Locales}).  This order is usually very different
-from the results obtained when doing straight character-by-character
-comparison.@footnote{Technically, string comparison is supposed
-to behave the same way as if the strings were compared with the C
-@code{strcoll()} function.}
+POSIX 标准规定，字串的比较是按照本地语言设置的@dfn{分类顺序}进行的。这个顺序字符是按照本语言设置经过排序的
+（更多的讨论可查看 @ref{Locales}）。
+这个顺序完全不同于进行直接的字符对字符的比较所得到的结果。 
+@footnote{从技术上说，字串比较应该的行为应该一致，就好像字串的的比较使用的是 C @code{strcoll()} 函数一样。}
 
-Because this behavior differs considerably from existing practice,
-@command{gawk} only implements it when in POSIX mode (@pxref{Options}).
-Here is an example to illustrate the difference, in an @code{en_US.UTF-8}
-locale:
+由于这样的行为与既有的实践有巨大的差异，@command{gawk} 只在 POSIX 模式下（查看 @ref{Options}）实现了。
+下面的例子解释了在 @code{en_US.UTF-8} 语言设置下的差异：
 
 @example
 $ @kbd{gawk 'BEGIN @{ printf("ABC < abc = %s\n",}
@@ -10034,7 +9788,7 @@ $ @kbd{gawk --posix 'BEGIN @{ printf("ABC < abc = %s\n",}
 
 
 @node Boolean Ops
-@subsection Boolean Expressions
+@subsection 布林表达式
 @cindex and Boolean-logic operator
 @cindex or Boolean-logic operator
 @cindex not Boolean-logic operator
@@ -10045,73 +9799,49 @@ $ @kbd{gawk --posix 'BEGIN @{ printf("ABC < abc = %s\n",}
 @cindex logical operators, See Boolean expressions
 @cindex operators, logical, See Boolean expressions
 
-A @dfn{Boolean expression} is a combination of comparison expressions or
-matching expressions, using the Boolean operators ``or''
-(@samp{||}), ``and'' (@samp{&&}), and ``not'' (@samp{!}), along with
-parentheses to control nesting.  The truth value of the Boolean expression is
-computed by combining the truth values of the component expressions.
-Boolean expressions are also referred to as @dfn{logical expressions}.
-The terms are equivalent.
+@dfn{布林表达式}是由比较表达式或者是匹配表达式组成，
+利用操作“or”（@samp{||}），“and”（@samp{&&}），还有“not”（@samp{!}）组合而成，并利用括号来控制表达式的嵌入。
+布林表达式的真值通过计算组成该表达式的直值组合而得。布林表达式也称为@dfn{逻辑表达式}。两者是一样的。
 
-Boolean expressions can be used wherever comparison and matching
-expressions can be used.  They can be used in @code{if}, @code{while},
-@code{do}, and @code{for} statements
-(@pxref{Statements}).
-They have numeric values (one if true, zero if false) that come into play
-if the result of the Boolean expression is stored in a variable or
-used in arithmetic.
+布林表达式可以用在所有的比较与匹配表达式可以使用的地方。可以用在 @code{if}，@code{while}，@code{do} 与 @code{for} 语言中
+（查看 @ref{Statements}）。当布林表达式的结果要存在变量中或者在算法表达式中使用，则其值为数值类型（真则为 1，否则为 0）。
 
-In addition, every Boolean expression is also a valid pattern, so
-you can use one as a pattern to control the execution of rules.
-The Boolean operators are:
+其次，每一个布林表达式都是有效的模式，因此你可以将其用在模式中，以控制规则的执行。布林操作符有如下这些：
 
 @table @code
 @item @var{boolean1} && @var{boolean2}
-True if both @var{boolean1} and @var{boolean2} are true.  For example,
-the following statement prints the current input record if it contains
-both @samp{edu} and @samp{li}:
+如果 @var{boolean1} 与 @var{boolean2} 都为 true，则返回 true。例如，下面的语句，
+如果输入记录中包含 @samp{edu} 与 @samp{li} 则打印它：
 
 @example
 if ($0 ~ /edu/ && $0 ~ /li/) print
 @end example
 
 @cindex side effects, Boolean operators
-The subexpression @var{boolean2} is evaluated only if @var{boolean1}
-is true.  This can make a difference when @var{boolean2} contains
-expressions that have side effects. In the case of @samp{$0 ~ /foo/ &&
-($2 == bar++)}, the variable @code{bar} is not incremented if there is
-no substring @samp{foo} in the record.
+子表达式 @var{boolean2} 只有在 @var{boolean1} 求值为 true 时，才会进行求值。
+如果 @var{boolean2} 表达式包含有副作用的表达式，则会产生不同的结果。
+在 @samp{$0 ~ /foo/ && ($2 == bar++)} 例子中，变量 @code{bar} 在记录中不包含子串 @samp{foo} 时，不会进行递增。
 
 @item @var{boolean1} || @var{boolean2}
-True if at least one of @var{boolean1} or @var{boolean2} is true.
-For example, the following statement prints all records in the input
-that contain @emph{either} @samp{edu} or
-@samp{li}:
+@var{boolean1} 或者 @var{boolean2} 之一为 true 是返回 true。例如，
+下面的语句中，如果输入中包含 @samp{edu} @emph{或者} @samp{li}，则打印这些记录：
 
 @example
 if ($0 ~ /edu/ || $0 ~ /li/) print
 @end example
 
-The subexpression @var{boolean2} is evaluated only if @var{boolean1}
-is false.  This can make a difference when @var{boolean2} contains
-expressions that have side effects.
-(Thus, this test never really distinguishes records that contain both
-@samp{edu} and @samp{li}---as soon as @samp{edu} is matched,
-the full test succeeds.)
+子表达式 @var{boolean2} 只有在 @var{boolean1} 的值为 false 才会进行求值。
+因此如果 @var{boolean2} 表达式有副作用，则会带来不同的结果。（所以，这里的测试并不是真正地测试记录中是否包含 @samp{edu} 与 @samp{li} 二者——只要匹配 @samp{edu}，整个测试就成功。）
 
 @item ! @var{boolean}
-True if @var{boolean} is false.  For example,
-the following program prints @samp{no home!} in
-the unusual event that the @env{HOME} environment
-variable is not defined:
+如果 @var{boolean} 为 false，则为 true。下面的代码，当 @env{HOME} 环境变量不存在这种不正常事件时，则打印 @samp{no home!}：
 
 @example
 BEGIN @{ if (! ("HOME" in ENVIRON))
             print "no home!" @}
 @end example
 
-(The @code{in} operator is described in
-@ref{Reference to Elements}.)
+（@code{in} 操作符在 @ref{Reference to Elements}，这里描述）
 @end table
 
 @cindex short-circuit operators
@@ -10120,28 +9850,18 @@ BEGIN @{ if (! ("HOME" in ENVIRON))
 @cindex ampersand (@code{&}), @code{&&} operator
 @cindex @code{|} (vertical bar), @code{||} operator
 @cindex vertical bar (@code{|}), @code{||} operator
-The @samp{&&} and @samp{||} operators are called @dfn{short-circuit}
-operators because of the way they work.  Evaluation of the full expression
-is ``short-circuited'' if the result can be determined partway through
-its evaluation.
+@samp{&&} 与 @samp{||} 操作符因为它们的执行方式被称为短路操作符。对于完整表达式的求值，如果其结果只需要由其部分求值即可得到，则我们称这个表达式 @samp{被短路了} 。
 
 @cindex line continuations
-Statements that end with @samp{&&} or @samp{||} can be continued simply
-by putting a newline after them.  But you cannot put a newline in front
-of either of these operators without using backslash continuation
-(@pxref{Statements/Lines}).
+如果语句由 @samp{&&} 或者 @samp{||} 结束，可以简单地在其后进行换行就可以进行续行。但是在其前面，如果你不加上一个反斜杠，都不能进行换行（查看 @ref{Statements/Lines}）。
 
 @cindex @code{!} (exclamation point), @code{!}  operator
 @cindex exclamation point (@code{!}), @code{!} operator
 @cindex newlines
 @cindex variables, flag
 @cindex flag variables
-The actual value of an expression using the @samp{!} operator is
-either one or zero, depending upon the truth value of the expression it
-is applied to.
-The @samp{!} operator is often useful for changing the sense of a flag
-variable from false to true and back again. For example, the following
-program is one way to print lines in between special bracketing lines:
+使用 @samp{!} 操作符的表达式的值要么是 1，要么是 0，则要视其应用所在的表达式的值。
+@samp{!} 操作符在将标志变量的值从 false 转换为 true，再转回来的情况下很有用。例如，下面的程序就是一种打印特殊括号之间的行的方式：
 
 @example
 $1 == "START"   @{ interested = ! interested; next @}
@@ -10150,14 +9870,11 @@ $1 == "END"     @{ interested = ! interested; next @}
 @end example
 
 @noindent
-The variable @code{interested}, as with all @command{awk} variables, starts
-out initialized to zero, which is also false.  When a line is seen whose
-first field is @samp{START}, the value of @code{interested} is toggled
-to true, using @samp{!}. The next rule prints lines as long as
-@code{interested} is true.  When a line is seen whose first field is
-@samp{END}, @code{interested} is toggled back to false.@footnote{This
-program has a bug; it prints lines starting with @samp{END}. How
-would you fix it?}
+变量 @code{interested} 与共他所有的 @command{awk} 变量一样，一开始被初始化为 0，其表示 false。
+当行发现了第一个域为 @samp{START} 的行后，@code{interested} 变量的值则利用用 @samp{!} 变为 true。
+下一个规则中，如果 @code{interested} 为 true，则打印这些行。
+当发现第一个域为 @samp{END} 的行后，则 @code{interested} 变量又会转回 false。 
+@footnote{这个程序有一个 BUG，它会打印以 @samp{END} 开头的行。看看你怎么来修复它？}
 
 @ignore
 Scott Deifik points out that this program isn't robust against
@@ -10165,9 +9882,7 @@ bogus input data, but the point is to illustrate the use of `!',
 so we'll leave well enough alone.
 @end ignore
 
-Most commonly, the @samp{!} operator is used in the conditions of
-@code{if} and @code{while} statements, where it often makes more
-sense to phrase the logic in the negative:
+更通常的是，@samp{!} 操作符是用在 @code{if} 与 @code{while} 语句中，在这些语句中，写否定逻辑含义更加明确：
 
 @example
 if (! @var{some condition} || @var{some other condition}) @{
@@ -10176,101 +9891,71 @@ if (! @var{some condition} || @var{some other condition}) @{
 @end example
 
 @cindex @code{next} statement
-@quotation NOTE
-The @code{next} statement is discussed in
-@ref{Next Statement}.
-@code{next} tells @command{awk} to skip the rest of the rules, get the
-next record, and start processing the rules over again at the top.
-The reason it's there is to avoid printing the bracketing
-@samp{START} and @samp{END} lines.
+@quotation 提示
+@code{next} 语句将在 @ref{Next Statement}，讨论。
+@code{next} 告诉 @command{awk} 跳过剩下的规则，并读取下一个记录，并从最开始来处理各个规则。
+写在这里的原因是避免打印括起文本的 @samp{START} 与 @samp{END} 行。
 @end quotation
 
 @node Conditional Exp
-@subsection Conditional Expressions
+@subsection 条件表达式
 @cindex conditional expressions
 @cindex expressions, conditional
 @cindex expressions, selecting
 
-A @dfn{conditional expression} is a special kind of expression that has
-three operands.  It allows you to use one expression's value to select
-one of two other expressions.
-The conditional expression in @command{awk} is the same as in the C
-language, as shown here:
+@dfn{条件表达式}是一种拥有三个操作数的特殊的表达式。该表达式可以让你使用一个表达式的值，即可以从其他两个表达式中选择一个。
+@command{awk} 中的条件表达式与 C 语言中的表达式一样，如下所示：
 
 @example
 @var{selector} ? @var{if-true-exp} : @var{if-false-exp}
 @end example
 
 @noindent
-There are three subexpressions.  The first, @var{selector}, is always
-computed first.  If it is ``true'' (not zero or not null), then
-@var{if-true-exp} is computed next, and its value becomes the value of
-the whole expression.  Otherwise, @var{if-false-exp} is computed next,
-and its value becomes the value of the whole expression.
-For example, the following expression produces the absolute value of @code{x}:
+这里有三个子表达式。第一个子表达式是 @var{selector}，它总是首先被计算。如果结果为 @samp{true}（非零或者非空），
+则 @var{if-true-exp} 则接着被计算，其值将成为整个表达式的值。否则，@var{if-true-exp} 被计算，其值成为整个表达式的值。
+例如，下面的表达式产生 @code{x} 的绝对值：
 
 @example
 x >= 0 ? x : -x
 @end example
 
 @cindex side effects, conditional expressions
-Each time the conditional expression is computed, only one of
-@var{if-true-exp} and @var{if-false-exp} is used; the other is ignored.
-This is important when the expressions have side effects.  For example,
-this conditional expression examines element @code{i} of either array
-@code{a} or array @code{b}, and increments @code{i}:
+条件表达式的每一次计算，@var{if-true-exp} 与 @var{if-false-exp} 只会有一个被使用，
+另外一个就被忽略了。如果表达式中有副作用，这就变得相当重要。例如，下面的条件表达式提取数组 @code{a} 或者 @code{b} 的元素 @code{i}，
+并递增 @code{i}：
 
 @example
 x == y ? a[i++] : b[i++]
 @end example
 
 @noindent
-This is guaranteed to increment @code{i} exactly once, because each time
-only one of the two increment expressions is executed
-and the other is not.
-@xref{Arrays},
-for more information about arrays.
+这保证了 @code{i} 只会被递增一次，当表达式被计算时，两个递增表达式只会执行一个。
+查看 @ref{Arrays}，来获取更多的关于数组的信息。
 
 @cindex differences in @command{awk} and @command{gawk}, line continuations
 @cindex line continuations, @command{gawk}
 @cindex @command{gawk}, line continuation in
-As a minor @command{gawk} extension,
-a statement that uses @samp{?:} can be continued simply
-by putting a newline after either character.
-However, putting a newline in front
-of either character does not work without using backslash continuation
-(@pxref{Statements/Lines}).
-If @option{--posix} is specified
-(@pxref{Options}), this extension is disabled.
+作为一个小的 @command{gawk} 扩展，使用 @samp{?:} 的语句可以在两个符号中的任意字符处进行换行。
+但是，在这两个字符前进行换行，如果不加反斜杠是不行的（查看 @ref{Statements/Lines}）。
+如何使用了 @option{--posix} 参数（查看 @ref{Options}），这个扩展也不被禁用了。
 
 @node Function Calls
-@section Function Calls
+@section 函数调用
 @cindex function calls
 
-A @dfn{function} is a name for a particular calculation.
-This enables you to
-ask for it by name at any point in the program.  For
-example, the function @code{sqrt()} computes the square root of a number.
+@dfn{函数}是一个特殊计算过程的名字。这样你可以通过名字在程序的任何位置来请求执行。
+例如，函数 @code{sqrt()} 计算数值的平方根。
 
 @cindex functions, built-in
-A fixed set of functions are @dfn{built in}, which means they are
-available in every @command{awk} program.  The @code{sqrt()} function is one
-of these.  @xref{Built-in} for a list of built-in
-functions and their descriptions.  In addition, you can define
-functions for use in your program.
-@xref{User-defined}
-for instructions on how to do this.
-Finally, @command{gawk} lets you write functions in C or C++
-that may be called from your program (@pxref{Dynamic Extensions}).
+@command{awk} 中有固定的@dfn{内建}函数集合，它们可以在任意的 @command{awk} 程序中使用。
+@code{sqrt()} 就是其中之一。查看 @ref{Built-in}，内建函数的列表以及其说明。
+另外，你也可以定义只有你的程序使用的函数。查看 @ref{User-defined}，来获取自定义函数的方法。
+@command{gawk} 也可以让你使用 C 或者 C++ 来编写函数，并在你的程序中调用（查看 @ref{Dynamic Extensions}）。
 
 @cindex arguments, in function calls
-The way to use a function is with a @dfn{function call} expression,
-which consists of the function name followed immediately by a list of
-@dfn{arguments} in parentheses.  The arguments are expressions that
-provide the raw materials for the function's calculations.
-When there is more than one argument, they are separated by commas.  If
-there are no arguments, just write @samp{()} after the function name.
-The following examples show function calls with and without arguments:
+函数的使用带有一个@dfn{函数调用}表达式，其包括函数名，后面直接跟着在括号中的@dfn{参数}列表。
+参数是为调用函数计算过程而提供的原始资料的表达式。当多于一个参数时，它们则通过逗号分隔。
+如果没有参数，则只要在函数名后写 @samp{()} 即可。下面的例子展现了带参与不带参的函数调用。
 
 @example
 sqrt(x^2 + y^2)        @ii{one argument}
@@ -10279,47 +9964,29 @@ rand()                 @ii{no arguments}
 @end example
 
 @cindex troubleshooting, function call syntax
-@quotation CAUTION
-Do not put any space between the function name and the opening parenthesis!
-A user-defined function name looks just like the name of a
-variable---a space would make the expression look like concatenation of
-a variable with an expression inside parentheses.
-With built-in functions, space before the parenthesis is harmless, but
-it is best not to get into the habit of using space to avoid mistakes
-with user-defined functions.
+@quotation 注意
+不要在函数名与开括号之间输出任何空格！
+用户自定义的函数名看起来就像是变量名——因此空格会导致表达式看起来是变量与括号中的表达式的连接操作。
+而对于内建的函数，在括号之前的空格是可选的，但是最好不要形成插入空格的习惯，以避免在调用用户自定义函数的时候犯错。
 @end quotation
 
-Each function expects a particular number
-of arguments.  For example, the @code{sqrt()} function must be called with
-a single argument, the number of which to take the square root:
+每个函数都有特定的参数。例如，@code{sqrt()} 函数必须用单参数调用，即要计算平方根的数值：
 
 @example
 sqrt(@var{argument})
 @end example
 
-Some of the built-in functions have one or
-more optional arguments.
-If those arguments are not supplied, the functions
-use a reasonable default value.
-@xref{Built-in} for full details.  If arguments
-are omitted in calls to user-defined functions, then those arguments are
-treated as local variables. Such local variables act like the
-empty string if referenced where a string value is required,
-and like zero if referenced where a numeric value is required
-(@pxref{User-defined}).
+一些内建的函数有一个或者多个的可选参数。如果没有提供那些参数，则函数会使用合适的默认值。
+查看 @ref{Built-in}，来获取更多细节。如果在调用用户自定义的函数时省略了参数，则这些参数将会当成本变量（在定义函数时的括号中的变量——译者注）。这些本地变量当被使用时，如果需要的是一个字串，则其为空串，如果需要的数值，则其值为 0（查看 @ref{User-defined}）。
 
-As an advanced feature, @command{gawk} provides indirect function calls,
-which is a way to choose the function to call at runtime, instead of
-when you write the source code to your program. We defer discussion of
-this feature until later; see @ref{Indirect Calls}.
+作为一个高级特性，@command{gawk} 提供了间接调用函数的方式，
+这是一种在运行时进行函数选择的方式，而不是在你写程序的时候就确定要调用的函数。
+我们后面再对这个进行讨论，可以查看 @ref{Indirect Calls}。
 
 @cindex side effects, function calls
-Like every other expression, the function call has a value, often
-called the @dfn{return value}, which is computed by the function
-based on the arguments you give it.  In this example, the return value
-of @samp{sqrt(@var{argument})} is the square root of @var{argument}.
-The following program reads numbers, one number per line, and prints
-the square root of each one:
+如其他的表达式一样，函数调用也会生成一个值，通常称为返回值，这个值是根据函数的参数进行计算所得到的值。
+在这个例子中，@samp{sqrt(@var{argument})} 的返回值就是 @var{argument} 的平方根。
+下面的程序一行行地读取数值，然扣打印它们的平方根：
 
 @example
 $ @kbd{awk '@{ print "The square root of", $1, "is", sqrt($1) @}'}
@@ -10332,11 +9999,8 @@ $ @kbd{awk '@{ print "The square root of", $1, "is", sqrt($1) @}'}
 @kbd{Ctrl-d}
 @end example
 
-A function can also have side effects, such as assigning
-values to certain variables or doing I/O.
-This program shows how the @code{match()} function
-(@pxref{String Functions})
-changes the variables @code{RSTART} and @code{RLENGTH}:
+函数调用有副作用，例如将值赋给一个指定的变量或者执行 I/O 操作。这个程序展现了 @code{match()} 函数
+（查看 @ref{String Functions}）如何来更改变量 @code{RSTART} 与 @code{RLENGTH}：
 
 @example
 @{
@@ -10348,7 +10012,7 @@ changes the variables @code{RSTART} and @code{RLENGTH}:
 @end example
 
 @noindent
-Here is a sample run:
+这是运行例子：
 
 @example
 $ @kbd{awk -f matchit.awk}
@@ -10361,16 +10025,15 @@ $ @kbd{awk -f matchit.awk}
 @end example
 
 @node Precedence
-@section Operator Precedence (How Operators Nest)
+@section 操作符优先级（操作符的嵌套）
 @cindex precedence
 @cindex operators, precedence
 
-@dfn{Operator precedence} determines how operators are grouped when
-different operators appear close by in one expression.  For example,
-@samp{*} has higher precedence than @samp{+}; thus, @samp{a + b * c}
-means to multiply @code{b} and @code{c}, and then add @code{a} to the
-product (i.e., @samp{a + (b * c)}).
+@dfn{操作符的优先级}决定了不同的操作符紧接着出现在一个表达式中时如何结合。
+例如，@samp{*} 比 @samp{+} 有更高的优先级，所以 @samp{a + b * c} 表示先将 @code{b} 与 @code{c} 相乘，
+然后再与 @code{a} 相加（如 @samp{a + (b * c)}）
 
+#TODO20171107
 The normal precedence of the operators can be overruled by using parentheses.
 Think of the precedence rules as saying where the
 parentheses are assumed to be.  In
