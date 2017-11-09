@@ -10157,38 +10157,27 @@ awk -v pat="$pattern" '$0 ~ pat @{ nmatches++ @}
 指定 @command{awk} 程序的控制流。@command{awk} 语言可以让你写 C 风格的结构（@code{if}，@code{for}，@code{while}，以及 @code{do}），
 也有一些自己特殊的结构（查看 @ref{Statements}）。
 
-#TODO20171108
-@item Compound statements
-Enclose one or more statements in braces.  A compound statement
-is used in order to put several statements together in the body of an
-@code{if}, @code{while}, @code{do}, or @code{for} statement.
+@item 复合语句
+包括在花括号中一个或者多个语句。复合语句用于在 @code{if}，@code{while}，@code{do}，或者 @code{for} 的语句体中，将几个语句顺序地放在一起。
 
-@item Input statements
-Use the @code{getline} command
-(@pxref{Getline}).
-Also supplied in @command{awk} are the @code{next}
-statement (@pxref{Next Statement})
-and the @code{nextfile} statement
-(@pxref{Nextfile Statement}).
+@item 输入语句
+使用 @code{getline} 命令（查看 @ref{Getline}）。
+在 @command{awk} 中也提供 @code{next} 语句（查看 @ref{Next Statement}）与 @code{nextfile} 语句（查看 @ref{Nextfile Statement}）。
 
-@item Output statements
-Such as @code{print} and @code{printf}.
-@xref{Printing}.
+@item 输出语句
+如 @code{print} 与 @code{printf}，查看 @ref{Printing}。
 
-@item Deletion statements
-For deleting array elements.
-@xref{Delete}.
+@item 删除语句
+由于删除数组元素。查看 @ref{Delete}。
 @end table
 
 @node Statements
-@section Control Statements in Actions
+@section 动作中的控制语句
 @cindex control statements
 @cindex statements, control, in actions
 @cindex actions, control statements in
 
-@dfn{Control statements}, such as @code{if}, @code{while}, and so on,
-control the flow of execution in @command{awk} programs.  Most of @command{awk}'s
-control statements are patterned after similar statements in C.
+如 @code{if}，@code{while} 等等的@dfn{控制语句}，用来控制 @command{awk} 程序的执行流。大多数的 @command{awk} 控制语句都是使用与 C 类似的模式。
 
 @cindex compound statements@comma{} control statements and
 @cindex statements, compound@comma{} control statements and
@@ -10198,14 +10187,10 @@ control statements are patterned after similar statements in C.
 @cindex newlines, separating statements in actions
 @cindex @code{;} (semicolon), separating statements in actions
 @cindex semicolon (@code{;}), separating statements in actions
-All the control statements start with special keywords, such as @code{if}
-and @code{while}, to distinguish them from simple expressions.
-Many control statements contain other statements.  For example, the
-@code{if} statement contains another statement that may or may not be
-executed.  The contained statement is called the @dfn{body}.
-To include more than one statement in the body, group them into a
-single @dfn{compound statement} with braces, separating them with
-newlines or semicolons.
+所有的控制语句都以一个特殊关键词开始，如 @code{if} 与 @code{while} 等，以将它们与一般的表达式进行区分。很多的控制语句还包含其他的语句。
+例如，@code{if} 语句包含其他的语句，可能执行也可能不执行。
+被包含的语句称为相应语句的@dfn{语句体}。为了在语句体中包含多于一个语句，则将他们包含在一个有花括号的@dfn{复合语句}中，
+将通过换行或者分号来分隔它们。
 
 @menu
 * If Statement::                Conditionally execute some @command{awk}
@@ -10226,24 +10211,19 @@ newlines or semicolons.
 @end menu
 
 @node If Statement
-@subsection The @code{if}-@code{else} Statement
+@subsection @code{if}-@code{else} 语句
 
 @cindex @code{if} statement
-The @code{if}-@code{else} statement is @command{awk}'s decision-making
-statement.  It looks like this:
+@code{if}-@code{else} 语句是 @command{awk} 的“决策-执行”语句，看起来如下：
 
 @display
 @code{if (@var{condition}) @var{then-body}} [@code{else @var{else-body}}]
 @end display
 
 @noindent
-The @var{condition} is an expression that controls what the rest of the
-statement does.  If the @var{condition} is true, @var{then-body} is
-executed; otherwise, @var{else-body} is executed.
-The @code{else} part of the statement is
-optional.  The condition is considered false if its value is zero or
-the null string; otherwise, the condition is true.
-Refer to the following:
+@var{condition} 是一个表达式，用来控制后面的语句的执行。如果 @var{condition} 为 true，则执行 @var{then-body} 的部分，
+否则执行 @var{else-body} 的部分。
+这个语句的 @code{else} 部分是可选的。@var{condition} 的值如果为 0 或者为空串，则被认为是 false，其他情况则为 true。参考如下：
 
 @example
 if (x % 2 == 0)
@@ -10252,15 +10232,10 @@ else
     print "x is odd"
 @end example
 
-In this example, if the expression @samp{x % 2 == 0} is true (i.e.,
-if the value of @code{x} is evenly divisible by two), then the first
-@code{print} statement is executed; otherwise, the second @code{print}
-statement is executed.
-If the @code{else} keyword appears on the same line as @var{then-body} and
-@var{then-body} is not a compound statement (i.e., not surrounded by
-braces), then a semicolon must separate @var{then-body} from
-the @code{else}.
-To illustrate this, the previous example can be rewritten as:
+在这个例子中，如果表达式 @samp{x % 2 == 0} 为真（比如，x 的值是偶数，可被 2 整除），则第一个 @code{print} 语句被执行，
+否则，就执行第二个 @code{print} 语句。如果 @code{else} 关键词与 @var{then-body} 出现在一行中，
+并且 @var{then-body} 不是一个复合语句（没有被花括号包含），则必须要用分号将 @var{then-body} 的部分与 @code{else} 部分进行分隔。
+如，上面的例子代码可以写在这样：
 
 @example
 if (x % 2 == 0) print "x is even"; else
@@ -10268,23 +10243,18 @@ if (x % 2 == 0) print "x is even"; else
 @end example
 
 @noindent
-If the @samp{;} is left out, @command{awk} can't interpret the statement and
-it produces a syntax error.  Don't actually write programs this way,
-because a human reader might fail to see the @code{else} if it is not
-the first thing on its line.
+如果没有 @samp{;}，则 @command{awk} 无法解释上面的语句，因此会生成一个语法错误。在实际的程序中不要这么写，
+因此程序的人类阅读者有可能不会看到 @code{else}，因为它没出现在它自己所应在行的第一位置。
 
 @node While Statement
-@subsection The @code{while} Statement
+@subsection @code{while} 语句
 @cindex @code{while} statement
 @cindex loops
 @cindex loops, @code{while}
 @cindex loops, See Also @code{while} statement
 
-In programming, a @dfn{loop} is a part of a program that can
-be executed two or more times in succession.
-The @code{while} statement is the simplest looping statement in
-@command{awk}.  It repeatedly executes a statement as long as a condition is
-true.  For example:
+在程序中，循环是程序的一部份，并且可被连续两次或者多次地执行。
+@code{while} 语句是 @command{awk} 中最简单的循环语句。只要条件为 true，就会一直重复执行。例如：
 
 @example
 while (@var{condition})
@@ -10293,22 +10263,15 @@ while (@var{condition})
 
 @cindex body, in loops
 @noindent
-@var{body} is a statement called the @dfn{body} of the loop,
-and @var{condition} is an expression that controls how long the loop
-keeps running.
-The first thing the @code{while} statement does is test the @var{condition}.
-If the @var{condition} is true, it executes the statement @var{body}.
+@var{body} 语句称为@dfn{循环体}，而 @var{condition} 是一个表达式，用来控制循环的执行。
+@code{while} 语句所做的第一件事情就是测试 @var{condition} 的值。
+如果为 true，则执行语句 @var{body}。
 @ifinfo
-(The @var{condition} is true when the value
-is not zero and not a null string.)
+（当这个值是一个非零数和非空字符串的时候，@var{condition} 的值为 true。）
 @end ifinfo
-After @var{body} has been executed,
-@var{condition} is tested again, and if it is still true, @var{body}
-executes again.  This process repeats until the @var{condition} is no longer
-true.  If the @var{condition} is initially false, the body of the loop
-never executes and @command{awk} continues with the statement following
-the loop.
-This example prints the first three fields of each record, one per line:
+完成后，@var{condition} 会被再次测试，如果依然为 true，则 @var{body} 会再次被执行。这个过程一直持续到 @var{condition} 不再为 true。
+如果 @var{condition} 一开始就为 false，而循环体就根本不会执行，@command{awk} 会继续执行循环后的语句。
+下面的例子打印每个记录的头三个域，一个一行：
 
 @example
 awk '
@@ -10322,28 +10285,19 @@ awk '
 @end example
 
 @noindent
-The body of this loop is a compound statement enclosed in braces,
-containing two statements.
-The loop works in the following manner: first, the value of @code{i} is set to one.
-Then, the @code{while} statement tests whether @code{i} is less than or equal to
-three.  This is true when @code{i} equals one, so the @code{i}th
-field is printed.  Then the @samp{i++} increments the value of @code{i}
-and the loop repeats.  The loop terminates when @code{i} reaches four.
+这个循环的循环休是一个包含在花括号中的复合语句，包含两个语句。循环按下面的方式执行：首先，@code{i} 的值被设置为 1。
+然后 @code{while} 语句会测试 @code{i} 的值是否为小于等于 3。当 @code{i} 为 1 时，这肯定为 true，因此第 @code{i} 个域就打印出来。
+然后执行 @samp{i++} ，递增 @code{i} 的值，并重复循环。当 @code{i} 为 4 时，结束循环。
 
-A newline is not required between the condition and the
-body; however, using one makes the program clearer unless the body is a
-compound statement or else is very simple.  The newline after the open brace
-that begins the compound statement is not required either, but the
-program is harder to read without it.
+在条件与循环体之间的换行不是必须的，但是，使用换行会使得程序更加清晰，除非循环体是一个复合语句或者是非常简单。开花操号后面的换行开启复合语句，也不是必须的，但是程序不这么处理就比较难阅读。
 
 @node Do Statement
-@subsection The @code{do}-@code{while} Statement
+@subsection @code{do}-@code{while} 语句
 @cindex @code{do}-@code{while} statement
 @cindex loops, @code{do}-@code{while}
 
-The @code{do} loop is a variation of the @code{while} looping statement.
-The @code{do} loop executes the @var{body} once and then repeats the
-@var{body} as long as the @var{condition} is true.  It looks like this:
+@code{do} 循环是 @code{while} 循环的变体。
+@code{do} 循环中先会执行 @var{body} 一次，如果条件为 true，则会重复执行 @var{body}。它看起来如下：
 
 @example
 do
@@ -10351,10 +10305,8 @@ do
 while (@var{condition})
 @end example
 
-Even if the @var{condition} is false at the start, the @var{body}
-executes at least once (and only once, unless executing @var{body}
-makes @var{condition} true).  Contrast this with the corresponding
-@code{while} statement:
+就算是 @var{condition} 一开始为 false，@var{body} 也会至少执行一次（并且只执行一次，除非 @var{body} 内将 @var{condition} 变成 true）。
+与 @code{while} 语句比较起来：
 
 @example
 while (@var{condition})
@@ -10362,9 +10314,7 @@ while (@var{condition})
 @end example
 
 @noindent
-This statement does not execute the @var{body} even once if the
-@var{condition} is false to begin with.  The following is an example of
-a @code{do} statement:
+这个语句中，如果 @var{condition} 一开始为 false，则 @var{body} 一次也不会被执行。下面是 @code{do} 语句的一个例子：
 
 @example
 @{
@@ -10377,18 +10327,15 @@ a @code{do} statement:
 @end example
 
 @noindent
-This program prints each input record 10 times.  However, it isn't a very
-realistic example, because in this case an ordinary @code{while} would do
-just as well.  This situation reflects actual experience; only
-occasionally is there a real use for a @code{do} statement.
+这个程序打印记录 10 次。但是，这并不是一个非常理想的例子，因此在这种情况下，
+普通的 @code{while} 循环就可以完成了。这个反映了一种实际使用经验：只有很少的情况下，才需要真正使用 @code{do} 语句。
 
 @node For Statement
-@subsection The @code{for} Statement
+@subsection @code{for} 语句
 @cindex @code{for} statement
 @cindex loops, @code{for}, iterative
 
-The @code{for} statement makes it more convenient to count iterations of a
-loop.  The general form of the @code{for} statement looks like this:
+@code{for} 语句可以更方便地统计循环的迭代次数。@code{for} 语句的一般格式如下：
 
 @example
 for (@var{initialization}; @var{condition}; @var{increment})
@@ -10396,17 +10343,10 @@ for (@var{initialization}; @var{condition}; @var{increment})
 @end example
 
 @noindent
-The @var{initialization}, @var{condition}, and @var{increment} parts are
-arbitrary @command{awk} expressions, and @var{body} stands for any
-@command{awk} statement.
+@var{initialization}，@var{condition} 与 @var{increment} 的部分可以是任意的 @command{awk} 表达式，而 @var{body} 表示任意的 @command{awk} 语句。
 
-The @code{for} statement starts by executing @var{initialization}.
-Then, as long
-as the @var{condition} is true, it repeatedly executes @var{body} and then
-@var{increment}.  Typically, @var{initialization} sets a variable to
-either zero or one, @var{increment} adds one to it, and @var{condition}
-compares it against the desired number of iterations.
-For example:
+@code{for} 语句以执行 @var{initialization} 开始，然后，只要 @var{condition} 为 true，则会重复执行 @var{body} 与 @var{increment}。
+典型的情况下，@var{initialization} 将某个变量设置成 0 或者 1，@var{increment} 将其增加 1，然后 @var{condition} 将其与所要迭代的次数进行比较。例如：
 
 @example
 awk '
@@ -10417,40 +10357,24 @@ awk '
 @end example
 
 @noindent
-This prints the first three fields of each input record, with one field per
-line.
+这个例子中，会打印每个记录的前三个域，每行是一条记录。
 
-It isn't possible to
-set more than one variable in the
-@var{initialization} part without using a multiple assignment statement
-such as @samp{x = y = 0}. This makes sense only if all the initial values
-are equal.  (But it is possible to initialize additional variables by writing
-their assignments as separate statements preceding the @code{for} loop.)
+在 @var{initialization} 部分，如果不使用多个赋值语句，如 @samp{x = y = 0}，不可能设置多于一个变量的值。这只有在所有的初始值都是一样的才有意义。（但是不可能在 @code{for} 循环前，用几个赋值语句来初始化其他变量的值。）
 
 @c @cindex comma operator, not supported
-The same is true of the @var{increment} part. Incrementing additional
-variables requires separate statements at the end of the loop.
-The C compound expression, using C's comma operator, is useful in
-this context, but it is not supported in @command{awk}.
+在 @var{increment} 部分也是一样。对其他的变量的递增，需要在循环结束时用独立的语句来进行递增。C 类型的复合表达式，使用 C 的逗号操作符，在这样的上下文中很有用，但是在 @command{awk} 中不被支持。
 
-Most often, @var{increment} is an increment expression, as in the previous
-example.  But this is not required; it can be any expression
-whatsoever.  For example, the following statement prints all the powers of two
-between 1 and 100:
+在多数情况下，@var{increment} 是一个递增表达式，就如前面的例子中的一样。但是却并不是必须的，它也可以是任意的表达式。例如，下面的语句打印 1 到 100 之间的 2 次幂的值：
 
 @example
 for (i = 1; i <= 100; i *= 2)
     print i
 @end example
 
-If there is nothing to be done, any of the three expressions in the
-parentheses following the @code{for} keyword may be omitted.  Thus,
-@w{@samp{for (; x > 0;)}} is equivalent to @w{@samp{while (x > 0)}}.  If the
-@var{condition} is omitted, it is treated as true, effectively
-yielding an @dfn{infinite loop} (i.e., a loop that never terminates).
+如果在 @code{for} 后面括号中的表达式什么也不需要做，则可以省略它们。如 @w{@samp{for (; x > 0;)}} 与 @w{@samp{while (x > 0)}} 是等同的。
+如果 @var{condition} 被省略了，则其将被视作 true，这样可以有效地产生一个@dfn{无限循环}（不会终止的循环）。
 
-In most cases, a @code{for} loop is an abbreviation for a @code{while}
-loop, as shown here:
+在多数情况下，@code{for} 循环是 @code{while} 循环的一个简写方式，如下面所示：
 
 @example
 @var{initialization}
@@ -10462,21 +10386,13 @@ while (@var{condition}) @{
 
 @cindex loops, @code{continue} statements and
 @noindent
-The only exception is when the @code{continue} statement
-(@pxref{Continue Statement}) is used
-inside the loop. Changing a @code{for} statement to a @code{while}
-statement in this way can change the effect of the @code{continue}
-statement inside the loop.
+唯一的例外是在循环中使用 @code{continue} 语句时（查看 @ref{Continue Statement}）。
+将 @code{for} 循环改为 @code{while} 循环，也能够改变循环内的 @code{continue} 语句的结果。
 
-The @command{awk} language has a @code{for} statement in addition to a
-@code{while} statement because a @code{for} loop is often both less work to
-type and more natural to think of.  Counting the number of iterations is
-very common in loops.  It can be easier to think of this counting as part
-of looping rather than as something to do inside the loop.
+@command{awk} 语言除了 @code{while} 还要加上一个 @code{for} 循环，主要是因为 @code{for} 循环通常有更少的敲击输入，同时也是一种很自然的过程。统计迭代次数在循环中是一种很普遍的事情。将这种统计作为循环的一部份要比在循环内部来做这些事情要更容易。
 
 @cindex @code{in} operator
-There is an alternative version of the @code{for} loop, for iterating over
-all the indices of an array:
+这是另一种版本的 @code{for} 循环，@code{for} 迭代数组的所有下标：
 
 @example
 for (i in array)
@@ -10484,31 +10400,21 @@ for (i in array)
 @end example
 
 @noindent
-@xref{Scanning an Array}
-for more information on this version of the @code{for} loop.
+查看 @ref{Scanning an Array}，来获取更多的关于 @code{for} 循环的信息。
 
 @node Switch Statement
-@subsection The @code{switch} Statement
+@subsection @code{switch} 语句
 @cindex @code{switch} statement
 @cindex @code{case} keyword
 @cindex @code{default} keyword
 
-This @value{SECTION} describes a @command{gawk}-specific feature.
-If @command{gawk} is in compatibility mode (@pxref{Options}),
-it is not available.
+本@value{SECTION}描述的是一个 @command{gawk} 专有的特性。如果 @command{gawk} 是在兼容模式下（查看 @ref{Options}），则这个特性就不可用。
 
-The @code{switch} statement allows the evaluation of an expression and
-the execution of statements based on a @code{case} match. Case statements
-are checked for a match in the order they are defined.  If no suitable
-@code{case} is found, the @code{default} section is executed, if supplied.
+@code{switch} 语句允许对表达式求值，并针对匹配的值来执行不同的语句。
+@code{case} 语句用来顺序地检查所定义的匹配。如果没有合适的 @code{case}，如果提供了 @code{default} 段，则 @code{default} 段会被执行。
 
-Each @code{case} contains a single constant, be it numeric, string, or
-regexp.  The @code{switch} expression is evaluated, and then each
-@code{case}'s constant is compared against the result in turn. The type of constant
-determines the comparison: numeric or string do the usual comparisons.
-A regexp constant does a regular expression match against the string
-value of the original expression.  The general form of the @code{switch}
-statement looks like this:
+每个 @code{case} 中包含一个常量，可以是数值，字串或者正则表达式。@code{switch} 表达式被求值后，会按顺序对 @code{case} 中的学常量进行比较。
+常量的类型决定了比较的类型：数值的，还是字串的。一个正则表达式常量执行的是针对初始表达式的值的正则表达式匹配。一般地，@code{switch} 语句看起来如下：
 
 @example
 switch (@var{expression}) @{
@@ -10519,11 +10425,7 @@ default:
 @}
 @end example
 
-Control flow in
-the @code{switch} statement works as it does in C. Once a match to a given
-case is made, the case statement bodies execute until a @code{break},
-@code{continue}, @code{next}, @code{nextfile}, or @code{exit} is encountered,
-or the end of the @code{switch} statement itself. For example:
+@code{switch} 的控制流与 C 中的执行一致。只要与给定的 @code{case} 匹配了，@code{case} 语句体中的语句就会被执行，直到遇到 @code{break}，@code{continue}，@code{next}，@code{nextfile}，或者是 @code{exit}，或者是 @code{switch} 语句本身的结束。
 
 @example
 while ((c = getopt(ARGC, ARGV, "aksx")) != -1) @{
@@ -10551,24 +10453,17 @@ while ((c = getopt(ARGC, ARGV, "aksx")) != -1) @{
 @}
 @end example
 
-Note that if none of the statements specified here halt execution
-of a matched @code{case} statement, execution falls through to the
-next @code{case} until execution halts. In this example, the
-@code{case} for @code{"?"} falls through to the @code{default}
-case, which is to call a function named @code{usage()}.
-(The @code{getopt()} function being called here is
-described in @ref{Getopt Function}.)
+要注意的是，如果这里没有指定任何语句，则会停止执行匹配的 @code{case} 语句，则执行流程会落入下一个 @code{case} 中，直到执行中止。
+在这个例子中，@code{"?"} 的 @code{case} 中，会落入到 @code{default} @code{case} 中执行，并在其中调用 @code{usage()} 函数。
+其中所调用的 @code{getopt()} 函数在 @ref{Getopt Function} 描述。）
 
 @node Break Statement
-@subsection The @code{break} Statement
+@subsection @code{break} 语句
 @cindex @code{break} statement
 @cindex loops, exiting
 @cindex loops, @code{break} statement and
 
-The @code{break} statement jumps out of the innermost @code{for},
-@code{while}, or @code{do} loop that encloses it.  The following example
-finds the smallest divisor of any integer, and also identifies prime
-numbers:
+@code{break} 语句跳出最包含该语句的最内层的 @code{for}，@code{while}，@code{do} 循环。下面的例子查找任意整数的最小因数，并判断是否为质数：
 
 @example
 # find smallest divisor of num
@@ -10585,16 +10480,10 @@ numbers:
 @}
 @end example
 
-When the remainder is zero in the first @code{if} statement, @command{awk}
-immediately @dfn{breaks out} of the containing @code{for} loop.  This means
-that @command{awk} proceeds immediately to the statement following the loop
-and continues processing.  (This is very different from the @code{exit}
-statement, which stops the entire @command{awk} program.
-@xref{Exit Statement}.)
+当第一个 @code{if} 语句中的余数是 0 时，@command{awk} 就直接跳出循环。这表示 @command{awk} 会执行直接跟在循环后面的语句。
+（这与 @code{exit} 非常不同，@code{exit} 会停止跟个 @command{awk} 程序，查看 @ref{Exit Statement}。）
 
-The following program illustrates how the @var{condition} of a @code{for}
-or @code{while} statement could be replaced with a @code{break} inside
-an @code{if}:
+下面的程序解释了在 @code{for} 或者 @code{while} 循环语句中的 @var{condition}，如何用 @code{if} 中的 @code{break} 来代替：
 
 @example
 # find smallest divisor of num
@@ -10613,9 +10502,7 @@ an @code{if}:
 @}
 @end example
 
-The @code{break} statement is also used to break out of the
-@code{switch} statement.
-This is discussed in @ref{Switch Statement}.
+@code{break} 语句也用来中断 @code{switch} 中的语句。这在 @ref{Switch Statement}，进行了描述。
 
 @c @cindex @code{break}, outside of loops
 @c @cindex historical features
@@ -10624,30 +10511,19 @@ This is discussed in @ref{Switch Statement}.
 @cindex dark corner, @code{break} statement
 @cindex @command{gawk}, @code{break} statement in
 @cindex Brian Kernighan's @command{awk}
-The @code{break} statement has no meaning when
-used outside the body of a loop or @code{switch}.
-However, although it was never documented,
-historical implementations of @command{awk} treated the @code{break}
-statement outside of a loop as if it were a @code{next} statement
-(@pxref{Next Statement}).
+在循环体或者 @code{switch} 外面使用 @code{break} 没有意义。但是，虽然没有在文档中记录下来，@command{awk} 的历史版本中将循环外的 @code{break} 语句，当成是一个 @code{next} 语句（查看 @ref{Next Statement}）。
 @value{DARKCORNER}
-Recent versions of BWK @command{awk} no longer allow this usage,
-nor does @command{gawk}.
+近来的 BWK @command{awk} 版本不再允许这样的用法，@command{gawk} 也不允许。
 
 @node Continue Statement
-@subsection The @code{continue} Statement
+@subsection @code{continue} 语句
 
 @cindex @code{continue} statement
-Similar to @code{break}, the @code{continue} statement is used only inside
-@code{for}, @code{while}, and @code{do} loops.  It skips
-over the rest of the loop body, causing the next cycle around the loop
-to begin immediately.  Contrast this with @code{break}, which jumps out
-of the loop altogether.
+与 @code{break} 类型，@code{continue} 语句只要 @code{for}，@code{while}，以及 @code{do} 循环中使用，它路过循环体后面的部分，使得下一个循环立即开始。
+与 @code{break} 相比，它只是跳出循环。
 
-The @code{continue} statement in a @code{for} loop directs @command{awk} to
-skip the rest of the body of the loop and resume execution with the
-increment-expression of the @code{for} statement.  The following program
-illustrates this fact:
+@code{for} 循环中的 @code{continue} 语句，引导 @command{awk} 路过循环体后面的部分，并执行 @code{for} 语句中的递增表达式（increment-expression）。
+下面的程序解释了这样的情形：
 
 @example
 BEGIN @{
@@ -10661,10 +10537,8 @@ BEGIN @{
 @end example
 
 @noindent
-This program prints all the numbers from 0 to 20---except for 5, for
-which the @code{printf} is skipped.  Because the increment @samp{x++}
-is not skipped, @code{x} does not remain stuck at 5.  Contrast the
-@code{for} loop from the previous example with the following @code{while} loop:
+这个程序打印 0 到 20 之间的数，除了 5 外，因为在这个数值时 @code{printf} 被路过了。因为 @samp{x++} 并没有被路过，因此，x 的值不会卡在 5 上。
+下面的 @code{while} 循环与前面的 @code{for} 循环相比：
 
 @example
 BEGIN @{
@@ -10680,8 +10554,7 @@ BEGIN @{
 @end example
 
 @noindent
-This program loops forever once @code{x} reaches 5, because
-the increment (@samp{x++}) is never reached.
+这个程序中，只要 x 达到 5 就会成为一个死循环，因此递增（@samp{x++}）语句永远不会执行。
 
 @c @cindex @code{continue}, outside of loops
 @c @cindex historical features
@@ -10690,49 +10563,33 @@ the increment (@samp{x++}) is never reached.
 @cindex dark corner, @code{continue} statement
 @cindex @command{gawk}, @code{continue} statement in
 @cindex Brian Kernighan's @command{awk}
-The @code{continue} statement has no special meaning with respect to the
-@code{switch} statement, nor does it have any meaning when used outside the
-body of a loop.  Historical versions of @command{awk} treated a @code{continue}
-statement outside a loop the same way they treated a @code{break}
-statement outside a loop: as if it were a @code{next}
-statement
+与 @code{switch} 语句对应，@code{continue} 语句并没有特别的含义，在循环体之外也没有什么特别的含义。
+@command{awk} 的历史版本将循环体之外的 @code{continue} 与循环体之外的的 @code{break} 一样对待：就像它是一个 @code{next} 语句一样
 @ifset FOR_PRINT
-(discussed in the following @value{SECTION}).
+（在后面的@value{SECTION}中讨论）。
 @end ifset
 @ifclear FOR_PRINT
-(@pxref{Next Statement}).
+（查看 @ref{Next Statement}）。
 @end ifclear
 @value{DARKCORNER}
-Recent versions of BWK @command{awk} no longer work this way, nor
-does @command{gawk}.
+BWK @command{awk} 的后面的版本不再这么处理，@command{gawk} 也不这么做。
 
 @node Next Statement
-@subsection The @code{next} Statement
+@subsection @code{next} 语句
 @cindex @code{next} statement
 
-The @code{next} statement forces @command{awk} to immediately stop processing
-the current record and go on to the next record.  This means that no
-further rules are executed for the current record, and the rest of the
-current rule's action isn't executed.
+@code{next} 语句强制 @command{awk} 立即停止当前记录的处理并处理下一条记录。
+这表示针对当前的记录不再进一步进行规则的匹配，当前规则的余下部分也不被执行。
 
-Contrast this with the effect of the @code{getline} function
-(@pxref{Getline}).  That also causes
-@command{awk} to read the next record immediately, but it does not alter the
-flow of control in any way (i.e., the rest of the current action executes
-with a new input record).
+与 @code{getline} 函数（查看 @ref{Getline}）进行对比。@code{getline} 也会导致 @command{awk} 立即读取下一条记录，
+但是并没有改变控制流（即，当前的动作会在新的记录上执行）。
 
 @cindex @command{awk} programs, execution of
-At the highest level, @command{awk} program execution is a loop that reads
-an input record and then tests each rule's pattern against it.  If you
-think of this loop as a @code{for} statement whose body contains the
-rules, then the @code{next} statement is analogous to a @code{continue}
-statement. It skips to the end of the body of this implicit loop and
-executes the increment (which reads another record).
+在最高级上，@command{awk} 程序是这样的一个循环，即读取一条记录，然后与每一个模式进行匹配。
+如果你把这样的一个循环看成是一个 @code{for} 语句，其循环体包含了这些规则，然后，@code{next} 语句则与 @code{continue} 语句类似。它会跳过这个隐式循环的后面部分，然后执行递增（也就是读取下一条记录）。
 
-For example, suppose an @command{awk} program works only on records
-with four fields, and it shouldn't fail when given bad input.  To avoid
-complicating the rest of the program, write a ``weed out'' rule near
-the beginning, in the following manner:
+例如，假设一个 @command{awk} 程序处理的记录只有 4 个域，并且当输入不规范时时不会导致失败。
+为了避免后面程序的复杂性，用下面的方式，在开头处这一个这样的“排除”代码：
 
 @example
 NF != 4 @{
@@ -10742,19 +10599,11 @@ NF != 4 @{
 @end example
 
 @noindent
-Because of the @code{next} statement,
-the program's subsequent rules won't see the bad record.  The error
-message is redirected to the standard error output stream, as error
-messages should be.
-For more detail, see
-@ref{Special Files}.
+由于有一 @code{next} 语句，程序后面的规则就不会再看到那些不规范的记录。错误的信息会被重定向到标准错误输出流上，正如错误信息应该这么被处处理一样。要取得更多的信息，请查看 @ref{Special Files}。
 
-If the @code{next} statement causes the end of the input to be reached,
-then the code in any @code{END} rules is executed.
-@xref{BEGIN/END}.
+如果 @code{next} 语句导致了输入文件的结束，则在 @code{END} 规则里的代码就会被执行，查看 @ref{BEGIN/END}。
 
-The @code{next} statement is not allowed inside @code{BEGINFILE} and
-@code{ENDFILE} rules. @xref{BEGINFILE/ENDFILE}.
+@code{next} 语句不可以使用在 @code{BEGINFILE} 与 @code{ENDFILE} 规则中，查看 @ref{BEGINFILE/ENDFILE}。
 
 @c @cindex @command{awk} language, POSIX version
 @c @cindex @code{next}, inside a user-defined function
@@ -10763,86 +10612,52 @@ The @code{next} statement is not allowed inside @code{BEGINFILE} and
 @cindex POSIX @command{awk}, @code{next}/@code{nextfile} statements and
 @cindex @code{next} statement, user-defined functions and
 @cindex functions, user-defined, @code{next}/@code{nextfile} statements and
-According to the POSIX standard, the behavior is undefined if the
-@code{next} statement is used in a @code{BEGIN} or @code{END} rule.
-@command{gawk} treats it as a syntax error.  Although POSIX does not disallow it,
-most other @command{awk} implementations don't allow the @code{next}
-statement inside function bodies (@pxref{User-defined}).  Just as with any
-other @code{next} statement, a @code{next} statement inside a function
-body reads the next record and starts processing it with the first rule
-in the program.
+根据 POSIX 标准，如果 @code{next} 语句用在 @code{BEGIN} 与 @code{END} 规则中，其行为是未定义的。
+@command{gawk} 将其视为语法错误。尽管 POSIX 没有禁止，但大多数的 @command{awk} 实现不准在函数体内
+（查看 @ref{User-defined}）使用 @code{next} 语句。与共他的处的 @code{next} 语句一样，
+在函数内的 @code{next} 语句也是读取下一条记录然后从程序的第一个规则开始处理。
 
 @node Nextfile Statement
-@subsection The @code{nextfile} Statement
+@subsection @code{nextfile} 语句
 @cindex @code{nextfile} statement
 
-The @code{nextfile} statement
-is similar to the @code{next} statement.
-However, instead of abandoning processing of the current record, the
-@code{nextfile} statement instructs @command{awk} to stop processing the
-current @value{DF}.
+@code{nextfile} 与 @code{next} 语句类似。但是不是放弃处理当前记录，@code{nextfile} 则是通知 @command{awk} 停止处理当前的@value{DF}。
 
-Upon execution of the @code{nextfile} statement,
-@code{FILENAME} is
-updated to the name of the next @value{DF} listed on the command line,
-@code{FNR} is reset to one,
-and processing
-starts over with the first rule in the program.
-If the @code{nextfile} statement causes the end of the input to be reached,
-then the code in any @code{END} rules is executed. An exception to this is
-when @code{nextfile} is invoked during execution of any statement in an
-@code{END} rule; in this case, it causes the program to stop immediately.
-@xref{BEGIN/END}.
+随着 @code{nextfile} 的执行，@code{FILENAME} 也会更新以反映命令行列表中的下一个@value{DF}。
+@code{FNR} 则被重置为 0，处理流程回到程序中的第一个规则中。
+如果 @code{nextfile} 语句导致了输入的结束，则在 @code{END} 规则中的代码就会被执行。一个例外就是这个 @code{nextfile} 是在执行 @code{END} 规则中被调用的，在这种情况下，会导致程序退出。
+查看 @ref{BEGIN/END}。
 
-The @code{nextfile} statement is useful when there are many @value{DF}s
-to process but it isn't necessary to process every record in every file.
-Without @code{nextfile},
-in order to move on to the next @value{DF}, a program
-would have to continue scanning the unwanted records.  The @code{nextfile}
-statement accomplishes this much more efficiently.
+当有很多的数据文件要处理，但是不需要处理每个文件中的每个记录的情况下，@code{nextfile} 语句非常有用。
+如果没有 @code{nextfile}，为了要处理下一个@value{DF}，程序就得断续输入那些不需要的记录。@code{nextfile} 语句以一种更为高效的方式来完成这样的目标。
 
-In @command{gawk}, execution of @code{nextfile} causes additional things
-to happen: any @code{ENDFILE} rules are executed if @command{gawk} is
-not currently in an @code{END} or @code{BEGINFILE} rule, @code{ARGIND} is
-incremented, and any @code{BEGINFILE} rules are executed.  (@code{ARGIND}
-hasn't been introduced yet. @xref{Built-in Variables}.)
+在 @command{gawk} 中，@code{nextfile} 的执行会导致一些其他的事情发生：如果 @command{gawk} 当前没有执行 @code{END} 或者 @code{ENDFILE} 规则，
+则会导致所有 @code{ENDFILE} 被执行，@code{ARGIND} 会被递增，所有的 @code{BEGINFILE} 会被执行。（@code{ARGIND} 还没有介绍。
+查看 @ref{Built-in Variables}。）
 
-With @command{gawk}, @code{nextfile} is useful inside a @code{BEGINFILE}
-rule to skip over a file that would otherwise cause @command{gawk}
-to exit with a fatal error. In this case, @code{ENDFILE} rules are not
-executed. @xref{BEGINFILE/ENDFILE}.
+对于 @command{gawk}，在 @code{BEGINFILE} 规则中跳过一个会导致 @command{gawk} 因为致命错误而退出的文件也非常有用。
+在这种情况下，@code{ENDFILE} 不会被执行。查看 @ref{BEGINFILE/ENDFILE}。
 
-Although it might seem that @samp{close(FILENAME)} would accomplish
-the same as @code{nextfile}, this isn't true.  @code{close()} is
-reserved for closing files, pipes, and coprocesses that are
-opened with redirections.  It is not related to the main processing that
-@command{awk} does with the files listed in @code{ARGV}.
+尽管有可能看到用 @samp{close(FILENAME)} 来完成如 @code{nextfile} 一样的功能，但是事实却不是这样的。
+@code{close()} 保留用来关闭打开用于重定向的文件、管道以及并程。它与主过程没有关系，它们不处理 @command{awk} 的 @code{ARGV} 中的文件。
 
-@quotation NOTE
-For many years, @code{nextfile} was a
-common extension. In September 2012, it was accepted for
-inclusion into the POSIX standard.
-See @uref{http://austingroupbugs.net/view.php?id=607, the Austin Group website}.
+@quotation 提示
+许多年了，@code{nextfile} 一直是一个扩展。在 2012 年 9 月，它报授受并包含在 POSIX 标准中，查看 @uref{http://austingroupbugs.net/view.php?id=607, Austin Group 的网站}。
 @end quotation
 
 @cindex functions, user-defined, @code{next}/@code{nextfile} statements and
 @cindex @code{nextfile} statement, user-defined functions and
 @cindex Brian Kernighan's @command{awk}
 @cindex @command{mawk} utility
-The current version of BWK @command{awk} and @command{mawk}
-also support @code{nextfile}.  However, they don't allow the
-@code{nextfile} statement inside function bodies (@pxref{User-defined}).
-@command{gawk} does; a @code{nextfile} inside a function body reads the
-first record from the next file and starts processing it with the first
-rule in the program, just as any other @code{nextfile} statement.
+BWK @command{awk} 与 @command{mawk} 的最新版本也支持 @code{nextfile}。但是，它们不允许在函数体
+（查看 @ref{User-defined}）中使用 @code{nextfile} 语句。@command{gawk} 则允许。
+在函数体内的 @code{nextfile} 会读取下一个记录，然后从程序的第一条规则开始处理，这与其他处的 @code{nextfile} 语句一样。
 
 @node Exit Statement
-@subsection The @code{exit} Statement
+@subsection @code{exit} 语句
 
 @cindex @code{exit} statement
-The @code{exit} statement causes @command{awk} to immediately stop
-executing the current rule and to stop processing input; any remaining input
-is ignored.  The @code{exit} statement is written as follows:
+@code{exit} 语句会导致 @command{awk} 立即停止执行当前的规则，并停止处理输入，所有剩下的输入都将被忽略。@code{exit} 的写法如下：
 
 @display
 @code{exit} [@var{return code}]
@@ -10850,44 +10665,23 @@ is ignored.  The @code{exit} statement is written as follows:
 
 @cindex @code{BEGIN} pattern, @code{exit} statement and
 @cindex @code{END} pattern, @code{exit} statement and
-When an @code{exit} statement is executed from a @code{BEGIN} rule, the
-program stops processing everything immediately.  No input records are
-read.  However, if an @code{END} rule is present,
-as part of executing the @code{exit} statement,
-the @code{END} rule is executed
-(@pxref{BEGIN/END}).
-If @code{exit} is used in the body of an @code{END} rule, it causes
-the program to stop immediately.
+当在 @code{BEGIN} 规则中执行 @code{exit} 语句时，程序会立即停止一切处理。也没有输入记录被读取，如果提供了 @code{END} 规则，
+会作为执行 @code{exit} 语句的一部份，而被执行（查看 @ref{BEGIN/END}）。如果在 @code{END} 规则中使用 @code{exit}，会导致程序立即停止。
 
-An @code{exit} statement that is not part of a @code{BEGIN} or @code{END}
-rule stops the execution of any further automatic rules for the current
-record, skips reading any remaining input records, and executes the
-@code{END} rule if there is one.  @command{gawk} also skips
-any @code{ENDFILE} rules; they do not execute.
+@code{exit} 语句如果不是 @code{BEGIN} 或者 @code{END} 规则一部份，则会停止任何后续的针对当前记录的自动规则的执行，并不再读取剩下的输入记录，
+然后如果有 @code{END} 规则，则执行。@command{gawk} 也会跳过 @code{ENDFILE} 规则，因此不会执行。
 
-In such a case,
-if you don't want the @code{END} rule to do its job, set a variable
-to a nonzero value before the @code{exit} statement and check that variable in
-the @code{END} rule.
-@xref{Assert Function}
-for an example that does this.
+在这样的情况下，如果你不想 @code{END} 规则被执行，可以将某个变量的值设置成非零值，然后在 @code{END} 规则中的 @code{exit} 语句前，
+判断这个变量的值。查看 @ref{Assert Function}，来参考这样的具体例子。
 
 @cindex dark corner, @code{exit} statement
-If an argument is supplied to @code{exit}, its value is used as the exit
-status code for the @command{awk} process.  If no argument is supplied,
-@code{exit} causes @command{awk} to return a ``success'' status.
-In the case where an argument
-is supplied to a first @code{exit} statement, and then @code{exit} is
-called a second time from an @code{END} rule with no argument,
-@command{awk} uses the previously supplied exit value.  @value{DARKCORNER}
-@xref{Exit Status} for more information.
+如果给 @code{exit} 语句提供了参数，它的值将作为 @command{awk} 进程的退出状态码。如果没有提供，@command{awk} 则会以“成功”的方式退出。
+在第一次调用 @code{exit} 时提供了参数，而第二次从 @code{END} 规则中调用，但是没有提供参数的情况下，@command{awk} 会使用之前提供的退出值。
+查看 @ref{Exit Status}，来取得更多信息。
 
 @cindex programming conventions, @code{exit} statement
-For example, suppose an error condition occurs that is difficult or
-impossible to handle.  Conventionally, programs report this by
-exiting with a nonzero status.  An @command{awk} program can do this
-using an @code{exit} statement with a nonzero argument, as shown
-in the following example:
+例如，如果一个错误条件出现，很难或者无法处理。一般的作法是程序会以一个非零状态退出。
+@command{awk} 程序通过带非零值的 @code{exit} 语句来处理，如下面的例子所示：
 
 @example
 BEGIN @{
@@ -10900,31 +10694,22 @@ BEGIN @{
 @}
 @end example
 
-@quotation NOTE
-For full portability, exit values should be between zero and 126, inclusive.
-Negative values, and values of 127 or greater, may not produce consistent
-results across different operating systems.
+@quotation 提示
+为了完全的可移植性，@code{exit} 的值应该在 0 于是 126 （含）之间。负值与 127 或者更大的值，在不同的平台之间可能不会产生一致的结果。
 @end quotation
 
 
 @node Built-in Variables
-@section Predefined Variables
+@section 预定义变量
 @cindex predefined variables
 @cindex variables, predefined
 
-Most @command{awk} variables are available to use for your own
-purposes; they never change unless your program assigns values to
-them, and they never affect anything unless your program examines them.
-However, a few variables in @command{awk} have special built-in meanings.
-@command{awk} examines some of these automatically, so that they enable you
-to tell @command{awk} how to do certain things.  Others are set
-automatically by @command{awk}, so that they carry information from the
-internal workings of @command{awk} to your program.
+大多数的 @command{awk} 变量是我们自己使用，如果他们没有被赋值，则不会改变，并且如果你不检查它们，对你也没有什么影响。但是，
+有一些的 @command{awk} 变量有一些特殊的内置含义。@command{awk} 会自动检查它们当中的一些值，
+因此使你可以告诉 @command{awk} 执行一些特定的事情。有一些是被 @command{awk} 自动设置的，所以它们为你的程序带来一些 @command{awk} 执行时的内部信息。
 
 @cindex @command{gawk}, predefined variables and
-This @value{SECTION} documents all of @command{gawk}'s predefined variables,
-most of which are also documented in the @value{CHAPTER}s describing
-their areas of activity.
+本@value{SECTION}录了所有的 @command{gawk} 预定义的变量，它们中的大多数也记录在了描述它所应用的场景中的@value{CHAPTER}中。
 
 @menu
 * User-modified::               Built-in variables that you change to control
@@ -10935,18 +10720,14 @@ their areas of activity.
 @end menu
 
 @node User-modified
-@subsection Built-in Variables That Control @command{awk}
+@subsection 控制 @command{awk} 的内置变量
 @cindex predefined variables, user-modifiable
 @cindex user-modifiable variables
 
-The following is an alphabetical list of variables that you can change to
-control how @command{awk} does certain things.
+下面是按字母顺序列出的变量，你可更改它们的值来控制 @command{awk} 所执行的特定事情。
 
-The variables that are specific to @command{gawk} are marked with a pound
-sign (@samp{#}).  These variables are @command{gawk} extensions.  In other
-@command{awk} implementations or if @command{gawk} is in compatibility
-mode (@pxref{Options}), they are not special.  (Any exceptions are noted
-in the description of each variable.)
+这些变量如果是 @command{gawk} 特有的，则会被标志一个井号（@samp{#}）。
+这些变量是 @command{gawk} 的扩展。在一些其他的 @command{awk} 实现中，或者在 @command{gawk} 的兼容模式（查看 @ref{Options}）下，它们没有特殊含义。（如果变量有什么例外，则会在变量的说明中列出。）
 
 @table @code
 @cindex @code{BINMODE} variable
@@ -10954,19 +10735,13 @@ in the description of each variable.)
 @cindex input/output, binary
 @cindex differences in @command{awk} and @command{gawk}, @code{BINMODE} variable
 @item BINMODE #
-On non-POSIX systems, this variable specifies use of binary mode
-for all I/O.  Numeric values of one, two, or three specify that input
-files, output files, or all files, respectively, should use binary I/O.
-A numeric value less than zero is treated as zero, and a numeric value
-greater than three is treated as three.  Alternatively, string values
-of @code{"r"} or @code{"w"} specify that input files and output files,
-respectively, should use binary I/O.  A string value of @code{"rw"} or
-@code{"wr"} indicates that all files should use binary I/O.  Any other
-string value is treated the same as @code{"rw"}, but causes @command{gawk}
-to generate a warning message.  @code{BINMODE} is described in more
-detail in @ref{PC Using}.  @command{mawk} (@pxref{Other Versions})
-also supports this variable, but only using numeric values.
+在非 POSIX 系统上，这个变量指定了所有 I/O 所使用的二进制模式。数值 1，2，3 分别指定为输入文件，输出文件与所有文件相应地要使用二进制 I/O 模式。
+小于 0 的值，则当成 0 对待，而大于 3 的值，则会被当为 3 对待。
+相应的，字串“r”与“w”分别指定输入输出要使用二进制 I/O。
+字串“rw”或者“wr”表示所有的文件使用二进制 I/O。其他的字串值则被当成“rw”，但是 @command{gawk} 会产生一告警。
+@code{BINMODE} 在 @ref{PC Using}，这里有更详细的说明，@command{mawk}（查看 @ref{Other Versions}）也支持这个变量，但是只使用数值。
 
+#TODO20171109
 @cindex @code{CONVFMT} variable
 @cindex POSIX @command{awk}, @code{CONVFMT} variable and
 @cindex numbers, converting, to strings

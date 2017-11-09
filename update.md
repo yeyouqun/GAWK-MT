@@ -300,3 +300,15 @@
 
 ## 7
 第七章中的 `END` 相关的行为描述为 `cleanup`。原文译为“清理”，改为了“整理”。
+
+## 7.4.4
+英文原文
+> This prints the first three fields of each input record, with one field per line.
+ 
+译文原文
+> 这个例子中，会打印每个记录的前三个域，并且每个域一行。
+
+改动
+> 这个例子中，会打印每个记录的前三个域，每行是一条记录。
+* 这里的 'with one field per line' 疑似打印错误，可能是 'with one record per line'。暂且按这个翻译了。*
+
