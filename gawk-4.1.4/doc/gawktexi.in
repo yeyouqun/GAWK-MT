@@ -10357,7 +10357,7 @@ awk '
 @end example
 
 @noindent
-这个例子中，会打印每个记录的前三个域，每行是一条记录。
+这个例子中，会打印每个记录的前三个域，每行打印一个域。
 
 在 @var{initialization} 部分，如果不使用多个赋值语句，如 @samp{x = y = 0}，不可能设置多于一个变量的值。这只有在所有的初始值都是一样的才有意义。（但是不可能在 @code{for} 循环前，用几个赋值语句来初始化其他变量的值。）
 
@@ -10741,19 +10741,14 @@ BEGIN @{
 字串“rw”或者“wr”表示所有的文件使用二进制 I/O。其他的字串值则被当成“rw”，但是 @command{gawk} 会产生一告警。
 @code{BINMODE} 在 @ref{PC Using}，这里有更详细的说明，@command{mawk}（查看 @ref{Other Versions}）也支持这个变量，但是只使用数值。
 
-#TODO20171109
 @cindex @code{CONVFMT} variable
 @cindex POSIX @command{awk}, @code{CONVFMT} variable and
 @cindex numbers, converting, to strings
 @cindex strings, converting, numbers to
 @item @code{CONVFMT}
-A string that controls the conversion of numbers to
-strings (@pxref{Conversion}).
-It works by being passed, in effect, as the first argument to the
-@code{sprintf()} function
-(@pxref{String Functions}).
-Its default value is @code{"%.6g"}.
-@code{CONVFMT} was introduced by the POSIX standard.
+用于控制数值转换成字串的格式（查看 @ref{Conversion}）。
+在效果上，它的工作原理是将其作为 @code{sprintf()} 函数的第一个参数（查看 @ref{String Functions}）。
+它的默认值是 @code{"%.6g"}。@code{CONVFMT} 由 POSIX 标准引入。
 
 @cindex @command{gawk}, @code{FIELDWIDTHS} variable in
 @cindex @code{FIELDWIDTHS} variable
@@ -10761,11 +10756,8 @@ Its default value is @code{"%.6g"}.
 @cindex field separators, @code{FIELDWIDTHS} variable and
 @cindex separators, field, @code{FIELDWIDTHS} variable and
 @item FIELDWIDTHS #
-A space-separated list of columns that tells @command{gawk}
-how to split input with fixed columnar boundaries.
-Assigning a value to @code{FIELDWIDTHS}
-overrides the use of @code{FS} and @code{FPAT} for field splitting.
-@xref{Constant Size} for more information.
+一个由空格分隔的列，由以告诉 @command{gawk} 如何用固定的列边界来分割输入。给 @code{FIELDWIDTHS} 赋值，
+会覆盖用 @code{FS} 与 @code{FPAT} 进行域分割的方式。查看 @ref{Constant Size} ，来获取更多信息。
 
 @cindex @command{gawk}, @code{FPAT} variable in
 @cindex @code{FPAT} variable
@@ -10773,46 +10765,34 @@ overrides the use of @code{FS} and @code{FPAT} for field splitting.
 @cindex field separators, @code{FPAT} variable and
 @cindex separators, field, @code{FPAT} variable and
 @item FPAT #
-A regular expression (as a string) that tells @command{gawk}
-to create the fields based on text that matches the regular expression.
-Assigning a value to @code{FPAT}
-overrides the use of @code{FS} and @code{FIELDWIDTHS} for field splitting.
-@xref{Splitting By Content} for more information.
+告诉 @command{gawk} 域的分割是由匹配正则表达式（一个字串）的文本进行的。
+对 @code{FPAT} 的赋值会覆盖 @code{FS} 与 @code{FIELDWIDTHS} 的域分割方式。查看 @ref{Splitting By Content}，来获取更多的信息。
 
 @cindex @code{FS} variable
 @cindex separators, field
 @cindex field separators
 @item FS
-The input field separator (@pxref{Field Separators}).
-The value is a single-character string or a multicharacter regular
-expression that matches the separations between fields in an input
-record.  If the value is the null string (@code{""}), then each
-character in the record becomes a separate field.
-(This behavior is a @command{gawk} extension. POSIX @command{awk} does not
-specify the behavior when @code{FS} is the null string.
-Nonetheless, some other versions of @command{awk} also treat
-@code{""} specially.)
+输入的域分隔符（查看 @ref{Field Separators}）。
+它的值是一个单独的字符或者是一个多字符的正则表达式，该表达式匹配输入记录中域之间的分隔内容。
+如果它的值为空串（@code{""}），则输入记录中的每个字符都是分隔符。（这个行为是 @command{gawk} 扩展。
+POSIX @command{awk} 没有指定当 @code{FS} 的值为窗口时的行为。因此，其他版本的 @command{awk} 也有可能将 @code{""} 特殊对待。）
 
 @cindex POSIX @command{awk}, @code{FS} variable and
-The default value is @w{@code{" "}}, a string consisting of a single
-space.  As a special exception, this value means that any
-sequence of spaces, TABs, and/or newlines is a single separator.@footnote{In
-POSIX @command{awk}, newline does not count as whitespace.}  It also causes
-spaces, TABs, and newlines at the beginning and end of a record to be ignored.
+它的默认值是 @w{@code{" "}}，即只包含一个空格的字串。这是一个特殊的例外，这个值表示所有空格，TABs 与/或换行序列，
+都是一个分隔符。 
+@footnote{在 POSIX @command{awk} 中，换行符不被当成空白。}
+同时，在记录前后的空格，TABs 与换行符也被忽略掉。
 
-You can set the value of @code{FS} on the command line using the
-@option{-F} option:
+你也可以在命令行中用 @option{-F} 来指定 @code{FS} 的值：
 
 @example
 awk -F, '@var{program}' @var{input-files}
 @end example
 
 @cindex @command{gawk}, field separators and
-If @command{gawk} is using @code{FIELDWIDTHS} or @code{FPAT}
-for field splitting,
-assigning a value to @code{FS} causes @command{gawk} to return to
-the normal, @code{FS}-based field splitting. An easy way to do this
-is to simply say @samp{FS = FS}, perhaps with an explanatory comment.
+如果 @command{gawk} 使用了 @code{FIELDWIDTHS} 或者 @code{FPAT} 用来进行域分割，
+对 @code{FS} 的赋值会导致 @command{gawk} 退回到常规的，基于 @code{FS} 的域分割方式。
+一个简单的方法就是就是使用 @samp{FS = FS}，并加上一些解释型注释。
 
 @cindex @command{gawk}, @code{IGNORECASE} variable in
 @cindex @code{IGNORECASE} variable
@@ -10821,54 +10801,35 @@ is to simply say @samp{FS = FS}, perhaps with an explanatory comment.
 @cindex case sensitivity, and regexps
 @cindex regular expressions, case sensitivity
 @item IGNORECASE #
-If @code{IGNORECASE} is nonzero or non-null, then all string comparisons
-and all regular expression matching are case-independent.
-This applies to
-regexp matching with @samp{~} and @samp{!~},
-the @code{gensub()}, @code{gsub()}, @code{index()}, @code{match()},
-@code{patsplit()}, @code{split()}, and @code{sub()} functions,
-record termination with @code{RS}, and field splitting with
-@code{FS} and @code{FPAT}.
-However, the value of @code{IGNORECASE} does @emph{not} affect array subscripting
-and it does not affect field splitting when using a single-character
-field separator.
-@xref{Case-sensitivity}.
+如果 @code{IGNORECASE} 是一个非零值或者非空串，则字串的比较与所有的正则表达式匹配都是大小写无关的。
+这应用于用 @samp{~} 与 @samp{!~} 进行的正则匹配， 也用于 @code{gensub()}，@code{gsub()}，@code{index()}，@code{match()}，
+@code{pat@code{split()}}，@code{split()} 与 @code{sub()} 等函数，还有以 @code{RS} 进行分割的记录，
+用 @code{FS} 与 @code{FPAT} 进行分割的域中。
+但是，@code{IGNORECASE} 的值@emph{不会}影响用下标索引数组元素，也不会影响当使用半字符的分割符时的域分割。
+查看 @ref{Case-sensitivity}。
 
 @cindex @command{gawk}, @code{LINT} variable in
 @cindex @code{LINT} variable
 @cindex differences in @command{awk} and @command{gawk}, @code{LINT} variable
 @cindex lint checking
 @item LINT #
-When this variable is true (nonzero or non-null), @command{gawk}
-behaves as if the @option{--lint} command-line option is in effect
-(@pxref{Options}).
-With a value of @code{"fatal"}, lint warnings become fatal errors.
-With a value of @code{"invalid"}, only warnings about things that are
-actually invalid are issued. (This is not fully implemented yet.)
-Any other true value prints nonfatal warnings.
-Assigning a false value to @code{LINT} turns off the lint warnings.
+当这个变量为 true（非零或者非空），@command{gawk} 表现得就像在命令行参数中指定了 @option{--lint} 参数一样效果
+（查看 @ref{Options}）。当它的值为 @code{"fatal"} 时，lint 告警会成为致命（fatal）错误。如果值是 @code{"invalid"} 时，
+则只有真的是无效的事情的告警才会生成。（这还没有完全实现。）任意的其他 true 值都打印非致命告警。
+给 @code{LINT}  变量赋值为 false，会关闭 lint 告警。
 
-This variable is a @command{gawk} extension.  It is not special
-in other @command{awk} implementations.  Unlike with the other special variables,
-changing @code{LINT} does affect the production of lint warnings,
-even if @command{gawk} is in compatibility mode.  Much as
-the @option{--lint} and @option{--traditional} options independently
-control different aspects of @command{gawk}'s behavior, the control
-of lint warnings during program execution is independent of the flavor
-of @command{awk} being executed.
+此变量是一个 @command{gawk} 扩展。在其他的 @command{awk} 实现中则并不特殊。与其他的特殊变量不同的是，
+改变 @code{LINT} 变量不会影响 lint 告警的产生，就算 @command{gawk} 是处于兼容模式。
+虽然 @option{--lint} 与 @option{--traditional} 选项单独地控制 @command{gawk} 行为的不同方面，但是程序执行中的 lint 告警的控制是与 @command{awk} 被执行的方式是无关的。
 
 @cindex @code{OFMT} variable
 @cindex numbers, converting, to strings
 @cindex strings, converting, numbers to
 @item OFMT
-A string that controls conversion of numbers to
-strings (@pxref{Conversion}) for
-printing with the @code{print} statement.  It works by being passed
-as the first argument to the @code{sprintf()} function
-(@pxref{String Functions}).
-Its default value is @code{"%.6g"}.  Earlier versions of @command{awk}
-used @code{OFMT} to specify the format for converting numbers to
-strings in general expressions; this is now done by @code{CONVFMT}.
+控制 @code{print} 语句中，数字到字串的转换方式的字串（查看 @ref{Conversion}）。
+它的工作方式是将其作为传递给 @code{sprintf()} 函数的第一个参数（查看 @ref{String Functions}）。
+它的默认值是 @code{"%.6g"}。早期的 @command{awk} 版本使用 @code{OFMT} 来指定将数值转换为字串的格式的一般表达式，
+但是这个现在由 @code{CONVFMT} 来完成。
 
 @cindex @code{sprintf()} function, @code{OFMT} variable and
 @cindex @code{print} statement, @code{OFMT} variable and
@@ -10876,83 +10837,58 @@ strings in general expressions; this is now done by @code{CONVFMT}.
 @cindex separators, field
 @cindex field separators
 @item OFS
-The output field separator (@pxref{Output Separators}).  It is
-output between the fields printed by a @code{print} statement.  Its
-default value is @w{@code{" "}}, a string consisting of a single space.
+输出域分隔符（查看 @ref{Output Separators}）。它被输出在通过 @code{print} 语句打印的域之间。
+它的默认值是 @w{@code{" "}}，即一个空格的字串。
 
 @cindex @code{ORS} variable
 @item ORS
-The output record separator.  It is output at the end of every
-@code{print} statement.  Its default value is @code{"\n"}, the newline
-character.  (@xref{Output Separators}.)
+输出记录的分隔符。它会被输出在每个 @code{print} 语句的后面。其默认值是 @code{"\n"}，
+即换行符。（查看 @ref{Output Separators}）
 
 @cindex @code{PREC} variable
 @item PREC #
-The working precision of arbitrary-precision floating-point numbers,
-53 bits by default (@pxref{Setting precision}).
+任意精度浮点数的工作精度，默认为 53 位（查看 @ref{Setting precision}）。
 
 @cindex @code{ROUNDMODE} variable
 @item ROUNDMODE #
-The rounding mode to use for arbitrary-precision arithmetic on
-numbers, by default @code{"N"} (@code{roundTiesToEven} in
-the IEEE 754 standard; @pxref{Setting the rounding mode}).
+用于任意精度数值算术计算的舍入舍出模式，默认为 @code{"N"}
+（即 IEEE 754 标准中的 @code{roundTiesToEven}）。
 
 @cindex @code{RS} variable
 @cindex separators, for records
 @cindex record separators
 @item @code{RS}
-The input record separator.  Its default value is a string
-containing a single newline character, which means that an input record
-consists of a single line of text.
-It can also be the null string, in which case records are separated by
-runs of blank lines.
-If it is a regexp, records are separated by
-matches of the regexp in the input text.
-(@xref{Records}.)
+输入记录的分隔符。它的默认值是包含一个换行符的字串，表示输入的记录由一行的文本组成。它的值也可以是空串，在这种情况下，记录由于一连串的空行分隔。如果它是一个正则表达式，则记录是由匹配正则表达式的文本进行分割。
+（查看 @ref{Records}。）
 
-The ability for @code{RS} to be a regular expression
-is a @command{gawk} extension.
-In most other @command{awk} implementations,
-or if @command{gawk} is in compatibility mode
-(@pxref{Options}),
-just the first character of @code{RS}'s value is used.
+@code{RS} 可以使用正则表达式的能力是 @command{gawk} 的扩展。在多数的其他 @command{awk} 实现中，或者 @command{gawk} 是处于兼容模式下（查看 @ref{Options}），只有 @code{RS} 中的第一个字符被用来进行分割记录。
 
 @cindex @code{SUBSEP} variable
 @cindex separators, subscript
 @cindex subscript separators
 @item @code{SUBSEP}
-The subscript separator.  It has the default value of
-@code{"\034"} and is used to separate the parts of the indices of a
-multidimensional array.  Thus, the expression @samp{@w{foo["A", "B"]}}
-really accesses @code{foo["A\034B"]}
-(@pxref{Multidimensional}).
+下标分隔符。它的默认值是 @code{"\034"} ，并用来作为多维数组下标索引的一部分。因此，
+表达式 @samp{@w{foo["A", "B"]}} 实际上是访问 @code{foo["A\034B"]}
+（查看 @ref{Multidimensional}）。
 
 @cindex @command{gawk}, @code{TEXTDOMAIN} variable in
 @cindex @code{TEXTDOMAIN} variable
 @cindex differences in @command{awk} and @command{gawk}, @code{TEXTDOMAIN} variable
 @cindex internationalization, localization
 @item TEXTDOMAIN #
-Used for internationalization of programs at the
-@command{awk} level.  It sets the default text domain for specially
-marked string constants in the source text, as well as for the
-@code{dcgettext()}, @code{dcngettext()}, and @code{bindtextdomain()} functions
-(@pxref{Internationalization}).
-The default value of @code{TEXTDOMAIN} is @code{"messages"}.
+用于在 @command{awk} 层中的程序的国际化。它设置默认的文本域，其用来在源文本中用来标识字串常量，也用于 @code{dcgettext()}，@code{dcngettext()} 与 @code{bindtextdomain()} 函数
+（查看 @ref{Internationalization}）。@code{TEXTDOMAIN} 的默认值为 @code{"messages"}。
 @end table
 
 @node Auto-set
-@subsection Built-in Variables That Convey Information
+@subsection 传递信息的内置变量
 
 @cindex predefined variables, conveying information
 @cindex variables, predefined conveying information
-The following is an alphabetical list of variables that @command{awk}
-sets automatically on certain occasions in order to provide
-information to your program.
+下面的变量，以字母顺序排列，@command{awk} 在特定的情况下会自动设置它的值，以向程序传递信息。
 
-The variables that are specific to @command{gawk} are marked with a pound
-sign (@samp{#}).  These variables are @command{gawk} extensions.  In other
-@command{awk} implementations or if @command{gawk} is in compatibility
-mode (@pxref{Options}), they are not special:
+如果是 @command{gawk} 特有的变量，则被用井号标识（@samp{#}）。
+这些变量是 @command{gawk} 的扩展。对于其他的 @command{awk} 实现，或者在兼容模式下的 @command{gawk}（查看 @ref{Options}），则它们没有特别含义：
 
 @c @asis for docbook
 @table @asis
@@ -10960,12 +10896,9 @@ mode (@pxref{Options}), they are not special:
 @cindex arguments, command-line
 @cindex command line, arguments
 @item @code{ARGC}, @code{ARGV}
-The command-line arguments available to @command{awk} programs are stored in
-an array called @code{ARGV}.  @code{ARGC} is the number of command-line
-arguments present.  @xref{Other Arguments}.
-Unlike most @command{awk} arrays,
-@code{ARGV} is indexed from 0 to @code{ARGC} @minus{} 1.
-In the following example:
+命令行中的参数被存在了名为 @code{ARGV} 的数组中，并可以被 @command{awk} 程序使用。@code{ARGC} 是命令行中参数的个数。
+查看 @ref{Other Arguments}。与大多数的 @command{awk} 数组不同，@code{ARGV} 的下标从 0 到 @code{ARGC} @minus{} 1。
+在下面的例子中：
 
 @example
 $ @kbd{awk 'BEGIN @{}
@@ -10978,65 +10911,45 @@ $ @kbd{awk 'BEGIN @{}
 @end example
 
 @noindent
-@code{ARGV[0]} contains @samp{awk}, @code{ARGV[1]}
-contains @samp{inventory-shipped}, and @code{ARGV[2]} contains
-@samp{mail-list}.  The value of @code{ARGC} is three, one more than the
-index of the last element in @code{ARGV}, because the elements are numbered
-from zero.
+@code{ARGV[0]} 包含 @samp{awk}，@code{ARGV[1]} 包含 @samp{inventory-shipped}，@code{ARGV[2]} 包含 @samp{mail-list}。
+@code{ARGC} 的值为 3，比 @code{ARGV} 数组最后一个元素的下标大 1，因为元素是从 0 开始编号的。
 
 @cindex programming conventions, @code{ARGC}/@code{ARGV} variables
-The names @code{ARGC} and @code{ARGV}, as well as the convention of indexing
-the array from 0 to @code{ARGC} @minus{} 1, are derived from the C language's
-method of accessing command-line arguments.
+@code{ARGC} 与 @code{ARGV} 的名字，与其下标为从 0 到 @code{ARGC} @minus{} 1，都是从 C 语言中访问命令行参数的方法继承而来。
 
 @cindex dark corner, value of @code{ARGV[0]}
-The value of @code{ARGV[0]} can vary from system to system.
-Also, you should note that the program text is @emph{not} included in
-@code{ARGV}, nor are any of @command{awk}'s command-line options.
-@xref{ARGC and ARGV} for information
-about how @command{awk} uses these variables.
+@code{ARGV[0]} 的值会因为系统不同可能不同。同时，你应该注意程序文本与 @command{awk} 的命令行选项都@emph{没有}包含在 @code{ARGV} 中。
+查看 @ref{ARGC and ARGV}，来获取使用这些 @command{awk} 变量的信息。
 @value{DARKCORNER}
 
 @cindex @code{ARGIND} variable
 @cindex differences in @command{awk} and @command{gawk}, @code{ARGIND} variable
 @item @code{ARGIND #}
-The index in @code{ARGV} of the current file being processed.
-Every time @command{gawk} opens a new @value{DF} for processing, it sets
-@code{ARGIND} to the index in @code{ARGV} of the @value{FN}.
-When @command{gawk} is processing the input files,
-@samp{FILENAME == ARGV[ARGIND]} is always true.
+当前正在被处理的文件在 @code{ARGV} 中的索引。每次 @command{gawk} 打开一个@value{DF}进行处理，
+它就会设置 @code{ARGIND} 的值为文件名在 @code{ARGV} 中的索引。
+当 @command{gawk} 处理输入文件时，@samp{FILENAME == ARGV[ARGIND]} 的值总是为 true。
 
 @cindex files, processing@comma{} @code{ARGIND} variable and
-This variable is useful in file processing; it allows you to tell how far
-along you are in the list of @value{DF}s as well as to distinguish between
-successive instances of the same @value{FN} on the command line.
+这个变量在处理文件时很有用，它可以让你知道@value{DF}中已经处理了多少，以及用来区分在命令行中两个连续的同名文件。
 
 @cindex file names, distinguishing
-While you can change the value of @code{ARGIND} within your @command{awk}
-program, @command{gawk} automatically sets it to a new value when it
-opens the next file.
+当你在 @command{awk} 程序中改变 @code{ARGIND} 变量的值时，@command{gawk} 会在打开下一个文件时，自动设置它为新的值。
 
 @cindex @code{ENVIRON} array
 @cindex environment variables, in @code{ENVIRON} array
 @item @code{ENVIRON}
-An associative array containing the values of the environment.  The array
-indices are the environment variable names; the elements are the values of
-the particular environment variables.  For example,
-@code{ENVIRON["HOME"]} might be @code{"/home/arnold"}.  Changing this array
-does not affect the environment passed on to any programs that
-@command{awk} may spawn via redirection or the @code{system()} function.
-(In a future version of @command{gawk}, it may do so.)
+一个包含环境变量以其值的关联数组。数组的索引是环境变量名，元素则是特定环境变量的值。
+例如 @code{ENVIRON["HOME"]} 的值可以是 @code{"/home/arnold"}。
+改变这个数组不会影响传递到任意的通过 @code{system()} 函数或者重定向启动的程序的环境变量。（在后续的 @command{gawk} 版本，有可能会有影响。）
 
-Some operating systems may not have environment variables.
-On such systems, the @code{ENVIRON} array is empty (except for
-@w{@code{ENVIRON["AWKPATH"]}} and
-@w{@code{ENVIRON["AWKLIBPATH"]}};
-@pxref{AWKPATH Variable} and
+有一些操作系统没有环境变量。在这样的系统中，@code{ENVIRON} 数组为空
+（除了 @w{@code{ENVIRON["AWKPATH"]}} 与 @w{@code{ENVIRON["AWKLIBPATH"]}}，
+查看 @ref{AWKPATH Variable}，与 
 @ifdocbook
-@ref{AWKLIBPATH Variable}).
+@ref{AWKLIBPATH Variable}）。
 @end ifdocbook
 @ifnotdocbook
-@pxref{AWKLIBPATH Variable}).
+@ref{AWKLIBPATH Variable}）。
 @end ifnotdocbook
 
 @cindex @command{gawk}, @code{ERRNO} variable in
@@ -11044,265 +10957,208 @@ On such systems, the @code{ENVIRON} array is empty (except for
 @cindex differences in @command{awk} and @command{gawk}, @code{ERRNO} variable
 @cindex error handling, @code{ERRNO} variable and
 @item @code{ERRNO #}
-If a system error occurs during a redirection for @code{getline}, during
-a read for @code{getline}, or during a @code{close()} operation, then
-@code{ERRNO} contains a string describing the error.
+如果在为 @code{getline} 进行重定向、读取时，或者进行 @code{close()} 操作中，发生了系统错误，
+则 @code{ERRNO} 会包含一个描述错误的字串。
 
-In addition, @command{gawk} clears @code{ERRNO} before opening each
-command-line input file. This enables checking if the file is readable
-inside a @code{BEGINFILE} pattern (@pxref{BEGINFILE/ENDFILE}).
+另外，@command{gawk} 会在每一个命令行中的输入文件的操作前清空 @code{ERRNO}。
+这样可以在 @code{BEGINFILE} 模式中检查文件的可读性（查看 @ref{BEGINFILE/ENDFILE}）。
 
-Otherwise, @code{ERRNO} works similarly to the C variable @code{errno}.
-Except for the case just mentioned, @command{gawk} @emph{never} clears
-it (sets it to zero or @code{""}).  Thus, you should only expect its
-value to be meaningful when an I/O operation returns a failure value,
-such as @code{getline} returning @minus{}1.  You are, of course, free
-to clear it yourself before doing an I/O operation.
+其他情况，@code{ERRNO} 的作用就类似于 C 变量 @code{errno}。
+除了则才所提到的几个种情况，@command{gawk} @emph{绝不会}清除它（即将其设置为 0，或者 @code{""}）。
+因此，只有在 I/O 操作返回一个失败的值的情况下，你才可寄希望于它的值有意义，例如 @code{getline} 返回 @minus{}1。
+当然，你也可以在执行 I/O 操作之前自己清理它。
 
 @cindex @code{FILENAME} variable
 @cindex dark corner, @code{FILENAME} variable
 @item @code{FILENAME}
-The name of the current input file.  When no @value{DF}s are listed
-on the command line, @command{awk} reads from the standard input and
-@code{FILENAME} is set to @code{"-"}.  @code{FILENAME} changes each
-time a new file is read (@pxref{Reading Files}).  Inside a @code{BEGIN}
-rule, the value of @code{FILENAME} is @code{""}, because there are no input
-files being processed yet.@footnote{Some early implementations of Unix
-@command{awk} initialized @code{FILENAME} to @code{"-"}, even if there
-were @value{DF}s to be processed. This behavior was incorrect and should
-not be relied upon in your programs.} @value{DARKCORNER} Note, though,
-that using @code{getline} (@pxref{Getline}) inside a @code{BEGIN} rule
-can give @code{FILENAME} a value.
+当前输入文件的名字。如果在命令行中没有输入文件时，@command{awk} 会从标准输入中读取数据，同时 @code{FILENAME} 的值会设置成 @code{"-"}。
+@code{FILENAME} 每次读取新文件的时候都会改变（查看 @ref{Reading Files}）。
+在 @code{BEGIN} 规则内，@code{FILENAME} 的值为 @code{""}，因为这时还没有输入文件被处理。
+@footnote{有一些 Unix @command{awk} 的早期实现将 @code{FILENAME} 的值设置成 @code{"-"}，
+就算还没有文件被处理。这个行为是不正确的，在你的程序中不能依赖于它。}
+@value{DARKCORNER}
+但是，在 @code{BEGIN} 规则中使用 @code{getline} （查看 @ref{Getline}）可以使 @code{FILENAME} 有一个值。
 
 @cindex @code{FNR} variable
 @item @code{FNR}
-The current record number in the current file.  @command{awk} increments
-@code{FNR} each time it reads a new record (@pxref{Records}).
-@command{awk} resets @code{FNR} to zero each time it starts a new
-input file.
+当前文件的当前记录数。@command{awk} 每读一个新记录的时候，会递增 @code{FNR}（查看 @ref{Records}）。
+@command{awk} 每次开始读取一个新文件的时候，会将 @code{FNR} 设置为 0。
 
 @cindex @code{NF} variable
 @item @code{NF}
-The number of fields in the current input record.
-@code{NF} is set each time a new record is read, when a new field is
-created, or when @code{$0} changes (@pxref{Fields}).
+当前输入记录的域数值。@code{NF} 每读一个新记录，并且域已经生成的时候，就会被重置，或者是 @code{$0} 改变也会重置
+（查看 @ref{Fields}）。
 
-Unlike most of the variables described in this @value{SUBSECTION},
-assigning a value to @code{NF} has the potential to affect
-@command{awk}'s internal workings.  In particular, assignments
-to @code{NF} can be used to create fields in or remove fields from the
-current record. @xref{Changing Fields}.
+与在本节中描述的其他大多数变量不同，给 @code{NF} 赋值对 @command{awk} 的内部工作有一些潜在的效果。具体地说，
+给 @code{NF} 赋值可能创建新的域，或者是从当前的记录中删除域。查看 @ref{Changing Fields}。
 
 @cindex @code{FUNCTAB} array
 @cindex @command{gawk}, @code{FUNCTAB} array in
 @cindex differences in @command{awk} and @command{gawk}, @code{FUNCTAB} variable
 @item @code{FUNCTAB #}
-An array whose indices and corresponding values are the names of all
-the built-in, user-defined, and extension functions in the program.
+一个数组，其索引以及对应的值全部都是内建的，用户定义的，以及程序中扩展的函数。
 
-@quotation NOTE
-Attempting to use the @code{delete} statement with the @code{FUNCTAB}
-array causes a fatal error.  Any attempt to assign to an element of
-@code{FUNCTAB} also causes a fatal error.
+@quotation 提示
+在 @code{FUNCTAB} 上尝试用 @code{delete} 语句会导致致使错误。而对其元素进行赋值，也会导致命令错误。
 @end quotation
 
 @cindex @code{NR} variable
 @item @code{NR}
-The number of input records @command{awk} has processed since
-the beginning of the program's execution
-(@pxref{Records}).
-@command{awk} increments @code{NR} each time it reads a new record.
+从程序执行开始到现在为止，@command{awk} 已经处理的记录的个数（查看 @ref{Records}）。
+@command{awk} 每读一个新记录就会对其进行递增。
 
 @cindex @command{gawk}, @code{PROCINFO} array in
 @cindex @code{PROCINFO} array
 @cindex differences in @command{awk} and @command{gawk}, @code{PROCINFO} array
 @item @code{PROCINFO #}
-The elements of this array provide access to information about the
-running @command{awk} program.
-The following elements (listed alphabetically)
-are guaranteed to be available:
+这个数组的元素为运行中的程序的信息提供了访问手段。下面的元素（按字母顺序）保证可用：
 
 @table @code
 @cindex effective group ID of @command{gawk} user
 @item PROCINFO["egid"]
-The value of the @code{getegid()} system call.
+系统调用 @code{getegid()} 的值。
 
 @item PROCINFO["euid"]
 @cindex effective user ID of @command{gawk} user
-The value of the @code{geteuid()} system call.
+系统调用 @code{geteuid()} 的值。
 
 @item PROCINFO["FS"]
-This is
-@code{"FS"} if field splitting with @code{FS} is in effect,
-@code{"FIELDWIDTHS"} if field splitting with @code{FIELDWIDTHS} is in effect,
-or @code{"FPAT"} if field matching with @code{FPAT} is in effect.
+如果域分割方式是 @code{FS}，则其值为 “@code{FS}”，如果是 @code{FIELDWIDTHS} 分割方式起作用，则其值为 “@code{FIELDWIDTHS}”，
+如果是 @code{FPAT} 方式进行分割，则其值为 @code{"FPAT"}。
 
 @item PROCINFO["gid"]
 @cindex group ID of @command{gawk} user
-The value of the @code{getgid()} system call.
+系统调用 @code{getgid()} 的值。
 
 @item PROCINFO["identifiers"]
 @cindex program identifiers
-A subarray, indexed by the names of all identifiers used in the text of
-the @command{awk} program.  An @dfn{identifier} is simply the name of a variable
-(be it scalar or array), built-in function, user-defined function, or
-extension function.  For each identifier, the value of the element is
-one of the following:
+一个子数组，由在 @command{awk} 程序文件中所使用的标识符名字进行索引。一个@dfn{标识符}简单地说就是变量的名字
+（变量是一个标量或者是一个数组），也可以是内建函数，用户自定义函数，或者是函数扩展。对每一个标识符，元素的值可能是下面其中之一：
 
 @table @code
 @item "array"
-The identifier is an array.
+标识符是一个数组。
 
 @item "builtin"
-The identifier is a built-in function.
+标识符是一个内建函数。
 
 @item "extension"
-The identifier is an extension function loaded via
-@code{@@load} or @option{-l}.
+标识符是一个函数扩展，并通过 @code{@@load} 或者 @option{-l} 进行装载。
 
 @item "scalar"
-The identifier is a scalar.
+标识符是一个标量。
 
 @item "untyped"
-The identifier is untyped (could be used as a scalar or an array;
-@command{gawk} doesn't know yet).
+标识符是无类型的（可用于标量或者是数组，@command{gawk} 还不知道而已）。
 
 @item "user"
-The identifier is a user-defined function.
+标识符是一个用户自定义的函数。
 @end table
 
 @noindent
-The values indicate what @command{gawk} knows about the identifiers
-after it has finished parsing the program; they are @emph{not} updated
-while the program runs.
+其值显示了 @command{gawk} 完成程序的分析后，
+对所了解到的标识符的情况，它们的值在程序的运行过程中@emph{不能}更新。
 
 @item PROCINFO["pgrpid"]
 @cindex process group ID of @command{gawk} process
-The process group ID of the current process.
+当前进程的组 ID。
 
 @item PROCINFO["pid"]
 @cindex process ID of @command{gawk} process
-The process ID of the current process.
+当前进程的进程 ID。
 
 @item PROCINFO["ppid"]
 @cindex parent process ID of @command{gawk} process
-The parent process ID of the current process.
+当前进程的父进程的进程 ID。
 
 @item PROCINFO["strftime"]
-The default time format string for @code{strftime()}.
-Assigning a new value to this element changes the default.
-@xref{Time Functions}.
+@code{strftime()} 时间函数的默认格式串。对这个值进行赋值可以改变默认串，查看 @ref{Time Functions}。
 
 @item PROCINFO["uid"]
-The value of the @code{getuid()} system call.
+系统调用 @code{getuid()} 的值。
 
 @item PROCINFO["version"]
 @cindex version of @command{gawk}
 @cindex @command{gawk} version
-The version of @command{gawk}.
+@command{gawk} 的版本号。
 @end table
 
-The following additional elements in the array
-are available to provide information about the MPFR and GMP libraries
-if your version of @command{gawk} supports arbitrary-precision arithmetic
-(@pxref{Arbitrary Precision Arithmetic}):
+下面在数组中的额外元素，如果你的 @command{gawk} 版本支持任意精度的算术运算（查看 @ref{Arbitrary Precision Arithmetic}），
+则它们会在数组中存在，并提供关于 MPFR 以及 GMP 库的相关信息。
 
 @table @code
 @item PROCINFO["gmp_version"]
 @cindex version of GNU MP library
-The version of the GNU MP library.
+GNU MP 库的版本。
 
 @cindex version of GNU MPFR library
 @item PROCINFO["mpfr_version"]
-The version of the GNU MPFR library.
+GNU MPFR 库的版本。
 
 @item PROCINFO["prec_max"]
 @cindex maximum precision supported by MPFR library
-The maximum precision supported by MPFR.
+MPFR 支持的最大精度。
 
 @item PROCINFO["prec_min"]
 @cindex minimum precision required by MPFR library
-The minimum precision required by MPFR.
+MPFR 所要求的最小精度。
 @end table
 
-The following additional elements in the array are available to provide
-information about the version of the extension API, if your version
-of @command{gawk} supports dynamic loading of extension functions
-(@pxref{Dynamic Extensions}):
+下面的附加元素，如果你的 @command{gawk} 版本支持动态装载扩展函数（查看 @ref{Dynamic Extensions}），则会在数组中存在，并向你提供这些扩展 API 的版本信息：
 
 @table @code
 @item PROCINFO["api_major"]
 @cindex version of @command{gawk} extension API
 @cindex extension API, version number
-The major version of the extension API.
+扩展 API 的主版本。
 
 @item PROCINFO["api_minor"]
-The minor version of the extension API.
+扩展 API 的次版本。
 @end table
 
 @cindex supplementary groups of @command{gawk} process
-On some systems, there may be elements in the array, @code{"group1"}
-through @code{"group@var{N}"} for some @var{N}. @var{N} is the number of
-supplementary groups that the process has.  Use the @code{in} operator
-to test for these elements
-(@pxref{Reference to Elements}).
+在某些系统中，有可能存在 @code{"group1"} 到值为 @var{N} 的 @code{"group@var{N}"} 的元素存在。
+@var{N} 是进程所有的补充组的数值。使用 @code{in} 操作符来测试这些元素（查看 @ref{Reference to Elements}）。
 
-The following elements allow you to change @command{gawk}'s behavior:
+下面的附加元素允许你改变 @command{gawk} 的行为：
 
 @table @code
 @item PROCINFO["@var{command}", "pty"]
-For two-way communication to @var{command}, use a pseudo-tty instead
-of setting up a two-way pipe.
-@xref{Two-way I/O} for more information.
+可以使用 pseudo-tty 代替双向管道进行双向通信。查看 @ref{Two-way I/O} 关于更多信息。
 
 @item PROCINFO["@var{input_name}", "READ_TIMEOUT"]
-Set a timeout for reading from input redirection @var{input_name}.
-@xref{Read Timeout} for more information.
+在从重定向输入中读取数据的时候，设置一个超时提示。
+查看 @ref{Read Timeout} 关于更多信息。
 
 @item PROCINFO["sorted_in"]
-If this element exists in @code{PROCINFO}, its value controls the
-order in which array indices will be processed by
-@samp{for (@var{indx} in @var{array})} loops.
-This is an advanced feature, so we defer the
-full description until later; see
-@ref{Scanning an Array}.
+如果这个元素在 @code{PROCINFO} 中存在，则它的值控制针对数组索引在 @samp{for (@var{indx} in @var{array})} 循环中的处理顺序。
+这是一个高级特性，因此我们后再详细讨论。查看 @ref{Scanning an Array}。
 @end table
 
 @cindex @code{RLENGTH} variable
 @item @code{RLENGTH}
-The length of the substring matched by the
-@code{match()} function
-(@pxref{String Functions}).
-@code{RLENGTH} is set by invoking the @code{match()} function.  Its value
-is the length of the matched string, or @minus{}1 if no match is found.
+@code{match()} 函数匹配的子串的长度（查看 @ref{String Functions}）。
+@code{RLENGTH} 在调用 @code{match()} 函数时被设置。它的值是匹配串的长度，如果没有匹配找到，则值为 @minus{}1。
 
 @cindex @code{RSTART} variable
 @item @code{RSTART}
-The start index in characters of the substring that is matched by the
-@code{match()} function
-(@pxref{String Functions}).
-@code{RSTART} is set by invoking the @code{match()} function.  Its value
-is the position of the string where the matched substring starts, or zero
-if no match was found.
+调用 @code{match()} 函数所匹配的子串的开始字符的下标（查看 @ref{String Functions}）。
+@code{RSTART} 在调用 @code{match()} 函数的时候被设置。它的值是匹配串的在串中的位置，如果没有匹配串，则其值为 0。
 
 @cindex @command{gawk}, @code{RT} variable in
 @cindex @code{RT} variable
 @cindex differences in @command{awk} and @command{gawk}, @code{RT} variable
 @item @code{RT #}
-The input text that matched the text denoted by @code{RS},
-the record separator.  It is set every time a record is read.
+输入文件中匹配由 @code{RS}，即记录分隔符，表示的串。每次读取一个记录时，则其值会被设置。
 
 @cindex @command{gawk}, @code{SYMTAB} array in
 @cindex @code{SYMTAB} array
 @cindex differences in @command{awk} and @command{gawk}, @code{SYMTAB} variable
 @item @code{SYMTAB #}
-An array whose indices are the names of all defined global variables and
-arrays in the program.  @code{SYMTAB} makes @command{gawk}'s symbol table
-visible to the @command{awk} programmer.  It is built as @command{gawk}
-parses the program and is complete before the program starts to run.
+在程序中由名字进行索引的所有全局定义的变量与数组的数组。
+@code{SYMTAB} 使得 @command{gawk} 的符号表可由 @command{awk} 程序员看到。它在 @command{gawk} 分析程序的时候建立，并在程序开始执行前完成。
 
-The array may be used for indirect access to read or write the value of
-a variable:
+数组可以用来间接地读取与写入一个数量的值：
 
 @example
 foo = 5
@@ -11311,12 +11167,10 @@ print foo    # prints 4
 @end example
 
 @noindent
-The @code{isarray()} function (@pxref{Type Functions}) may be used to test
-if an element in @code{SYMTAB} is an array.
-Also, you may not use the @code{delete} statement with the
-@code{SYMTAB} array.
+@code{isarray()} 函数（查看 @ref{Type Functions}）可以用来测试 @code{SYMTAB} 中的元素是否为数组。
+类似地，你也不可以对 @code{SYMTAB} 中的元素使用 delete 语句。
 
-You may use an index for @code{SYMTAB} that is not a predefined identifier:
+你也可以使用没有定义的标识符作为 @code{SYMTAB} 的下标：
 
 @example
 SYMTAB["xxx"] = 5
@@ -11324,14 +11178,10 @@ print SYMTAB["xxx"]
 @end example
 
 @noindent
-This works as expected: in this case @code{SYMTAB} acts just like
-a regular array.  The only difference is that you can't then delete
-@code{SYMTAB["xxx"]}.
+如下情况，其运行与预期一致：@code{SYMTAB} 就是一个普通的数组。唯一的不同就是你不可以删除 @code{SYMTAB["xxx"]}。
 
 @cindex Schorr, Andrew
-The @code{SYMTAB} array is more interesting than it looks. Andrew Schorr
-points out that it effectively gives @command{awk} data pointers. Consider his
-example:
+@code{SYMTAB} 比初看起来要有趣得多。Andrew Schorr 指出来，可以用其作为 @command{awk} 的数组指针。看看他的例子：
 
 @example
 # Indirect multiply of any variable by amount, return result
@@ -11343,7 +11193,7 @@ function multiply(variable, amount)
 @end example
 
 @noindent
-You would use it like this:
+你可以这么用它：
 
 @example
 BEGIN @{
@@ -11354,31 +11204,27 @@ BEGIN @{
 @end example
 
 @noindent
-When run, this produces:
+当这段程序运行的时候，产生这样的结果：
 
 @example
 $ @kbd{gawk -f answer.awk}
 @print{} The answer is 42
 @end example
 
-@quotation NOTE
-In order to avoid severe time-travel paradoxes,@footnote{Not to mention
-difficult implementation issues.} neither @code{FUNCTAB} nor @code{SYMTAB}
-is available as an element within the @code{SYMTAB} array.
+@quotation 提示
+为了避免严重的长时间旅行悖论，
+@footnote{更不用提在实现上的困难。}
+不管是 @code{FUNCTAB} 还是 @code{SYMTAB} 都不能作为 @code{SYMTAB} 数组中的元素。
 @end quotation
 @end table
 
-@sidebar Changing @code{NR} and @code{FNR}
+@sidebar 改变 @code{NR} 与 @code{FNR}
 @cindex @code{NR} variable, changing
 @cindex @code{FNR} variable, changing
 @cindex dark corner, @code{FNR}/@code{NR} variables
-@command{awk} increments @code{NR} and @code{FNR}
-each time it reads a record, instead of setting them to the absolute
-value of the number of records read.  This means that a program can
-change these variables and their new values are incremented for
-each record.
+每次读取一个记录时，@command{awk} 就是递增 @code{NR} 与 @code{FNR} 的值，而不是直接将它们设置成已读记录的绝对值。这意味着，程序可以改变这些变量的值，并且在每个记录间都将被递增。
 @value{DARKCORNER}
-The following example shows this:
+下面的例子可以说明：
 
 @example
 $ @kbd{echo '1}
@@ -11393,22 +11239,17 @@ $ @kbd{echo '1}
 @end example
 
 @noindent
-Before @code{FNR} was added to the @command{awk} language
-(@pxref{V7/SVR3.1}),
-many @command{awk} programs used this feature to track the number of
-records in a file by resetting @code{NR} to zero when @code{FILENAME}
-changed.
+在 @code{FNR} 被加入到 @command{awk} 语言之前（查看 @ref{V7/SVR3.1}），
+很多的 @command{awk} 程序使用这个特性来跟踪文件中的记录数，这只需要在 @code{FILENAME} 变化时，将 @code{NR} 的值设置成 0 即可。
 @end sidebar
 
 @node ARGC and ARGV
-@subsection Using @code{ARGC} and @code{ARGV}
+@subsection 使用 @code{ARGC} 与 @code{ARGV}
 @cindex @code{ARGC}/@code{ARGV} variables, how to use
 @cindex arguments, command-line
 @cindex command line, arguments
 
-@ref{Auto-set}
-presented the following program describing the information contained in @code{ARGC}
-and @code{ARGV}:
+在 @ref{Auto-set}，中有提供下面的程序来描述包含在 @code{ARGC} 与 @code{ARGV} 中的信息：
 
 @example
 $ @kbd{awk 'BEGIN @{}
@@ -11421,16 +11262,11 @@ $ @kbd{awk 'BEGIN @{}
 @end example
 
 @noindent
-In this example, @code{ARGV[0]} contains @samp{awk}, @code{ARGV[1]}
-contains @samp{inventory-shipped}, and @code{ARGV[2]} contains
-@samp{mail-list}.
-Notice that the @command{awk} program is not entered in @code{ARGV}.  The
-other command-line options, with their arguments, are also not
-entered.  This includes variable assignments done with the @option{-v}
-option (@pxref{Options}).
-Normal variable assignments on the command line @emph{are}
-treated as arguments and do show up in the @code{ARGV} array.
-Given the following program in a file named @file{showargs.awk}:
+在这个例子中，@code{ARGV[0]} 包含 @samp{awk}，@code{ARGV[1]} 包含 @samp{inventory-shipped}，
+而 @code{ARGV[2]} 包含 @samp{mail-list} 。注意 @command{awk} 程序并没有在 @code{ARGV}中。其他的命令行选项，以及它们的参数都没有进入到这个数组中。
+这也包括通过 @option{-v} 参数（查看 @ref{Options}）进行变量赋值的部分。
+在命令行中的正常的变量赋值@emph{被}当成参数对待，
+并且会在 @code{ARGV} 中出现。有下面的名为 @file{showargs.awk} 的文件：
 
 @example
 BEGIN @{
@@ -11442,7 +11278,7 @@ END   @{ printf "A=%d, B=%d\n", A, B @}
 @end example
 
 @noindent
-Running it produces the following:
+运行程序会产生如下输出：
 
 @example
 $ @kbd{awk -v A=1 -f showargs.awk B=2 /dev/null}
@@ -11453,49 +11289,35 @@ $ @kbd{awk -v A=1 -f showargs.awk B=2 /dev/null}
 @print{} A=1, B=2
 @end example
 
-A program can alter @code{ARGC} and the elements of @code{ARGV}.
-Each time @command{awk} reaches the end of an input file, it uses the next
-element of @code{ARGV} as the name of the next input file.  By storing a
-different string there, a program can change which files are read.
-Use @code{"-"} to represent the standard input.  Storing
-additional elements and incrementing @code{ARGC} causes
-additional files to be read.
+程序可以改变 @code{ARGC} 与 @code{ARGV} 的元素值。当每次 @command{awk} 达到文件尾时，
+它会使用 @code{ARGV} 的下一个元素作为输入文件。
+通过在那个位置存入一个不同的串，程序就可以改变要读取的文件。使用 @code{"-"} 来表示标准输入。
+存储额外的元素并递增 @code{ARGC} 的值，可以处理额外的文件。
 
-If the value of @code{ARGC} is decreased, that eliminates input files
-from the end of the list.  By recording the old value of @code{ARGC}
-elsewhere, a program can treat the eliminated arguments as
-something other than @value{FN}s.
+如果 @code{ARGC} 的值被递减了，则会从将输入文件从列表的尾部删除。通过在其他地方记录 @code{ARGC} 的旧值，
+程序可以将取消的参数当做其他东西来对待，而不是@value{FN}。
 
-To eliminate a file from the middle of the list, store the null string
-(@code{""}) into @code{ARGV} in place of the file's name.  As a
-special feature, @command{awk} ignores @value{FN}s that have been
-replaced with the null string.
-Another option is to
-use the @code{delete} statement to remove elements from
-@code{ARGV} (@pxref{Delete}).
+为了从列表的中间将文件排除，可以将空串（@code{""}）存到 @code{ARGV} 中来代替@value{FN}。作用一个特殊的特性，
+@command{awk} 会忽略那些用空串替换掉的文件。另一个选择就是用 @code{delete} 语句来移除 @code{ARGV} 中的元素（查看 @ref{Delete}）。
 
-All of these actions are typically done in the @code{BEGIN} rule,
-before actual processing of the input begins.
-@xref{Split Program} and
+所有这些动作一般都要在 @code{BEGIN} 规则中完成，也就是在程序实际处理输入前。查看 @ref{Split Program}，
+以及
 @ifnotdocbook
-@pxref{Tee Program}
+@ref{Tee Program}
 @end ifnotdocbook
 @ifdocbook
 @ref{Tee Program}
 @end ifdocbook
-for examples
-of each way of removing elements from @code{ARGV}.
+中的例子，来获取从 @code{ARGV} 中删除元素的各种方法。
 
-To actually get options into an @command{awk} program,
-end the @command{awk} options with @option{--} and then supply
-the @command{awk} program's options, in the following manner:
+为了取得输入 @command{awk} 程序中的选项，用 @option{--} 来结束 @command{awk} 的选项，
+然后再提供 @command{awk} 程序的选项，如下面的方式：
 
 @example
 awk -f myprog.awk -- -v -q file1 file2 @dots{}
 @end example
 
-The following fragment processes @code{ARGV} in order to examine, and
-then remove, the previously mentioned command-line options:
+下面的处理 @code{ARGV} 的代码片段，就是用来检查，移除前面所提到的命令行选项：
 
 @example
 BEGIN @{
@@ -11516,117 +11338,80 @@ BEGIN @{
 @end example
 
 @cindex differences in @command{awk} and @command{gawk}, @code{ARGC}/@code{ARGV} variables
-Ending the @command{awk} options with @option{--} isn't
-necessary in @command{gawk}. Unless @option{--posix} has
-been specified, @command{gawk} silently puts any unrecognized options
-into @code{ARGV} for the @command{awk} program to deal with.  As soon
-as it sees an unknown option, @command{gawk} stops looking for other
-options that it might otherwise recognize.  The previous command line with
-@command{gawk} would be:
+在 @command{gawk} 中用 @option{--} 来结束 @command{awk} 的选项不是必须的，除非指定了 @option{--posix} ，
+@command{gawk} 会默默地将不能够识别的选项放到 @code{ARGV} 中以备 @command{awk} 程序来处理。一看到不认识的选项，
+@command{gawk} 会停止查找其他的可能可以识别的选项。前面的命令行在 @command{gawk} 中可以如下：
 
 @example
 gawk -f myprog.awk -q -v file1 file2 @dots{}
 @end example
 
 @noindent
-Because @option{-q} is not a valid @command{gawk} option, it and the
-following @option{-v} are passed on to the @command{awk} program.
-(@xref{Getopt Function} for an @command{awk} library function that
-parses command-line options.)
+由于 @option{-q} 不是一个有效的 @command{gawk} 选项，它以及后面的 @option{-v} 选项都会被传递给 @command{awk} 程序。
+（查看 @ref{Getopt Function}，来查看分析命令选项的库函数。）
 
-When designing your program, you should choose options that don't
-conflict with @command{gawk}'s, because it will process any options
-that it accepts before passing the rest of the command line on to
-your program.  Using @samp{#!} with the @option{-E} option may help
-(@pxref{Executable Scripts}
-and
+当设计你的程序的时候，你应该选择那些不与 @command{gawk} 冲突的选项，
+因为它将后续的要传递给你的程序的选项之前先处理掉自己可以接受的选项。使用以 @samp{#!} 并使用 @option{-E} 参数也许有帮助
+（查看 @ref{Executable Scripts}，以及 
 @ifnotdocbook
-@pxref{Options}).
+@ref{Options}）。
 @end ifnotdocbook
 @ifdocbook
-@ref{Options}).
+@ref{Options}）。
 @end ifdocbook
 
 @node Pattern Action Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-Pattern--action pairs make up the basic elements of an @command{awk}
-program.  Patterns are either normal expressions, range expressions,
-or regexp constants; one of the special keywords @code{BEGIN}, @code{END},
-@code{BEGINFILE}, or @code{ENDFILE}; or empty.  The action executes if
-the current record matches the pattern.  Empty (missing) patterns match
-all records.
+模式-行为对组成了 @command{awk} 程序的基本元素。模式要是么一个普通的表达式，范围表达式，或者是正则表达式常量，
+或者是特殊关键字 @code{BEGIN}，@code{END}，@code{BEGINFILE}，@code{ENDFILE}，或者为空。
+动作在当前记录匹配模式后执行。空的（省略）的模式匹配所有的记录。
 
 @item
-I/O from @code{BEGIN} and @code{END} rules has certain constraints.
-This is also true, only more so, for @code{BEGINFILE} and @code{ENDFILE}
-rules.  The latter two give you ``hooks'' into @command{gawk}'s file
-processing, allowing you to recover from a file that otherwise would
-cause a fatal error (such as a file that cannot be opened).
+从 @code{BEGIN} 与 @code{END} 模式中进行 I/O 有一定的限制，对于 @code{BEGINFILE} 以及 @code{ENDFILE} 也是如此，
+而且限制更多。后两者可以让你在处理文件之间打入“勾子”，因此可你使用从可以导致致使错误的文件中恢复回来（例如文件不能被打开）。
 
 @item
-Shell variables can be used in @command{awk} programs by careful
-use of shell quoting.  It is easier to pass a shell variable into
-@command{awk} by using the @option{-v} option and an @command{awk}
-variable.
+Shell 变量可以通过仔细地使用 Shell 引号来用在 @command{awk} 程序中。
+用 @command{awk} 的 @option{-v} 选项来传递 Shell 变量到 @command{awk} 变量会更加容易。
 
 @item
-Actions consist of statements enclosed in curly braces. Statements
-are built up from expressions, control statements, compound statements,
-input and output statements, and deletion statements.
+动作由花括号包含的语句组成 。语句由表达式，控制语句，复合语句，输入输出语句以及删除文句组成。
 
 @item
-The control statements in @command{awk} are @code{if}-@code{else},
-@code{while}, @code{for}, and @code{do}-@code{while}.  @command{gawk}
-adds the @code{switch} statement.  There are two flavors of @code{for}
-statement: one for performing general looping, and the other for iterating
-through an array.
+@command{awk} 的控制语句是 @code{if}-@code{else}，@code{while}，@code{for} 和 @code{do}-@code{while}。
+@command{gawk} 添加了 @code{switch} 语句。@code{for} 语句有两个用处：一个是执行一般的循环，另一个是用来迭代数组。
 
 @item
-@code{break} and @code{continue} let you exit early or start the next
-iteration of a loop (or get out of a @code{switch}).
+@code{break} 与 @code{continue} 可以让你早点或者开启下一个循环替代（或者跳出 @code{switch}）。
 
 @item
-@code{next} and @code{nextfile} let you read the next record and start
-over at the top of your program or skip to the next input file and
-start over, respectively.
+@code{next} 与 @code{nextfile} 可以让你读取下一个记录并从你程序的开头执行，或者路过下一个输入文件并重新开始。
 
 @item
-The @code{exit} statement terminates your program. When executed
-from an action (or function body), it transfers control to the
-@code{END} statements. From an @code{END} statement body, it exits
-immediately.  You may pass an optional numeric value to be used
-as @command{awk}'s exit status.
+@code{exit} 语句用来结束你的程序。当从动作中执行时（或者在函数体内执行时），它将控制流传递到 @code{END} 语句。从 @code{END} 语句体中执行时，则会直接退出。你可以传递一个可选的数值参数来作为 @command{awk} 的退出状态。
 
 @item
-Some predefined variables provide control over @command{awk}, mainly for I/O.
-Other variables convey information from @command{awk} to your program.
+一些预定义的函数可以控制 @command{awk} ，主要是用于 I/O。其他的变量用来向你的程序传递信息。
 
 @item
-@code{ARGC} and @code{ARGV} make the command-line arguments available
-to your program. Manipulating them from a @code{BEGIN} rule lets you
-control how @command{awk} will process the provided @value{DF}s.
+@code{ARGC} 与 @code{ARGV} 可以让你的程序使用命令行参数。从 @code{BEGIN} 规则中操作它们，
+可以使你控制 @command{awk} 如何来处理@value{DF}。
 
 @end itemize
 
 @node Arrays
-@chapter Arrays in @command{awk}
+@chapter @command{awk} 数组
 @cindex arrays
 
-An @dfn{array} is a table of values called @dfn{elements}.  The
-elements of an array are distinguished by their @dfn{indices}.  Indices
-may be either numbers or strings.
+@dfn{数组}是被称为@dfn{元素}的值的表。数组的元素都由@dfn{索引}来区分，
+索引即可以是数值也可以是字串。
 
-This @value{CHAPTER} describes how arrays work in @command{awk},
-how to use array elements, how to scan through every element in an array,
-and how to remove array elements.
-It also describes how @command{awk} simulates multidimensional
-arrays, as well as some of the less obvious points about array usage.
-The @value{CHAPTER} moves on to discuss @command{gawk}'s facility
-for sorting arrays, and ends with a brief description of @command{gawk}'s
-ability to support true arrays of arrays.
+本@value{CHAPTER}描述 @command{awk} 中的数组如保来工作，如何使用元素，如何来扫描数组成的每个元素，以及如可来删除数组元素。同时，
+也描述 @command{awk} 如何来模拟多维数组，以及在使用数组时的一些不太明显的地方。
+本@value{CHAPTER}还会讨论 @command{gawk} 中用于对数组排序的工具，然后以 @command{gawk} 支持真正的数组之数组的能力为结尾。
 
 @menu
 * Array Basics::                The basics of arrays.
@@ -11641,6 +11426,7 @@ ability to support true arrays of arrays.
 * Arrays Summary::              Summary of arrays.
 @end menu
 
+#TODO20171113
 @node Array Basics
 @section The Basics of Arrays
 
