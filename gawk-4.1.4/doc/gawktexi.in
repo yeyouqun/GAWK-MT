@@ -7458,7 +7458,7 @@ END @{ close("sh") @}
 @cindex file descriptors
 @cindex files, descriptors, See file descriptors
 
-一般地，正在执行的程序有三个输入输出游戏已经可以用来进行读写。
+一般地，正在执行的程序已经有三个输入输出流可以用来进行读写。
 这就是众所周知的@dfn{标准输入}，@dfn{标准输出}以及@dfn{标准错误输出}。
 这些已经打开的流（以及任意已经打开的文件或者管道）技术上可以由所谓的@dfn{文件描述符}来表示。
 
@@ -7608,7 +7608,7 @@ print "Serious error detected!" > "/dev/stderr"
 （查看 @ref{Getline}），则文件（或者命令的执行）只在第一次发生。从那以后，从中读取第一个输入记录。
 通过 @code{getline} 再次读取同一个文件或者命令时，第二条记录从其中获取，以此类推。
 
-相似地，当文件或者管道被打开用于输出时，@command{awk} 会记录@value{FN}或者与其相关的命令，后续对于同一个文件或者命令写入，会被附加到前一个写操作之后。真到 @command{awk} 退出后，文件或者管道才会被关闭。
+相似地，当文件或者管道被打开用于输出时，@command{awk} 会记录@value{FN}或者与其相关的命令，后续对于同一个文件或者命令写入，会被附加到前一个写操作之后。直到 @command{awk} 退出后，文件或者管道才会被关闭。
 
 @cindexawkfunc{close}
 这意思是说，为了再次从头开始读取同一个文件，或者重新执行一个 Shell 命令，你需要一些特别步骤（而不是从同一个命令中读取更多的输出）。
@@ -7699,7 +7699,7 @@ close(sortcom)
 尽管每个命令都已经执行完成（通过 @code{getline} 的 end-of-file 的返回值指示），子进程却没有结束；
 @footnote{技术术语应该是病态进程（morbid），已经完成的子进程称为“僵尸进程（zombie）”，通过“回收（reaping）”后，进程就会被清理。}
 @c Good old UNIX: give the marketing guys fits, that's the ticket
-更重要的是，与管道关联的描述符真到 @command{awk} 退出后，才会调用 @code{close()} 进行关闭释放。
+更重要的是，与管道关联的描述符直到 @command{awk} 退出后，才会调用 @code{close()} 进行关闭释放。
 
 @code{close()} 如果接收的不是一个文件、管道或者并程这样的打开用于重定向的参数，则默默地什么也不干。
 在这种情况下，它的返回值是负值，表示错误。另外，@command{gawk} 会设置 @code{ERRNO} 的值为指示对应的错误。
@@ -7885,12 +7885,12 @@ BEGIN @{ print "Serious error detected!" > /dev/stderr @}
 @cindex numbers, octal
 @cindex numbers, hexadecimal
 
-在 @command{awk} 中，所有的数值都小十进制数（以 10 为进制）。很多的其他编程变速器允许你指定其他进制的数，
+在 @command{awk} 中，所有的数值都是十进制数（以 10 为进制）。很多的其他编程变速器允许你指定其他进制的数，
 一般为八进制（以 8 为进制）和十六进制（以 16 为进制）。在八进制中，数值为 0，1，2，4，5，6，7，10，11，12 等等。
 正如十进制中的 @samp{11}，是 1 乘 10，然后加 1，因此八进制中的 @samp{11}，表示是 1 乘 8，然后加 1。
 在十进制中它等于 9。对于十六进制，有 16 个数字位。由于我们日常的十进制数值系统中只有 10 个数字位（@samp{0} - @samp{9}），
 因此，@samp{a} 到 @samp{f} 这 6 个字符用来表示剩下的部分。
-（大小写通常是无关的，十六进制的 @samp{a} 与 @samp{A} 有相同的值。）因此，十六进制中的 @samp{11} 表示的是 1 乘 16，然后加1，在进制中则是 17。
+（大小写通常是无关的，十六进制的 @samp{a} 与 @samp{A} 有相同的值。）因此，十六进制中的 @samp{11} 表示的是 1 乘 16，然后加 1，在进制中则是 17。
 
 通过 @samp{11} 这个普通字串，你无法知道它是什么进制的。
 因此，在 C，C++ 以及其他的从 C 派生出来的语言中。有一个特殊的符号用来指明进制。八进制以 @samp{0} 开头，而十六进制则以 @samp{0x} 或者 @samp{0X} 开头。
@@ -8166,7 +8166,7 @@ print (two three) + 4
 @cindex null strings, converting numbers to strings
 @cindex type conversion
 由于某种原因，如果你需要强制数值被转换成字串，则将这个数值与空串（@code{""}）连接。
-强制一个字串要转换成数值，则半这个字串加上 0 即可。
+强制一个字串要转换成数值，则把这个字串加上 0 即可。
 字串转换成数值是通过将字串的数字形式的前缀串解释当成数值：@code{"2.5"} 会被转换成 2.5，@code{"1e3"} 会被转换成 1000，
 @code{"25fix"} 会被转换 25。无法转换成数值的字串则会转换成 0。
 
@@ -9092,7 +9092,7 @@ $ @kbd{echo ' +3.14' | awk '@{ print($1 == 3.14) @}'}        @ii{True}
 @item @var{x} @code{!=} @var{y} @tab 如果 @var{x} 不等于 @var{y} 则为真
 @item @var{x} @code{~} @var{y} @tab 如果字串 @var{x} 与 @var{y} 所代表的正则表达式匹配则为真
 @item @var{x} @code{!~} @var{y} @tab 如果字串 @var{x} 与 @var{y} 表示的正则表达式不匹配则为真
-@item @var{subscript} @code{in} @var{array} @tab 如果数组 @var{array} 在下存在下标 @var{subscript} 所指明的元素则为真
+@item @var{subscript} @code{in} @var{array} @tab 如果数组 @var{array} 存在下标 @var{subscript} 所指明的元素则为真
 @end multitable
 @end float
 
@@ -9719,11 +9719,11 @@ ISO C 标准定义了一种默认的 @code{"C"} 语言设置，这是一种很�
 
 @item BEGIN
 @itemx END
-指定 @command{awk} 程序开始与整理行为的特殊模式。（查看 @ref{BEGIN/END}。）
+指定 @command{awk} 程序开始与结束行为的特殊模式。（查看 @ref{BEGIN/END}。）
 
 @item BEGINFILE
 @itemx ENDFILE
-针对每个文件为基础的在开始与整理中执行的动作的特殊模式。（查看 @ref{BEGINFILE/ENDFILE}。）
+针对每个文件为基础的在开始与结束中执行的动作的特殊模式。（查看 @ref{BEGINFILE/ENDFILE}。）
 
 @item @var{empty}
 空模式匹配每一条记录。（查看 @ref{Empty}。）
@@ -9777,7 +9777,7 @@ $ @kbd{awk '$1 ~ /li/ @{ print $2 @}' mail-list}
 
 @cindex regexp constants, as patterns
 @cindex patterns, regexp constants as
-正则表达式常量是表达式模式的一种特列。表达式 @code{/li/} 中，如果 @samp{li} 出现在当前的记录中，则其值为 1。
+正则表达式常量是表达式模式的一种特例。表达式 @code{/li/} 中，如果 @samp{li} 出现在当前的记录中，则其值为 1。
 因此，作为模式，@code{/li/} 匹配任意的包含 @samp{li} 的记录。
 
 @cindex Boolean expressions, as patterns
@@ -9896,7 +9896,8 @@ $ @kbd{echo Yes | gawk '(/1/,/2/) || /Yes/'}
 
 @cindex @code{BEGIN} pattern
 @cindex @code{END} pattern
-到目前为止所描述的模式都用来匹配输入记录。@code{BEGIN} 与 @code{END} 特殊模式则不同。它们为 @command{awk} 启动与整理操作。@code{BEGIN} 与 @code{END} 规则必须有动作。这些规则没有默认的动作因为在运行时没有当前记录。@code{BEGIN} 与 @code{END} 规则常常被那些老的 @command{awk} 程序员称为“@code{BEGIN} 与 @code{END} 块”。
+到目前为止所描述的模式都用来匹配输入记录。@code{BEGIN} 与 @code{END} 特殊模式则不同。它们为 @command{awk} 程序提供开始与结束操作。
+@code{BEGIN} 与 @code{END} 规则必须有动作。这些规则没有默认的动作因为在运行时没有当前记录。@code{BEGIN} 与 @code{END} 规则常常被那些老的 @command{awk} 程序员称为“@code{BEGIN} 与 @code{END} 块”。
 
 @menu
 * Using BEGIN/END::             How and why to use BEGIN/END rules.
@@ -9904,7 +9905,7 @@ $ @kbd{echo Yes | gawk '(/1/,/2/) || /Yes/'}
 @end menu
 
 @node Using BEGIN/END
-@subsubsection 启动与整理动作
+@subsubsection 开始与结束动作
 
 @cindex @code{BEGIN} pattern
 @cindex @code{END} pattern
@@ -9931,7 +9932,7 @@ $ @kbd{awk '}
 而所有的 @code{END} 规则在结束时执行。@code{BEGIN} 与 @code{END} 规则可以与其他的规则交叉混合。
 这样的特性是在 @command{awk} 的 1987 年的版本被加入，并加入到 POSIX 标准中。最开始（1978）的 @command{awk} 版本要求 @code{BEGIN} 规则要放在程序的开始处，@code{END} 规则则需要放在程序的结尾处，并且两者都只能出现一次。目前不再需要这样，但是按照这样的模板来写程序却是个好习惯，因为这样可以使程序组织得更好，并且增强可读性。
 
-多个 @code{BEGIN} 与 @code{END} 规则在写库函数的时候非常有用，因为每个库文件都可以有它们自己的 @code{BEGIN} 与/或 @code{END} 规则来处理初始化与/或整理工作。在命令行中指定的库函数的名字，可以控制与其相关的 @code{BEGIN} 与 @code{END} 规则执行的顺序。因此，你要仔细地处理库文件中的这些规则，使得它们的执行顺序不会带来影响。
+多个 @code{BEGIN} 与 @code{END} 规则在写库函数的时候非常有用，因为每个库文件都可以有它们自己的 @code{BEGIN} 与/或 @code{END} 规则来处理初始化与/或结束工作。在命令行中指定的库函数的名字，可以控制与其相关的 @code{BEGIN} 与 @code{END} 规则执行的顺序。因此，你要仔细地处理库文件中的这些规则，使得它们的执行顺序不会带来影响。
 查看 @ref{Options}，来获取更多的使用库函数的相关信息。查看 @ref{Library Functions}。
 
 如果 @command{awk} 只有 @code{BEGIN} 规则而没有其他的规则，则程序在执行了 @code{BEGIN} 规则之后就退出了。 但是，
@@ -10168,7 +10169,7 @@ awk -v pat="$pattern" '$0 ~ pat @{ nmatches++ @}
 如 @code{print} 与 @code{printf}，查看 @ref{Printing}。
 
 @item 删除语句
-由于删除数组元素。查看 @ref{Delete}。
+用于删除数组元素。查看 @ref{Delete}。
 @end table
 
 @node Statements
@@ -10244,7 +10245,7 @@ if (x % 2 == 0) print "x is even"; else
 
 @noindent
 如果没有 @samp{;}，则 @command{awk} 无法解释上面的语句，因此会生成一个语法错误。在实际的程序中不要这么写，
-因此程序的人类阅读者有可能不会看到 @code{else}，因为它没出现在它自己所应在行的第一位置。
+因为程序的人类阅读者有可能不会看到 @code{else}，因为它没出现在它自己所应在行的第一位置。
 
 @node While Statement
 @subsection @code{while} 语句
@@ -10289,7 +10290,7 @@ awk '
 然后 @code{while} 语句会测试 @code{i} 的值是否为小于等于 3。当 @code{i} 为 1 时，这肯定为 true，因此第 @code{i} 个域就打印出来。
 然后执行 @samp{i++} ，递增 @code{i} 的值，并重复循环。当 @code{i} 为 4 时，结束循环。
 
-在条件与循环体之间的换行不是必须的，但是，使用换行会使得程序更加清晰，除非循环体是一个复合语句或者是非常简单。开花操号后面的换行开启复合语句，也不是必须的，但是程序不这么处理就比较难阅读。
+在条件与循环体之间的换行不是必须的，但是，使用换行会使得程序更加清晰，除非循环体是一个复合语句或者是非常简单。开花括号后面的换行开启复合语句，也不是必须的，但是程序不这么处理就比较难阅读。
 
 @node Do Statement
 @subsection @code{do}-@code{while} 语句
@@ -10481,7 +10482,7 @@ while ((c = getopt(ARGC, ARGV, "aksx")) != -1) @{
 @end example
 
 当第一个 @code{if} 语句中的余数是 0 时，@command{awk} 就直接跳出循环。这表示 @command{awk} 会执行直接跟在循环后面的语句。
-（这与 @code{exit} 非常不同，@code{exit} 会停止跟个 @command{awk} 程序，查看 @ref{Exit Statement}。）
+（这与 @code{exit} 非常不同，@code{exit} 会停止整个 @command{awk} 程序，查看 @ref{Exit Statement}。）
 
 下面的程序解释了在 @code{for} 或者 @code{while} 循环语句中的 @var{condition}，如何用 @code{if} 中的 @code{break} 来代替：
 
@@ -10537,7 +10538,7 @@ BEGIN @{
 @end example
 
 @noindent
-这个程序打印 0 到 20 之间的数，除了 5 外，因为在这个数值时 @code{printf} 被路过了。因为 @samp{x++} 并没有被路过，因此，x 的值不会卡在 5 上。
+这个程序打印 0 到 20 之间的数，除了 5 外，因为在这个数值时 @code{printf} 被跳过了。因为 @samp{x++} 并没有被跳过，因此，x 的值不会卡在 5 上。
 下面的 @code{while} 循环与前面的 @code{for} 循环相比：
 
 @example
@@ -10554,7 +10555,7 @@ BEGIN @{
 @end example
 
 @noindent
-这个程序中，只要 x 达到 5 就会成为一个死循环，因此递增（@samp{x++}）语句永远不会执行。
+这个程序中，只要 x 达到 5 就会成为一个死循环，因为递增语句（@samp{x++}）永远不会执行。
 
 @c @cindex @code{continue}, outside of loops
 @c @cindex historical features
@@ -10588,7 +10589,7 @@ BWK @command{awk} 的后面的版本不再这么处理，@command{gawk} 也不�
 在最高级上，@command{awk} 程序是这样的一个循环，即读取一条记录，然后与每一个模式进行匹配。
 如果你把这样的一个循环看成是一个 @code{for} 语句，其循环体包含了这些规则，然后，@code{next} 语句则与 @code{continue} 语句类似。它会跳过这个隐式循环的后面部分，然后执行递增（也就是读取下一条记录）。
 
-例如，假设一个 @command{awk} 程序处理的记录只有 4 个域，并且当输入不规范时时不会导致失败。
+例如，假设一个 @command{awk} 程序处理的记录只有 4 个域，并且当输入不规范时不会导致失败。
 为了避免后面程序的复杂性，用下面的方式，在开头处这一个这样的“排除”代码：
 
 @example
@@ -10709,7 +10710,7 @@ BEGIN @{
 因此使你可以告诉 @command{awk} 执行一些特定的事情。有一些是被 @command{awk} 自动设置的，所以它们为你的程序带来一些 @command{awk} 执行时的内部信息。
 
 @cindex @command{gawk}, predefined variables and
-本@value{SECTION}录了所有的 @command{gawk} 预定义的变量，它们中的大多数也记录在了描述它所应用的场景中的@value{CHAPTER}中。
+本@value{SECTION}记录了所有的 @command{gawk} 预定义的变量，它们中的大多数也记录在了描述它所应用的场景中的@value{CHAPTER}中。
 
 @menu
 * User-modified::               Built-in variables that you change to control
