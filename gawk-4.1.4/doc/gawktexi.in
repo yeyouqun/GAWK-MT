@@ -11426,13 +11426,10 @@ Shell 变量可以通过仔细地使用 Shell 引号来用在 @command{awk} 程�
 * Arrays Summary::              Summary of arrays.
 @end menu
 
-#TODO20171113
 @node Array Basics
-@section The Basics of Arrays
+@section 数组基础
 
-This @value{SECTION} presents the basics: working with elements
-in arrays one at a time, and traversing all of the elements in
-an array.
+本@value{SECTION}描述一些基础：一次处理数组中的一个元素，以及遍历数组中的所有元素。
 
 @menu
 * Array Intro::                 Introduction to Arrays
@@ -11447,58 +11444,38 @@ an array.
 @end menu
 
 @node Array Intro
-@subsection Introduction to Arrays
+@subsection 数组介绍
 
 @cindex Wall, Larry
 @quotation
-@i{Doing linear scans over an associative array is like trying to club someone
-to death with a loaded Uzi.}
+@i{
+对一个关联数组进行线性扫描就好像用一个已经装弹的 Uzi 枪将人敲死。（喻大才小用——译者）
+}
 @author Larry Wall
 @end quotation
 
-The @command{awk} language provides one-dimensional arrays
-for storing groups of related strings or numbers.
-Every @command{awk} array must have a name.  Array names have the same
-syntax as variable names; any valid variable name would also be a valid
-array name.  But one name cannot be used in both ways (as an array and
-as a variable) in the same @command{awk} program.
+@command{awk} 语言提供了一维数组用以存储一组相关的串或者数字。每一个 @command{awk} 数组都必须有一个名字。数组名字与变量名有一样的语法，任意有效的变量名也都是一个有效的数组名。但是在同一个程序中，一名不能两用（同时作为数组又作为变量）。
 
-Arrays in @command{awk} superficially resemble arrays in other programming
-languages, but there are fundamental differences.  In @command{awk}, it
-isn't necessary to specify the size of an array before starting to use it.
-Additionally, any number or string, not just consecutive integers,
-may be used as an array index.
+在 @command{awk} 中的数组表面上与在其他的编程语言中的数组相似，但是它们却有着本质的不同。
+在 @command{awk} 中，没有必要指定数组的大小就可以使用。而且，任意的数字或者字串，不仅仅是连续的整数，都可以用来作数组的索引。
 
-In most other languages, arrays must be @dfn{declared} before use,
-including a specification of
-how many elements or components they contain.  In such languages, the
-declaration causes a contiguous block of memory to be allocated for that
-many elements.  Usually, an index in the array must be a nonnegative integer.
-For example, the index zero specifies the first element in the array, which is
-actually stored at the beginning of the block of memory.  Index one
-specifies the second element, which is stored in memory right after the
-first element, and so on.  It is impossible to add more elements to the
-array, because it has room only for as many elements as given in
-the declaration.
-(Some languages allow arbitrary starting and ending
-indices---e.g., @samp{15 .. 27}---but the size of the array is still fixed when
-the array is declared.)
+其他大多数语言，数组必须经@dfn{声明}才可用，包括指定在数组中包含什么样元素与组件。在这样的语言中，声明 会导致内存的连续块分配用来存储这些元素。通常情况下，数组中的索引必须是一个非负整数。例如，索引 0 指定了数组中的第一个元素，实际上就是存储在内存块中开始的元素，等等。没有可能为数组添加更多的元素，因为它只包含声明时所给定的元素个数。（一些其他语言可以使用任意的起始与结束索引，如 @samp{15 .. 27}，
+但是数组的大小一经声明后，就是固定的。）
 
 @c 1/2015: Do not put the numeric values into @code. Array element
 @c values are no different than scalar variable values.
-A contiguous array of four elements might look like
+一个 4 个元素的连续数组看起来如 
 @ifnotdocbook
 @ref{figure-array-elements},
 @end ifnotdocbook
 @ifdocbook
 @inlineraw{docbook, <xref linkend="figure-array-elements"/>},
 @end ifdocbook
-conceptually, if the element values are eight, @code{"foo"},
-@code{""}, and 30.
+所示，元素的值假设为 8，@code{"foo"}，@code{""} 跟 30。
 
 @ifnotdocbook
 @float Figure,figure-array-elements
-@caption{A contiguous array}
+@caption{连续数组}
 @center @image{array-elements, , , A Contiguous Array}
 @end float
 @end ifnotdocbook
@@ -11513,17 +11490,14 @@ conceptually, if the element values are eight, @code{"foo"},
 @end docbook
 
 @noindent
-Only the values are stored; the indices are implicit from the order of
-the values. Here, eight is the value at index zero, because eight appears in the
-position with zero elements before it.
+其中仅值会被存储起来，索引则是在值的顺序中隐含的。这里，8 的索引为 0，因为 8 出现在 0 的位置，其之前没有元素存在。
 
 @cindex arrays, indexing
 @cindex indexing arrays
 @cindex associative arrays
 @cindex arrays, associative
-Arrays in @command{awk} are different---they are @dfn{associative}.  This means
-that each array is a collection of pairs---an index and its corresponding
-array element value:
+@command{awk} 的数组也是不同的——它们都是@dfn{关联性}的。
+这就是说，每个数组都是“成对值”集合——下面是索引与其关联的数组元素值：
 
 @ifnotdocbook
 @c extra empty column to indent it right
@@ -11576,14 +11550,11 @@ array element value:
 @end docbook
 
 @noindent
-The pairs are shown in jumbled order because their order is
-irrelevant.@footnote{The ordering will vary among @command{awk}
-implementations, which typically use hash tables to store array elements
-and values.}
+成对值以随意的顺序出现，因为他们与顺序无关。 
+@footnote{顺序在不同的 @command{awk} 实现中是不同的，典型的情况下是吏用哈希表来存储数组元素与它的值。}
 
-One advantage of associative arrays is that new pairs can be added
-at any time.  For example, suppose a tenth element is added to the array
-whose value is @w{@code{"number ten"}}.  The result is:
+关联数组的一个好处就是新的成对值可以在任意时间进行添加。例如，假如第 10 个元素被加到数组中，而其值为 @w{@code{"number ten"}}。
+则结果为：
 
 @ifnotdocbook
 @c extra empty column to indent it right
@@ -11644,13 +11615,9 @@ whose value is @w{@code{"number ten"}}.  The result is:
 @noindent
 @cindex sparse arrays
 @cindex arrays, sparse
-Now the array is @dfn{sparse}, which just means some indices are missing.
-It has elements 0--3 and 10, but doesn't have elements 4, 5, 6, 7, 8, or 9.
+现在数组是@dfn{稀疏}的，即有些索引是缺失的。它有元素 0--3 与 10，但是没有元素 4，5，6，7，8 与 9。
 
-Another consequence of associative arrays is that the indices don't
-have to be nonnegative integers.  Any number, or even a string, can be
-an index.  For example, the following is an array that translates words from
-English to French:
+关联数组的另一个结果就是索引不必是非负的整数。任何数值，甚至是字串都可以作为索引。例如，下面的数组将英语单词翻译为法语：
 
 @ifnotdocbook
 @multitable @columnfractions .1 .1 .1
@@ -11701,72 +11668,52 @@ English to French:
 @end docbook
 
 @noindent
-Here we decided to translate the number one in both spelled-out and
-numeric form---thus illustrating that a single array can have both
-numbers and strings as indices.
-(In fact, array subscripts are always strings.
-There are some subtleties to how numbers work when used as
-array subscripts; this is discussed in more detail in
-@ref{Numeric Array Subscripts}.)
-Here, the number @code{1} isn't double-quoted, because @command{awk}
-automatically converts it to a string.
+在这里，我们决定将数值 1 翻译为拼写与数值形式——这个例子说明了一个数组即可以用数字也可以用字串作为索引。
+（事实上，数组下标总是字串。这里面，数值用于数组下标如何工作，有一些微妙的地方，这会在 @ref{Numeric Array Subscripts}，进行更详细的说明。）在这里，数值 @code{1} 没有双引号引起来，
+因为 @command{awk} 会自动地将其转换为字串。
 
 @cindex @command{gawk}, @code{IGNORECASE} variable in
 @cindex case sensitivity, array indices and
 @cindex arrays, and @code{IGNORECASE} variable
 @cindex @code{IGNORECASE} variable, and array indices
-The value of @code{IGNORECASE} has no effect upon array subscripting.
-The identical string value used to store an array element must be used
-to retrieve it.
-When @command{awk} creates an array (e.g., with the @code{split()}
-built-in function),
-that array's indices are consecutive integers starting at one.
-(@xref{String Functions}.)
+@code{IGNORECASE} 的值不会影响在数组进行下标操作时结果。用来存储与返回数组元素必须使用相同的字串。
+当 @command{awk} 创建一个数组（比如在 @code{split()} 内建函数中），那个数组的索引就是从 1 开始的连续整数。（查看 @ref{String Functions}）
 
-@command{awk}'s arrays are efficient---the time to access an element
-is independent of the number of elements in the array.
+@command{awk} 的数组是非常高效的——访问元素的时间与数组中的元素数量无关。
 
 @node Reference to Elements
-@subsection Referring to an Array Element
+@subsection 指向数组元素
 @cindex arrays, referencing elements
 @cindex array members
 @cindex elements of arrays
 
-The principal way to use an array is to refer to one of its elements.
-An @dfn{array reference} is an expression as follows:
+使用数组的主要方式就是使用它的元素。@dfn{数组参考}是一个如下面这样的表达式：
 
 @example
 @var{array}[@var{index-expression}]
 @end example
 
 @noindent
-Here, @var{array} is the name of an array.  The expression @var{index-expression} is
-the index of the desired element of the array.
+在这里，@var{array} 是数组的名字。表达式 @var{index-expression} 是数组中所需要元素的索引。
 
 @c 1/2015: Having the 4.3 in @samp is a little iffy. It's essentially
 @c an expression though, so leave be. It's to early in the discussion
 @c to mention that it's really a string.
-The value of the array reference is the current value of that array
-element.  For example, @code{foo[4.3]} is an expression referencing the element
-of array @code{foo} at index @samp{4.3}.
+数组参考的值是数组指定元素的当前值。例如 @code{foo[4.3]} 是一个表达式参考，
+是指数组 @code{foo} 在索引 @samp{4.3} 的元素。
 
 @cindex arrays, unassigned elements
 @cindex unassigned array elements
 @cindex empty array elements
-A reference to an array element that has no recorded value yields a value of
-@code{""}, the null string.  This includes elements
-that have not been assigned any value as well as elements that have been
-deleted (@pxref{Delete}).
+对未存在数组数组元素的参考，会产生一个 @code{""} 值，即空串。
+这也包括了那些还没有被赋值的元素，以及已经删除的元素（查看 @ref{Delete}）。
 
 @cindex non-existent array elements
 @cindex arrays, elements that don't exist
-@quotation NOTE
-A reference to an element that does not exist @emph{automatically} creates
-that array element, with the null string as its value.  (In some cases,
-this is unfortunate, because it might waste memory inside @command{awk}.)
+@quotation 提示
+对不存在元素的参考会@emph{自动地}创建这个数组元素，并将窗口作为它的值。（在某种情况下，这却是不幸的，因为这会浪费 @command{awk} 中的内存。）
 
-Novice @command{awk} programmers often make the mistake of checking if
-an element exists by checking if the value is empty:
+@command{awk} 新手程序员常常犯通过检查其值是否为空来检查元素存不存在的错误：
 
 @example
 # Check if "foo" exists in a:         @ii{Incorrect!}
@@ -11774,15 +11721,13 @@ if (a["foo"] != "") @dots{}
 @end example
 
 @noindent
-This is incorrect for two reasons. First, it @emph{creates} @code{a["foo"]}
-if it didn't exist before! Second, it is valid (if a bit unusual) to set
-an array element equal to the empty string.
+这是不正确的，有两个原因：第一，如果之前不存在 @code{a["foo"]}，则会@emph{创建}它。
+第二，（看起来不寻常）将数组元素的值设置成空串是有效的。
 @end quotation
 
 @c @cindex arrays, @code{in} operator and
 @cindex @code{in} operator, testing if array element exists
-To determine whether an element exists in an array at a certain index, use
-the following expression:
+为了确定特定索引的元素是否存在数组中，使用下面的表达式：
 
 @example
 @var{indx} in @var{array}
@@ -11790,25 +11735,19 @@ the following expression:
 
 @cindex side effects, array indexing
 @noindent
-This expression tests whether the particular index @var{indx} exists,
-without the side effect of creating that element if it is not present.
-The expression has the value one (true) if @code{@var{array}[@var{indx}]}
-exists and zero (false) if it does not exist.
-(We use @var{indx} here, because @samp{index} is the name of a built-in
-function.)
-For example, this statement tests whether the array @code{frequencies}
-contains the index @samp{2}:
+这个表达式测试特定的索引 @var{indx} 是否存在，并且不会产生如果元素不存在会创建这个元素的副作用。
+如果 @code{@var{array}[@var{indx}]} 存在，则表达式的具有值 1 （true），否则为 0 （false）。
+（我们在这里使用的是 @var{indx}，是因为 @samp{index} 是内建函数的名字。）
+例如，这个语句测试数组 @code{frequencies} 是不存在索引 @samp{2} ：
 
 @example
 if (2 in frequencies)
     print "Subscript 2 is present."
 @end example
 
-Note that this is @emph{not} a test of whether the array
-@code{frequencies} contains an element whose @emph{value} is two.
-There is no way to do that except to scan all the elements.  Also, this
-@emph{does not} create @code{frequencies[2]}, while the following
-(incorrect) alternative does:
+注意，这@emph{不是}测试数组 @code{frequencies} 是否包含@emph{值}为 2 的元素。
+除了扫描所有的元素，否则的话没有其他的办法。同时，这也@emph{不会}创建 @code{frequencies[2]}，
+而下面的代码则会（是不正确的）：
 
 @example
 if (frequencies[2] != "")
@@ -11816,35 +11755,25 @@ if (frequencies[2] != "")
 @end example
 
 @node Assigning Elements
-@subsection Assigning Array Elements
+@subsection 给数组元素赋值
 @cindex arrays, elements, assigning values
 @cindex elements in arrays, assigning values
 
-Array elements can be assigned values just like
-@command{awk} variables:
+数组元素可以像 @command{awk} 变量一样被赋值：
 
 @example
 @var{array}[@var{index-expression}] = @var{value}
 @end example
 
 @noindent
-@var{array} is the name of an array.  The expression
-@var{index-expression} is the index of the element of the array that is
-assigned a value.  The expression @var{value} is the value to
-assign to that element of the array.
+@var{array} 是数组的名字。表达式 @var{index-expression} 是 @var{value} 要被赋值的元素的索引。
+表达式的值是赋给数组元素的值。
 
 @node Array Example
-@subsection Basic Array Example
+@subsection 基本数组实例
 @cindex arrays, an example of using
 
-The following program takes a list of lines, each beginning with a line
-number, and prints them out in order of line number.  The line numbers
-are not in order when they are first read---instead, they
-are scrambled.  This program sorts the lines by making an array using
-the line numbers as subscripts.  The program then prints out the lines
-in sorted order of their numbers.  It is a very simple program and gets
-confused upon encountering repeated numbers, gaps, or lines that don't
-begin with a number:
+下面的程序提取一系列的行，每一行以数字开始，并按行号的顺序打印它们。行号第一次读取的时候不是顺序的——相反，它们是打乱的。程序对行进行排序，使数组用行号作为下标。程序然后按照行号的顺序打印它们。这是个非常简单的程序，但是在遇到重复的行号，空格或者不是以数值开始的行的时候会导致困惑：
 
 @example
 @c file eg/misc/arraymax.awk
@@ -11861,12 +11790,8 @@ END @{
 @c endfile
 @end example
 
-The first rule keeps track of the largest line number seen so far;
-it also stores each line into the array @code{arr}, at an index that
-is the line's number.
-The second rule runs after all the input has been read, to print out
-all the lines.
-When this program is run with the following input:
+第一个规则跟踪当前已经看到的最大的行号，同时也将每一行存储在数组 @code{arr} 中，
+并以行号作为索引。每二个规则则是打印所有的行。当程序执行时，有下面的输入：
 
 @example
 @c file eg/misc/arraymax.data
@@ -11889,10 +11814,8 @@ Its output is:
 5  I am the Five man
 @end example
 
-If a line number is repeated, the last line with a given number overrides
-the others.
-Gaps in the line numbers can be handled with an easy improvement to the
-program's @code{END} rule, as follows:
+如果行号是重复的，已经存在的行的最后一行将覆盖其他的。
+在行号间的空隙可以通过在程序的 @code{END} 规则中做一个简单的增强就可以处理，如下：
 
 @example
 END @{
@@ -11903,20 +11826,13 @@ END @{
 @end example
 
 @node Scanning an Array
-@subsection Scanning All Elements of an Array
+@subsection 遍历数组元素
 @cindex elements in arrays, scanning
 @cindex scanning arrays
 @cindex arrays, scanning
 @cindex loops, @code{for}, array scanning
 
-In programs that use arrays, it is often necessary to use a loop that
-executes once for each element of an array.  In other languages, where
-arrays are contiguous and indices are limited to nonnegative integers,
-this is easy: all the valid indices can be found by counting from
-the lowest index up to the highest.  This technique won't do the job
-in @command{awk}, because any number or string can be an array index.
-So @command{awk} has a special kind of @code{for} statement for scanning
-an array:
+在使用数组的程序中，常常需要使用循环来执行针对数组中每个元素的操作。在其他的语言中，数组是连续的，并且过些限制为非负整数，处理起来就非常的简单：所有有效的索引都可以为最低索引到最大的索引。这个技巧在 @command{awk} 中并不可用，因此任意的数字与字串都可以作为数组的索引。因此，@command{awk} 有一个特殊的 @code{for} 语句来扫描数组：
 
 @example
 for (@var{var} in @var{array})
@@ -11925,20 +11841,15 @@ for (@var{var} in @var{array})
 
 @noindent
 @cindex @code{in} operator, use in loops
-This loop executes @var{body} once for each index in @var{array} that the
-program has previously used, with the variable @var{var} set to that index.
+这个循环为程序中使用过的数组 @var{array} 中的每一个索引执行一次 @var{body}，
+并将 @var{var} 变量设置成索引值。
 
 @cindex arrays, @code{for} statement and
 @cindex @code{for} statement, looping over arrays
-The following program uses this form of the @code{for} statement.  The
-first rule scans the input records and notes which words appear (at
-least once) in the input, by storing a one into the array @code{used} with
-the word as the index.  The second rule scans the elements of @code{used} to
-find all the distinct words that appear in the input.  It prints each
-word that is more than 10 characters long and also prints the number of
-such words.
-@xref{String Functions}
-for more information on the built-in function @code{length()}.
+下面的程序使用这种形式的 @code{for} 语句。第一个规则扫描输入记录，并且注意出现在输入中的单词（至少出现一次），
+通过用其中一个单词作为索引来并将值 1 存到存储数组 @code{used} 中。
+第二个规则扫描已经使用过的元素来查找所有的在输入中出现的不同的单词。然后打印其长度大于 10 个字符的单词，
+同时也打印此类单词出现的次数。查看 @ref{String Functions}，来获取内建函数 @code{length()} 的更多信息。
 
 @example
 # Record a 1 for each word that is used at least once
@@ -11960,24 +11871,18 @@ END @{
 @end example
 
 @noindent
-@xref{Word Sorting}
-for a more detailed example of this type.
+查看 @ref{Word Sorting}，来获取更多的更多更详细的此类例子。
 
 @cindex arrays, elements, order of access by @code{in} operator
 @cindex elements in arrays, order of access by @code{in} operator
 @cindex @code{in} operator, order of array access
-The order in which elements of the array are accessed by this statement
-is determined by the internal arrangement of the array elements within
-@command{awk} and in standard @command{awk} cannot be controlled
-or changed.  This can lead to problems if new elements are added to
-@var{array} by statements in the loop body; it is not predictable whether
-the @code{for} loop will reach them.  Similarly, changing @var{var} inside
-the loop may produce strange results.  It is best to avoid such things.
+通过这个语句访问数组中的元素的顺序则是由 @command{awk} 内部对数组元素的安排确定的，
+并且在标准的 @command{awk} 中是无法控制与改变的。如果新元素被在循环体内的语句加入到数组 @var{array} 中，
+前面的规则可会导致问题的产生，即在 @code{for} 循环中什么时候指向它们是不可预测的。相似的，改变循环体内的 @var{var} 会导致奇怪的结果。
+因此最好别做这样的事情。
 
-As a point of information, @command{gawk} sets up the list of elements
-to be iterated over before the loop starts, and does not change it.
-But not all @command{awk} versions do so. Consider this program, named
-@file{loopcheck.awk}:
+作为信息点，@command{gawk} 开始循环之前，挂起被迭代的元素的列表，并不可以改变它。
+但是不是所有的 @command{awk} 版本都这么做。考虑下面的程序，名为 @file{loopcheck.awk}：
 
 @example
 BEGIN @{
@@ -11993,7 +11898,7 @@ BEGIN @{
 @}
 @end example
 
-Here is what happens when run with @command{gawk} (and @command{mawk}):
+这是用 @command{gawk}（与 @command{mawk}）执行时的结果：
 
 @example
 $ @kbd{gawk -f loopcheck.awk}
@@ -12003,7 +11908,7 @@ $ @kbd{gawk -f loopcheck.awk}
 @print{} is
 @end example
 
-Contrast this to BWK @command{awk}:
+而下面是 BWK @command{awk} 的执行结果：
 
 @example
 $ @kbd{nawk -f loopcheck.awk}
@@ -12015,105 +11920,70 @@ $ @kbd{nawk -f loopcheck.awk}
 @end example
 
 @node Controlling Scanning
-@subsection Using Predefined Array Scanning Orders with @command{gawk}
+@subsection 在 @command{gawk} 中使用预定义的数组遍历顺序
 
-This @value{SUBSECTION} describes a feature that is specific to @command{gawk}.
+本@value{SUBSECTION}描述的是 @command{gawk} 特有的特性。
 
-By default, when a @code{for} loop traverses an array, the order
-is undefined, meaning that the @command{awk} implementation
-determines the order in which the array is traversed.
-This order is usually based on the internal implementation of arrays
-and will vary from one version of @command{awk} to the next.
+在默认情况下，当 @code{for} 在遍历数组时，其顺序是未定义的，即是说，@command{awk} 的实现决定了在遍历数组时的顺序。这个顺序通常是基于数组的内部实现，并在不同版本的 @command{awk} 有差异。
 
 @cindex array scanning order, controlling
 @cindex controlling array scanning order
-Often, though, you may wish to do something simple, such as
-``traverse the array by comparing the indices in ascending order,''
-or ``traverse the array by comparing the values in descending order.''
-@command{gawk} provides two mechanisms that give you this control:
+尽管你通常做的都是一些简单的事情，如“通过以升序的方式比较索引来遍历数组”，或者是“通过以降序的方式比较值来遍历数组”。
+@command{gawk} 通过两种机制让你来执行这样的控制：
 
 @itemize @value{BULLET}
 @item
-Set @code{PROCINFO["sorted_in"]} to one of a set of predefined values.
-We describe this now.
+设置 @code{PROCINFO["sorted_in"]} 的值为预定义值之一。后面会讲到。
 
 @item
-Set @code{PROCINFO["sorted_in"]} to the name of a user-defined function
-to use for comparison of array elements. This advanced feature
-is described later in @ref{Array Sorting}.
+设置 @code{PROCINFO["sorted_in"]} 为用户自定义的函数用来比较数组中的元素。这个高级特性在后面的章节 @ref{Array Sorting}，
+中进行描述。
 @end itemize
 
 @cindex @code{PROCINFO}, values of @code{sorted_in}
-The following special values for @code{PROCINFO["sorted_in"]} are available:
+下面是可获取的 @code{PROCINFO["sorted_in"]} 值：
 
 @table @code
 @item "@@unsorted"
-Array elements are processed in arbitrary order, which is the default
-@command{awk} behavior.
+数组元素以任意顺序处理，这是默认的 @command{awk} 行为。
 
 @item "@@ind_str_asc"
-Order by indices in ascending order compared as strings; this is the most basic sort.
-(Internally, array indices are always strings, so with @samp{a[2*5] = 1}
-the index is @code{"10"} rather than numeric 10.)
+以字串比较索引升序方式，这是最基本的排序。（在内部，数组索引总是字串，因此 @samp{a[2*5] = 1} 中的索引是 @code{"10"}，
+而不是数字的 10。）
 
 @item "@@ind_num_asc"
-Order by indices in ascending order but force them to be treated as numbers in the process.
-Any index with a non-numeric value will end up positioned as if it were zero.
+以索引升序的方式，但是强制索引以数值对待。对于不是数值的索引，就当成是 0 的方式进行定位。
 
 @item "@@val_type_asc"
-Order by element values in ascending order (rather than by indices).
-Ordering is by the type assigned to the element
-(@pxref{Typing and Comparison}).
-All numeric values come before all string values,
-which in turn come before all subarrays.
-(Subarrays have not been described yet;
-@pxref{Arrays of Arrays}.)
+以元素值的升序方式排序（而不是索引）。排序是通过给元素所赋值的类型进行的（查看 @ref{Typing and Comparison}）。
+所有的数值都在字串之前，后面再接子数组。（子数组还没有讨论到，查看 @ref{Arrays of Arrays}）。
 
 @item "@@val_str_asc"
-Order by element values in ascending order (rather than by indices).  Scalar values are
-compared as strings.  Subarrays, if present, come out last.
+按元素值的升序排序（不是按索引）。标量值与字串进行比较，如果有子数组，则最后与其比较。
 
 @item "@@val_num_asc"
-Order by element values in ascending order (rather than by indices).  Scalar values are
-compared as numbers.  Subarrays, if present, come out last.
-When numeric values are equal, the string values are used to provide
-an ordering: this guarantees consistent results across different
-versions of the C @code{qsort()} function,@footnote{When two elements
-compare as equal, the C @code{qsort()} function does not guarantee
-that they will maintain their original relative order after sorting.
-Using the string value to provide a unique ordering when the numeric
-values are equal ensures that @command{gawk} behaves consistently
-across different environments.} which @command{gawk} uses internally
-to perform the sorting.
+按元素值的升序排序（不是按索引）。标量值与字串进行比较，如果有子数组，则最后与其比较。当数值相同时，用字串比较来确定顺序。这保证了在不同版本的 C @code{qsort()} 函数间的一致结果，
+@footnote{当两个元素比较相同时，C 的 @code{qsort()} 函数不保证它们比较之后保持比较之前的相对顺序（不稳定排序）。
+通过字串比较，可以保证在数值比较为相同时，可提供唯一的顺序，因此 @command{gawk} 可以在不同的环境中行为一致。}
+在内部它被 @command{gawk} 用来执行排序。
 
 @item "@@ind_str_desc"
-Like @code{"@@ind_str_asc"}, but the
-string indices are ordered from high to low.
+与 @code{"@@ind_str_asc"} 相似，但是字串顺序是从高到低，即降序。
 
 @item "@@ind_num_desc"
-Like @code{"@@ind_num_asc"}, but the
-numeric indices are ordered from high to low.
+与 @code{"@@ind_num_asc"} 相似，但是数值索引是从高到低，即降序。
 
 @item "@@val_type_desc"
-Like @code{"@@val_type_asc"}, but the
-element values, based on type, are ordered from high to low.
-Subarrays, if present, come out first.
+与 @code{"@@val_type_asc"} 相似，但是基于元素值的类型则是从高到低。如果有子数组，则最先比较子数组。
 
 @item "@@val_str_desc"
-Like @code{"@@val_str_asc"}, but the
-element values, treated as strings, are ordered from high to low.
-Subarrays, if present, come out first.
+与 @code{"@@val_str_asc"} 相似，但是基于元素值的字串则是从高到低。如果有子数组，则最先比较子数组。
 
 @item "@@val_num_desc"
-Like @code{"@@val_num_asc"}, but the
-element values, treated as numbers, are ordered from high to low.
-Subarrays, if present, come out first.
+与 @code{"@@val_num_asc"} 相似，但是基于元素值的数值则是从高到低。如果有子数组，则最先比较子数组。
 @end table
 
-The array traversal order is determined before the @code{for} loop
-starts to run. Changing @code{PROCINFO["sorted_in"]} in the loop body
-does not affect the loop.
-For example:
+数组的遍历顺序是在 @code{for} 循环开始执行之前就确定的。在循环体内改变 @code{PROCINFO["sorted_in"]} 的值不会影响循环。例如：
 
 @example
 $ @kbd{gawk '}
@@ -12137,20 +12007,15 @@ $ @kbd{gawk '}
 @print{} 4 4
 @end example
 
-When sorting an array by element values, if a value happens to be
-a subarray then it is considered to be greater than any string or
-numeric value, regardless of what the subarray itself contains,
-and all subarrays are treated as being equal to each other.  Their
-order relative to each other is determined by their index strings.
+当通过元素值的方式来排序，如果某个值为子数组，则其被认为比任意的字串与数组都大，而不管子数组中包含的内容，
+而所有的子数组都当成相同来对待。而它们之间的相对顺序则由它们的索引字串来决定 。
 
-Here are some additional things to bear in mind about sorted
-array traversal:
+下面是一些在进行排序数组遍历时要记住的点：
 
 @itemize @value{BULLET}
 @item
-The value of @code{PROCINFO["sorted_in"]} is global. That is, it affects
-all array traversal @code{for} loops.  If you need to change it within your
-own code, you should see if it's defined and save and restore the value:
+@code{PROCINFO["sorted_in"]} 的值是全局的，它影响所有的数组遍历 @code{for} 循环。
+如果你要在你的代码中改变它，则你需要确定它是否存在，同时要保存与恢复它的值：
 
 @example
 @dots{}
@@ -12164,30 +12029,24 @@ if (save_sorted)
 @end example
 
 @item
-As already mentioned, the default array traversal order is represented by
-@code{"@@unsorted"}.  You can also get the default behavior by assigning
-the null string to @code{PROCINFO["sorted_in"]} or by just deleting the
-@code{"sorted_in"} element from the @code{PROCINFO} array with
-the @code{delete} statement.
-(The @code{delete} statement hasn't been described yet; @pxref{Delete}.)
+如早前所提到的，默认的数组遍历由 @code{"@@unsorted"} 表示。
+你也可以给 @code{PROCINFO["sorted_in"]} 赋一个空串来获得这样的默认行为，
+或者只需要用 @code{delete} 语句将 @code{"sorted_in"} 从 @code{PROCINFO} 中删除。
+（@code{delete} 语句还没有讨论到，请查看 @ref{Delete}。）
 @end itemize
 
-In addition, @command{gawk} provides built-in functions for
-sorting arrays; see @ref{Array Sorting Functions}.
+另外，@command{gawk} 提供了内建的用于数组排序的函数，查看 @ref{Array Sorting Functions}。
 
 @node Numeric Array Subscripts
-@section Using Numbers to Subscript Arrays
+@section 用数值作为数组下标
 
 @cindex numbers, as array subscripts
 @cindex arrays, numeric subscripts
 @cindex subscripts in arrays, numbers as
 @cindex @code{CONVFMT} variable, and array subscripts
-An important aspect to remember about arrays is that @emph{array subscripts
-are always strings}.  When a numeric value is used as a subscript,
-it is converted to a string value before being used for subscripting
-(@pxref{Conversion}).
-This means that the value of the predefined variable @code{CONVFMT} can
-affect how your program accesses elements of an array.  For example:
+要记住数组的一个重要点就是@emph{数组的下标总是字串}。
+当数值用于下标，它会在用于下标前被转换为字串（查看 @ref{Conversion}）。
+这意味着，预定义变量 @code{CONVFMT} 会影响你的程序访问数组的元素。例如：
 
 @example
 xyz = 12.153
@@ -12200,59 +12059,42 @@ else
 @end example
 
 @noindent
-This prints @samp{12.15 is not in data}.  The first statement gives
-@code{xyz} a numeric value.  Assigning to
-@code{data[xyz]} subscripts @code{data} with the string value @code{"12.153"}
-(using the default conversion value of @code{CONVFMT}, @code{"%.6g"}).
-Thus, the array element @code{data["12.153"]} is assigned the value one.
-The program then changes
-the value of @code{CONVFMT}.  The test @samp{(xyz in data)} generates a new
-string value from @code{xyz}---this time @code{"12.15"}---because the value of
-@code{CONVFMT} only allows two significant digits.  This test fails,
-because @code{"12.15"} is different from @code{"12.153"}.
+程序会打印 @samp{12.15 is not in data}。
+第一条语句给了 @code{xyz} 一个数值值。
+@code{data[xyz]} 用字串 @code{"12.153"} 赋给 @code{data} 的下标
+（使用默认的 @code{CONVFMT} 转换值 @code{"%.6g"}）。
+因此，数组元素 @code{data["12.153"]} 被赋值为 1。程序然后改变 @code{CONVFMT} 的值。
+测试语句 @samp{(xyz in data)} 产生一个 @code{xyz} 的新字串值——这次则是 @code{"12.15"}
+——因为 @code{CONVFMT} 的值只允许有两个有效位。这个测试会失败，因为 @code{"12.15"} 与 @code{"12.153"} 是不同的。
 
 @cindex converting integer array subscripts
 @cindex integer array indices
-According to the rules for conversions
-(@pxref{Conversion}), integer
-values always convert to strings as integers, no matter what the
-value of @code{CONVFMT} may happen to be.  So the usual case of
-the following works:
+根据转换规则（查看 @ref{Conversion}），整数总是会转换为整数的字串，不管 @code{CONVFMT} 的值是什么。因此下面的例子可以工作：
 
 @example
 for (i = 1; i <= maxsub; i++)
     @ii{do something with} array[i]
 @end example
 
-The ``integer values always convert to strings as integers'' rule
-has an additional consequence for array indexing.
-Octal and hexadecimal constants
+“整数总是转换为整数字串”规则在数组索引中有另一个结果。八进制与十六进制常量
 @ifnotdocbook
-(@pxref{Nondecimal-numbers})
+（查看 @ref{Nondecimal-numbers}）
 @end ifnotdocbook
 @ifdocbook
-(covered in @ref{Nondecimal-numbers})
+（查看 @ref{Nondecimal-numbers}）
 @end ifdocbook
-are converted internally into numbers, and their original form
-is forgotten.  This means, for example, that @code{array[17]},
-@code{array[021]}, and @code{array[0x11]} all refer to the same element!
+在内部会转换为数值，它们的原型形式会被丢弃。这就是说，@code{array[17]}，@code{array[021]} 与 @code{array[0x11]} 都是指向同一个元素！
 
-As with many things in @command{awk}, the majority of the time
-things work as you would expect them to.  But it is useful to have a precise
-knowledge of the actual rules, as they can sometimes have a subtle
-effect on your programs.
+与 @command{awk} 许多的事情一样，大部份时间下，事情都与你所期望它所应该是那样的方式工作。但是对于实际规则具有精确知识是非常有用的，因为它们有时会让你的程序表现出一些很微妙的结果。
 
 @node Uninitialized Subscripts
-@section Using Uninitialized Variables as Subscripts
+@section 用未初始化的数值作为数组下标
 
 @cindex variables, uninitialized@comma{} as array subscripts
 @cindex uninitialized variables, as array subscripts
 @cindex subscripts in arrays, uninitialized variables as
 @cindex arrays, subscripts, uninitialized variables as
-Suppose it's necessary to write a program
-to print the input data in reverse order.
-A reasonable attempt to do so (with some test
-data) might look like this:
+假如有必要写一个程序来将输入的数据逆序打印。一个合理的尝试来这么做（带上一些测试数据）可能如下：
 
 @example
 $ @kbd{echo 'line 1}
@@ -12266,19 +12108,14 @@ $ @kbd{echo 'line 1}
 @print{} line 2
 @end example
 
-Unfortunately, the very first line of input data did not appear in the
-output!
+不幸的是，第一行的数据不会出现在输出中！
 
-Upon first glance, we would think that this program should have worked.
-The variable @code{lines}
-is uninitialized, and uninitialized variables have the numeric value zero.
-So, @command{awk} should have printed the value of @code{l[0]}.
+初看起来，我们认为这个程序应该可以工作。变量 @code{lines} 是未初始化的，
+而一个未初始化的变量具有值为 0。因此，@command{awk} 应该会打印 @code{l[0]} 的值。
 
-The issue here is that subscripts for @command{awk} arrays are @emph{always}
-strings. Uninitialized variables, when used as strings, have the
-value @code{""}, not zero.  Thus, @samp{line 1} ends up stored in
-@code{l[""]}.
-The following version of the program works correctly:
+这里的问题是 @command{awk} 数组中的下标@emph{总是}字符串。
+未初始化的变量被用作字符串时，其值为 @code{""}，而不是 0。
+所以，@samp{line 1} 最终被存在 @code{l[""]} 中。下面的版本则可以正确工作：
 
 @example
 @{ l[lines++] = $0 @}
@@ -12288,38 +12125,31 @@ END @{
 @}
 @end example
 
-Here, the @samp{++} forces @code{lines} to be numeric, thus making
-the ``old value'' numeric zero. This is then converted to @code{"0"}
-as the array subscript.
+在这里，@samp{++} 强制 @code{lines} 成为一数值，所在使得其“旧值”
+（因为是未初始化的变量，因此就无所谓旧值，这里是为表述方便。——译者）为数值 0。然后其被转换为 @code{"0"} 作为数组的下标。
 
 @cindex null strings, as array subscripts
 @cindex dark corner, array subscripts
 @cindex lint checking, array subscripts
-Even though it is somewhat unusual, the null string
-(@code{""}) is a valid array subscript.
+就算不是特别常用，空串（@code{""}）也是一个有效的数组下标。
 @value{DARKCORNER}
-@command{gawk} warns about the use of the null string as a subscript
-if @option{--lint} is provided
-on the command line (@pxref{Options}).
+@command{gawk} 会对使用空串作为下标发出警告，但这只在命令行参数中指定了 @option{--lint} 参数（查看 @ref{Options}）。
 
 @node Delete
-@section The @code{delete} Statement
+@section @code{delete} 语句
 @cindex @code{delete} statement
 @cindex deleting elements in arrays
 @cindex arrays, elements, deleting
 @cindex elements in arrays, deleting
 
-To remove an individual element of an array, use the @code{delete}
-statement:
+为了删除数组的一个独立元素，可以使用 @code{delete} 语句：
 
 @example
 delete @var{array}[@var{index-expression}]
 @end example
 
-Once an array element has been deleted, any value the element once
-had is no longer available. It is as if the element had never
-been referred to or been given a value.
-The following is an example of deleting elements in an array:
+一旦数组中的一个元素被删除，那个元素的值就不再可用。
+就好像那个元素从来没有被使用到或者也从来没有被赋值。下面的例子从数组中删除一个元素：
 
 @example
 for (i in frequencies)
@@ -12327,10 +12157,8 @@ for (i in frequencies)
 @end example
 
 @noindent
-This example removes all the elements from the array @code{frequencies}.
-Once an element is deleted, a subsequent @code{for} statement to scan the array
-does not report that element and using the @code{in} operator to check for
-the presence of that element returns zero (i.e., false):
+这个例子删除数组 @code{frequencies} 的所有元素。只要一个元素被删除了，
+后续的 @code{for} 语句来扫描数组时就不会再报告被删除的元素，并且用 @code{in} 操作符来检查被删除的元素的是否存在会返回 0（即 false）：
 
 @example
 delete foo[4]
@@ -12339,9 +12167,7 @@ if (4 in foo)
 @end example
 
 @cindex null strings, and deleting array elements
-It is important to note that deleting an element is @emph{not} the
-same as assigning it a null value (the empty string, @code{""}).
-For example:
+要注意的是，删除一个元素给元素赋一个空值（空串，@code{""}）是@emph{两码事}。如：
 
 @example
 foo[4] = ""
@@ -12350,11 +12176,8 @@ if (4 in foo)
 @end example
 
 @cindex lint checking, array elements
-It is not an error to delete an element that does not exist.
-However, if @option{--lint} is provided on the command line
-(@pxref{Options}),
-@command{gawk} issues a warning message when an element that
-is not in the array is deleted.
+删除一个不存在的元素并不是一个错误。但是，如果在命令行中指定了 @option{--lint} 参数（查看 @ref{Options}），
+当删除数组中不存在的元素的时候，@command{gawk} 会产生一个告警信息。
 
 @cindex common extensions, @code{delete} to delete entire arrays
 @cindex extensions, common@comma{} @code{delete} to delete entire arrays
@@ -12362,51 +12185,38 @@ is not in the array is deleted.
 @cindex deleting entire arrays
 @cindex @code{delete} @var{array}
 @cindex differences in @command{awk} and @command{gawk}, array elements, deleting
-All the elements of an array may be deleted with a single statement
-by leaving off the subscript in the @code{delete} statement,
-as follows:
+通过在 @code{delete} 语句后面的数组中，不写下标时，可以用一个语句就可删除数组的所有元素，如下：
 
 
 @example
 delete @var{array}
 @end example
 
-Using this version of the @code{delete} statement is about three times
-more efficient than the equivalent loop that deletes each element one
-at a time.
+使用这种版本的 @code{delete} 语句大概要比使用等同的一次删除一个元素的循环要快大概 3 倍。
 
-This form of the @code{delete} statement is also supported
-by BWK @command{awk} and @command{mawk}, as well as
-by a number of other implementations.
+这种类型的 @code{delete} 语句也被 BWK @command{awk} 与 @command{mawk} 所支持，很多其他版本的实现也支持。
 
 @cindex Brian Kernighan's @command{awk}
-@quotation NOTE
-For many years, using @code{delete} without a subscript was a common
-extension.  In September 2012, it was accepted for inclusion into the
-POSIX standard.  See @uref{http://austingroupbugs.net/view.php?id=544,
-the Austin Group website}.
+@quotation 提示
+很多年以来，使用 @code{delete} 语句不带下标是一个通用的扩展。在 2012 年的 9 月，它被接受并包含到 POSIX 标准中。
+查看 @uref{http://austingroupbugs.net/view.php?id=544,
+Austin Group 网站}。
 @end quotation
 
 @cindex portability, deleting array elements
 @cindex Brennan, Michael
-The following statement provides a portable but nonobvious way to clear
-out an array:@footnote{Thanks to Michael Brennan for pointing this out.}
+下面的语句提供了一种可移植但是不是特别明显的方式来将数组清除： 
+@footnote{感谢 Michael Brennan 提出这点。}
 
 @example
 split("", array)
 @end example
 
 @cindex @code{split()} function, array elements@comma{} deleting
-The @code{split()} function
-(@pxref{String Functions})
-clears out the target array first. This call asks it to split
-apart the null string. Because there is no data to split out, the
-function simply clears the array and then returns.
+@code{split()} 函数（查看 @ref{String Functions}）会首先清除目标数组。这个调用请求分割一个空串。因为没有数据用来分割，函数只是简单地清除数组然后返回。
 
 @quotation CAUTION
-Deleting all the elements from an array does not change its type; you cannot
-clear an array and then use the array's name as a scalar
-(i.e., a regular variable). For example, the following does not work:
+注意：删除数组中的所有元素不会改变它的类型，你不可清除一个数组，然后使用数组的名字来作为一个标量名（比如一个常规的变量）。例如，下面的例子不会工作：
 
 @example
 a[1] = 3
@@ -12416,7 +12226,7 @@ a = 3
 @end quotation
 
 @node Multidimensional
-@section Multidimensional Arrays
+@section 多维数组
 
 @menu
 * Multiscanning::               Scanning multidimensional arrays.
@@ -12424,60 +12234,37 @@ a = 3
 
 @cindex subscripts in arrays, multidimensional
 @cindex arrays, multidimensional
-A @dfn{multidimensional array} is an array in which an element is identified
-by a sequence of indices instead of a single index.  For example, a
-two-dimensional array requires two indices.  The usual way (in many
-languages, including @command{awk}) to refer to an element of a
-two-dimensional array named @code{grid} is with
-@code{grid[@var{x},@var{y}]}.
+@dfn{多维数组}是这样的数组，其元素的标识是通过一连串的索引而不是单个索引来标识的。例如，两维数组需要两个索引。
+一般的方式（包括 @command{awk} 在内的许多语言）要参考到两维数 @code{grid} 中的元素，则用 @code{grid[@var{x},@var{y}]}。
 
 @cindex @code{SUBSEP} variable, and multidimensional arrays
-Multidimensional arrays are supported in @command{awk} through
-concatenation of indices into one string.
-@command{awk} converts the indices into strings
-(@pxref{Conversion}) and
-concatenates them together, with a separator between them.  This creates
-a single string that describes the values of the separate indices.  The
-combined string is used as a single index into an ordinary,
-one-dimensional array.  The separator used is the value of the built-in
-variable @code{SUBSEP}.
+在 @command{awk} 中的多维数组 是通过将索引连接成字串来实现的。@command{awk} 将索引转换为字串
+（查看 @ref{Conversion}）然后将它他连接在一起，并在它们之间存放分隔符。
+这样可以创建一个单一的字串来描述分离索引的值。合并后的字串用作普通的一维数组的一个索引。分隔符则使用内建变量 @code{SUBSEP} 的值。
 
-For example, suppose we evaluate the expression @samp{foo[5,12] = "value"}
-when the value of @code{SUBSEP} is @code{"@@"}.  The numbers 5 and 12 are
-converted to strings and
-concatenated with an @samp{@@} between them, yielding @code{"5@@12"}; thus,
-the array element @code{foo["5@@12"]} is set to @code{"value"}.
+例如，假设我们对表达式 @samp{foo[5,12] = "value"} 求值，并且 @code{SUBSEP} 的值为 @code{"@@"} 的时候。
+数值 5 与 12 会被转换成字串并且用 @samp{@@} 连接它们，从而产生 @code{"5@@12"}；
+所以，数组元素 @code{foo["5@@12"]} 的值被设置成 @code{"value"}。
 
-Once the element's value is stored, @command{awk} has no record of whether
-it was stored with a single index or a sequence of indices.  The two
-expressions @samp{foo[5,12]} and @w{@samp{foo[5 SUBSEP 12]}} are always
-equivalent.
+一旦元素被存储，@command{awk} 就不再记得它是存成单个的索引还是用一串索引。
+@samp{foo[5,12]} 与 @w{@samp{foo[5 SUBSEP 12]}} 总是等同的。
 
-The default value of @code{SUBSEP} is the string @code{"\034"},
-which contains a nonprinting character that is unlikely to appear in an
-@command{awk} program or in most input data.
-The usefulness of choosing an unlikely character comes from the fact
-that index values that contain a string matching @code{SUBSEP} can lead to
-combined strings that are ambiguous.  Suppose that @code{SUBSEP} is
-@code{"@@"}; then @w{@samp{foo["a@@b", "c"]}} and @w{@samp{foo["a",
-"b@@c"]}} are indistinguishable because both are actually
-stored as @samp{foo["a@@b@@c"]}.
+@code{SUBSEP} 的默认值是 @code{"\034"}，这包含了非打印字符，并不会出现在 @command{awk} 程序中，
+或者不会出现在输入数据中。使用一个不太可能的字符的用处来自于这样的事实，
+即索引值中包含一个串匹配 @code{SUBSEP} 可以导致合并后的字串的含义不明。
+如 @code{SUBSEP} 是 @code{"@@"}，则 @w{@samp{foo["a@@b", "c"]}} 与 @w{@samp{foo["a",
+"b@@c"]}} 则没办法区分开来，因为两者都会存成 @samp{foo["a@@b@@c"]} 。
 
 @cindex @code{in} operator, index existence in multidimensional arrays
-To test whether a particular index sequence exists in a
-multidimensional array, use the same operator (@code{in}) that is
-used for single-dimensional arrays.  Write the whole sequence of indices
-in parentheses, separated by commas, as the left operand:
+要测试一个特定的索引序列是否存在于多维数组中，使用与一维数组相同的 @code{in} 操作符。
+将整个序列写在气括号中，并用逗号分隔，并做为 @code{in} 的左操作数：
 
 @example
 if ((@var{subscript1}, @var{subscript2}, @dots{}) in @var{array})
     @dots{}
 @end example
 
-Here is an example that treats its input as a two-dimensional array of
-fields; it rotates this array 90 degrees clockwise and prints the
-result.  It assumes that all lines have the same number of
-elements:
+下面是一个将输入作为一个域的二维数组的例子，然后将数组顺时针转 90 度（注下），再打印结果。假设所有的行都相相同数目的元素：
 
 @example
 @{
@@ -12498,7 +12285,7 @@ END @{
 @end example
 
 @noindent
-When given the input:
+如果输入如下：
 
 @example
 1 2 3 4 5 6
@@ -12508,7 +12295,7 @@ When given the input:
 @end example
 
 @noindent
-the program produces the following output:
+则程序会产生下面的输出：
 
 @example
 4 3 2 1
@@ -12520,24 +12307,17 @@ the program produces the following output:
 @end example
 
 @node Multiscanning
-@subsection Scanning Multidimensional Arrays
+@subsection 遍历多维数组
 
-There is no special @code{for} statement for scanning a
-``multidimensional'' array. There cannot be one, because, in truth,
-@command{awk} does not have
-multidimensional arrays or elements---there is only a
-multidimensional @emph{way of accessing} an array.
+没有特殊的 @code{for} 语句用来进行“多维”数组的遍历。也不会有这么一个，因为事实上，@command{awk} 根本就没有二维数组或者元素。
+只有一个多维@emph{方式}来访问数组。
 
 @cindex subscripts in arrays, multidimensional, scanning
 @cindex arrays, multidimensional, scanning
 @cindex scanning multidimensional arrays
-However, if your program has an array that is always accessed as
-multidimensional, you can get the effect of scanning it by combining
-the scanning @code{for} statement
-(@pxref{Scanning an Array}) with the
-built-in @code{split()} function
-(@pxref{String Functions}).
-It works in the following manner:
+但是，如果你的程序有这样的数组总是像多维数组一样来访问，你可以用 @code{split()} 函数
+（查看 @ref{String Functions}）来获得 @code{for} 语句一样的扫描效果（查看 @ref{Scanning an Array}）。
+它是以下面的方式来工作的：
 
 @example
 for (combined in array) @{
@@ -12547,76 +12327,53 @@ for (combined in array) @{
 @end example
 
 @noindent
-This sets the variable @code{combined} to
-each concatenated combined index in the array, and splits it
-into the individual indices by breaking it apart where the value of
-@code{SUBSEP} appears.  The individual indices then become the elements of
-the array @code{separate}.
+这里将变量 @code{combined} 为数组中每个索引的连接组合，然后用 @code{SUBSEP} 的值，
+将它分割为独立的索引。单独的索引然后就可以成为数组 @code{separate} 的元素。
 
-Thus, if a value is previously stored in @code{array[1, "foo"]}, then
-an element with index @code{"1\034foo"} exists in @code{array}.  (Recall
-that the default value of @code{SUBSEP} is the character with code 034.)
-Sooner or later, the @code{for} statement finds that index and does an
-iteration with the variable @code{combined} set to @code{"1\034foo"}.
-Then the @code{split()} function is called as follows:
+因此，如果前面的值存在 @code{array[1, "foo"]} 里，则会有索引为 @code{"1\034foo"} 的元素存在数组中。
+（回忆一下 @code{SUBSEP} 的默认值是 “\034”。）
+早早晚晚，@code{for} 语句会找到索引，并将变量 @code{combined} 设置成 @code{"1\034foo"} 来进行迭代。
+然后 @code{split()} 函数会像下面这样来调用：
 
 @example
 split("1\034foo", separate, "\034")
 @end example
 
 @noindent
-The result is to set @code{separate[1]} to @code{"1"} and
-@code{separate[2]} to @code{"foo"}.  Presto! The original sequence of
-separate indices is recovered.
+结果会将 @code{separate[1]} 设置成 @code{"1"}，@code{separate[2]} 为 @code{"foo"}。
+太神奇了，原来的分离的索引序列又被恢复了。
 
 
 @node Arrays of Arrays
-@section Arrays of Arrays
+@section 数组之数组
 @cindex arrays of arrays
 
-@command{gawk} goes beyond standard @command{awk}'s multidimensional
-array access and provides true arrays of
-arrays. Elements of a subarray are referred to by their own indices
-enclosed in square brackets, just like the elements of the main array.
-For example, the following creates a two-element subarray at index @code{1}
-of the main array @code{a}:
+@command{gawk} 超越了标准的 @command{awk} 的多维数组的访问，并提供了真正的数组之数组。子数组的元素通过它们在方括号中的下标来取得，就是主数组元素一样。
+例如，下面创建一个两元素的子数组，索引为主数组 @code{a} 的 @code{1}：
 
 @example
 a[1][1] = 1
 a[1][2] = 2
 @end example
 
-This simulates a true two-dimensional array. Each subarray element can
-contain another subarray as a value, which in turn can hold other arrays
-as well. In this way, you can create arrays of three or more dimensions.
-The indices can be any @command{awk} expressions, including scalars
-separated by commas (i.e., a regular @command{awk} simulated
-multidimensional subscript). So the following is valid in
-@command{gawk}:
+这里模拟了一个真正的两维数组。每一个子数组元素包含另一个子数组作为值，进而也可以包含其他的数组。通过这样的方式，你可以创建三维或者多维的数组。
+索引可以是 @command{awk} 所任意表达式，包括用逗号分隔的标量（例如常规的 @command{awk} 模拟多维的下标）。因此，下面代码在 @command{gawk} 中是有效的：
 
 @example
 a[1][3][1, "name"] = "barney"
 @end example
 
-Each subarray and the main array can be of different length. In fact, the
-elements of an array or its subarray do not all have to have the same
-type. This means that the main array and any of its subarrays can be
-nonrectangular, or jagged in structure. You can assign a scalar value to
-the index @code{4} of the main array @code{a}, even though @code{a[1]}
-is itself an array and not a scalar:
+每一个子数组与主数组可以有不同的长度。实际上，数组的元素，或者它的子数组不必要都包含相同类型。
+这意味着，主数组与它的子数组在结构上，可以是非矩形的，即是锯齿形的。
+你可以给主数组 @code{a} 索引为 @code{4} 的元素赋值一个标量，就算是 @code{a[1]} 本身是一个数组而不是一个标量：
 
 @example
 a[4] = "An element in a jagged array"
 @end example
 
-The terms @dfn{dimension}, @dfn{row}, and @dfn{column} are
-meaningless when applied
-to such an array, but we will use ``dimension'' henceforth to imply the
-maximum number of indices needed to refer to an existing element. The
-type of any element that has already been assigned cannot be changed
-by assigning a value of a different type. You have to first delete the
-current element, which effectively makes @command{gawk} forget about
-the element at that index:
+@dfn{维度}，@dfn{行}，@dfn{列}这样的术语用在这样的数组中是没有含义的，但是我们使用“维度”隐含，
+要访问一个已经存在的元素的所需要的索引数的最大值。
+任意元素的类型，一旦被赋值，就不能通过赋值一个不同类型的值来改变它的类型。你必须先删除当前的元素，这样使 @command{gawk} 可以有效地丢弃在那个索引下的元素：
 
 @example
 delete a[4]
@@ -12624,51 +12381,36 @@ a[4][5][6][7] = "An element in a four-dimensional array"
 @end example
 
 @noindent
-This removes the scalar value from index @code{4} and then inserts a
-three-level nested subarray
-containing a scalar. You can also
-delete an entire subarray or subarray of subarrays:
+这里删除索引为 @code{4} 的标量值，然后插入一个包含一个标量的三层的内嵌子数组。你也可以删除整个的子数组的子数组的了数组：
 
 @example
 delete a[4][5]
 a[4][5] = "An element in subarray a[4]"
 @end example
 
-But recall that you can not delete the main array @code{a} and then use it
-as a scalar.
+但是要记住，你不可以删除主数组 @code{a}，然后将其用作一个标量。
 
-The built-in functions that take array arguments can also be used
-with subarrays. For example, the following code fragment uses @code{length()}
-(@pxref{String Functions})
-to determine the number of elements in the main array @code{a} and
-its subarrays:
+内置函数中使用数组作为参数时，函数也可以使用子数组。例如，下面的代码段使用 @code{length()}
+（查看 @ref{String Functions}）来确定主数组 @code{a} 与其子数组的元素个数：
 
 @example
 print length(a), length(a[1]), length(a[1][3])
 @end example
 
 @noindent
-This results in the following output for our main array @code{a}:
+对主数组 @code{a} 的输出结果如下：
 
 @example
 2, 3, 1
 @end example
 
 @noindent
-The @samp{@var{subscript} in @var{array}} expression
-(@pxref{Reference to Elements}) works similarly for both
-regular @command{awk}-style
-arrays and arrays of arrays. For example, the tests @samp{1 in a},
-@samp{3 in a[1]}, and @samp{(1, "name") in a[1][3]} all evaluate to
-one (true) for our array @code{a}.
+@samp{@var{subscript} in @var{array}} 表达式（查看 @ref{Reference to Elements}）
+工作原理与正规的 @command{awk} 数组以及数组之数组的方式相似。
+例如测试语句 @samp{1 in a}，@samp{3 in a[1]} 与 @samp{(1, "name") in a[1][3]} 对于数组 @code{a} 都会求值为 1（true）。
 
-The @samp{for (item in array)} statement (@pxref{Scanning an Array})
-can be nested to scan all the
-elements of an array of arrays if it is rectangular in structure. In order
-to print the contents (scalar values) of a two-dimensional array of arrays
-(i.e., in which each first-level element is itself an
-array, not necessarily of the same length),
-you could use the following code:
+@samp{for (item in array)} 语句（查看 @ref{Scanning an Array}）可以嵌套，用来扫描一个数组之数组的所有元素，
+只要它在结构上是矩形的。为了打印两维数组之数组的内容（标量）（在数组中，它的第一层本身是一个数组，但不必是有相同的长度），你可以使用下面的代码：
 
 @example
 for (i in array)
@@ -12676,8 +12418,8 @@ for (i in array)
         print array[i][j]
 @end example
 
-The @code{isarray()} function (@pxref{Type Functions})
-lets you test if an array element is itself an array:
+@code{isarray()} 函数（查看 @ref{Type Functions}）
+可以让你测试数组的元素是否为数组：
 
 @example
 for (i in array) @{
@@ -12691,9 +12433,7 @@ for (i in array) @{
 @}
 @end example
 
-If the structure of a jagged array of arrays is known in advance,
-you can often devise workarounds using control statements. For example,
-the following code prints the elements of our main array @code{a}:
+如果一个事先知道是一个锯齿形的数组，你通常要通过控制语句来解决遍历问题。例如，下面的代码打印主数组 @code{a} 的元素：
 
 @example
 for (i in a) @{
@@ -12708,21 +12448,17 @@ for (i in a) @{
 @end example
 
 @noindent
-@xref{Walking Arrays} for a user-defined function that ``walks'' an
-arbitrarily dimensioned array of arrays.
+查看 @ref{Walking Arrays}，来获取用户自定义的函数，其功能就是用来遍历任意维度的数组之数组。
 
-Recall that a reference to an uninitialized array element yields a value
-of @code{""}, the null string. This has one important implication when you
-intend to use a subarray as an argument to a function, as illustrated by
-the following example:
+回忆一下参考一个未初始化的数组元素会产生一个 @code{""} 值，即空串。
+这有一个非常重要的含义，即当你想使用一个子数组作为参数向函数传递，如下面的代码所呈现的：
 
 @example
 $ @kbd{gawk 'BEGIN @{ split("a b c d", b[1]); print b[1][1] @}'}
 @error{} gawk: cmd. line:1: fatal: split: second argument is not an array
 @end example
 
-The way to work around this is to first force @code{b[1]} to be an array by
-creating an arbitrary index:
+要解决这样的问题，首先要通过创建一个任意的索引，以强制 @code{b[1]} 成是一个数组：
 
 @example
 $ @kbd{gawk 'BEGIN @{ b[1][1] = ""; split("a b c d", b[1]); print b[1][1] @}'}
@@ -12730,75 +12466,55 @@ $ @kbd{gawk 'BEGIN @{ b[1][1] = ""; split("a b c d", b[1]); print b[1][1] @}'}
 @end example
 
 @node Arrays Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-Standard @command{awk} provides one-dimensional associative arrays
-(arrays indexed by string values).  All arrays are associative; numeric
-indices are converted automatically to strings.
+标准的 @command{awk} 提供一维关联数组（通过字串进行索引的数组）。所有的数组都是关联的，数值索引会被自动转换为字串。
 
 @item
-Array elements are referenced as @code{@var{array}[@var{indx}]}.
-Referencing an element creates it if it did not exist previously.
+数组元素通过 @code{@var{array}[@var{indx}]} 进行参考。参考一个不存在的元素，则会创建这个元素。
 
 @item
-The proper way to see if an array has an element with a given index
-is to use the @code{in} operator: @samp{@var{indx} in @var{array}}.
+正确的查看是否给定索引的元素是否存在数组中的方式是使用 @code{in} 操作符：@samp{@var{indx} in @var{array}}
 
 @item
-Use @samp{for (@var{indx} in @var{array}) @dots{}} to scan through all the
-individual elements of an array. In the body of the loop, @var{indx} takes
-on the value of each element's index in turn.
+使用 @samp{for (@var{indx} in @var{array}) @dots{}} 来描述数组中的每个元素。
+在环境体中，@var{indx} 会轮流地设置为元素的索引值。
 
 @item
-The order in which a @samp{for (@var{indx} in @var{array})} loop
-traverses an array is undefined in POSIX @command{awk} and varies among
-implementations.  @command{gawk} lets you control the order by assigning
-special predefined values to @code{PROCINFO["sorted_in"]}.
+用 @samp{for (@var{indx} in @var{array})} 来遍历数组的顺序在 POSIX @command{awk} 中是未定义的，并且不同的版本实现是不同的。
+@command{gawk} 使用通过设置预定义变量 @code{PROCINFO["sorted_in"]} 的值来控制遍历的顺序。
 
 @item
-Use @samp{delete @var{array}[@var{indx}]} to delete an individual element.
-To delete all of the elements in an array,
-use @samp{delete @var{array}}.
-This latter feature has been a common extension for many
-years and is now standard, but may not be supported by all commercial
-versions of @command{awk}.
+使用 @samp{delete @var{array}[@var{indx}]} 来删除单个元素。要删除数组中的所有元素，
+则使用 @samp{delete @var{array}} 。后者的特性多年来都是一个通用扩展，但是现在已经标准化了，
+但是可能不是所有的被商业版本的 @command{awk} 都支持。
 
 @item
-Standard @command{awk} simulates multidimensional arrays by separating
-subscript values with commas.  The values are concatenated into a
-single string, separated by the value of @code{SUBSEP}.  The fact
-that such a subscript was created in this way is not retained; thus,
-changing @code{SUBSEP} may have unexpected consequences.  You can use
-@samp{(@var{sub1}, @var{sub2}, @dots{}) in @var{array}} to see if such
-a multidimensional subscript exists in @var{array}.
+标准的 @command{awk} 通过用逗号来分隔不同的下标来模拟多维数组。这些下标值会被合并成一个单独的串，
+并且使用 @code{SUBSEP} 的值来进行分离。通过这种方式创建的下标是没有保存的，所以改变 @code{SUBSEP} 的值会导致未预期的结果。
+你可以使用 @samp{(@var{sub1}, @var{sub2}, @dots{}) in @var{array}} 来查看一个多维数组的相应下标是否存在数组中。
 
 @item
-@command{gawk} provides true arrays of arrays. You use a separate
-set of square brackets for each dimension in such an array:
-@code{data[row][col]}, for example. Array elements may thus be either
-scalar values (number or string) or other arrays.
+@command{gawk} 提供了真正的数组之数组。在这样的数组中，你可以在方括号中使用独立的集合来表示每一维。例如 @code{data[row][col]}。
+数组元素即可以是标量（数值或者字串），也可以是其他的数组类型。
 
 @item
-Use the @code{isarray()} built-in function to determine if an array
-element is itself a subarray.
+使用 @code{isarray()} 内置函数来确定一个数组元素是不是子数组。
 
 @end itemize
 
 
 @node Functions
-@chapter Functions
+@chapter 函数
 
 @cindex functions, built-in
 @cindex built-in functions
-This @value{CHAPTER} describes @command{awk}'s built-in functions,
-which fall into three categories: numeric, string, and I/O.
-@command{gawk} provides additional groups of functions
-to work with values that represent time, do
-bit manipulation, sort arrays,
-provide type information, and internationalize and localize programs.
+本@value{CHAPTER}描述 @command{awk} 的内置函数，它们被分成三类：数值类，字串类与 I/O 类。
+@command{gawk} 还提供额外的一些函数用来表示时间的值、或者进行位操作，数组排序，提供类型信息，国际化与本地化程序。
 
+#TODO20171114
 Besides the built-in functions, @command{awk} has provisions for
 writing new functions that the rest of a program can use.
 The second half of this @value{CHAPTER} describes these
