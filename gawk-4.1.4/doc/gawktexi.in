@@ -1502,7 +1502,7 @@ $ @kbd{awk 1 /dev/null}
 @item
 @ref{Arrays},
 包括 @command{awk} 中的唯一的数组结构，关联数组。删除数组元素以及整个数组，同时也涉及 @command{gawk} 中的数组的排序。
-在本@value{CHAPTER}还包括 @command{gawk} 如何来提供数组之数组的实现方式。
+在本@value{CHAPTER}还包括 @command{gawk} 如何来提供多维数组的实现方式。
 
 @item
 @ref{Functions},
@@ -11159,7 +11159,7 @@ MPFR 所要求的最小精度。
 在程序中由名字进行索引的所有全局定义的变量与数组的数组。
 @code{SYMTAB} 使得 @command{gawk} 的符号表可由 @command{awk} 程序员看到。它在 @command{gawk} 分析程序的时候建立，并在程序开始执行前完成。
 
-数组可以用来间接地读取与写入一个数量的值：
+这个数组可以用来间接地读取与写入一个数量的值：
 
 @example
 foo = 5
@@ -11264,7 +11264,7 @@ $ @kbd{awk 'BEGIN @{}
 
 @noindent
 在这个例子中，@code{ARGV[0]} 包含 @samp{awk}，@code{ARGV[1]} 包含 @samp{inventory-shipped}，
-而 @code{ARGV[2]} 包含 @samp{mail-list} 。注意 @command{awk} 程序并没有在 @code{ARGV}中。其他的命令行选项，以及它们的参数都没有进入到这个数组中。
+而 @code{ARGV[2]} 包含 @samp{mail-list} 。注意 @command{awk} 程序并没有在 @code{ARGV} 中。其他的命令行选项，以及它们的参数都没有进入到这个数组中。
 这也包括通过 @option{-v} 参数（查看 @ref{Options}）进行变量赋值的部分。
 在命令行中的正常的变量赋值@emph{被}当成参数对待，
 并且会在 @code{ARGV} 中出现。有下面的名为 @file{showargs.awk} 的文件：
@@ -11412,7 +11412,7 @@ Shell 变量可以通过仔细地使用 Shell 引号来用在 @command{awk} 程�
 
 本@value{CHAPTER}描述 @command{awk} 中的数组如保来工作，如何使用元素，如何来扫描数组成的每个元素，以及如可来删除数组元素。同时，
 也描述 @command{awk} 如何来模拟多维数组，以及在使用数组时的一些不太明显的地方。
-本@value{CHAPTER}还会讨论 @command{gawk} 中用于对数组排序的工具，然后以 @command{gawk} 支持真正的数组之数组的能力为结尾。
+本@value{CHAPTER}还会讨论 @command{gawk} 中用于对数组排序的工具，然后以简要介绍关于 @command{gawk} 支持真正的多维数组的能力为结尾。
 
 @menu
 * Array Basics::                The basics of arrays.
@@ -11477,7 +11477,7 @@ Shell 变量可以通过仔细地使用 Shell 引号来用在 @command{awk} 程�
 @ifnotdocbook
 @float Figure,figure-array-elements
 @caption{连续数组}
-@center @image{array-elements, , , A Contiguous Array}
+@center @image{array-elements, , , 连续数组}
 @end float
 @end ifnotdocbook
 
@@ -12239,7 +12239,7 @@ a = 3
 一般的方式（包括 @command{awk} 在内的许多语言）要参考到两维数 @code{grid} 中的元素，则用 @code{grid[@var{x},@var{y}]}。
 
 @cindex @code{SUBSEP} variable, and multidimensional arrays
-在 @command{awk} 中的多维数组 是通过将索引连接成字串来实现的。@command{awk} 将索引转换为字串
+在 @command{awk} 中的多维数组是通过将索引连接成字串来实现的。@command{awk} 将索引转换为字串
 （查看 @ref{Conversion}）然后将它他连接在一起，并在它们之间存放分隔符。
 这样可以创建一个单一的字串来描述分离索引的值。合并后的字串用作普通的一维数组的一个索引。分隔符则使用内建变量 @code{SUBSEP} 的值。
 
@@ -12346,10 +12346,10 @@ split("1\034foo", separate, "\034")
 
 
 @node Arrays of Arrays
-@section 数组之数组
+@section 多维数组
 @cindex arrays of arrays
 
-@command{gawk} 超越了标准的 @command{awk} 的多维数组的访问，并提供了真正的数组之数组。子数组的元素通过它们在方括号中的下标来取得，就是主数组元素一样。
+@command{gawk} 超越了标准的 @command{awk} 的多维数组的访问，并提供了真正的多维数组。子数组的元素通过它们在方括号中的下标来取得，就是主数组元素一样。
 例如，下面创建一个两元素的子数组，索引为主数组 @code{a} 的 @code{1}：
 
 @example
@@ -12372,8 +12372,7 @@ a[1][3][1, "name"] = "barney"
 a[4] = "An element in a jagged array"
 @end example
 
-@dfn{维度}，@dfn{行}，@dfn{列}这样的术语用在这样的数组中是没有含义的，但是我们使用“维度”隐含，
-要访问一个已经存在的元素的所需要的索引数的最大值。
+@dfn{维度}，@dfn{行}，@dfn{列}这样的术语用在这样的数组中是没有含义的，但是我们使用“维度”表示要访问一个已经存在的元素的所需要的索引数的最大值。
 任意元素的类型，一旦被赋值，就不能通过赋值一个不同类型的值来改变它的类型。你必须先删除当前的元素，这样使 @command{gawk} 可以有效地丢弃在那个索引下的元素：
 
 @example
@@ -12407,11 +12406,11 @@ print length(a), length(a[1]), length(a[1][3])
 
 @noindent
 @samp{@var{subscript} in @var{array}} 表达式（查看 @ref{Reference to Elements}）
-工作原理与正规的 @command{awk} 数组以及数组之数组的方式相似。
+工作原理与正规的 @command{awk} 数组以及多维数组的方式相似。
 例如测试语句 @samp{1 in a}，@samp{3 in a[1]} 与 @samp{(1, "name") in a[1][3]} 对于数组 @code{a} 都会求值为 1（true）。
 
-@samp{for (item in array)} 语句（查看 @ref{Scanning an Array}）可以嵌套，用来扫描一个数组之数组的所有元素，
-只要它在结构上是矩形的。为了打印两维数组之数组的内容（标量）（在数组中，它的第一层本身是一个数组，但不必是有相同的长度），你可以使用下面的代码：
+@samp{for (item in array)} 语句（查看 @ref{Scanning an Array}）可以嵌套，用来扫描一个多维数组的所有元素，
+只要它在结构上是矩形的。为了打印两维多维数组的内容（标量）（在数组中，它的第一层本身是一个数组，但不必是有相同的长度），你可以使用下面的代码：
 
 @example
 for (i in array)
@@ -12449,7 +12448,7 @@ for (i in a) @{
 @end example
 
 @noindent
-查看 @ref{Walking Arrays}，来获取用户自定义的函数，其功能就是用来遍历任意维度的数组之数组。
+查看 @ref{Walking Arrays}，来获取用户自定义的函数，其功能就是用来遍历任意维度的多维数组。
 
 回忆一下参考一个未初始化的数组元素会产生一个 @code{""} 值，即空串。
 这有一个非常重要的含义，即当你想使用一个子数组作为参数向函数传递，如下面的代码所呈现的：
@@ -12498,7 +12497,7 @@ $ @kbd{gawk 'BEGIN @{ b[1][1] = ""; split("a b c d", b[1]); print b[1][1] @}'}
 你可以使用 @samp{(@var{sub1}, @var{sub2}, @dots{}) in @var{array}} 来查看一个多维数组的相应下标是否存在数组中。
 
 @item
-@command{gawk} 提供了真正的数组之数组。在这样的数组中，你可以在方括号中使用独立的集合来表示每一维。例如 @code{data[row][col]}。
+@command{gawk} 提供了真正的多维数组。在这样的数组中，你可以在方括号中使用独立的集合来表示每一维。例如 @code{data[row][col]}。
 数组元素即可以是标量（数值或者字串），也可以是其他的数组类型。
 
 @item
@@ -12515,14 +12514,9 @@ $ @kbd{gawk 'BEGIN @{ b[1][1] = ""; split("a b c d", b[1]); print b[1][1] @}'}
 本@value{CHAPTER}描述 @command{awk} 的内置函数，它们被分成三类：数值类，字串类与 I/O 类。
 @command{gawk} 还提供额外的一些函数用来表示时间的值、或者进行位操作，数组排序，提供类型信息，国际化与本地化程序。
 
-#TODO20171114
-Besides the built-in functions, @command{awk} has provisions for
-writing new functions that the rest of a program can use.
-The second half of this @value{CHAPTER} describes these
-@dfn{user-defined} functions.
-Finally, we explore indirect function calls, a @command{gawk}-specific
-extension that lets you determine at runtime what function is to
-be called.
+除了内置函数，@command{awk} 也提供写新函数的能力，这样可以在程序的后面进行调用。
+本@value{CHAPTER}的下半部份描述了@dfn{用户自定义}函数。
+最后，我们探讨间接函数调用，一种 @command{gawk} 才有的扩展，这样可以让你在运行时来确定最终来调用什么样的函数。
 
 @menu
 * Built-in::                    Summarizes the built-in functions.
@@ -12532,12 +12526,9 @@ be called.
 @end menu
 
 @node Built-in
-@section Built-in Functions
+@section 内置函数
 
-@dfn{Built-in} functions are always available for your @command{awk}
-program to call.  This @value{SECTION} defines all the built-in functions
-in @command{awk}; some of these are mentioned in other @value{SECTION}s
-but are summarized here for your convenience.
+@dfn{内置}函数在你的 @command{awk} 程序总是可用的。本@value{SECTION}定义了所有的 @command{awk} 中的函数，它们中的一些在其他的@value{SECTION}中已经被提到过，在这里进行汇总，你可以方便地参考。
 
 @menu
 * Calling Built-in::            How to call built-in functions.
@@ -12554,34 +12545,22 @@ but are summarized here for your convenience.
 @end menu
 
 @node Calling Built-in
-@subsection Calling Built-in Functions
+@subsection 调用内置函数
 
-To call one of @command{awk}'s built-in functions, write the name of
-the function followed
-by arguments in parentheses.  For example, @samp{atan2(y + z, 1)}
-is a call to the function @code{atan2()} and has two arguments.
+为了调用 @command{awk} 的内置函数，只需要输入函数的名字，后面跟着放置在括号内的参数列表即可。
+例如，@samp{atan2(y + z, 1)} 为调用函数 @code{atan2()}，并带有两个参数。
 
 @cindex programming conventions, functions, calling
 @cindex whitespace, functions@comma{} calling
-Whitespace is ignored between the built-in function name and the
-opening parenthesis, but nonetheless it is good practice to avoid using whitespace
-there.  User-defined functions do not permit whitespace in this way, and
-it is easier to avoid mistakes by following a simple
-convention that always works---no whitespace after a function name.
+内建函数中函数名与开括号之间的空格会被忽略，但是这不是一个好的编程习惯，应该要避免在它们之间输入空格。用户自定义的函数不允许在这个位置有空格，因此一个简单的编程习惯就可以避免这样的错误——就是不要在函数名后面插入空格。
 
 @cindex troubleshooting, @command{gawk}, fatal errors@comma{} function arguments
 @cindex @command{gawk}, function arguments and
 @cindex differences in @command{awk} and @command{gawk}, function arguments (@command{gawk})
-Each built-in function accepts a certain number of arguments.
-In some cases, arguments can be omitted. The defaults for omitted
-arguments vary from function to function and are described under the
-individual functions.  In some @command{awk} implementations, extra
-arguments given to built-in functions are ignored.  However, in @command{gawk},
-it is a fatal error to give extra arguments to a built-in function.
+每个内置函数都接收特定数目的参数。在某些情况下，参数可以省略。对于省略参数的默认值函数与函数间是不同的，并且会单独进行说明。
+一些 @command{awk} 实现中，有一些额外会被忽略。但是，在 @command{gawk} 中，给内置函数一个额外的参数是一个致使错误。
 
-When a function is called, expressions that create the function's actual
-parameters are evaluated completely before the call is performed.
-For example, in the following code fragment:
+当函数被调用时，生成函数实际参数的表达式会在调用执行前进行求值。例如，下面的代码片段中：
 
 @example
 i = 4
@@ -12592,84 +12571,59 @@ j = sqrt(i++)
 @cindex functions, built-in, evaluation order
 @cindex built-in functions, evaluation order
 @noindent
-the variable @code{i} is incremented to the value five before @code{sqrt()}
-is called with a value of four for its actual parameter.
-The order of evaluation of the expressions used for the function's
-parameters is undefined.  Thus, avoid writing programs that
-assume that parameters are evaluated from left to right or from
-right to left.  For example:
+变量 @code{i} 会在调用 @code{sqrt()} 之前递增为值 5，但是调用时会用值 4 作为实际的参数。作为函数参数的表达式的求值的顺序是未定义的。所以，要避免写从左到右，或者从右到左进行求值的程序。如：
 
 @example
 i = 5
 j = atan2(++i, i *= 2)
 @end example
 
-If the order of evaluation is left to right, then @code{i} first becomes
-six, and then 12, and @code{atan2()} is called with the two arguments six
-and 12.  But if the order of evaluation is right to left, @code{i}
-first becomes 10, then 11, and @code{atan2()} is called with the
-two arguments 11 and 10.
+如果求值的顺序是从左到右，则 @code{i} 会为 6，然后成为 12。则会用 6 与 12 两个值调用 @code{atan2()}。但是如果顺序为从右到左，@code{i} 首先为 10，然后为 11，则 @code{atan2()} 会用 11，与 10 来进行调用。
 
 @node Numeric Functions
-@subsection Numeric Functions
+@subsection 数值函数
 @cindex numeric functions
 
-The following list describes all of
-the built-in functions that work with numbers.
-Optional parameters are enclosed in square brackets@w{ ([ ]):}
+下面的列表描述了所有的用于数值处理的内置函数。可选的参数用方括号@w{ ([ ]):} 包含起来：
 
 @c @asis for docbook
 @table @asis
 @item @code{atan2(@var{y}, @var{x})}
 @cindexawkfunc{atan2}
 @cindex arctangent
-Return the arctangent of @code{@var{y} / @var{x}} in radians.
-You can use @samp{pi = atan2(0, -1)} to retrieve the value of
-@value{PI}.
+返回 @code{@var{y} / @var{x}} 弧度的反正切值。你可以使用 @samp{pi = atan2(0, -1)} 来求得 @value{PI} 的值。
 
 @item @code{cos(@var{x})}
 @cindexawkfunc{cos}
 @cindex cosine
-Return the cosine of @var{x}, with @var{x} in radians.
+返回 @var{x} 的余弦值，@var{x} 为弧度。
 
 @item @code{exp(@var{x})}
 @cindexawkfunc{exp}
 @cindex exponent
-Return the exponential of @var{x} (@code{e ^ @var{x}}) or report
-an error if @var{x} is out of range.  The range of values @var{x} can have
-depends on your machine's floating-point representation.
+返回 @var{x} 的自然幂（@code{e ^ @var{x}}）或者 @var{x} 的值超过范围则报错。@var{x} 的范围依赖于你的机器的浮点数表示。
 
 @item @code{int(@var{x})}
 @cindexawkfunc{int}
 @cindex round to nearest integer
-Return the nearest integer to @var{x}, located between @var{x} and zero and
-truncated toward zero.
-For example, @code{int(3)} is 3, @code{int(3.9)} is 3, @code{int(-3.9)}
-is @minus{}3, and @code{int(-3)} is @minus{}3 as well.
+返回最接近于 @var{x} 的整数，其值在 @var{x} 与 0 之间，并向 0 进行截取。
+如 @code{int(3)} 为 3，@code{int(3.9)} 为 3，@code{int(-3.9)} 为 @minus{}3，@code{int(-3)} 也为 @minus{}3。
 
 @item @code{log(@var{x})}
 @cindexawkfunc{log}
 @cindex logarithm
-Return the natural logarithm of @var{x}, if @var{x} is positive;
-otherwise, return @code{NaN} (``not a number'') on IEEE 754 systems.
-Additionally, @command{gawk} prints a warning message when @code{x}
-is negative.
+如果 @var{x} 为正数，返回 @var{x} 的自然对数，否则在 IEEE 754 的系统上返回 @code{NaN} （“not a number”）。
+此外，如果 @var{x} 为负数，@command{gawk} 还会打印一个警告信息。
 
 @item @code{rand()}
 @cindexawkfunc{rand}
 @cindex random numbers, @code{rand()}/@code{srand()} functions
-Return a random number.  The values of @code{rand()} are
-uniformly distributed between zero and one.
-The value could be zero but is never one.@footnote{The C version of @code{rand()}
-on many Unix systems
-is known to produce fairly poor sequences of random numbers.
-However, nothing requires that an @command{awk} implementation use the C
-@code{rand()} to implement the @command{awk} version of @code{rand()}.
-In fact, @command{gawk} uses the BSD @code{random()} function, which is
-considerably better than @code{rand()}, to produce random numbers.}
+返回一个随机数。@code{rand()} 的值一致地分布在 0 与 1 之间，值可以为 0，但不会等于 1。 
+@footnote{大家都知道，在很多 Unix 系统上的 C 版本的 @code{rand()}，产生的随机数序列非常不好。
+但是 @command{awk} 版本的实现一点都没有使用 C 版本的 @code{rand()}。
+事实上，@command{gawk} 使用 BSD 的 @code{random()} 函数，这个函数产生的随机数要比 @code{rand()} 好很多。}
 
-Often random integers are needed instead.  Following is a user-defined function
-that can be used to obtain a random nonnegative integer less than @var{n}:
+通常情况下，你需要的是随机的整数。下面是一个用户自定义的函数，此函数可以用来产生小于 @var{n} 的随机非负整数：
 
 @example
 function randint(n)
@@ -12679,13 +12633,9 @@ function randint(n)
 @end example
 
 @noindent
-The multiplication produces a random number greater than or equal to
-zero and less than @code{n}.  Using @code{int()}, this result is made into
-an integer between zero and @code{n} @minus{} 1, inclusive.
+乘法产生一个随机数大于等于 0，但小于 @code{n}。使用 @code{int()} 因此可以使得结果成为 0 到 @code{n} @minus{} 1 之间的整数。
 
-The following example uses a similar function to produce random integers
-between one and @var{n}.  This program prints a new random number for
-each input record:
+下面的例子使用一个相似的函数来产生在 1 到 @var{n} 之间的随机整数。这个程序会为每个输入记录打印一个新的随机数：
 
 @example
 # Function to roll a simulated die.
@@ -12700,94 +12650,60 @@ function roll(n) @{ return 1 + int(rand() * n) @}
 
 @cindex seeding random number generator
 @cindex random numbers, seed of
-@quotation CAUTION
-In most @command{awk} implementations, including @command{gawk},
-@code{rand()} starts generating numbers from the same
-starting number, or @dfn{seed}, each time you run @command{awk}.@footnote{@command{mawk}
-uses a different seed each time.}  Thus,
-a program generates the same results each time you run it.
-The numbers are random within one @command{awk} run but predictable
-from run to run.  This is convenient for debugging, but if you want
-a program to do different things each time it is used, you must change
-the seed to a value that is different in each run.  To do this,
-use @code{srand()}.
+@quotation 注意
+在大多数的 @command{awk} 实现中，包括 @command{gawk}，每次运行 @command{awk} 时，@code{rand()} 都从相同的开始数，或者种子起产生随机数。
+@footnote{@command{mawk} 每次都使用不同的种子。}
+所以，程序每次运行都产生相同的结果。在 @command{awk} 一次运行中产生的数值是随机的，但是每次运行时产生的随机数却是可预测的。这用一调试时非常有用，但是如果你想程序每次使用的时候做不同的事情，你必须改变 seed 为每次运行都不相同的值。要这么做，就调用 @code{srand()} 函数。
 @end quotation
 
 @item @code{sin(@var{x})}
 @cindexawkfunc{sin}
 @cindex sine
-Return the sine of @var{x}, with @var{x} in radians.
+返回弧度 @var{x} 的正弦值。
 
 @item @code{sqrt(@var{x})}
 @cindexawkfunc{sqrt}
 @cindex square root
-Return the positive square root of @var{x}.
-@command{gawk} prints a warning message
-if @var{x} is negative.  Thus, @code{sqrt(4)} is 2.
+返回 @var{x} 的正平方根。@command{gawk} 在 @var{x} 为负值时会打印一个告警。@code{sqrt(4)} 的值是 2。
 
 @item @code{srand(}[@var{x}]@code{)}
 @cindexawkfunc{srand}
-Set the starting point, or seed,
-for generating random numbers to the value @var{x}.
+设置开始点，或者种子，用来产生相对于 @var{x} 的随机数。
 
-Each seed value leads to a particular sequence of random
-numbers.@footnote{Computer-generated random numbers really are not truly
-random.  They are technically known as @dfn{pseudorandom}.  This means
-that although the numbers in a sequence appear to be random, you can in
-fact generate the same sequence of random numbers over and over again.}
-Thus, if the seed is set to the same value a second time,
-the same sequence of random numbers is produced again.
+每一个种子都会产生特定序列的随机数。
+@footnote{计算机产生的随机数不是真正的随机数。在技术上，它们都是@dfn{伪随机}的。
+这就是说，尽管数值序列看起来是随机的，但是事实上会一次次地产生相同的随机序列。}
+所以，如果种子每次都设置成相同的值，则随机数每次都会产生一样。
 
-@quotation CAUTION
-Different @command{awk} implementations use different random-number
-generators internally.  Don't expect the same @command{awk} program
-to produce the same series of random numbers when executed by
-different versions of @command{awk}.
+@quotation 注意
+不同的 @command{awk} 实现使用不同的内部随机数产生器。不要希望 @command{awk} 程序被不同版本的 @command{awk} 执行时会产生相同的随机数序列。
 @end quotation
 
-If the argument @var{x} is omitted, as in @samp{srand()}, then the current
-date and time of day are used for a seed.  This is the way to get random
-numbers that are truly unpredictable.
+如果在 @samp{srand()} 函数中省略了 @var{x}，则会使用当前的日期与当天的时间来作为种子。这种方式下取得的随机数是真正不可预测的。
 
-The return value of @code{srand()} is the previous seed.  This makes it
-easy to keep track of the seeds in case you need to consistently reproduce
-sequences of random numbers.
+@code{srand()} 返回的值是前一个种子的值。这可以使得很容易来跟踪种子，以便你需要产生一致的随机数序列。
 
-POSIX does not specify the initial seed; it differs among @command{awk}
-implementations.
+POSIX 没有指定初始的种子值，因此在不同的 @command{awk} 实现中是不同的。
 @end table
 
 @node String Functions
-@subsection String-Manipulation Functions
+@subsection 字串操作函数
+
 @cindex string-manipulation functions
 
-The functions in this @value{SECTION} look at or change the text of one
-or more strings.
+本@value{SECTION}我们来讨论一下查找或者更改一个或者一些串的文本。
 
-@command{gawk} understands locales (@pxref{Locales}) and does all
-string processing in terms of @emph{characters}, not @emph{bytes}.
-This distinction is particularly important to understand for locales
-where one character may be represented by multiple bytes.  Thus, for
-example, @code{length()} returns the number of characters in a string,
-and not the number of bytes used to represent those characters. Similarly,
-@code{index()} works with character indices, and not byte indices.
+@command{gawk} 可以理解本本语言设置（查看 @pxref{Locales}）并且对字串的处理都是根据@emph{字符}来的，而不是@emph{字节}。
+这个区别在理解本地语言设置中，一个字符需要多个字节来表示的时候非常重要。所以，像 @code{length()} 函数会返回字串中的字符数，而不是用来表示这些字符的字节数。
+相似地，@code{index()} 是返回字符的索引，而不是字节的索引。
 
-@quotation CAUTION
-A number of functions deal with indices into strings.  For these
-functions, the first character of a string is at position (index) one.
-This is different from C and the languages descended from it, where the
-first character is at position zero.  You need to remember this when
-doing index calculations, particularly if you are used to C.
+@quotation 注意
+有很多的函数会处理字串的索引。对于这此函数，字串的第一个字符的索引为 1。这个与 C 以及其派生的语言不同，在这些语言中，第一个字符的索引位置为 0。你需要记住这个区别，以正确处理索引的计算，尤其是你已经习惯了 C 的情况。
 @end quotation
 
-In the following list, optional parameters are enclosed in square brackets@w{ ([ ]).}
-Several functions perform string substitution; the full discussion is
-provided in the description of the @code{sub()} function, which comes
-toward the end, because the list is presented alphabetically.
+下面的列表中，可选的参数放在方括号中@w{ ([ ]).}。有几个函数用来处理字串替换，完整的讨论会在 @code{sub()} 函数的说明中给出，并且以此为结束，因为列表是按字母顺序排序的。
 
-Those functions that are specific to @command{gawk} are marked with a
-pound sign (@samp{#}).  They are not available in compatibility mode
-(@pxref{Options}):
+那些特定于 @command{gawk} 的函数用井号字符（@samp{#}）标识。它们在兼容模式中不可用（查看 @ref{Options}）：
 
 
 @menu
@@ -12805,31 +12721,20 @@ pound sign (@samp{#}).  They are not available in compatibility mode
 @cindex arrays, elements, retrieving number of
 @cindexgawkfunc{asort}
 @cindex sort array indices
-These two functions are similar in behavior, so they are described
-together.
+这两个函数的行为是类似的，因此在一起描述。
 
-@quotation NOTE
-The following description ignores the third argument, @var{how}, as it
-requires understanding features that we have not discussed yet.  Thus,
-the discussion here is a deliberate simplification.  (We do provide all
-the details later on; see @ref{Array Sorting Functions} for the full story.)
+@quotation 提示
+下面的描述忽略了第三个参数，@var{how}，因为需要理解目前我们还没有讨论到的特性。所以，这里讨论有意简化了。（我们后面会提供所有的细节，查看 @ref{Array Sorting Functions}，来获取所有的信息。）
 @end quotation
 
-Both functions return the number of elements in the array @var{source}.
-For @command{asort()}, @command{gawk} sorts the values of @var{source}
-and replaces the indices of the sorted values of @var{source} with
-sequential integers starting with one.  If the optional array @var{dest}
-is specified, then @var{source} is duplicated into @var{dest}.  @var{dest}
-is then sorted, leaving the indices of @var{source} unchanged.
+两个函数都返回数组 @var{source} 中的元素的个数。对于 @command{asort()}，@command{gawk} 对 @var{source} 的值进行排序，并替换经过排序的值的索引为由 1 开始连续整数。如果可选的数组 @var{dest} 存在，则 @var{source} 的值会复制到 @var{dest} 中。@var{dest} 则也是经过排序的，而 @var{source} 的索引则保持不变。
 
 @cindex @command{gawk}, @code{IGNORECASE} variable in
-When comparing strings, @code{IGNORECASE} affects the sorting
-(@pxref{Array Sorting Functions}).  If the
-@var{source} array contains subarrays as values (@pxref{Arrays of
-Arrays}), they will come last, after all scalar values.
-Subarrays are @emph{not} recursively sorted.
+当进行字串比较时，@code{IGNORECASE} 会影响排序（查看 @pxref{Array Sorting Functions}）。
+如果 @var{source} 数组包含了子数组（查看 @pxref{Arrays of Arrays}），它们会在所有的标量值的后面。
+子数组@emph{不会}再进行递归排序。
 
-For example, if the contents of @code{a} are as follows:
+例如，@code{a} 的内容如下：
 
 @example
 a["last"] = "de"
@@ -12838,14 +12743,14 @@ a["middle"] = "cul"
 @end example
 
 @noindent
-A call to @code{asort()}:
+调用 @code{asort()}:
 
 @example
 asort(a)
 @end example
 
 @noindent
-results in the following contents of @code{a}:
+@code{a} 内容的结果如下：
 
 @example
 a[1] = "cul"
@@ -12853,10 +12758,8 @@ a[2] = "de"
 a[3] = "sac"
 @end example
 
-The @code{asorti()} function works similarly to @code{asort()}; however,
-the @emph{indices} are sorted, instead of the values. Thus, in the
-previous example, starting with the same initial set of indices and
-values in @code{a}, calling @samp{asorti(a)} would yield:
+@code{asorti()} 函数与 @code{asort()} 类型，但是只对@emph{索引}排序，而不是针对值进行排序。
+所以，在前面的例子中，@code{a} 用同样的索引与值，调用 @samp{asorti(a)} 则产生如下结果：
 
 @example
 a[1] = "first"
@@ -12868,24 +12771,14 @@ a[3] = "middle"
 @cindexgawkfunc{gensub}
 @cindex search and replace in strings
 @cindex substitute in string
-Search the target string @var{target} for matches of the regular
-expression @var{regexp}.  If @var{how} is a string beginning with
-@samp{g} or @samp{G} (short for ``global''), then replace all matches of @var{regexp} with
-@var{replacement}.  Otherwise, @var{how} is treated as a number indicating
-which match of @var{regexp} to replace. If no @var{target} is supplied,
-use @code{$0}.  It returns the modified string as the result
-of the function and the original target string is @emph{not} changed.
+搜索匹配正则表达式 @var{regexp} 的目标字串，如果 @var{how} 是以 @samp{g} 或者 @samp{G} 开如的字串，
+则用 @var{replacement} 替换所有匹配的 @var{regexp}。
+否则 @var{how} 将会当面成一个指示哪一个要进行替换的数值。如果没有提供 @var{target} 参数，则使用 @code{$0} 。
+函数返回经过修改的字串，原始的字串则@emph{不会}变化。
 
-@code{gensub()} is a general substitution function.  Its purpose is
-to provide more features than the standard @code{sub()} and @code{gsub()}
-functions.
+@code{gensub()} 是一个通用的替换函数。它的目的是提供比标准的 @code{sub()} 与 @code{gsub()} 函数多一个特性。
 
-@code{gensub()} provides an additional feature that is not available
-in @code{sub()} or @code{gsub()}: the ability to specify components of a
-regexp in the replacement text.  This is done by using parentheses in
-the regexp to mark the components and then specifying @samp{\@var{N}}
-in the replacement text, where @var{N} is a digit from 1 to 9.
-For example:
+@code{gensub()} 提供一个额外的特性是 @code{sub()} 与 @code{gsub()} 所没有的，即：在 @var{replacement} 文本中，指定一个 @var{regexp} 组件的能力。这个通过在 @var{regexp} 中使用括号来标志组件，然后通过在 @var{replacement} 中用 @samp{\@var{N}} 来指定，这里 @var{N} 是一个从 0 到 9 的数字。如：
 
 @example
 $ @kbd{gawk '}
@@ -12898,13 +12791,9 @@ $ @kbd{gawk '}
 @end example
 
 @noindent
-As with @code{sub()}, you must type two backslashes in order
-to get one into the string.
-In the replacement text, the sequence @samp{\0} represents the entire
-matched text, as does the character @samp{&}.
+用 @code{sub()} 函数，你必须指定两个反斜杠来在字串中包含一个。在替换文本中，@samp{\0} 的序列表示整个匹配的文本，如字符 @samp{&} 所表示的一样。
 
-The following example shows how you can use the third argument to control
-which match of the regexp should be changed:
+下面的例子显示了你可以使用第三个参数来控制哪个匹配的正则表达式可以被替换：
 
 @example
 $ @kbd{echo a b c a b c |}
@@ -12912,49 +12801,33 @@ $ @kbd{echo a b c a b c |}
 @print{} a b c AA b c
 @end example
 
-In this case, @code{$0} is the default target string.
-@code{gensub()} returns the new string as its result, which is
-passed directly to @code{print} for printing.
+在这个例子中，@code{$0} 是默认的 @var{target} 字串。@code{gensub()} 返回新的串作为它的结果，这个结果直接传递给 @code{print} 用来打印。
 
 @c @cindex automatic warnings
 @c @cindex warnings, automatic
-If the @var{how} argument is a string that does not begin with @samp{g} or
-@samp{G}, or if it is a number that is less than or equal to zero, only one
-substitution is performed.  If @var{how} is zero, @command{gawk} issues
-a warning message.
+如果 @var{how} 这个参数是一个不以 @samp{g} 或者 @samp{G} 开头的串，或者是一个小于等于 0 的数值，则只有一个替换会被执行。如果 @var{how} 是 0，@command{gawk} 会产生一个告警。
 
-If @var{regexp} does not match @var{target}, @code{gensub()}'s return value
-is the original unchanged value of @var{target}.
+如果 @var{regexp} 没有匹配 @var{target}，则 @code{gensub()} 的返回值就是原来未经更改的 @var{target} 的值。
 
 @item @code{gsub(@var{regexp}, @var{replacement}} [@code{, @var{target}}]@code{)}
 @cindexawkfunc{gsub}
-Search @var{target} for
-@emph{all} of the longest, leftmost, @emph{nonoverlapping} matching
-substrings it can find and replace them with @var{replacement}.
-The @samp{g} in @code{gsub()} stands for
-``global,'' which means replace everywhere.  For example:
+搜索 @var{target} 中@emph{所有的}最左最长的，@emph{无重叠}的匹配子串，并且用 @var{replacement} 进行替换。
+@code{gsub()} 中的 @samp{g} 表示“global”，其表示替换所有出现的字串。例如：
 
 @example
 @{ gsub(/Britain/, "United Kingdom"); print @}
 @end example
 
 @noindent
-replaces all occurrences of the string @samp{Britain} with @samp{United
-Kingdom} for all input records.
+会用 @samp{United Kingdom} 替换输入记录所有的 @samp{Britain} 字串。
 
-The @code{gsub()} function returns the number of substitutions made.  If
-the variable to search and alter (@var{target}) is
-omitted, then the entire input record (@code{$0}) is used.
-As in @code{sub()}, the characters @samp{&} and @samp{\} are special,
-and the third argument must be assignable.
+@code{gsub()} 函数返回执行了替换的个数。如果要搜索及变更（@var{target}）的变量被省略了，就是使用整个输入记录 @code{$0} 。如在 @code{sub()} 中，字串 @samp{&} 与 @samp{\} 是特殊字符，并且第三个参数必须是可赋值的。
 
 @item @code{index(@var{in}, @var{find})}
 @cindexawkfunc{index}
 @cindex search in string
 @cindex find substring in string
-Search the string @var{in} for the first occurrence of the string
-@var{find}, and return the position in characters where that occurrence
-begins in the string @var{in}.  Consider the following example:
+在 @var{in} 这个字串中搜索第一次出现的 @var{find} 串，并且返回在字串 @var{in} 中出现的最开始的位置。考虑下面的例子：
 
 @example
 $ @kbd{awk 'BEGIN @{ print index("peanut", "an") @}'}
@@ -12962,22 +12835,18 @@ $ @kbd{awk 'BEGIN @{ print index("peanut", "an") @}'}
 @end example
 
 @noindent
+如果 @var{find} 没有被找到，@code{index()} 会返回 0。
 If @var{find} is not found, @code{index()} returns zero.
 
 @cindex dark corner, regexp as second argument to @code{index()}
-With BWK @command{awk} and @command{gawk},
-it is a fatal error to use a regexp constant for @var{find}.
-Other implementations allow it, simply treating the regexp
-constant as an expression meaning @samp{$0 ~ /regexp/}. @value{DARKCORNER}
+对于 BWK @command{awk} 与 @command{gawk} ，使用正则表达式常量来作为 @var{find} 参数会是一个致命错误。其他的实则允许，他们仅是简单地将正则表达式常量当成与 @samp{$ 0 ~ /regexp/} 一样的表达式。
 
 @item @code{length(}[@var{string}]@code{)}
 @cindexawkfunc{length}
 @cindex string length
 @cindex length of string
-Return the number of characters in @var{string}.  If
-@var{string} is a number, the length of the digit string representing
-that number is returned.  For example, @code{length("abcde")} is five.  By
-contrast, @code{length(15 * 35)} works out to three. In this example,
+返回字串 @var{string} 的字符数。如果 @var{string} 是一个数值，则表示这个数值串的数字位数被返回。
+例如 @code{length("abcde")} 的值为 5。比较 @code{length(15 * 35)} 其值则为 3。在这个例子中，
 @iftex
 @math{15 @cdot 35 = 525},
 @end iftex
@@ -12989,31 +12858,23 @@ contrast, @code{length(15 * 35)} works out to three. In this example,
 @docbook
 15 &sdot; 35 = 525,
 @end docbook
-and 525 is then converted to the string @code{"525"}, which has
-three characters.
+而 525 转换成字串 @code{"525"}，这里面有三个字符。
 
 @cindex length of input record
 @cindex input record, length of
-If no argument is supplied, @code{length()} returns the length of @code{$0}.
+如果没有提供参数，@code{length()} 则返回 @code{$0} 的长度。
 
 @c @cindex historical features
 @cindex portability, @code{length()} function
 @cindex POSIX @command{awk}, functions and, @code{length()}
-@quotation NOTE
-In older versions of @command{awk}, the @code{length()} function could
-be called
-without any parentheses.  Doing so is considered poor practice,
-although the 2008 POSIX standard explicitly allows it, to
-support historical practice.  For programs to be maximally portable,
-always supply the parentheses.
+@quotation 提示
+在旧版本的 @command{awk} 中，@code{length()} 函数可以不带括号进行调用。这么做被视为很不好的实践，尽管 2008 版本的 POSIX 标准还是显式地允许它，但那也是为了支持历史实践。为了程序的最大可移植性，在调用时总是使用括号。
 @end quotation
 
 @cindex dark corner, @code{length()} function
-If @code{length()} is called with a variable that has not been used,
-@command{gawk} forces the variable to be a scalar.  Other
-implementations of @command{awk} leave the variable without a type.
+如果调用 @code{length()} 时使用的是一个还没有被使用的变量，@command{gawk} 会强制变量为一个标量。其他的 @command{awk} 实现会将变量保留为一个无类型的变量。
 @value{DARKCORNER}
-Consider:
+如：
 
 @example
 $ @kbd{gawk 'BEGIN @{ print length(x) ; x[1] = 1 @}'}
@@ -13025,59 +12886,34 @@ $ @kbd{nawk 'BEGIN @{ print length(x) ; x[1] = 1 @}'}
 @end example
 
 @noindent
-If @option{--lint} has
-been specified on the command line, @command{gawk} issues a
-warning about this.
+如果在命令行中指定了 @option{--lint} 参数，@command{gawk} 会对这使用产生一个告警。
 
 @cindex common extensions, @code{length()} applied to an array
 @cindex extensions, common@comma{} @code{length()} applied to an array
 @cindex differences between @command{gawk} and @command{awk}
 @cindex number of array elements
 @cindex array, number of elements
-With @command{gawk} and several other @command{awk} implementations, when given an
-array argument, the @code{length()} function returns the number of elements
-in the array. @value{COMMONEXT}
-This is less useful than it might seem at first, as the
-array is not guaranteed to be indexed from one to the number of elements
-in it.
-If @option{--lint} is provided on the command line
-(@pxref{Options}),
-@command{gawk} warns that passing an array argument is not portable.
-If @option{--posix} is supplied, using an array argument is a fatal error
-(@pxref{Arrays}).
+@command{gawk} 与其他的几个 @command{awk} 实现，当参数是一个数组时，@code{length()} 返回的是数组中的元素个数。 @value{COMMONEXT}
+初看起来，这没什么作用，因为数组的索引并不保证是从 1 到数组中的元素数目。如果在命令行中使用了 @option{--lint} 选项（查看 @ref{Options}），@command{gawk} 会警告说，传递数组参数并不是可移植的。如果指定了 @option{--posix} 选项，则使用数组作为参数会是一个致命错误（查看 @pxref{Arrays}）。
 
 @item @code{match(@var{string}, @var{regexp}} [@code{, @var{array}}]@code{)}
 @cindexawkfunc{match}
 @cindex string, regular expression match
 @cindex match regexp in string
-Search @var{string} for the
-longest, leftmost substring matched by the regular expression
-@var{regexp} and return the character position (index)
-at which that substring begins (one, if it starts at the beginning of
-@var{string}).  If no match is found, return zero.
+搜索匹配正则表达式 @var{regexp} 的最长最左边的子串，并返回子串开始的字符位置（索引，如果子串是字串 @var{string} 的开始，则返回 1 ）。如果没有找到匹配，则返回 0。
 
-The @var{regexp} argument may be either a regexp constant
-(@code{/}@dots{}@code{/}) or a string constant (@code{"}@dots{}@code{"}).
-In the latter case, the string is treated as a regexp to be matched.
-@xref{Computed Regexps} for a
-discussion of the difference between the two forms, and the
-implications for writing your program correctly.
+@var{regexp} 参数即可以是正则表达式常量（@code{/}@dots{}@code{/}），也可以是一个字串常量（@code{"}@dots{}@code{"}）。
+如果是后者，字串被当成是正则表达式用来进行匹配。查看 @xref{Computed Regexps}，可以了解到两种方式之间不同的讨论，以及如何来写出正确的程序的一些提示。
 
-The order of the first two arguments is the opposite of most other string
-functions that work with regular expressions, such as
-@code{sub()} and @code{gsub()}.  It might help to remember that
-for @code{match()}, the order is the same as for the @samp{~} operator:
-@samp{@var{string} ~ @var{regexp}}.
+两个参数的顺序，与大多数的其他用正则表达式处理字串函数的相反，比如 @code{sub()} ，@code{gsub()}。
+记住 @code{match()} 函数的参数顺序与 @samp{~} 操作符是一样的：@samp{@var{string} ~ @var{regexp}}
 
 @cindex @code{RSTART} variable, @code{match()} function and
 @cindex @code{RLENGTH} variable, @code{match()} function and
 @cindex @code{match()} function, @code{RSTART}/@code{RLENGTH} variables
-The @code{match()} function sets the predefined variable @code{RSTART} to
-the index.  It also sets the predefined variable @code{RLENGTH} to the
-length in characters of the matched substring.  If no match is found,
-@code{RSTART} is set to zero, and @code{RLENGTH} to @minus{}1.
+@code{match()} 函数会设置预定义的变量 @code{RSTART} 为索引，同时也设置预定义的变量 @code{RLENGTH} 为匹配子串的长度。如果没有找到匹配，@code{RSTART} 的值被设置成 0，而 @code{RLENGTH} 的值为 @minus{}1。
 
-For example:
+如：
 
 @example
 @c file eg/misc/findpat.awk
@@ -13094,10 +12930,9 @@ For example:
 @end example
 
 @noindent
-This program looks for lines that match the regular expression stored in
-the variable @code{regex}.  This regular expression can be changed.  If the
-first word on a line is @samp{FIND}, @code{regex} is changed to be the
-second word on that line.  Therefore, if given:
+这个程序查找那些匹配存储在变量 @code{regex} 中的正则表达式的行。
+这个正则表达式可以被更改。如果行中的第一个单词是 @samp{FIND} ，则 @code{regex} 会被改成那一行的第二个单词。
+所以，假如有下面的数据：
 
 @example
 @c file eg/misc/findpat.data
@@ -13112,7 +12947,7 @@ Melvin was here.
 @end example
 
 @noindent
-@command{awk} prints:
+则 @command{awk} 会打印：
 
 @example
 Match of ru+n found at 12 in My program runs
@@ -13120,13 +12955,8 @@ Match of Melvin found at 1 in Melvin was here.
 @end example
 
 @cindex differences in @command{awk} and @command{gawk}, @code{match()} function
-If @var{array} is present, it is cleared, and then the zeroth element
-of @var{array} is set to the entire portion of @var{string}
-matched by @var{regexp}.  If @var{regexp} contains parentheses,
-the integer-indexed elements of @var{array} are set to contain the
-portion of @var{string} matching the corresponding parenthesized
-subexpression.
-For example:
+如果提供了 @var{array} 参数，它首先会被清除，然后数组 @var{array} 的第 0 个元素会被设置为匹配正则表达式 @var{regexp} 的整个字串 @var{string}。
+如果 @var{regexp} 包含了括号，数组 @var{array} 的整数索引元素会被设置成匹配相应匹配括号子表达式的字串 @var{string} 的部分。例如：
 
 @example
 $ @kbd{echo foooobazbarrrrr |}
@@ -13135,9 +12965,7 @@ $ @kbd{echo foooobazbarrrrr |}
 @print{} foooo barrrrr
 @end example
 
-In addition,
-multidimensional subscripts are available providing
-the start index and length of each matched subexpression:
+另外，多维下标也可用来提供 start 索引与每个匹配子表达式的长度 length 索引：
 
 @example
 $ @kbd{echo foooobazbarrrrr |}
@@ -13151,66 +12979,36 @@ $ @kbd{echo foooobazbarrrrr |}
 @print{} 9 7
 @end example
 
-There may not be subscripts for the start and index for every parenthesized
-subexpression, because they may not all have matched text; thus, they
-should be tested for with the @code{in} operator
-(@pxref{Reference to Elements}).
+有可能没有为每一个括号子表达式提供 start 以及 index 的下标，因为有可能并不是所有都匹配；
+所以，它们应该用 @code{in} 操作符来进行测试（查看 @ref{Reference to Elements}）。
 
 @cindex troubleshooting, @code{match()} function
-The @var{array} argument to @code{match()} is a
-@command{gawk} extension.  In compatibility mode
-(@pxref{Options}),
-using a third argument is a fatal error.
+@code{match()} 的 @var{array} 参数是 @command{gawk} 扩展。在兼容模式中（查看 @ref{Options}），使用第三个参数是一个致使错误。
 
 @item @code{patsplit(@var{string}, @var{array}} [@code{, @var{fieldpat}} [@code{, @var{seps}} ] ]@code{) #}
 @cindexgawkfunc{patsplit}
 @cindex split string into array
-Divide
-@var{string} into pieces defined by @var{fieldpat}
-and store the pieces in @var{array} and the separator strings in the
-@var{seps} array.  The first piece is stored in
-@code{@var{array}[1]}, the second piece in @code{@var{array}[2]}, and so
-forth.  The third argument, @var{fieldpat}, is
-a regexp describing the fields in @var{string} (just as @code{FPAT} is
-a regexp describing the fields in input records).
-It may be either a regexp constant or a string.
-If @var{fieldpat} is omitted, the value of @code{FPAT} is used.
-@code{patsplit()} returns the number of elements created.
-@code{@var{seps}[@var{i}]} is
-the separator string
-between @code{@var{array}[@var{i}]} and @code{@var{array}[@var{i}+1]}.
-Any leading separator will be in @code{@var{seps}[0]}.
+将 @var{string} 用 @var{fieldpat} 定义的分隔符分割成片，并存储在 @var{array} 中，
+并将字串中分隔符存储在 @var{seps} 数组中。
+第一块片存储在 @code{@var{array}[1]} 中，第二片存储在 @code{@var{array}[2]} 中，依此类推。
+第三个参数 @var{fieldpat} 是一个正则表达式描述在 @var{string} 中的域（就好像 @code{FPAT} 是一个描述输入记录域的正则表达式）。它即可以是一个正则表达式常量，也可以是一个字串。
+如果省略了 @var{fieldpat}，则会使用 @code{FPAT} 的值。
+@code{patsplit()} 返回创建元素的个数。@code{@var{seps}[@var{i}]} 是在 @code{@var{array}[@var{i}]} 与 @code{@var{array}[@var{i}+1]} 之间的分隔符。所有前导的分隔符都存储在 @code{@var{seps}[0]} 中。
 
-The @code{patsplit()} function splits strings into pieces in a
-manner similar to the way input lines are split into fields using @code{FPAT}
-(@pxref{Splitting By Content}).
+@code{patsplit()} 函数将字符串分割为片，其方式是与用 @code{FPAT} 将输入行分割成域的方式相似（查看 @pxref{Splitting By Content}）。
 
-Before splitting the string, @code{patsplit()} deletes any previously existing
-elements in the arrays @var{array} and @var{seps}.
+在分割字符串之前，@code{patsplit()} 会删除在 @var{array} 与 @var{seps} 中已经存在的元素。
 
 @item @code{split(@var{string}, @var{array}} [@code{, @var{fieldsep}} [@code{, @var{seps}} ] ]@code{)}
 @cindexawkfunc{split}
-Divide @var{string} into pieces separated by @var{fieldsep}
-and store the pieces in @var{array} and the separator strings in the
-@var{seps} array.  The first piece is stored in
-@code{@var{array}[1]}, the second piece in @code{@var{array}[2]}, and so
-forth.  The string value of the third argument, @var{fieldsep}, is
-a regexp describing where to split @var{string} (much as @code{FS} can
-be a regexp describing where to split input records).
-If @var{fieldsep} is omitted, the value of @code{FS} is used.
-@code{split()} returns the number of elements created.
-@var{seps} is a @command{gawk} extension, with @code{@var{seps}[@var{i}]}
-being the separator string
-between @code{@var{array}[@var{i}]} and @code{@var{array}[@var{i}+1]}.
-If @var{fieldsep} is a single
-space, then any leading whitespace goes into @code{@var{seps}[0]} and
-any trailing
-whitespace goes into @code{@var{seps}[@var{n}]}, where @var{n} is the
-return value of
-@code{split()} (i.e., the number of elements in @var{array}).
+将 @var{string} 用 @var{fieldsep} 定义的分隔符分割成片，并存储在 @var{array} 中，并将字串中分隔符存储在 @var{seps} 中。
+第一块片存储在 @code{@var{array}[1]} 中，第二片存储在 @code{@var{array}[1]} 中，依此类推。
+第三个参数 @var{fieldsep} 的字串值是一个用来描述在何片分割 @var{string} 的正则表达式（正如 @code{FS} 可以为正则表达式来描述在何处来分割输入记录一样）。
+如果 @var{fieldsep} 被省略了，则使用 @code{FS} 的值。@code{split()} 返回被创建的元素个数。@var{seps} 是 @command{gawk} 扩展，@code{@var{seps}[@var{i}]} 是在 @code{@var{array}[@var{i}]} 与 @code{@var{array}[@var{i}+1]} 之间的分隔符。
+如果 @var{fieldsep} 是一个空格，则前导的空格会全部存储 @code{@var{seps}[0]} 中，而后缀的空格会存储在 @code{@var{seps}[@var{n}]} 中，
+其中 @var{n} 是 @code{split()} 返回的值（即 @var{array} 数组中的元素个数）。
 
-The @code{split()} function splits strings into pieces in a
-manner similar to the way input lines are split into fields.  For example:
+@code{split()} 函数将字串分割成片的方式与将输入行分割成域的方式类似。比如：
 
 @example
 split("cul-de-sac", a, "-", seps)
@@ -13218,8 +13016,7 @@ split("cul-de-sac", a, "-", seps)
 
 @noindent
 @cindex strings splitting, example
-splits the string @code{"cul-de-sac"} into three fields using @samp{-} as the
-separator.  It sets the contents of the array @code{a} as follows:
+将字串 @code{"cul-de-sac"} 用 @samp{-} 分割成三个域。它将数组 @code{a} 的内容设置成如下：
 
 @example
 a[1] = "cul"
@@ -13227,7 +13024,7 @@ a[2] = "de"
 a[3] = "sac"
 @end example
 
-and sets the contents of the array @code{seps} as follows:
+同时设置数组 @code{seps} 的值为：
 
 @example
 seps[1] = "-"
@@ -13235,67 +13032,44 @@ seps[2] = "-"
 @end example
 
 @noindent
-The value returned by this call to @code{split()} is three.
+调用 @code{split()} 的返回值为 3。
 
 @cindex differences in @command{awk} and @command{gawk}, @code{split()} function
-As with input field-splitting, when the value of @var{fieldsep} is
-@w{@code{" "}}, leading and trailing whitespace is ignored in values assigned to
-the elements of
-@var{array} but not in @var{seps}, and the elements
-are separated by runs of whitespace.
-Also, as with input field splitting, if @var{fieldsep} is the null string, each
-individual character in the string is split into its own array element.
-@value{COMMONEXT}
+随着输入的域分割，当 @var{fieldsep} 的值为 @w{@code{" "}} 时，
+前缀和后缀的空格都会在赋值给数组 @var{array} 中的元素的时候被忽略，但是在 @var{seps} 中不会被忽略，@var{array} 数组元素是you连续的空格分割。
+同时，随着输入记录的分割，如果 @var{fieldsep} 是一个空串，在字串中的每一个字符都将分割到数组的元素中。@value{COMMONEXT}
 
-Note, however, that @code{RS} has no effect on the way @code{split()}
-works. Even though @samp{RS = ""} causes the newline character to also be an input
-field separator, this does not affect how @code{split()} splits strings.
+但是要注意，@code{RS} 的值对 @code{split()} 函数的工作没有影响。就算是 @samp{RS = ""} 会导致换行符成为域分割符，这也不会影响 @code{split()} 分割字串的方式。
 
 @cindex dark corner, @code{split()} function
-Modern implementations of @command{awk}, including @command{gawk}, allow
-the third argument to be a regexp constant (@w{@code{/}@dots{}@code{/}})
-as well as a string.  @value{DARKCORNER}
-The POSIX standard allows this as well.
-@xref{Computed Regexps} for a
-discussion of the difference between using a string constant or a regexp constant,
-and the implications for writing your program correctly.
+现代的 @command{awk} 实现版本，包括 @command{gawk}，允许第三个参数为正则表达式常量（@w{@code{/}@dots{}@code{/}}），也可以是一字串。
+POSIX 标准允许这样的参数。查看 @xref{Computed Regexps}，可了解使用字串常量与正则表达式之间的常量，并获取一些如何正确地写程序的提示。
 
-Before splitting the string, @code{split()} deletes any previously existing
-elements in the arrays @var{array} and @var{seps}.
+在分割字符串前，@code{split()} 会删除在数组 @var{array} 与 @var{seps} 中已经存在的元素。
 
-If @var{string} is null, the array has no elements. (So this is a portable
-way to delete an entire array with one statement.
-@xref{Delete}.)
+如果 @var{string} 为空，则数组就不会有元素。（所以这是一个可移植的以一个语句来删除整个数组的方法。查看 @xref{Delete}。）
 
-If @var{string} does not match @var{fieldsep} at all (but is not null),
-@var{array} has one element only. The value of that element is the original
-@var{string}.
+如果 @var{string} 没有匹配 @var{fieldsep}（但不是空），则 @var{array} 只会有一个元素。元素的值就是原来的字串 @var{string}。
 
-In POSIX mode (@pxref{Options}), the fourth argument is not allowed.
+在 POSIX 模式下（查看 @ref{Options}），第四个参数是不允许的。
 
 @item @code{sprintf(@var{format}, @var{expression1}, @dots{})}
 @cindexawkfunc{sprintf}
 @cindex formatting strings
-Return (without printing) the string that @code{printf} would
-have printed out with the same arguments
-(@pxref{Printf}).
-For example:
+返回 @code{printf} 采用相同的参数时的输出（但是不输出）的字串。（查看 @pxref{Printf}）。例如：
 
 @example
 pival = sprintf("pi = %.2f (approx.)", 22/7)
 @end example
 
 @noindent
-assigns the string @w{@samp{pi = 3.14 (approx.)}} to the variable @code{pival}.
+将字串 @w{@samp{pi = 3.14 (approx.)}} 赋值给变量 @code{pival}。
 
 @cindexgawkfunc{strtonum}
 @cindex convert string to number
 @item @code{strtonum(@var{str}) #}
-Examine @var{str} and return its numeric value.  If @var{str}
-begins with a leading @samp{0}, @code{strtonum()} assumes that @var{str}
-is an octal number.  If @var{str} begins with a leading @samp{0x} or
-@samp{0X}, @code{strtonum()} assumes that @var{str} is a hexadecimal number.
-For example:
+检查 @var{str} 并返回它的数值值。如果 @var{str} 以 @samp{0} 开头，则 @code{strtonum()} 会假设 @var{str} 是一个八进制数。
+如果 @var{str} 是以 @samp{0x} 开头，或者 @samp{0X} 开头，@code{strtonum()} 会假设 @var{str} 是一个十六进制数。例如：
 
 @example
 $ @kbd{echo 0x11 |}
@@ -13303,42 +13077,22 @@ $ @kbd{echo 0x11 |}
 @print{} 17
 @end example
 
-Using the @code{strtonum()} function is @emph{not} the same as adding zero
-to a string value; the automatic coercion of strings to numbers
-works only for decimal data, not for octal or hexadecimal.@footnote{Unless
-you use the @option{--non-decimal-data} option, which isn't recommended.
-@xref{Nondecimal Data} for more information.}
+使用 @code{strtonum()} 函数与给字串添加一个零不同，自动强制性地将字串转换为数值只会在十进制数下有效，对于八进制与十六进制都是无效的。 
+@footnote{除非你使用了 @option{--non-decimal-data} 选项，但我们不建议这么使用。查看 @xref{Nondecimal Data}，取得更多的信息。}
 
-Note also that @code{strtonum()} uses the current locale's decimal point
-for recognizing numbers (@pxref{Locales}).
+同时也要注意 @code{strtonum()} 会使用当前的本地语言设置中的用于识别数值的十进制位（查看 @pxref{Locales}）。
 
 @item @code{sub(@var{regexp}, @var{replacement}} [@code{, @var{target}}]@code{)}
 @cindexawkfunc{sub}
 @cindex replace in string
-Search @var{target}, which is treated as a string, for the
-leftmost, longest substring matched by the regular expression @var{regexp}.
-Modify the entire string
-by replacing the matched text with @var{replacement}.
-The modified string becomes the new value of @var{target}.
-Return the number of substitutions made (zero or one).
+在被当成字串的 @var{target} 中搜索匹配正则表达式 @var{regexp} 的最左最长的匹配子串。并用 @var{replacement} 来规则匹配的子串。
+被修改过的字串成为 @var{target} 的新值。返回替换的次数（0 或者 1）。
 
-The @var{regexp} argument may be either a regexp constant
-(@code{/}@dots{}@code{/}) or a string constant (@code{"}@dots{}@code{"}).
-In the latter case, the string is treated as a regexp to be matched.
-@xref{Computed Regexps} for a
-discussion of the difference between the two forms, and the
-implications for writing your program correctly.
+@var{regexp} 参数即可以是一个正则表达式常量（@code{/}@dots{}@code{/}），也可以是一个字串常量（@code{"}@dots{}@code{"}）。对于后者，字串会被当面成一个正则表达式来进行匹配。查看 @xref{Computed Regexps}，以了解这两种形式之间的差异，以及了解一些如何正确地写这样的程序的提示。
 
-This function is peculiar because @var{target} is not simply
-used to compute a value, and not just any expression will do---it
-must be a variable, field, or array element so that @code{sub()} can
-store a modified value there.  If this argument is omitted, then the
-default is to use and alter @code{$0}.@footnote{Note that this means
-that the record will first be regenerated using the value of @code{OFS} if
-any fields have been changed, and that the fields will be updated
-after the substitution, even if the operation is a ``no-op'' such
-as @samp{sub(/^/, "")}.}
-For example:
+这个函数非常特别，是因为 @var{target} 并不是简单地使用来进行计算出一个值，也不像其他的表达式一样——它必须是一个变量，域或者一个数组元素，因此 @code{sub()} 可以将修改的值存在那个地方。如果这个参数被省略了，则默认的值会使用 @code{$0}。
+@footnote{注意这意味着那条记录首先会使用 @code{OFS} 来重新生成，因为有域已经被改变了，并且在替换之后，域会更新，就算操作是一个“no-op”，例如 @samp{sub(/^/, "")}。}
+例如：
 
 @example
 str = "water, water, everywhere"
@@ -13346,22 +13100,16 @@ sub(/at/, "ith", str)
 @end example
 
 @noindent
-sets @code{str} to @w{@samp{wither, water, everywhere}}, by replacing the
-leftmost longest occurrence of @samp{at} with @samp{ith}.
+通过将出现 @samp{at} 的地方替换成 @samp{ith} 来将 @code{str} 设置成 @w{@samp{wither, water, everywhere}}。
 
-If the special character @samp{&} appears in @var{replacement}, it
-stands for the precise substring that was matched by @var{regexp}.  (If
-the regexp can match more than one string, then this precise substring
-may vary.)  For example:
+如果特殊字符 @samp{&} 出现在 @var{replacement} 中，它就表示匹配 @var{regexp} 的精确子串。（如果 @var{regexp} 可以匹配 1 到多个串，则精确的匹配串可能不同。）例如：
 
 @example
 @{ sub(/candidate/, "& and his wife"); print @}
 @end example
 
 @noindent
-changes the first occurrence of @samp{candidate} to @samp{candidate
-and his wife} on each input line.
-Here is another example:
+会将输入的行中出现的第一个 @samp{candidate} 替换成 @samp{candidate and his wife} 。下面是另外一个例子：
 
 @example
 $ @kbd{awk 'BEGIN @{}
@@ -13373,16 +13121,9 @@ $ @kbd{awk 'BEGIN @{}
 @end example
 
 @noindent
-This shows how @samp{&} can represent a nonconstant string and also
-illustrates the ``leftmost, longest'' rule in regexp matching
-(@pxref{Leftmost Longest}).
+这里显示了 @samp{&} 可以表示一个非常量的字串，也说明了正则表达式匹配的最左最长规则的含义（查看 @pxref{Leftmost Longest}）。
 
-The effect of this special character (@samp{&}) can be turned off by putting a
-backslash before it in the string.  As usual, to insert one backslash in
-the string, you must write two backslashes.  Therefore, write @samp{\\&}
-in a string constant to include a literal @samp{&} in the replacement.
-For example, the following shows how to replace the first @samp{|} on each line with
-an @samp{&}:
+这个特殊字符 @samp{&} 的效果可以被关闭，只需要在字串中这个字符前加一个反斜杠即可。通常，为了插入一个反斜杠到字串中，你必须写两个反斜杠。因此在字串常量中要写 @samp{\\&} 来在替换文本中生成一个字面的 @samp{&} 字符。例如，下面的代码展示了如何来行中将第一个 @samp{|} 替换成 @samp{&} ：
 
 @example
 @{ sub(/\|/, "\\&"); print @}
@@ -13390,14 +13131,7 @@ an @samp{&}:
 
 @cindex @code{sub()} function, arguments of
 @cindex @code{gsub()} function, arguments of
-As mentioned, the third argument to @code{sub()} must
-be a variable, field, or array element.
-Some versions of @command{awk} allow the third argument to
-be an expression that is not an lvalue.  In such a case, @code{sub()}
-still searches for the pattern and returns zero or one, but the result of
-the substitution (if any) is thrown away because there is no place
-to put it.  Such versions of @command{awk} accept expressions
-like the following:
+如上面所提到的，@code{sub()} 的第三个参数必须是一个变量，域或者数组元素。某些版本的 @command{awk} 允许第三个参数是一个表达式，这个表达式不是个左传。在这种情况下，@code{sub()} 依然会搜索模式并返回 0 或者 1，但是替换的结果会被丢弃（如果有的话），而不会发生替换。这种版本的 @command{awk} 接受下面这样的表达式：
 
 @example
 sub(/USA/, "United States", "the USA and Canada")
@@ -13405,44 +13139,28 @@ sub(/USA/, "United States", "the USA and Canada")
 
 @noindent
 @cindex troubleshooting, @code{gsub()}/@code{sub()} functions
-For historical compatibility, @command{gawk} accepts such erroneous code.
-However, using any other nonchangeable
-object as the third parameter causes a fatal error and your program
-will not run.
+为了历史的兼容，@command{gawk} 会授受这样的错误代码。但是使用任何不可更改的对象作为第三个参数，会导致致命错误，你的程序也没办法执行下去。
 
-Finally, if the @var{regexp} is not a regexp constant, it is converted into a
-string, and then the value of that string is treated as the regexp to match.
+最后，如果 @var{regexp} 不是一个正则表达式常量，则它会被转换为一个字串，然后它的值会被当成正则表达式来进行匹配。
 
 @item @code{substr(@var{string}, @var{start}} [@code{, @var{length}} ]@code{)}
 @cindexawkfunc{substr}
 @cindex substring
-Return a @var{length}-character-long substring of @var{string},
-starting at character number @var{start}.  The first character of a
-string is character number one.@footnote{This is different from
-C and C++, in which the first character is number zero.}
-For example, @code{substr("washington", 5, 3)} returns @code{"ing"}.
+返回字中 @var{string} 的从 @var{start} 开始的，@var{length} 字符长度的子串。字串的第一个字符编号为 1。
+@footnote{这里不同 C 和 C++，在 C 和 C++ 中第一个字符是数字 0。}
+例如 @code{substr("washington", 5, 3)} 返回 @code{"ing"}。
 
-If @var{length} is not present, @code{substr()} returns the whole suffix of
-@var{string} that begins at character number @var{start}.  For example,
-@code{substr("washington", 5)} returns @code{"ington"}.  The whole
-suffix is also returned
-if @var{length} is greater than the number of characters remaining
-in the string, counting from character @var{start}.
+如果没有提供 @var{length} 参数，@code{substr()} 则返回 @var{string} 从 @var{start} 字符数开始的全部后面的字串。
+例如，@code{substr("washington", 5)} 返回 @code{"ington"}。
+如果 @var{length} 大于 @var{string} 后面剩下的字符数，则也会返回整个后缀的字串，这其中包括 @var{start} 处的字符。
 
 @cindex Brian Kernighan's @command{awk}
-If @var{start} is less than one, @code{substr()} treats it as
-if it was one. (POSIX doesn't specify what to do in this case:
-BWK @command{awk} acts this way, and therefore @command{gawk}
-does too.)
-If @var{start} is greater than the number of characters
-in the string, @code{substr()} returns the null string.
-Similarly, if @var{length} is present but less than or equal to zero,
-the null string is returned.
+如果 @var{start} 的值小于 1，@code{substr()} 会将其当为 1。
+（POSIX 没有指定这种情况下如何处理：BWK @command{awk} 会如上这么处理，@command{gawk} 也这么处理。）
+如果 @var{start} 大于 @var{string} 中的字符数，@code{substr()} 返回空串。相似的，如果 @var{length} 提供了，但是小于等于 0，也返回空串。
 
 @cindex troubleshooting, @code{substr()} function
-The string returned by @code{substr()} @emph{cannot} be
-assigned.  Thus, it is a mistake to attempt to change a portion of
-a string, as shown in the following example:
+由 @code{substr()} 返回的串@emph{不可以}被赋值。所以，试图改变一个字符串的一部分是一个错误，如下面的例子中所示的：
 
 @example
 string = "abcdef"
@@ -13451,19 +13169,16 @@ substr(string, 3, 3) = "CDE"
 @end example
 
 @noindent
-It is also a mistake to use @code{substr()} as the third argument
-of @code{sub()} or @code{gsub()}:
+将 @code{substr()} 的返回作为 @code{sub()} 或者 @code{gsub()} 的第三个参数，也是错误的：
 
 @example
 gsub(/xyz/, "pdq", substr($0, 5, 20))  # WRONG
 @end example
 
 @cindex portability, @code{substr()} function
-(Some commercial versions of @command{awk} treat
-@code{substr()} as assignable, but doing so is not portable.)
+（有一些商业版本的 @command{awk} 会把 @code{substr()} 的返回作为可赋值的，但是这么做是不可移植的。）
 
-If you need to replace bits and pieces of a string, combine @code{substr()}
-with string concatenation, in the following manner:
+如果你想替换一个字符串的一部分，将 @code{substr()} 与字串连接一起使用，如下面的方式：
 
 @example
 string = "abcdef"
@@ -13476,29 +13191,21 @@ string = substr(string, 1, 2) "CDE" substr(string, 6)
 @item @code{tolower(@var{string})}
 @cindexawkfunc{tolower}
 @cindex convert string to lower case
-Return a copy of @var{string}, with each uppercase character
-in the string replaced with its corresponding lowercase character.
-Nonalphabetic characters are left unchanged.  For example,
-@code{tolower("MiXeD cAsE 123")} returns @code{"mixed case 123"}.
+返回 @var{string} 的复本，但是将所有的大写字母用它对应的小写字母进行替换。非字母字符则不变化。例如 @code{tolower("MiXeD cAsE 123")} 返回 @code{"mixed case 123"}。
 
 @item @code{toupper(@var{string})}
 @cindexawkfunc{toupper}
 @cindex convert string to upper case
-Return a copy of @var{string}, with each lowercase character
-in the string replaced with its corresponding uppercase character.
-Nonalphabetic characters are left unchanged.  For example,
-@code{toupper("MiXeD cAsE 123")} returns @code{"MIXED CASE 123"}.
+返回 @var{string} 的复本，但是将所有的小写字母用它对应的大写字母进行替换。非字母字符则不变化。例如 @code{toupper("MiXeD cAsE 123")} 返回 @code{"MIXED CASE 123"}。
 @end table
 
-@sidebar Matching the Null String
+@sidebar 匹配空串
 @cindex matching, null strings
 @cindex null strings, matching
 @cindex @code{*} (asterisk), @code{*} operator, null strings@comma{} matching
 @cindex asterisk (@code{*}), @code{*} operator, null strings@comma{} matching
 
-In @command{awk}, the @samp{*} operator can match the null string.
-This is particularly important for the @code{sub()}, @code{gsub()},
-and @code{gensub()} functions.  For example:
+在 @command{awk} 中，@samp{*} 操作符可以匹配空串。这对于 @code{sub()}，@code{gsub()} 与 @code{gensub()} 函数尤其重要。如：
 
 @example
 $ @kbd{echo abc | awk '@{ gsub(/m*/, "X"); print @}'}
@@ -13506,13 +13213,12 @@ $ @kbd{echo abc | awk '@{ gsub(/m*/, "X"); print @}'}
 @end example
 
 @noindent
-Although this makes a certain amount of sense, it can be surprising.
+尽管这有一些意义，但看起来还是让人有点惊讶。
 @end sidebar
 
 
 @node Gory Details
-@subsubsection More about @samp{\} and @samp{&} with @code{sub()}, @code{gsub()}, and @code{gensub()}
-
+@subsubsection @code{sub()}、@code{gsub()} 与 @code{gensub()} 函数中的 @samp{\} 与 @samp{&} 
 @cindex escape processing, @code{gsub()}/@code{gensub()}/@code{sub()} functions
 @cindex @code{sub()} function, escape processing
 @cindex @code{gsub()} function, escape processing
@@ -13522,43 +13228,24 @@ Although this makes a certain amount of sense, it can be surprising.
 @cindex @code{&} (ampersand), @code{gsub()}/@code{gensub()}/@code{sub()} functions and
 @cindex ampersand (@code{&}), @code{gsub()}/@code{gensub()}/@code{sub()} functions and
 
-@quotation CAUTION
-This subsubsection has been reported to cause headaches.
-You might want to skip it upon first reading.
+@quotation 注意
+本小节据报说是会造成头痛，有可能第一次阅读时想跳过。
 @end quotation
 
-When using @code{sub()}, @code{gsub()}, or @code{gensub()}, and trying to get literal
-backslashes and ampersands into the replacement text, you need to remember
-that there are several levels of @dfn{escape processing} going on.
+当使用 @code{sub()}，@code{gsub()} 或者 @code{gensub()} ，并且试图获取字面的反斜杠与星号，并放在替换文本中，你需要记住，到底有几级@dfn{转义处理}。
 
-First, there is the @dfn{lexical} level, which is when @command{awk} reads
-your program
-and builds an internal copy of it to execute.
-Then there is the runtime level, which is when @command{awk} actually scans the
-replacement string to determine what to generate.
+首先，有一个@dfn{词汇}层，就是当 @command{awk} 读取你的程序，并建立一个要执行的内部复本的时候。然后一个是运行时层，就是当 @command{awk} 实际扫描替换文本串用于确定所产生的结果的时候。
 
 @cindex Brian Kernighan's @command{awk}
-At both levels, @command{awk} looks for a defined set of characters that
-can come after a backslash.  At the lexical level, it looks for the
-escape sequences listed in @ref{Escape Sequences}.
-Thus, for every @samp{\} that @command{awk} processes at the runtime
-level, you must type two backslashes at the lexical level.
-When a character that is not valid for an escape sequence follows the
-@samp{\}, BWK @command{awk} and @command{gawk} both simply remove the initial
-@samp{\} and put the next character into the string. Thus, for
-example, @code{"a\qb"} is treated as @code{"aqb"}.
+在两个层上，@command{awk} 会搜索已经定义好的可以放在反斜杠之后的字符集。在词汇层，它会搜索在 @ref{Escape Sequences} 中列出的转义序列。
+所以，对每一个 @command{awk} 在运行层处理的 @samp{\} ，你必须在词汇层输入两个反斜杠。当跟在 @samp{\} 之后的字符不是一个有效的转换序列，GWK @command{awk} 与 @command{gawk} 两者都是简单地移除 @samp{\} 并将下一个字符放在字串中。
+因此，如 @code{"a\qb"} 会被当成 @code{"aqb"}。
 
-At the runtime level, the various functions handle sequences of
-@samp{\} and @samp{&} differently.  The situation is (sadly) somewhat complex.
-Historically, the @code{sub()} and @code{gsub()} functions treated the
-two-character sequence @samp{\&} specially; this sequence was replaced in
-the generated text with a single @samp{&}.  Any other @samp{\} within
-the @var{replacement} string that did not precede an @samp{&} was passed
-through unchanged.  This is illustrated in @ref{table-sub-escapes}.
+在运行层，不同的函数在处理 @samp{\} 与 @samp{&} 序列时是不同的。这种情况很（蛋疼）地有点复杂。由于历史原因，@code{sub()} 与 @code{gsub()} 函数都将两字符 @samp{\&} 序列特殊对待，这个序列在产生的文本中被替换为 @samp{&} 。任何在 @var{replacement} 中的其他的不在 @samp{&} 之前的 @samp{\} 都原样地传递。这个将在 @ref{table-sub-escapes} 中解释。
 
 @c Thank to Karl Berry for help with the TeX stuff.
 @float Table,table-sub-escapes
-@caption{Historical escape sequence processing for @code{sub()} and @code{gsub()}}
+@caption{由于历史原因 @code{sub()} 与 @code{gsub()} 处理转义序列情况}
 @tex
 \vbox{\bigskip
 % We need more characters for escape and tab ...
@@ -13581,7 +13268,7 @@ _bigskip}
 @end tex
 @ifdocbook
 @multitable @columnfractions .20 .20 .60
-@headitem You type @tab @code{sub()} sees @tab @code{sub()} generates
+@headitem 输入 @tab @code{sub()} 所见 @tab @code{sub()} 所产生
 @item @code{\&}      @tab @code{&}    @tab The matched text
 @item @code{\\&}     @tab @code{\&}   @tab A literal @samp{&}
 @item @code{\\\&}    @tab @code{\&}   @tab A literal @samp{&}
@@ -13594,7 +13281,7 @@ _bigskip}
 @ifnottex
 @ifnotdocbook
 @display
- You type         @code{sub()} sees          @code{sub()} generates
+ 输入         @code{sub()} 所见          @code{sub()} 所产生
  --------         ----------          ---------------
      @code{\&}              @code{&}            The matched text
     @code{\\&}             @code{\&}            A literal @samp{&}
@@ -13609,6 +13296,7 @@ _bigskip}
 @end float
 
 @noindent
+#TODO20171115
 This table shows the lexical-level processing, where
 an odd number of backslashes becomes an even number at the runtime level,
 as well as the runtime processing done by @code{sub()}.

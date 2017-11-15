@@ -311,3 +311,30 @@
 改动
 > 这个例子中，会打印每个记录的前三个域，每行打印一个域。
 
+## 8
+英文原文
+> ...ends with a brief description of gawk's ability to support true arrays of arrays
+ 
+译文原文
+> 以 @command{gawk} 支持真正的数组之数组的能力为结尾。
+
+改动
+> 以简要介绍关于 gawk 支持真正的多维数组的能力为结尾。
+* 之后统一将“数组之数组”改为“多维数组”。*
+
+## 9.1.3 
+英文原文
+> As with input field-splitting, when the value of @var{fieldsep} is
+> @w{@code{" "}}, leading and trailing whitespace is ignored in values assigned to
+> the elements of
+> @var{array} but not in @var{seps}, and the elements
+> are separated by runs of whitespace.
+
+
+译文原文
+> 随着输入的域分割，当 fieldsep 的值为 “ ” 时，前导的后缀的空格会在赋值给数组元素的值中被忽略，
+> 而不是在 seps 中，数组则是由一连串的空格分隔。
+
+改动
+> 随着输入的域分割，当 fieldsep 的值为 “ ” 时，前缀和后缀的空格都会在赋值给数组 array 中的元素的时候被忽略，
+> 但是在 seps 中不会被忽略，并且 array 数组元素是you连续的空格分割。
