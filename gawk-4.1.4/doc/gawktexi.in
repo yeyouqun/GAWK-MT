@@ -13254,28 +13254,28 @@ $ @kbd{echo abc | awk '@{ gsub(/m*/, "X"); print @}'}
 % ... since this table has lots of &'s and \'s, so we unspecialize them.
 \catcode`\& = \other \catcode`\\ = \other
 _halign{_hfil#!_qquad_hfil#!_qquad#_hfil_cr
-      You type!@code{sub()} sees!@code{sub()} generates_cr
+      输入!@code{sub()} 所见!@code{sub()} 产生_cr
 _hrulefill!_hrulefill!_hrulefill_cr
-     @code{\&}!       @code{&}!The matched text_cr
-    @code{\\&}!      @code{\&}!A literal @samp{&}_cr
-   @code{\\\&}!      @code{\&}!A literal @samp{&}_cr
-  @code{\\\\&}!     @code{\\&}!A literal @samp{\&}_cr
- @code{\\\\\&}!     @code{\\&}!A literal @samp{\&}_cr
-@code{\\\\\\&}!    @code{\\\&}!A literal @samp{\\&}_cr
-    @code{\\q}!      @code{\q}!A literal @samp{\q}_cr
+     @code{\&}!       @code{&}!匹配的字串_cr
+    @code{\\&}!      @code{\&}!字符 @samp{&}_cr
+   @code{\\\&}!      @code{\&}!字符 @samp{&}_cr
+  @code{\\\\&}!     @code{\\&}!字符 @samp{\&}_cr
+ @code{\\\\\&}!     @code{\\&}!字符 @samp{\&}_cr
+@code{\\\\\\&}!    @code{\\\&}!字符 @samp{\\&}_cr
+    @code{\\q}!      @code{\q}!字符 @samp{\q}_cr
 }
 _bigskip}
 @end tex
 @ifdocbook
 @multitable @columnfractions .20 .20 .60
 @headitem 输入 @tab @code{sub()} 所见 @tab @code{sub()} 所产生
-@item @code{\&}      @tab @code{&}    @tab The matched text
-@item @code{\\&}     @tab @code{\&}   @tab A literal @samp{&}
-@item @code{\\\&}    @tab @code{\&}   @tab A literal @samp{&}
-@item @code{\\\\&}   @tab @code{\\&}  @tab A literal @samp{\&}
-@item @code{\\\\\&}  @tab @code{\\&}  @tab A literal @samp{\&}
-@item @code{\\\\\\&} @tab @code{\\\&} @tab A literal @samp{\\&}
-@item @code{\\q}     @tab @code{\q}   @tab A literal @samp{\q}
+@item @code{\&}      @tab @code{&}    @tab 匹配的字串
+@item @code{\\&}     @tab @code{\&}   @tab 字符 @samp{&}
+@item @code{\\\&}    @tab @code{\&}   @tab 字符 @samp{&}
+@item @code{\\\\&}   @tab @code{\\&}  @tab 字符 @samp{\&}
+@item @code{\\\\\&}  @tab @code{\\&}  @tab 字符 @samp{\&}
+@item @code{\\\\\\&} @tab @code{\\\&} @tab 字符 @samp{\\&}
+@item @code{\\q}     @tab @code{\q}   @tab 字符 @samp{\q}
 @end multitable
 @end ifdocbook
 @ifnottex
@@ -13284,41 +13284,28 @@ _bigskip}
  输入         @code{sub()} 所见          @code{sub()} 所产生
  --------         ----------          ---------------
      @code{\&}              @code{&}            The matched text
-    @code{\\&}             @code{\&}            A literal @samp{&}
-   @code{\\\&}             @code{\&}            A literal @samp{&}
-  @code{\\\\&}            @code{\\&}            A literal @samp{\&}
- @code{\\\\\&}            @code{\\&}            A literal @samp{\&}
-@code{\\\\\\&}           @code{\\\&}            A literal @samp{\\&}
-    @code{\\q}             @code{\q}            A literal @samp{\q}
+    @code{\\&}             @code{\&}            字符 @samp{&}
+   @code{\\\&}             @code{\&}            字符 @samp{&}
+  @code{\\\\&}            @code{\\&}            字符 @samp{\&}
+ @code{\\\\\&}            @code{\\&}            字符 @samp{\&}
+@code{\\\\\\&}           @code{\\\&}            字符 @samp{\\&}
+    @code{\\q}             @code{\q}            字符 @samp{\q}
 @end display
 @end ifnotdocbook
 @end ifnottex
 @end float
 
 @noindent
-#TODO20171115
-This table shows the lexical-level processing, where
-an odd number of backslashes becomes an even number at the runtime level,
-as well as the runtime processing done by @code{sub()}.
-(For the sake of simplicity, the rest of the following tables only show the
-case of even numbers of backslashes entered at the lexical level.)
+上表显示了词汇层的处理，在里面，一个奇数个的反斜杠在运行时，就变成了偶数，这与 @code{sub()} 的运行时的处理一样。（为了简单起见，后面的表只显示在词汇层输入偶数的反斜杠的情形。）
 
-The problem with the historical approach is that there is no way to get
-a literal @samp{\} followed by the matched text.
+历史方式的问题是，没有办法取得后面跟着匹配字串的字面的 @samp{\} 。
 
-Several editions of the POSIX standard attempted to fix this problem
-but weren't successful. The details are irrelevant at this point in time.
+POSIX 标准的几个版本都尝试来修复这个问题，但是都不成功。细节在此无关。
 
-At one point, the @command{gawk} maintainer submitted
-proposed text for a revised standard that
-reverts to rules that correspond more closely to the original existing
-practice. The proposed rules have special cases that make it possible
-to produce a @samp{\} preceding the matched text.
-This is shown in
-@ref{table-sub-proposed}.
+在某个时候，@command{gawk} 的维护者提交了建议文本，形成一个修订版本的标准，以逆转到与最初存在的实践更加接近的规则上。提交的规则存在特殊情形，以有可能产生在匹配的文本前的 @samp{\}。这个在 @ref{table-sub-proposed} 中显示。
 
 @float Table,table-sub-proposed
-@caption{@command{gawk} rules for @code{sub()} and backslash}
+@caption{@command{gawk} 针对 @code{sub()} 与反斜杠的规则}
 @tex
 \vbox{\bigskip
 % We need more characters for escape and tab ...
@@ -13327,61 +13314,50 @@ This is shown in
 % ... since this table has lots of &'s and \'s, so we unspecialize them.
 \catcode`\& = \other \catcode`\\ = \other
 _halign{_hfil#!_qquad_hfil#!_qquad#_hfil_cr
-    You type!@code{sub()} sees!@code{sub()} generates_cr
+    输入!@code{sub()} 所见!@code{sub()} 产生_cr
 _hrulefill!_hrulefill!_hrulefill_cr
-@code{\\\\\\&}!     @code{\\\&}!A literal @samp{\&}_cr
-@code{\\\\&}!     @code{\\&}!A literal @samp{\}, followed by the matched text_cr
-  @code{\\&}!      @code{\&}!A literal @samp{&}_cr
-  @code{\\q}!      @code{\q}!A literal @samp{\q}_cr
+@code{\\\\\\&}!     @code{\\\&}!字符 @samp{\&}_cr
+@code{\\\\&}!     @code{\\&}!字符 @samp{\}，后面跟着匹配文本_cr
+  @code{\\&}!      @code{\&}!字符 @samp{&}_cr
+  @code{\\q}!      @code{\q}!字符 @samp{\q}_cr
  @code{\\\\}!      @code{\\}!@code{\\}_cr
 }
 _bigskip}
 @end tex
 @ifdocbook
 @multitable @columnfractions .20 .20 .60
-@headitem You type @tab @code{sub()} sees @tab @code{sub()} generates
-@item @code{\\\\\\&} @tab @code{\\\&} @tab A literal @samp{\&}
-@item @code{\\\\&}   @tab @code{\\&}  @tab A literal @samp{\}, followed by the matched text
-@item @code{\\&}     @tab @code{\&}   @tab A literal @samp{&}
-@item @code{\\q}     @tab @code{\q}   @tab A literal @samp{\q}
+@headitem 输入 @tab @code{sub()} 所见 @tab @code{sub()} 产生
+@item @code{\\\\\\&} @tab @code{\\\&} @tab 字符 @samp{\&}
+@item @code{\\\\&}   @tab @code{\\&}  @tab 字符 @samp{\}，后面跟着匹配文本
+@item @code{\\&}     @tab @code{\&}   @tab 字符 @samp{&}
+@item @code{\\q}     @tab @code{\q}   @tab 字符 @samp{\q}
 @item @code{\\\\}    @tab @code{\\}   @tab @code{\\}
 @end multitable
 @end ifdocbook
 @ifnottex
 @ifnotdocbook
 @display
- You type         @code{sub()} sees         @code{sub()} generates
+ 输入         @code{sub()} 所见         @code{sub()} 产生
  --------         ----------         ---------------
-@code{\\\\\\&}           @code{\\\&}            A literal @samp{\&}
-  @code{\\\\&}            @code{\\&}            A literal @samp{\}, followed by the matched text
-    @code{\\&}             @code{\&}            A literal @samp{&}
-    @code{\\q}             @code{\q}            A literal @samp{\q}
+@code{\\\\\\&}           @code{\\\&}            字符 @samp{\&}
+  @code{\\\\&}            @code{\\&}            字符 @samp{\}，后面跟着匹配文本
+    @code{\\&}             @code{\&}            字符 @samp{&}
+    @code{\\q}             @code{\q}            字符 @samp{\q}
    @code{\\\\}             @code{\\}            @code{\\}
 @end display
 @end ifnotdocbook
 @end ifnottex
 @end float
 
-In a nutshell, at the runtime level, there are now three special sequences
-of characters (@samp{\\\&}, @samp{\\&}, and @samp{\&}) whereas historically
-there was only one.  However, as in the historical case, any @samp{\} that
-is not part of one of these three sequences is not special and appears
-in the output literally.
+总的来说，在运行时，现在有三个特殊的字符序列（@samp{\\\&}，@samp{\\&} 和 @samp{\&}），由于历史原因只会存在一个。但是在历史情况下，@samp{\} 并不是这三个序列的一部份也并不特殊，并以字符本身输出。
 
-@command{gawk} 3.0 and 3.1 follow these rules for @code{sub()} and
-@code{gsub()}.  The POSIX standard took much longer to be revised than
-was expected.  In addition, the @command{gawk} maintainer's proposal was
-lost during the standardization process.  The final rules are
-somewhat simpler.  The results are similar except for one case.
+@command{gawk} 3.0 与 3.1 会针对 @code{sub()} 与 @code{gsub()} 来匹配这些规则。POSIX 标准的修改要比期望的时间长得多。另外，@command{gawk} 的维护者的建议在标准化的过程中丢失了。最后的规则看起来更简单。结果除了一个情形外都类似。
 
 @cindex POSIX @command{awk}, functions and, @code{gsub()}/@code{sub()}
-The POSIX rules state that @samp{\&} in the replacement string produces
-a literal @samp{&}, @samp{\\} produces a literal @samp{\}, and @samp{\} followed
-by anything else is not special; the @samp{\} is placed straight into the output.
-These rules are presented in @ref{table-posix-sub}.
+POSIX 规则描述说，在替换文本中的 @samp{\&} 产生一个 @samp{&}，@samp{\\} 产生一个字面 @samp{\}，@samp{\} 后面再跟其他的字符都没有特殊含义，@samp{\} 会被直接放到输出中。这些规则在后面的 @ref{table-posix-sub}。
 
 @float Table,table-posix-sub
-@caption{POSIX rules for @code{sub()} and @code{gsub()}}
+@caption{POSIX 针对 @code{sub()} 与 @code{gsub()} 的规则}
 @tex
 \vbox{\bigskip
 % We need more characters for escape and tab ...
@@ -13390,67 +13366,54 @@ These rules are presented in @ref{table-posix-sub}.
 % ... since this table has lots of &'s and \'s, so we unspecialize them.
 \catcode`\& = \other \catcode`\\ = \other
 _halign{_hfil#!_qquad_hfil#!_qquad#_hfil_cr
-    You type!@code{sub()} sees!@code{sub()} generates_cr
+    输入!@code{sub()} 所见!@code{sub()} 生成_cr
 _hrulefill!_hrulefill!_hrulefill_cr
-@code{\\\\\\&}!     @code{\\\&}!A literal @samp{\&}_cr
-@code{\\\\&}!     @code{\\&}!A literal @samp{\}, followed by the matched text_cr
-  @code{\\&}!      @code{\&}!A literal @samp{&}_cr
-  @code{\\q}!      @code{\q}!A literal @samp{\q}_cr
+@code{\\\\\\&}!     @code{\\\&}!字符 @samp{\&}_cr
+@code{\\\\&}!     @code{\\&}!字符 @samp{\}，后面跟匹配文本_cr
+  @code{\\&}!      @code{\&}!字符 @samp{&}_cr
+  @code{\\q}!      @code{\q}!字符 @samp{\q}_cr
  @code{\\\\}!      @code{\\}!@code{\}_cr
 }
 _bigskip}
 @end tex
 @ifdocbook
 @multitable @columnfractions .20 .20 .60
-@headitem You type @tab @code{sub()} sees @tab @code{sub()} generates
-@item @code{\\\\\\&} @tab @code{\\\&} @tab A literal @samp{\&}
-@item @code{\\\\&}   @tab @code{\\&}  @tab A literal @samp{\}, followed by the matched text
-@item @code{\\&}     @tab @code{\&}   @tab A literal @samp{&}
-@item @code{\\q}     @tab @code{\q}   @tab A literal @samp{\q}
+@headitem 输入 @tab @code{sub()} 所见 @tab @code{sub()} 生成
+@item @code{\\\\\\&} @tab @code{\\\&} @tab 字符 @samp{\&}
+@item @code{\\\\&}   @tab @code{\\&}  @tab 字符 @samp{\}，后面跟匹配文本
+@item @code{\\&}     @tab @code{\&}   @tab 字符 @samp{&}
+@item @code{\\q}     @tab @code{\q}   @tab 字符 @samp{\q}
 @item @code{\\\\}    @tab @code{\\}   @tab @code{\}
 @end multitable
 @end ifdocbook
 @ifnottex
 @ifnotdocbook
 @display
- You type         @code{sub()} sees         @code{sub()} generates
+ 输入         @code{sub()} 所见         @code{sub()} 生成
  --------         ----------         ---------------
-@code{\\\\\\&}           @code{\\\&}            A literal @samp{\&}
-  @code{\\\\&}            @code{\\&}            A literal @samp{\}, followed by the matched text
-    @code{\\&}             @code{\&}            A literal @samp{&}
-    @code{\\q}             @code{\q}            A literal @samp{\q}
+@code{\\\\\\&}           @code{\\\&}            字符 @samp{\&}
+  @code{\\\\&}            @code{\\&}            字符 @samp{\}，后面跟匹配文本
+    @code{\\&}             @code{\&}            字符 @samp{&}
+    @code{\\q}             @code{\q}            字符 @samp{\q}
    @code{\\\\}             @code{\\}            @code{\}
 @end display
 @end ifnotdocbook
 @end ifnottex
 @end float
 
-The only case where the difference is noticeable is the last one: @samp{\\\\}
-is seen as @samp{\\} and produces @samp{\} instead of @samp{\\}.
+唯一可注意的不同的情形是最后一个：@samp{\\\\} 被看成 @samp{\\} 并产生 @samp{\} ，而不是 @samp{\\} 。
 
-Starting with @value{PVERSION} 3.1.4, @command{gawk} followed the POSIX rules
-when @option{--posix} was specified (@pxref{Options}). Otherwise,
-it continued to follow the proposed rules, as
-that had been its behavior for many years.
+从 3.1.4 @value{PVERSION}开始，如果指定了 @option{--posix} 选项，@command{gawk} 按照 POSIX 的标准来（查看 @ref{Options}）。否则，它还是会使用所建议的方案，因为那是多年来的行为。
 
-When @value{PVERSION} 4.0.0 was released, the @command{gawk} maintainer
-made the POSIX rules the default, breaking well over a decade's worth
-of backward compatibility.@footnote{This was rather naive of him, despite
-there being a note in this @value{SECTION} indicating that the next major version
-would move to the POSIX rules.} Needless to say, this was a bad idea,
-and as of @value{PVERSION} 4.0.1, @command{gawk} resumed its historical
-behavior, and only follows the POSIX rules when @option{--posix} is given.
+当发布了 4.0.0 @value{PVERSION}后，@command{gawk} 维护者将 POSIX 规则为默认规则，打破了 10 几年来后向兼容性的价值。
+@footnote{那个人真是幼稚，尽管这个@value{SECTION}中有一个提示说下个主要的版本会跟 POSIX 保持一致。}
+无须多说，这个是非常糟糕的主意，当 4.0.1 @value{PVERSION}时，@command{gawk} 恢复了它的历史行为，当指定了 @option{--posix} 选项时，则只遵守 POSIX 规则。
 
-The rules for @code{gensub()} are considerably simpler. At the runtime
-level, whenever @command{gawk} sees a @samp{\}, if the following character
-is a digit, then the text that matched the corresponding parenthesized
-subexpression is placed in the generated output.  Otherwise,
-no matter what character follows the @samp{\}, it
-appears in the generated text and the @samp{\} does not,
-as shown in @ref{table-gensub-escapes}.
+@code{gensub()} 的规则则相当简单。在运行层，无论什么时候 @command{gawk} 看到一个 @samp{\}，如果后面跟着一个数字，则匹配相应括号的子表达式的文件来产生输出。否则，不管 @samp{\} 后面跟着什么字符，它都出现在产生的文本中，而 @samp{\} 则不出现。
+如 @ref{table-gensub-escapes} 所示。
 
 @float Table,table-gensub-escapes
-@caption{Escape sequence processing for @code{gensub()}}
+@caption{@code{gensub()} 的转义字符}
 @tex
 \vbox{\bigskip
 % We need more characters for escape and tab ...
@@ -13459,154 +13422,103 @@ as shown in @ref{table-gensub-escapes}.
 % ... since this table has lots of &'s and \'s, so we unspecialize them.
 \catcode`\& = \other \catcode`\\ = \other
 _halign{_hfil#!_qquad_hfil#!_qquad#_hfil_cr
-    You type!@code{gensub()} sees!@code{gensub()} generates_cr
+    输入!@code{gensub()} 所见!@code{gensub()} 产生_cr
 _hrulefill!_hrulefill!_hrulefill_cr
-      @code{&}!           @code{&}!The matched text_cr
-    @code{\\&}!          @code{\&}!A literal @samp{&}_cr
-   @code{\\\\}!          @code{\\}!A literal @samp{\}_cr
-  @code{\\\\&}!         @code{\\&}!A literal @samp{\}, then the matched text_cr
-@code{\\\\\\&}!        @code{\\\&}!A literal @samp{\&}_cr
-    @code{\\q}!          @code{\q}!A literal @samp{q}_cr
+      @code{&}!           @code{&}!匹配文本_cr
+    @code{\\&}!          @code{\&}!字符 @samp{&}_cr
+   @code{\\\\}!          @code{\\}!字符 @samp{\}_cr
+  @code{\\\\&}!         @code{\\&}!字符 @samp{\}，后面跟着匹配文本
+@code{\\\\\\&}!        @code{\\\&}!字符 @samp{\&}_cr
+    @code{\\q}!          @code{\q}!字符 @samp{q}_cr
 }
 _bigskip}
 @end tex
 @ifdocbook
 @multitable @columnfractions .20 .20 .60
-@headitem You type @tab @code{gensub()} sees @tab @code{gensub()} generates
-@item @code{&}       @tab @code{&}    @tab The matched text
-@item @code{\\&}     @tab @code{\&}   @tab A literal @samp{&}
-@item @code{\\\\}    @tab @code{\\}   @tab A literal @samp{\}
-@item @code{\\\\&}   @tab @code{\\&}  @tab A literal @samp{\}, then the matched text
-@item @code{\\\\\\&} @tab @code{\\\&} @tab A literal @samp{\&}
-@item @code{\\q}     @tab  @code{\q}  @tab A literal @samp{q}
+@headitem 输入 @tab @code{gensub()} 所见 @tab @code{gensub()} 产生
+@item @code{&}       @tab @code{&}    @tab 匹配文本
+@item @code{\\&}     @tab @code{\&}   @tab 字符 @samp{&}
+@item @code{\\\\}    @tab @code{\\}   @tab 字符 @samp{\}
+@item @code{\\\\&}   @tab @code{\\&}  @tab 字符 @samp{\}，后面跟着匹配文本
+@item @code{\\\\\\&} @tab @code{\\\&} @tab 字符 @samp{\&}
+@item @code{\\q}     @tab  @code{\q}  @tab 字符 @samp{q}
 @end multitable
 @end ifdocbook
 @ifnottex
 @ifnotdocbook
 @display
-  You type          @code{gensub()} sees         @code{gensub()} generates
+  输入          @code{gensub()} 所见         @code{gensub()} 产生
   --------          -------------         ------------------
-      @code{&}                    @code{&}            The matched text
-    @code{\\&}                   @code{\&}            A literal @samp{&}
-   @code{\\\\}                   @code{\\}            A literal @samp{\}
-  @code{\\\\&}                  @code{\\&}            A literal @samp{\}, then the matched text
-@code{\\\\\\&}                 @code{\\\&}            A literal @samp{\&}
-    @code{\\q}                   @code{\q}            A literal @samp{q}
+      @code{&}                    @code{&}            匹配文本
+    @code{\\&}                   @code{\&}            字符 @samp{&}
+   @code{\\\\}                   @code{\\}            字符 @samp{\}
+  @code{\\\\&}                  @code{\\&}            字符 @samp{\}，后面跟着匹配文本
+@code{\\\\\\&}                 @code{\\\&}            字符 @samp{\&}
+    @code{\\q}                   @code{\q}            字符 @samp{q}
 @end display
 @end ifnotdocbook
 @end ifnottex
 @end float
 
-Because of the complexity of the lexical- and runtime-level processing
-and the special cases for @code{sub()} and @code{gsub()},
-we recommend the use of @command{gawk} and @code{gensub()} when you have
-to do substitutions.
+由于词汇层与运行层处理的复杂性，以及 @code{sub()} 与 @code{gsub()} 的特殊情形，我们建议使用 @command{gawk} 与 @code{gensub()} 来执行替换操作。
 
 @node I/O Functions
-@subsection Input/Output Functions
+@subsection 输入输出函数
 @cindex input/output functions
 
-The following functions relate to input/output (I/O).
-Optional parameters are enclosed in square brackets ([ ]):
+下面的函数与 I/O 相关。可选择的参数放在方括号中（[ ]）：
 
 @table @asis
 @item @code{close(}@var{filename} [@code{,} @var{how}]@code{)}
 @cindexawkfunc{close}
 @cindex files, closing
 @cindex close file or coprocess
-Close the file @var{filename} for input or output. Alternatively, the
-argument may be a shell command that was used for creating a coprocess, or
-for redirecting to or from a pipe; then the coprocess or pipe is closed.
-@xref{Close Files And Pipes}
-for more information.
+关闭用于输入或者输出的文件 @var{filename}。另外，参数也可以是一个用来创建并程或者用于重定向输出，或者从管道中输入的 Shell 命令。如果参数是这个，则会关闭相应的并程与管道。查看 @xref{Close Files And Pipes}，获取更多信息。
 
-When closing a coprocess, it is occasionally useful to first close
-one end of the two-way pipe and then to close the other.  This is done
-by providing a second argument to @code{close()}.  This second argument
-(@var{how})
-should be one of the two string values @code{"to"} or @code{"from"},
-indicating which end of the pipe to close.  Case in the string does
-not matter.
-@xref{Two-way I/O},
-which discusses this feature in more detail and gives an example.
+ 当关闭一个并程时，有时先关闭两路管道中的一端然后再关闭另一端非常有用。这通过向 @code{close()} 传递第二个参数来完成。这第二个参数（@var{how}）要是下面两个串中的一个，
+ 即 @code{"to"} 或者 @code{"from"}，以表示关闭管道的哪一端。字串的大小写是无关的。查看 @ref{Two-way I/O}，在里面更详细地讨论了这个特性，并且还举了一个例子。
 
-Note that the second argument to @code{close()} is a @command{gawk}
-extension; it is not available in compatibility mode (@pxref{Options}).
+注意 @code{close()} 的第二个参数是 @command{gawk} 扩展，在兼容模式下是不可用的（查看 @ref{Options}）。
 
 @item @code{fflush(}[@var{filename}]@code{)}
 @cindexawkfunc{fflush}
 @cindex flush buffered output
-Flush any buffered output associated with @var{filename}, which is either a
-file opened for writing or a shell command for redirecting output to
-a pipe or coprocess.
+将与 @var{filename} 相关的缓存输出刷出，@var{filename} 要么是一个打开的用于写的文件，或者用于重定向输出的管道，或者并程。
 
 @cindex buffers, flushing
 @cindex output, buffering
-Many utility programs @dfn{buffer} their output (i.e., they save information
-to write to a disk file or the screen in memory until there is enough
-for it to be worthwhile to send the data to the output device).
-This is often more efficient than writing
-every little bit of information as soon as it is ready.  However, sometimes
-it is necessary to force a program to @dfn{flush} its buffers (i.e.,
-write the information to its destination, even if a buffer is not full).
-This is the purpose of the @code{fflush()} function---@command{gawk} also
-buffers its output, and the @code{fflush()} function forces
-@command{gawk} to flush its buffers.
+很多的工具程序都会@dfn{缓存}它们的输出（即它们会将写到磁盘的文件或者屏幕的信息保存，并等待足够的时间以值得将这些数据输出到输出设备中）。这比起每次准备好一点数据就写要高效得多。但是，有时很有必要强制程序要@dfn{刷出}它的缓存（即将信息写到它的目的地，就是缓存还没有满）。
+这就是 @code{fflush()} 函数的目的——@command{gawk} 也会缓存它的输出，而 @code{fflush()} 函数强制 @command{gawk} 刷出它的缓存。
 
 @cindex extensions, common@comma{} @code{fflush()} function
 @cindex Brian Kernighan's @command{awk}
-Brian Kernighan added @code{fflush()} to his @command{awk} in April
-1992.  For two decades, it was a common extension.  In December
-2012, it was accepted for inclusion into the POSIX standard.
-See @uref{http://austingroupbugs.net/view.php?id=634, the Austin Group website}.
+Brian Kernighan 在 1992 年 4 月将 @code{fflush()} 加入到他的 @command{awk} 中。二十年过去了，它现在成为了一个通过扩展。2012 年 12 月，它被接受包含到 POSIX 标准中。
+可以查看@uref{http://austingroupbugs.net/view.php?id=634, Austin Group 网站}来了解。
 
-POSIX standardizes @code{fflush()} as follows: if there
-is no argument, or if the argument is the null string (@w{@code{""}}),
-then @command{awk} flushes the buffers for @emph{all} open output files
-and pipes.
+POSIX 标准化了 @code{fflush()} 下面几个方面：如果没有参数，或者参数是空串（@w{@code{""}}），则 @command{awk} 刷出所有已经打开的文件与管道的缓存。
 
-@quotation NOTE
-Prior to @value{PVERSION} 4.0.2, @command{gawk}
-would flush only the standard output if there was no argument,
-and flush all output files and pipes if the argument was the null
-string. This was changed in order to be compatible with Brian
-Kernighan's @command{awk}, in the hope that standardizing this
-feature in POSIX would then be easier (which indeed proved to be the case).
+@quotation 提示
+在 4.0.2 之前的@value{PVERSION}，如果没有参数，@command{gawk} 会只刷出标准输出，而为空串时，才会刷出所有的输出文件与管道。为了与 Brian Kernighan 的 @command{awk} 兼容，则对其作了更改，并希望在 POSIX 中对这个特性的标准化可以更加容易（实际上也确实是这样）。
 
-With @command{gawk},
-you can use @samp{fflush("/dev/stdout")} if you wish to flush
-only the standard output.
+对于 @command{gawk}，你可以使用 @samp{fflush("/dev/stdout")} 来只刷出标准输出。
 @end quotation
 
 @c @cindex automatic warnings
 @c @cindex warnings, automatic
 @cindex troubleshooting, @code{fflush()} function
-@code{fflush()} returns zero if the buffer is successfully flushed;
-otherwise, it returns a nonzero value. (@command{gawk} returns @minus{}1.)
-In the case where all buffers are flushed, the return value is zero
-only if all buffers were flushed successfully.  Otherwise, it is
-@minus{}1, and @command{gawk} warns about the problem @var{filename}.
+如果缓存被成功刷出，则 @code{fflush()} 返回 0，否则，它会返回一个非零值。（@command{gawk} 返回 @minus{}1。）在所有的缓存都刷出的情况下，当只有所有的缓存都成功刷出后才会返回 0。否则会返回 @minus{}1，并对有问题的 @var{filename} 发送告警。
 
-@command{gawk} also issues a warning message if you attempt to flush
-a file or pipe that was opened for reading (such as with @code{getline}),
-or if @var{filename} is not an open file, pipe, or coprocess.
-In such a case, @code{fflush()} returns @minus{}1, as well.
+如果你刷出的文件或者管道是打开用于读取的（如 @code{getline}），或者 @code{fflush()} 不是打开的文件，管道或者并程，@command{gawk} 也会发出一个告警。这种情况下，@code{fflush()} 也返回 @minus{}1。
 
-@sidebar Interactive Versus Noninteractive Buffering
+@sidebar 交互式与非交互式缓存
 @cindex buffering, interactive vs.@: noninteractive
 
-As a side point, buffering issues can be even more confusing if
-your program is @dfn{interactive} (i.e., communicating
-with a user sitting at a keyboard).@footnote{A program is interactive
-if the standard output is connected to a terminal device. On modern
-systems, this means your keyboard and screen.}
+多说一点，如果你的程序是@dfn{交互式}的（就是与坐在键盘前的用户进行通信），缓存问题有时会非常让人疑惑。
+@footnote{如果标准输出连接到一个终端设备，则程序是交互式的。在现代系统中，这表示设备是你的键盘或者屏幕。}
 
 @c Thanks to Walter.Mecky@dresdnerbank.de for this example, and for
 @c motivating me to write this section.
-Interactive programs generally @dfn{line buffer} their output (i.e., they
-write out every line).  Noninteractive programs wait until they have
-a full buffer, which may be many lines of output.
-Here is an example of the difference:
+交互式的程序一般都是@dfn{行缓存}它们的输出（即它们一行行地写输出）。非交互式的程序直到缓存满后才会输出，而这可能包含很多行输出。下面是其差异的例子：
 
 @example
 $ @kbd{awk '@{ print $1 + $2 @}'}
@@ -13618,8 +13530,7 @@ $ @kbd{awk '@{ print $1 + $2 @}'}
 @end example
 
 @noindent
-Each line of output is printed immediately. Compare that behavior
-with this example:
+输出的每一行是立即打印的。与下面这个例子的行为进行比较：
 
 @example
 $ @kbd{awk '@{ print $1 + $2 @}' | cat}
@@ -13631,20 +13542,16 @@ $ @kbd{awk '@{ print $1 + $2 @}' | cat}
 @end example
 
 @noindent
-Here, no output is printed until after the @kbd{Ctrl-d} is typed, because
-it is all buffered and sent down the pipe to @command{cat} in one shot.
+在这里，直到键入 @kbd{Ctrl-d} 后才有输出打印，因此它将所有的缓存，然后一次性发送到管道输出到 @command{cat}。
 @end sidebar
 
 @item @code{system(@var{command})}
 @cindexawkfunc{system}
 @cindex invoke shell command
 @cindex interacting with other programs
-Execute the operating system
-command @var{command} and then return to the @command{awk} program.
-Return @var{command}'s exit status (see further on).
+执行操作系统命令 @var{command} 并返回到 @command{awk} 程序中。同时返回 @var{command} 的退出状态。
 
-For example, if the following fragment of code is put in your @command{awk}
-program:
+例如，如果下面的代码片段放在你的 @command{awk} 程序中：
 
 @example
 END @{
@@ -13653,12 +13560,9 @@ END @{
 @end example
 
 @noindent
-the system administrator is sent mail when the @command{awk} program
-finishes processing input and begins its end-of-input processing.
+当 @command{awk} 程序完成处理输入，并且开启输入结束处理流程时，会向系统管理员发送邮件。
 
-Note that redirecting @code{print} or @code{printf} into a pipe is often
-enough to accomplish your task.  If you need to run many commands, it
-is more efficient to simply print them down a pipeline to the shell:
+注意重定向 @code{print} 或者 @code{printf} 到管道一般来就就够来完成你的工作。如果你需要运行许多命令，则简单地将它们通过管线打印到 Shell 更高效：
 
 @example
 while (@var{more stuff to do})
@@ -13669,73 +13573,51 @@ close("/bin/sh")
 @noindent
 @cindex troubleshooting, @code{system()} function
 @cindex @option{--sandbox} option, disabling @code{system()} function
-However, if your @command{awk}
-program is interactive, @code{system()} is useful for running large
-self-contained programs, such as a shell or an editor.
-Some operating systems cannot implement the @code{system()} function.
-@code{system()} causes a fatal error if it is not supported.
+但是，如果你的 @command{awk} 程序是交互式的，@code{system()} 用于大型的自包含的程序就非常有用，比如 Shell 或者编辑器。一些操作系统不能实现 @code{system()} 函数。@code{system()} 在不其不支持的情况下生成一个致命错误。
 
-@quotation NOTE
-When @option{--sandbox} is specified, the @code{system()} function is disabled
-(@pxref{Options}).
+@quotation 注意
+当指定了 @option{--sandbox} 选项，@code{system()} 函数会被禁用（查看 @ref{Options}）。
 @end quotation
 
-On POSIX systems, a command's exit status is a 16-bit number. The exit
-value passed to the C @code{exit()} function is held in the high-order
-eight bits. The low-order bits indicate if the process was killed by a
-signal (bit 7) and if so, the guilty signal number (bits 0--6).
+在 POSIX 系统中，一个命令的退出状态是一个 16 位的数。传递给 C 语言的 @code{exit()} 函数的是退出状态值的高 8 位。
+低位数表示这个进程是否是被一个信号（第 7 位）杀死的。如果是的话，剩下的位数表示出错的信号数（第 0-6 位）。
 
-Traditionally, @command{awk}'s @code{system()} function has simply
-returned the exit status value divided by 256. In the normal case this
-gives the exit status but in the case of death-by-signal it yields
-a fractional floating-point value.@footnote{In private correspondence,
-Dr.@: Kernighan has indicated to me that the way this was done
-was probably a mistake.} POSIX states that @command{awk}'s
-@code{system()} should return the full 16-bit value.
+传统上，@command{awk} 的 @code{system()} 函数简单地返回退出状态值除以 256 的值。
+在一般的例子中，就按照这样返回退出状态值。但是在进程被信号杀死的情况下，会产生一个极小的浮点数值。
+@footnote{在私人通信中，Dr.@: Kernighan 曾经向我表明，已有的这个处理方式可能是一个错误。}
+POSIX 声明 @command{awk} 的 @code{system()} 函数应该返回完整的 16 位数值。
 
-@command{gawk} steers a middle ground.
-The return values are summarized in @ref{table-system-return-values}.
+@command{gawk} 采取了折中方案。返回值总结在 @ref{table-system-return-values}。
 
 @float Table,table-system-return-values
-@caption{Return values from @code{system()}}
+@caption{@code{system()} 的返回值}
 @multitable @columnfractions .40 .60
-@headitem Situation @tab Return value from @code{system()}
-@item @option{--traditional} @tab C @code{system()}'s value divided by 256
-@item @option{--posix} @tab C @code{system()}'s value
-@item Normal exit of command @tab Command's exit status
-@item Death by signal of command @tab 256 + number of murderous signal
-@item Death by signal of command with core dump @tab 512 + number of murderous signal
-@item Some kind of error @tab @minus{}1
+@headitem 场景 @tab @code{system()} 的返回值
+@item @option{--traditional} @tab C @code{system()} 的值除以 256
+@item @option{--posix} @tab C @code{system()} 的值
+@item 一般的退出命令 @tab 命令的退出状态
+@item 被信号杀死的命令 @tab 256 + 这种信号的编号
+@item 被带 core dump 的信号杀死的命令 @tab 512 + 这种信号的编号
+@item 某种错误 @tab @minus{}1
 @end multitable
 @end float
 @end table
 
-@sidebar Controlling Output Buffering with @code{system()}
+@sidebar 通过 @code{system()} 来控制输出缓存
 @cindex buffers, flushing
 @cindex buffering, input/output
 @cindex output, buffering
 
-The @code{fflush()} function provides explicit control over output buffering for
-individual files and pipes.  However, its use is not portable to many older
-@command{awk} implementations.  An alternative method to flush output
-buffers is to call @code{system()} with a null string as its argument:
+@code{system()} 函数提供了显式的控制输出单独文件或者管道缓存的方式。但是，对于许多的旧的 @command{awk} 实现却是不可移植的。一个可用的方法就是通过调用 @code{system()} 函数，并给其提供一个空串作为其参数来刷出输出缓存：
 
 @example
 system("")   # flush output
 @end example
 
 @noindent
-@command{gawk} treats this use of the @code{system()} function as a special
-case and is smart enough not to run a shell (or other command
-interpreter) with the empty command.  Therefore, with @command{gawk}, this
-idiom is not only useful, it is also efficient.  Although this method should work
-with other @command{awk} implementations, it does not necessarily avoid
-starting an unnecessary shell.  (Other implementations may only
-flush the buffer associated with the standard output and not necessarily
-all buffered output.)
+@command{gawk} 将这种使用 @code{system()} 函数的方式作为一种特殊方式来对待，并且聪明地不用空命令来运行一个 Shell（或者其他的命令解释器）。因此，在 @command{gawk} 中，这种范式不仅很有用，同时也非常高效。尽管这个方法也会在其他的 @command{awk} 实现中可工作，但是却不是必须要避免开启一个不必要 Shell。（其他的实现可能只刷出与标准输出关键的缓存，而必是所有的缓存输出。）
 
-If you think about what a programmer expects, it makes sense that
-@code{system()} should flush any pending output.  The following program:
+如果你考虑一下一个程序员的预期，@code{system()} 会刷出所有的挂起的输出看起来就有意思了。下面的程序：
 
 @example
 BEGIN @{
@@ -13746,7 +13628,7 @@ BEGIN @{
 @end example
 
 @noindent
-must print:
+必须打印：
 
 @example
 first print
@@ -13755,7 +13637,7 @@ second print
 @end example
 
 @noindent
-and not:
+而不是：
 
 @example
 system echo
@@ -13763,12 +13645,11 @@ first print
 second print
 @end example
 
-If @command{awk} did not flush its buffers before calling @code{system()},
-you would see the latter (undesirable) output.
+如果 @command{awk} 不在调用 @code{system()} 前刷出它的缓存，你就可以会看到后面（不希望看到的）输出。
 @end sidebar
 
 @node Time Functions
-@subsection Time Functions
+@subsection 时间函数
 @cindex time functions
 
 @cindex timestamps
@@ -13776,20 +13657,11 @@ you would see the latter (undesirable) output.
 @cindex files, log@comma{} timestamps in
 @cindex @command{gawk}, timestamps
 @cindex POSIX @command{awk}, timestamps and
-@command{awk} programs are commonly used to process log files
-containing timestamp information, indicating when a
-particular log record was written.  Many programs log their timestamps
-in the form returned by the @code{time()} system call, which is the
-number of seconds since a particular epoch.  On POSIX-compliant systems,
-it is the number of seconds since
-1970-01-01 00:00:00 UTC, not counting leap
+@command{awk} 程序常常用来处理带时间戳信息的日志文件，以提示特定的日志记录是何时被写入的。许多的程序将日志的时间信息记录成 @code{time()} 系统调用返回的格式，即是从特定时刻开始的秒数。在 POSIX 兼容的系统上，它是从 1970-01-01 00:00:00 UTC 时间开始以来的秒数，没有包含润秒。
 @ifclear FOR_PRINT
-seconds.@footnote{@xref{Glossary}, especially the entries ``Epoch'' and ``UTC.''}
+@footnote{@xref{Glossary}，特别是 “Epoch” 与 “UTC” 项。}
 @end ifclear
-@ifset FOR_PRINT
-seconds.
-@end ifset
-All known POSIX-compliant systems support timestamps from 0 through
+所有知名的 POSIX 兼容的系统支持从 0 到
 @iftex
 @math{2^{31} - 1},
 @end iftex
@@ -13801,285 +13673,192 @@ All known POSIX-compliant systems support timestamps from 0 through
 2@sup{31} @minus{} 1,
 @end ifnotinfo
 @end ifnottex
-which is sufficient to represent times through
-2038-01-19 03:14:07 UTC.  Many systems support a wider range of timestamps,
-including negative timestamps that represent times before the
-epoch.
+之间的时间戳，这个时间可以表示到 2038-01-19 03:14:07 UTC 的时间。
+很多的系统支持更宽的时间戳范围，包括负的时间戳，以表示 epoch 之间的时间。
 
 @cindex @command{date} utility, GNU
 @cindex time, retrieving
-In order to make it easier to process such log files and to produce
-useful reports, @command{gawk} provides the following functions for
-working with timestamps.  They are @command{gawk} extensions; they are
-not specified in the POSIX standard.@footnote{The GNU @command{date} utility can
-also do many of the things described here.  Its use may be preferable
-for simple time-related operations in shell scripts.}
-However, recent versions
-of @command{mawk} (@pxref{Other Versions}) also support these functions.
-Optional parameters are enclosed in square brackets ([ ]):
+为了更容易处理这样的带时间戳的日志文件并且产生有用的报表，@command{gawk} 提供了下面的函数来处理时间戳。它们都是 @command{gawk} 的扩展，并没有在 POSIX 标准中指定。
+@footnote{GNU 的 @command{date} 工具也可以做这里所描述的很多的事情。如果在 Shell 中处理的是简单的与时间有关的操作，则可优先使用它。}
+但是，@command{mawk} 的新近的版本（查看 @pxref{Other Versions}）也支持这些函数。可选的参数被包含在方括号中（[ ]）：
 
 @c @asis for docbook
 @table @asis
 @item @code{mktime(@var{datespec})}
 @cindexgawkfunc{mktime}
 @cindex generate time values
-Turn @var{datespec} into a timestamp in the same form
-as is returned by @code{systime()}.  It is similar to the function of the
-same name in ISO C.  The argument, @var{datespec}, is a string of the form
-@w{@code{"@var{YYYY} @var{MM} @var{DD} @var{HH} @var{MM} @var{SS} [@var{DST}]"}}.
-The string consists of six or seven numbers representing, respectively,
-the full year including century, the month from 1 to 12, the day of the month
-from 1 to 31, the hour of the day from 0 to 23, the minute from 0 to
-59, the second from 0 to 60,@footnote{Occasionally there are
-minutes in a year with a leap second, which is why the
-seconds can go up to 60.}
-and an optional daylight-savings flag.
+将 @var{datespec} 转换为与 @code{systime()} 返回的相同格式的时间戳。它与在 ISO C 中同名的函数相似。
+@var{datespec} 参数是一个 @w{@code{"@var{YYYY} @var{MM} @var{DD} @var{HH} @var{MM} @var{SS} [@var{DST}]"}} 格式的字串。
+字串包含 6 个或者 7 个数字，以相应地表示年的全的世纪年，从 1 到 12 的月，1 到 31 的日，一天中从 0 到 23 的小时，0 到 59 分钟，0 到 60 秒，@footnote{在偶尔的情况下，一年中有几分钟会有润秒，因此秒数可以到 60。}
+以及一个可选的夏令时标志。
 
-The values of these numbers need not be within the ranges specified;
-for example, an hour of @minus{}1 means 1 hour before midnight.
-The origin-zero Gregorian calendar is assumed, with year 0 preceding
-year 1 and year @minus{}1 preceding year 0.
-The time is assumed to be in the local time zone.
-If the daylight-savings flag is positive, the time is assumed to be
-daylight savings time; if zero, the time is assumed to be standard
-time; and if negative (the default), @code{mktime()} attempts to determine
-whether daylight savings time is in effect for the specified time.
+这些数字的值不是必须在所指定的范围内，例如 @minus{}1 小时表时午夜前的 1 小时。初始的格林日历的 0 为始，0 年表示 1 年之前，而 @minus{}1 年表示在 0 年前。时间也可以假设为本地时间。如果夏令时标志为正，则时间假设为夏令时时间，如果为 0，则时间假设为标准时间，如果为负（默认值），@code{mktime()} 会试图确定特定的时间是否是夏令时时间。
 
-If @var{datespec} does not contain enough elements or if the resulting time
-is out of range, @code{mktime()} returns @minus{}1.
+如果 @var{datespec} 没有包含足够的元素或者结果的时间超出了范围，@code{mktime()} 返回 @minus{}1 。
 
 @cindex @command{gawk}, @code{PROCINFO} array in
 @cindex @code{PROCINFO} array
 @item @code{strftime(}[@var{format} [@code{,} @var{timestamp} [@code{,} @var{utc-flag}] ] ]@code{)}
 @cindexgawkfunc{strftime}
 @cindex format time string
-Format the time specified by @var{timestamp}
-based on the contents of the @var{format} string and return the result.
-It is similar to the function of the same name in ISO C.
-If @var{utc-flag} is present and is either nonzero or non-null, the value
-is formatted as UTC (Coordinated Universal Time, formerly GMT or Greenwich
-Mean Time). Otherwise, the value is formatted for the local time zone.
-The @var{timestamp} is in the same format as the value returned by the
-@code{systime()} function.  If no @var{timestamp} argument is supplied,
-@command{gawk} uses the current time of day as the timestamp.
-Without a @var{format} argument, @code{strftime()} uses
-the value of @code{PROCINFO["strftime"]} as the format string
-(@pxref{Built-in Variables}).
-The default string value is
-@code{@w{"%a %b %e %H:%M:%S %Z %Y"}}.  This format string produces
-output that is equivalent to that of the @command{date} utility.
-You can assign a new value to @code{PROCINFO["strftime"]} to
-change the default format; see the following list for the various format directives.
+根据字串格式 @var{format} 的内容，将指定的时间戳 @var{timestamp} 进行格式化，并返回结果。这与 ISO C 中同名的函数的功能类似。如果提供了 @var{utc-flag} 参数，并且是非 0，或者非空，则值会格式化为 UTC（统一协调时间，之前为 GMT，格林尼治标准时间）。否则，值将被格式化为本地时区时间。@var{timestamp} 的格式与 @code{systime()} 返回的值的格式一样。
+如果没有指定 @var{timestamp} 参数，@command{gawk} 则使用当天的当时时间作为 @var{timestamp}。如果没有格式参数，@code{strftime()} 则使用 @code{PROCINFO["strftime"]} 的值作为格式字串（查看 @ref{Built-in Variables}）。
+默认的字串值为 @code{@w{"%a %b %e %H:%M:%S %Z %Y"}}。这个格式字串产生的输出与 @command{date} 工具产生的输出一样。你可以给 @code{PROCINFO["strftime"]} 赋一个新值，以改变默认格式，查看下面的列表来获取格式指示符。
 
 @item @code{systime()}
 @cindexgawkfunc{systime}
 @cindex timestamps
 @cindex current system time
-Return the current time as the number of seconds since
-the system epoch.  On POSIX systems, this is the number of seconds
-since 1970-01-01 00:00:00 UTC, not counting leap seconds.
-It may be a different number on other systems.
+返回从系统 epoch 开始当前时间的秒数。在 POSIX 系统中，这是从 1970-01-01 00:00:00 UTC 开始的秒数，不包含润秒。在其他系统中可能是不同的值。
 @end table
 
-The @code{systime()} function allows you to compare a timestamp from a
-log file with the current time of day.  In particular, it is easy to
-determine how long ago a particular record was logged.  It also allows
-you to produce log records using the ``seconds since the epoch'' format.
+@code{systime()} 函数可以让你比较日志文件的时间戳与当前的时间。特别是，很容易确定相应的记录是多久之前记录的。它也可以让你用从 epoch 开始格式的时间来产生日志记录。
 
 @cindex converting, dates to timestamps
 @cindex dates, converting to timestamps
 @cindex timestamps, converting dates to
-The @code{mktime()} function allows you to convert a textual representation
-of a date and time into a timestamp.   This makes it easy to do before/after
-comparisons of dates and times, particularly when dealing with date and
-time data coming from an external source, such as a log file.
+@code{mktime()} 函数可以让你将文本形式的日期与时间的表示转换为一个时间戳。因此很容易来作日期与时间的前后比较，尤其是当处理的日期与时间数据来自于外部，比如一个日志文件。
 
-The @code{strftime()} function allows you to easily turn a timestamp
-into human-readable information.  It is similar in nature to the @code{sprintf()}
-function
-(@pxref{String Functions}),
-in that it copies nonformat specification characters verbatim to the
-returned string, while substituting date and time values for format
-specifications in the @var{format} string.
+@code{strftime()} 函数可以让你很容易将一个时间戳转换成一个人可读的信息。这有点像 @code{printf} 函数（查看 @ref{String Functions}）的特点一样，在这个函数中将非格式化的范围字符一字不变地加入到返回串中。将日期与时间值替换为格式串 @var{format} 中所指定的格式规范。
 
 @cindex format specifiers, @code{strftime()} function (@command{gawk})
-@code{strftime()} is guaranteed by the 1999 ISO C
-standard@footnote{Unfortunately,
-not every system's @code{strftime()} necessarily
-supports all of the conversions listed here.}
-to support the following date format specifications:
+@code{strftime()} 使用的是 1999 ISO C 的标准，
+@footnote{不幸的是，不是所有的系统的 @code{strftime()} 都必须支持这里所列的所有转换。}
+可以支持下面的日期格式规范：
 
 @table @code
 @item %a
-The locale's abbreviated weekday name.
+本地语言设置中缩写的星期名。
 
 @item %A
-The locale's full weekday name.
+本地语言设置中的完整的星期名。
 
 @item %b
-The locale's abbreviated month name.
+本地语言设置中缩写的月份名。
 
 @item %B
-The locale's full month name.
+本地语言设置中完整的月份名。
 
 @item %c
-The locale's ``appropriate'' date and time representation.
-(This is @samp{%A %B %d %T %Y} in the @code{"C"} locale.)
+本地语言设置中“恰当的”日期与时间表示。（这在 @code{"C"} 语言设置中为 @samp{%A %B %d %T %Y}）
 
 @item %C
-The century part of the current year.
-This is the year divided by 100 and truncated to the next
-lower integer.
+当前年的世纪部分。这是年除以 100，并向下整数进行截取得到的数值。
 
 @item %d
-The day of the month as a decimal number (01--31).
+月中的 10 进制日期（01-31）。
 
 @item %D
-Equivalent to specifying @samp{%m/%d/%y}.
+与指定 @samp{%m/%d/%y} 相同。
 
 @item %e
-The day of the month, padded with a space if it is only one digit.
+月中的日期，如果只有一位，则进行空格补全。
 
 @item %F
-Equivalent to specifying @samp{%Y-%m-%d}.
-This is the ISO 8601 date format.
+与指定 @samp{%Y-%m-%d} 等同。这是 ISO 8601 的格式。
 
 @item %g
-The year modulo 100 of the ISO 8601 week number, as a decimal number (00--99).
-For example, January 1, 2012, is in week 53 of 2011. Thus, the year
-of its ISO 8601 week number is 2011, even though its year is 2012.
-Similarly, December 31, 2012, is in week 1 of 2013. Thus, the year
-of its ISO week number is 2013, even though its year is 2012.
+ISO 8601 标准中年与 100 的模的周数值，格式为十进制数（00-99）。例如，2012 年的 1 月 1 日， 是 2011 年的 53 周。因此，年在 ISO 8601 中的周数在 2011 年，就算年已经是 2012 年了。相似的，2012 年 12 月 31 日是 2013 年的第 1 周。所以，年的 ISO 周是 2013 年，就算年还是 2012 年。
 
 @item %G
-The full year of the ISO week number, as a decimal number.
+ISO 周数的完整年，为十进制数。
 
 @item %h
-Equivalent to @samp{%b}.
+与 @samp{%b} 等同。
 
 @item %H
-The hour (24-hour clock) as a decimal number (00--23).
+十进制的小时（24 小时制，00-23）。
 
 @item %I
-The hour (12-hour clock) as a decimal number (01--12).
+十进制的小时（12 小时制，01-12 ）。
 
 @item %j
-The day of the year as a decimal number (001--366).
+一年中的天数的十进制数（001-366）。
 
 @item %m
-The month as a decimal number (01--12).
+月份的十进制数（01-12）。
 
 @item %M
-The minute as a decimal number (00--59).
+分钟的十进制数（00-59）。
 
 @item %n
-A newline character (ASCII LF).
+换行符（ASCII LF）。
 
 @item %p
-The locale's equivalent of the AM/PM designations associated
-with a 12-hour clock.
+与本地语言设置中 AM/PM 的等同，与 12 小时间制关联的表示法。
 
 @item %r
-The locale's 12-hour clock time.
-(This is @samp{%I:%M:%S %p} in the @code{"C"} locale.)
+本地语言设置中 12 小时制的时钟时间。（这在 @code{"C"} 语言设置中为 @samp{%I:%M:%S %p}。）
 
 @item %R
-Equivalent to specifying @samp{%H:%M}.
+与 @samp{%H:%M} 等同。
 
 @item %S
-The second as a decimal number (00--60).
+十进制的秒数（00-60）。
 
 @item %t
-A TAB character.
+TAB 字符。
 
 @item %T
-Equivalent to specifying @samp{%H:%M:%S}.
+与 @samp{%H:%M:%S} 等同。
 
 @item %u
-The weekday as a decimal number (1--7).  Monday is day one.
+十进制的星期数（1-7）。星期一为 1。
 
 @item %U
-The week number of the year (with the first Sunday as the first day of week one)
-as a decimal number (00--53).
+一年中的十进制的周数（0-53，第一个星期日作为第一周的第一天）。
 
 @c @cindex ISO 8601
 @item %V
-The week number of the year (with the first Monday as the first
-day of week one) as a decimal number (01--53).
-The method for determining the week number is as specified by ISO 8601.
-(To wit: if the week containing January 1 has four or more days in the
-new year, then it is week one; otherwise it is week 53 of the previous year
-and the next week is week one.)
+一年中的十进制的周数（01-53，第一个星期一作为第一周的第一天）。确定周数的方法由 ISO 8601 中所指定的一样。（即：如果包含 1 月 1 日星期中有在新的一年中有 4 天，或者更多的天数，则就是算成一周，否则前一年就是 53 周，下一周就算成第一周。）
 
 @item %w
-The weekday as a decimal number (0--6).  Sunday is day zero.
+十进制的星期几（0-6）。星期天是 0 天。
 
 @item %W
-The week number of the year (with the first Monday as the first day of week one)
-as a decimal number (00--53).
+一年的周数（00-53，第一个星期一作为第一周的第一天）。
 
 @item %x
-The locale's ``appropriate'' date representation.
-(This is @samp{%A %B %d %Y} in the @code{"C"} locale.)
+本地语言设置中“恰当的”日期表示。（对于 @code{"C"} 的语言设置则为 @samp{%A %B %d %Y} 。）
 
 @item %X
-The locale's ``appropriate'' time representation.
-(This is @samp{%T} in the @code{"C"} locale.)
+本地语言设置中“恰当的”时间表示。（对于 @code{"C"} 的语言设置则为 @samp{%T} 。）
 
 @item %y
-The year modulo 100 as a decimal number (00--99).
+年与 100 的模的十进制数（00-99）。
 
 @item %Y
-The full year as a decimal number (e.g., 2015).
+年的十进制全写（如 2015 ）。
 
 @c @cindex RFC 822
 @c @cindex RFC 1036
 @item %z
-The time zone offset in a @samp{+@var{HHMM}} format (e.g., the format
-necessary to produce RFC 822/RFC 1036 date headers).
+时区差，用 @samp{+@var{HHMM}} 格式表示（即格式需要产生 RFC 822/RFC 1036 的日期头）。
 
 @item %Z
-The time zone name or abbreviation; no characters if
-no time zone is determinable.
+时区名或者是其缩写，如果时区不能确定则没有字符。
 
 @item %Ec %EC %Ex %EX %Ey %EY %Od %Oe %OH
 @itemx %OI %Om %OM %OS %Ou %OU %OV %Ow %OW %Oy
-``Alternative representations'' for the specifications
-that use only the second letter (@samp{%c}, @samp{%C},
-and so on).@footnote{If you don't understand any of this, don't worry about
-it; these facilities are meant to make it easier to ``internationalize''
-programs.
-Other internationalization features are described in
-@ref{Internationalization}.}
-(These facilitate compliance with the POSIX @command{date} utility.)
+在规范中只使用第二个字符的“替代表示”（@samp{%c}，@samp{%C}，等等）。
+@footnote{如果你不理解这个，也不用担心，这个设施主要用于方便实现 “国际化” 程序。其他的国际化特性在 @ref{Internationalization}，这里描述。}
+（这个设施是与 POSIX 的 @command{date} 工具兼容的。）
 
 @item %%
 A literal @samp{%}.
 @end table
 
-If a conversion specifier is not one of those just listed, the behavior is
-undefined.@footnote{This is because ISO C leaves the
-behavior of the C version of @code{strftime()} undefined and @command{gawk}
-uses the system's version of @code{strftime()} if it's there.
-Typically, the conversion specifier either does not appear in the
-returned string or appears literally.}
+如果转换指定符不是上面所列之一，行为就是未定义的。 
+@footnote{这是因为 ISO C 将 C 版本的 @code{strftime()} 保留其行为为未定义的，@command{gawk} 就使用其所在系统的 @code{strftime()} 的版本。典型的情况下，转换指定符要么不会出现在返回的字串里，要么就以这面的方式出现。}
 
-For systems that are not yet fully standards-compliant,
-@command{gawk} supplies a copy of
-@code{strftime()} from the GNU C Library.
-It supports all of the just-listed format specifications.
-If that version is
-used to compile @command{gawk} (@pxref{Installation}),
-then the following additional format specifications are available:
+对于没有完全与标准兼容的系统，@command{gawk} 提供一个来自于 GNU C 库的 @code{strftime()} 的一个复本。它支持上面所列的所有格式指定符。如果那个版本用于编译 @command{gawk} （查看 @pxref{Installation}），则下面的额外的格式指定符也可用：
 
 @table @code
 @item %k
-The hour (24-hour clock) as a decimal number (0--23).
-Single-digit numbers are padded with a space.
+24 小时制的十进制小时（0-23）。一个位的数值会用空格进行填补。
 
 @item %l
-The hour (12-hour clock) as a decimal number (1--12).
-Single-digit numbers are padded with a space.
+12 小时制的十进制小时（1-12）。一个位的数值会用空格进行填补。
 
 @ignore
 @item %N
@@ -14092,7 +13871,7 @@ Equivalent to @samp{%y}.
 @end ignore
 
 @item %s
-The time as a decimal timestamp in seconds since the epoch.
+十进制的时间戳，从 epoch 开始的秒数。
 
 @ignore
 @item %v
@@ -14100,28 +13879,18 @@ The date in VMS format (e.g., @samp{20-JUN-1991}).
 @end ignore
 @end table
 
-Additionally, the alternative representations are recognized but their
-normal representations are used.
+另外，替代的表示可以被识别到，但是只使用它们的常规表示。
 
 @cindex @code{date} utility, POSIX
 @cindex POSIX @command{awk}, @code{date} utility and
-The following example is an @command{awk} implementation of the POSIX
-@command{date} utility.  Normally, the @command{date} utility prints the
-current date and time of day in a well-known format.  However, if you
-provide an argument to it that begins with a @samp{+}, @command{date}
-copies nonformat specifier characters to the standard output and
-interprets the current time according to the format specifiers in
-the string.  For example:
+下面的例子是 POSIX @command{date} 工具的 @command{awk} 实现。正常情况下，@command{date} 工具以一种大家都了解的格式打印当前的日期与时间。但是，如果你提供了前面带 @samp{+} 的参数，@command{date} 则会复杂非格式指定符到标准输出中，并且按照串中所格式指定符来解释当前的时间。如：
 
 @example
 $ @kbd{date '+Today is %A, %B %d, %Y.'}
 @print{} Today is Monday, September 22, 2014.
 @end example
 
-Here is the @command{gawk} version of the @command{date} utility.
-It has a shell ``wrapper'' to handle the @option{-u} option,
-which requires that @command{date} run as if the time zone
-is set to UTC:
+下面是 @command{gawk} 版本的 @command{date} 工具。它有一个壳为“wrapper”来处理 @option{-u} 选项，这个选项要求 @command{date} 运行时假设时区是 UTC：
 
 @example
 #! /bin/sh
@@ -14151,7 +13920,7 @@ gawk 'BEGIN  @{
 @end example
 
 @node Bitwise Functions
-@subsection Bit-Manipulation Functions
+@subsection 位操作函数
 @cindex bit-manipulation functions
 @cindex bitwise, operations
 @cindex AND bitwise operation
@@ -14159,15 +13928,14 @@ gawk 'BEGIN  @{
 @cindex XOR bitwise operation
 @cindex operations, bitwise
 @quotation
-@i{I can explain it for you, but I can't understand it for you.}
+@i{
+我可以向你解释，但是没办法帮你理解。
+}
 @author Anonymous
 @end quotation
 
-Many languages provide the ability to perform @dfn{bitwise} operations
-on two integer numbers.  In other words, the operation is performed on
-each successive pair of bits in the operands.
-Three common operations are bitwise AND, OR, and XOR.
-The operations are described in @ref{table-bitwise-ops}.
+很多的语言提供了在两个整数之间执行@dfn{位}操作的能力。换句话说，操作在两个在操作数上的连续位对进行操作。三个常用的操作为按位 AND，OR 与 XOR。操作在 @ref{table-bitwise-ops} 中描述。
+#TODO20171116
 
 @c 11/2014: Postprocessing turns the docbook informaltable
 @c into a table. Hurray for scripting!
