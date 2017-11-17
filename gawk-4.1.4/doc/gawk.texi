@@ -14687,19 +14687,18 @@ gawk 'BEGIN  @{
 @end quotation
 
 很多的语言提供了在两个整数之间执行@dfn{位}操作的能力。换句话说，操作在两个在操作数上的连续位对进行操作。三个常用的操作为按位 AND，OR 与 XOR。操作在 @ref{table-bitwise-ops} 中描述。
-#TODO20171116
 
 @c 11/2014: Postprocessing turns the docbook informaltable
 @c into a table. Hurray for scripting!
 @float Table,table-bitwise-ops
-@caption{Bitwise operations}
+@caption{位操作}
 @ifnottex
 @ifnotdocbook
 @display
-                Bit operator
+                位操作符
           |  AND  |   OR  |  XOR
           |---+---+---+---+---+---
-Operands  | 0 | 1 | 0 | 1 | 0 | 1
+操作数  | 0 | 1 | 0 | 1 | 0 | 1
 ----------+---+---+---+---+---+---
     0     | 0   0 | 0   1 | 0   1
     1     | 0   1 | 1   1 | 1   0
@@ -14802,72 +14801,53 @@ Operands  | 0 | 1 | 0 | 1 | 0 | 1
 
 @cindex bitwise, complement
 @cindex complement, bitwise
-As you can see, the result of an AND operation is 1 only when @emph{both}
-bits are 1.
-The result of an OR operation is 1 if @emph{either} bit is 1.
-The result of an XOR operation is 1 if either bit is 1,
-but not both.
-The next operation is the @dfn{complement}; the complement of 1 is 0 and
-the complement of 0 is 1. Thus, this operation ``flips'' all the bits
-of a given value.
+如你所见，AND 操作的结果是只有当两个位@emph{都}为 1 时才为 1。OR 的操作结果是当两个位@emph{有一个}为 1 则为 1。
+XOR 的操作结果是有一个位 1 则为 1，但不能两个都为 1。下一个参数是@dfn{“补”}（取反），1 的补为 0，0 的补为 1。所以，这个操作“翻转”所给值的所有位。
 
 @cindex bitwise, shift
 @cindex left shift, bitwise
 @cindex right shift, bitwise
 @cindex shift, bitwise
-Finally, two other common operations are to shift the bits left or right.
-For example, if you have a bit string @samp{10111001} and you shift it
-right by three bits, you end up with @samp{00010111}.@footnote{This example
-shows that zeros come in on the left side. For @command{gawk}, this is
-always true, but in some languages, it's possible to have the left side
-fill with ones.}
-If you start over again with @samp{10111001} and shift it left by three
-bits, you end up with @samp{11001000}.  The following list describes
-@command{gawk}'s built-in functions that implement the bitwise operations.
-Optional parameters are enclosed in square brackets ([ ]):
+最后，还有两个常用的操作将位从左或者从右进行平移。如，如果你有值串 @samp{10111001}，然后你将它向右平移 3 位，最终得到的值为 @samp{00010111}。
+@footnote{这个例子显示在左边会用 0 进行填补。对于 @command{gawk}，这总是正确的，但是在其他语言中，有可能会用 1 进行填补。}
+如果你又用同样的值 @samp{10111001} 进行左移三位，则得到 @samp{11001000}。下面的列表中描述了 @command{gawk} 中内建的实现位操作的函数。可选的参数包含在方括号中（[ ]）：
 
 @cindex @command{gawk}, bitwise operations in
 @table @code
 @cindexgawkfunc{and}
 @cindex bitwise AND
 @item @code{and(}@var{v1}@code{,} @var{v2} [@code{,} @dots{}]@code{)}
-Return the bitwise AND of the arguments. There must be at least two.
+返回参数的 AND 结果。至少有两个参数。
 
 @cindexgawkfunc{compl}
 @cindex bitwise complement
 @item @code{compl(@var{val})}
-Return the bitwise complement of @var{val}.
+返回 @var{val} 的位“补”结果。
 
 @cindexgawkfunc{lshift}
 @cindex left shift
 @item @code{lshift(@var{val}, @var{count})}
-Return the value of @var{val}, shifted left by @var{count} bits.
+ 返回 @var{val} 左移 @var{count} 位的值。
 
 @cindexgawkfunc{or}
 @cindex bitwise OR
 @item @code{or(}@var{v1}@code{,} @var{v2} [@code{,} @dots{}]@code{)}
-Return the bitwise OR of the arguments. There must be at least two.
+返回参数的 OR 结果。至少有两个参数。
 
 @cindexgawkfunc{rshift}
 @cindex right shift
 @item @code{rshift(@var{val}, @var{count})}
-Return the value of @var{val}, shifted right by @var{count} bits.
+返回 @var{val} 右移 @var{count} 位的值。
 
 @cindexgawkfunc{xor}
 @cindex bitwise XOR
 @item @code{xor(}@var{v1}@code{,} @var{v2} [@code{,} @dots{}]@code{)}
-Return the bitwise XOR of the arguments. There must be at least two.
+返回参数的 XOR 结果。至少有两个参数。
 @end table
 
-For all of these functions, first the double-precision floating-point value is
-converted to the widest C unsigned integer type, then the bitwise operation is
-performed.  If the result cannot be represented exactly as a C @code{double},
-leading nonzero bits are removed one by one until it can be represented
-exactly.  The result is then converted back into a C @code{double}.  (If
-you don't understand this paragraph, don't worry about it.)
+对所有这些函数，产生双精度的浮点数会被转换为最宽的 C 的无符号整数，然后再执行位操作。如果结果不能被 C 的 @code{double} 精确表示，其前导的非零位会一位位地移除，直到可以被精确表示。结果再转换加 @code{double} 类型。（如果你不理解这个转换图，也不要担心。）
 
-Here is a user-defined function (@pxref{User-defined})
-that illustrates the use of these functions:
+这里是一个用户自定义的函数（查看 @ref{User-defined}），其中解释了这些函数的使用：
 
 @cindex @code{bits2str()} user-defined function
 @cindex @code{testbits.awk} program
@@ -14930,7 +14910,7 @@ BEGIN @{
 @end example
 
 @noindent
-This program produces the following output when run:
+当执行时，产生如下输出：
 
 @example
 $ @kbd{gawk -f testbits.awk}
@@ -14947,116 +14927,68 @@ $ @kbd{gawk -f testbits.awk}
 @cindex numbers, converting
 @cindex converting, numbers to strings
 @cindex number as string of bits
-The @code{bits2str()} function turns a binary number into a string.
-Initializing @code{mask} to one creates
-a binary value where the rightmost bit
-is set to one.  Using this mask,
-the function repeatedly checks the rightmost bit.
-ANDing the mask with the value indicates whether the
-rightmost bit is one or not. If so, a @code{"1"} is concatenated onto the front
-of the string.
-Otherwise, a @code{"0"} is added.
-The value is then shifted right by one bit and the loop continues
-until there are no more one bits.
+@code{bits2str()} 函数将一个二进制数转换为字符串。给 @code{mask} 初始化为 1 来创建一个这样的二进制数据，其最右边的位被设置为 1。使用这个 @code{mask}，函数重复地检查最右边的位。将 @code{mask} 与值进行 AND 操作，可以显示出最右边的位是 1 还是 0。如果是 1，就会在字串的前面连接一个 @code{"1"}，否则连接一个 @code{"0"}。值然后向右称 1 位，直到没有更多的 1 存在。
 
-If the initial value is zero, it returns a simple @code{"0"}.
-Otherwise, at the end, it pads the value with zeros to represent multiples
-of 8-bit quantities. This is typical in modern computers.
+如果初始值为 0，它会简单地返回 @code{"0"}。否则最后，会将值进行填补以产生 8 位数量的整倍数。在现代的计算机中这是一种典型的处理。
 
-The main code in the @code{BEGIN} rule shows the difference between the
-decimal and octal values for the same numbers
-(@pxref{Nondecimal-numbers}),
-and then demonstrates the
-results of the @code{compl()}, @code{lshift()}, and @code{rshift()} functions.
+在 @code{BEGIN} 中的主代码规则显示了十进制与八进制数据的同一个值的不同（查看 @pxref{Nondecimal-numbers}），然后展示了 @code{compl()}，@code{lshift()}， 与 @code{rshift()} 函数的结果。
 
 @node Type Functions
-@subsection Getting Type Information
+@subsection 获取类型信息
 
-@command{gawk} provides a single function that lets you distinguish
-an array from a scalar variable.  This is necessary for writing code
-that traverses every element of an array of arrays
-(@pxref{Arrays of Arrays}).
+@command{gawk} 提供了一个函数来让你可以区分数组与标量变量。这在遍历多维数组的每一个元素的时候是非常有用的（查看 @pxref{Arrays of Arrays}）。
 
 @table @code
 @cindexgawkfunc{isarray}
 @cindex scalar or array
 @item isarray(@var{x})
-Return a true value if @var{x} is an array. Otherwise, return false.
+如果 @var{x} 是一个数组，则返回 true，否则返回 false。
 @end table
 
-@code{isarray()} is meant for use in two circumstances. The first is when
-traversing a multidimensional array: you can test if an element is itself
-an array or not.  The second is inside the body of a user-defined function
-(not discussed yet; @pxref{User-defined}), to test if a parameter is an
-array or not.
+@code{isarray()} 主要用在两种环境中。第一种是当遍历多维数组时，你可以测试某个元素是否是数组。第二个场景是在用户自定义函数中（还未讨论到，查看 @ref{User-defined}），用来测试参数是否为数组。
 
-@quotation NOTE
-Using @code{isarray()} at the global level to test
-variables makes no sense. Because you are the one writing the program, you
-are supposed to know if your variables are arrays or not. And in fact,
-due to the way @command{gawk} works, if you pass the name of a variable
-that has not been previously used to @code{isarray()}, @command{gawk}
-ends up turning it into a scalar.
+@quotation 提示
+在全局范围内使用 @code{isarray()} 来测试变量并没有含义。因为你就是写程序的人，你当然知道你的变量是不是数组，实际上，由于 @command{gawk} 的工具方式，如果你变量的名字在 @code{isarray()} 之前还没有用到，@command{gawk} 会将其转换成一个标量。
 @end quotation
 
 @node I18N Functions
-@subsection String-Translation Functions
+@subsection 字串翻译函数
 @cindex @command{gawk}, string-translation functions
 @cindex functions, string-translation
 @cindex string-translation functions
 @cindex internationalization
 @cindex @command{awk} programs, internationalizing
 
-@command{gawk} provides facilities for internationalizing @command{awk} programs.
-These include the functions described in the following list.
-The descriptions here are purposely brief.
-@xref{Internationalization},
-for the full story.
-Optional parameters are enclosed in square brackets ([ ]):
+@command{gawk} 提供了一些设施用来国际化 @command{awk} 程序。这些包含了下面列表中描述的函数。这些的描述只是目的性的。
+查看 @xref{Internationalization}，来查看全部的说明。可选的参数放在方括号中（[ ]）：
 
 @table @asis
 @cindexgawkfunc{bindtextdomain}
 @cindex set directory of message catalogs
 @item @code{bindtextdomain(@var{directory}} [@code{,} @var{domain}]@code{)}
-Set the directory in which
-@command{gawk} will look for message translation files, in case they
-will not or cannot be placed in the ``standard'' locations
-(e.g., during testing).
-It returns the directory in which @var{domain} is ``bound.''
+设置目录，当不会或者不能定位到“标准”的位置时，@command{gawk} 会在这个目录里查找信息翻译文件（如在测试期间）。
+它返回绑定 @var{domain} 的目录。
 
-The default @var{domain} is the value of @code{TEXTDOMAIN}.
-If @var{directory} is the null string (@code{""}), then
-@code{bindtextdomain()} returns the current binding for the
-given @var{domain}.
+默认的 @var{domain} 是 @code{TEXTDOMAIN} 的值。如果目录是一个空串（@code{""}），则 @code{bindtextdomain()} 返回给定 @var{domain} 的当前绑定。
 
 @cindexgawkfunc{dcgettext}
 @cindex translate string
 @item @code{dcgettext(@var{string}} [@code{,} @var{domain} [@code{,} @var{category}] ]@code{)}
-Return the translation of @var{string} in
-text domain @var{domain} for locale category @var{category}.
-The default value for @var{domain} is the current value of @code{TEXTDOMAIN}.
-The default value for @var{category} is @code{"LC_MESSAGES"}.
+返回在文本域 @var{domain} 中，对于本地语言设置 @var{category} 的串 @var{string} 的翻译串。
+默认的 @var{domain} 值是当前 @code{TEXTDOMAIN} 的值。
+@var{category} 的默认值是 @code{"LC_MESSAGES"}。
 
 @cindexgawkfunc{dcngettext}
 @item @code{dcngettext(@var{string1}, @var{string2}, @var{number}} [@code{,} @var{domain} [@code{,} @var{category}] ]@code{)}
-Return the plural form used for @var{number} of the
-translation of @var{string1} and @var{string2} in text domain
-@var{domain} for locale category @var{category}. @var{string1} is the
-English singular variant of a message, and @var{string2} is the English plural
-variant of the same message.
-The default value for @var{domain} is the current value of @code{TEXTDOMAIN}.
-The default value for @var{category} is @code{"LC_MESSAGES"}.
+返回在分类 @var{category} 的文本域 @var{domain} 中，用于进行 @var{string1} 与 @var{string2} 翻译的数目 @var{number} 的复数形式。@var{string1} 是某个消息的英语单一变体，@var{string2} 同一个消息的英语复数形式。@var{domain} 的默认值就是 @code{TEXTDOMAIN} 的当前值。@var{category} 的默认值是 @code{"LC_MESSAGES"}。
 @end table
 
 @node User-defined
-@section User-Defined Functions
+@section 用户自定义函数
 
 @cindex user-defined functions
 @cindex functions, user-defined
-Complicated @command{awk} programs can often be simplified by defining
-your own functions.  User-defined functions can be called just like
-built-in ones (@pxref{Function Calls}), but it is up to you to define
-them (i.e., to tell @command{awk} what they should do).
+复杂的 @command{awk} 程序常常通过定义自己的函数来进行简化。用户自定义函数也可以像内置函数一样调用（查看 @pxref{Function Calls}），但是定义他们则是你的自由（即告诉 @command{awk} 你所要做的事情）。
 
 @menu
 * Definition Syntax::           How to write definitions and what they mean.
@@ -15068,24 +15000,20 @@ them (i.e., to tell @command{awk} what they should do).
 @end menu
 
 @node Definition Syntax
-@subsection Function Definition Syntax
+@subsection 函数定义语法
 
 @quotation
-@i{It's entirely fair to say that the awk syntax for local
-variable definitions is appallingly awful.}
+@i{
+说 @command{awk} 本地变量的定义语法惊人的糟糕是很公正的。
+}
 @author Brian Kernighan
 @end quotation
 
 @cindex functions, defining
-Definitions of functions can appear anywhere between the rules of an
-@command{awk} program.  Thus, the general form of an @command{awk} program is
-extended to include sequences of rules @emph{and} user-defined function
-definitions.
-There is no need to put the definition of a function
-before all uses of the function.  This is because @command{awk} reads the
-entire program before starting to execute any of it.
+函数的定义可以出现在 @command{awk} 程序规则之间的任何地方。
+所以，@command{awk} 程序的一般形式是被扩展为包含一系列的规则@emph{与}用户自定义函数定义。没有必须将函数定义放在所有使用函数的地方之间。这是因为 @command{awk} 读取程序是在开始执行任何部份之前。
 
-The definition of a function named @var{name} looks like this:
+某个函数名为 @var{name} 的定义看起来如下：
 
 @display
 @code{function} @var{name}@code{(}[@var{parameter-list}]@code{)}
@@ -15098,129 +15026,65 @@ The definition of a function named @var{name} looks like this:
 @cindex functions, names of
 @cindex namespace issues, functions
 @noindent
-Here, @var{name} is the name of the function to define.  A valid function
-name is like a valid variable name: a sequence of letters, digits, and
-underscores that doesn't start with a digit.
-Here too, only the 52 upper- and lowercase English letters may
-be used in a function name.
-Within a single @command{awk} program, any particular name can only be
-used as a variable, array, or function.
+在这里，@var{name} 是要定义函数的名字。有一个有效的函数名就像一个有效的变量名一样：一系列的字母、数字以及下划线，同时不以数字开头的序列。因此，只有 52 个大写跟小写的英文字母可以用于函数名。
+在一个单独的 @command{awk} 程序中，任何特定的名字只能被作为变量、数组或者函数来使用。
 
-@var{parameter-list} is an optional list of the function's arguments and local
-variable names, separated by commas.  When the function is called,
-the argument names are used to hold the argument values given in
-the call.
+@var{parameter-list} 是一个可选的函数参数，以及本地变量名的列表，通过逗号分隔。当函数被调用的时候，参数名用于在调用时传递的参数值。
 
-A function cannot have two parameters with the same name, nor may it
-have a parameter with the same name as the function itself.
+函数不可以用两个相同名字的参数，也不可以与函数的名字同名。
 
-@quotation CAUTION
-According to the POSIX standard, function parameters
-cannot have the same name as one of the special predefined variables
-(@pxref{Built-in Variables}), nor may a function parameter have the
-same name as another function.
+@quotation 注意
+根据 POSIX 标准，函数参数不可以与特殊的预定义变量同名（查看 @pxref{Built-in Variables}），函数参数也不可以与另一个函数名同名。
 
-Not all versions of @command{awk} enforce
-these restrictions.
-@command{gawk} always enforces the first restriction.
-With @option{--posix} (@pxref{Options}),
-it also enforces the second restriction.
+并不是所有的 @command{awk} 版本都强制这些限制。@command{gawk} 总是强制第一条限制。在指定 @option{--posix} 选项时（查看 @ref{Options}），它也强制第二个限制。
 @end quotation
 
-Local variables act like the empty string if referenced where a string
-value is required, and like zero if referenced where a numeric value
-is required. This is the same as the behavior of regular variables that have never been
-assigned a value.  (There is more to understand about local variables;
-@pxref{Dynamic Typing}.)
+如果被参考的地方需要一个字串值的时候，本变量表现像一个空串，如果参考到的地方需要一个数值的时候，就表现为 0。这与常规的变量在还没有被赋值时的表现一样。（要更多地理解本地变量，查看 @pxref{Dynamic Typing}）
 
-The @var{body-of-function} consists of @command{awk} statements.  It is the
-most important part of the definition, because it says what the function
-should actually @emph{do}.  The argument names exist to give the body a
-way to talk about the arguments; local variables exist to give the body
-places to keep temporary values.
+@var{body-of-function} 由 @command{awk} 的语句组成。这是定义的最重要的部分，因此它定义了函数实际要@emph{做}的事情。参数名存在给了函数体与参数进行对话的方式，本地变量的存在可以使函数体来保存临时值。
 
-Argument names are not distinguished syntactically from local variable
-names. Instead, the number of arguments supplied when the function is
-called determines how many argument variables there are.  Thus, if three
-argument values are given, the first three names in @var{parameter-list}
-are arguments and the rest are local variables.
+参数名与本地变量名没有语法上的区别。相反，调用函数时提供的参数个数决定了有多少个参数变量。因此，如果给了三个参数值，@var{parameter-list} 中的头三个名字就是参数，而剩下的就是本地变量。
 
-It follows that if the number of arguments is not the same in all calls
-to the function, some of the names in @var{parameter-list} may be
-arguments on some occasions and local variables on others.  Another
-way to think of this is that omitted arguments default to the
-null string.
+规则是这样的，如果参数的个数与所有的函数的所有调用都不一样，在 @var{parameter-list} 中的一些名字有时是参数，而在其他时间则是本地变量。另一个思考这个问题的方式是，被省略的参数的默认值为空串。
 
 @cindex programming conventions, functions, writing
-Usually when you write a function, you know how many names you intend to
-use for arguments and how many you intend to use as local variables.  It is
-conventional to place some extra space between the arguments and
-the local variables, in order to document how your function is supposed to be used.
+通常情况下，当你写一个函数的时候，你知道你要使用的名字数，以基作为参数，而有相应的个数用来作本地变量。将一些额外的空格放在参数与本地变量之间可以很方便地来加以区分，这可以作为如何来使用函数的文档。
 
 @cindex variables, shadowing
 @cindex shadowing of variable values
-During execution of the function body, the arguments and local variable
-values hide, or @dfn{shadow}, any variables of the same names used in the
-rest of the program.  The shadowed variables are not accessible in the
-function definition, because there is no way to name them while their
-names have been taken away for the arguments and local variables.  All other variables
-used in the @command{awk} program can be referenced or set normally in the
-function's body.
+在函数体的执行过程中，参数与本地变量会被隐藏，或者@dfn{遮盖}掉，程序后面所有使用到的同名的变量。被遮盖掉的变量在函数定义中是不可访问的，因此没有方法在它们的名字被用于参数或者本地变量时进行命名。所以其他的在 @command{awk} 程序中使用的变量可以在函数体中被参考，或者设置。参数与本地变量只持续到函数体执行完成。只要函数体一完成，你就再一次可以访问那些在函数执行时被遮盖掉的变量。
 
-The arguments and local variables last only as long as the function body
-is executing.  Once the body finishes, you can once again access the
-variables that were shadowed while the function was running.
+函数体可以包含调用函数的表达式。他们甚至可以调用函数本身，直接地或者通过另一个函数来调用。当发生了这样的事情时，我们称函数是递归的。函数调用其本身的动作称为递归。
 
 @cindex recursive functions
 @cindex functions, recursive
-The function body can contain expressions that call functions.  They
-can even call this function, either directly or by way of another
-function.  When this happens, we say the function is @dfn{recursive}.
-The act of a function calling itself is called @dfn{recursion}.
+函数体可以包含调用函数的表达式。他们甚至可以调用函数本身，直接地或者通过另一个函数来调用。当发生了这样的事情时，我们称函数是@dfn{递归的}。函数调用其本身的动作称为@dfn{递归}。
 
-All the built-in functions return a value to their caller.
-User-defined functions can do so also, using the @code{return} statement,
-which is described in detail in @ref{Return Statement}.
-Many of the subsequent examples in this @value{SECTION} use
-the @code{return} statement.
+所有的内建函数返回一个值给它他的调用者。用户自定义函数也可以这么做，只需要使用 @code{return} 语句，它在 @ref{Return Statement}，进行详细的描述。本@value{SECTION}中后续的很多例子都使用 @code{return} 语句。
 
 @cindex common extensions, @code{func} keyword
 @cindex extensions, common@comma{} @code{func} keyword
 @c @cindex @command{awk} language, POSIX version
 @c @cindex POSIX @command{awk}
 @cindex POSIX @command{awk}, @code{function} keyword in
-In many @command{awk} implementations, including @command{gawk},
-the keyword @code{function} may be
-abbreviated @code{func}. @value{COMMONEXT}
-However, POSIX only specifies the use of
-the keyword @code{function}.  This actually has some practical implications.
-If @command{gawk} is in POSIX-compatibility mode
-(@pxref{Options}), then the following
-statement does @emph{not} define a function:
+在很多的 @command{awk} 实现中，包括 @command{gawk}，关键词 @code{function} 可以简写为 @code{func}。@value{COMMONEXT}
+但是 POSIX 只指定了使用关键词 @code{function}。实际上有一些实践上的隐义。如果 @command{gawk} 是 POSIX 兼容模式（查看 @ref{Options}），则下面的语句@emph{不会}定义一个函数：
 
 @example
 func foo() @{ a = sqrt($1) ; print a @}
 @end example
 
 @noindent
-Instead, it defines a rule that, for each record, concatenates the value
-of the variable @samp{func} with the return value of the function @samp{foo}.
-If the resulting string is non-null, the action is executed.
-This is probably not what is desired.  (@command{awk} accepts this input as
-syntactically valid, because functions may be used before they are defined
-in @command{awk} programs.@footnote{This program won't actually run,
-because @code{foo()} is undefined.})
+相反，它定义了这样的一个规则：对每一个记录，连接变量 @samp{func} 的值与函数 @samp{foo} 的返回值。如果结果字串是非空的，动作就会被执行。这可能不是所想要的。（@command{awk} 接收这样的输入为语法有效，因此函数可以在它们在 @command{awk} 程序中定义之前被调用。@footnote{这个程序实际上不会运行，因为 @code{foo()} 是未定义的。}）
 
 @cindex portability, functions@comma{} defining
-To ensure that your @command{awk} programs are portable, always use the
-keyword @code{function} when defining a function.
+为了保证你的 @command{awk} 程序是可移植的，在定义函数时，总是使用关键字 @code{function}。
 
 @node Function Example
-@subsection Function Definition Examples
+@subsection 函数定义范例
 @cindex function definition example
 
-Here is an example of a user-defined function, called @code{myprint()}, that
-takes a number and prints it in a specific format:
+下面是一个用户自定义函数的例子，函数名字叫 @code{myprint()}，该函数取得一个数值，并以指定的格式打印它：
 
 @example
 function myprint(num)
@@ -15230,16 +15094,14 @@ function myprint(num)
 @end example
 
 @noindent
-To illustrate, here is an @command{awk} rule that uses our @code{myprint()}
-function:
+为了解清楚，下面是一个使用 @code{myprint()} 函数的 @command{awk} 规则：
 
 @example
 $3 > 0     @{ myprint($3) @}
 @end example
 
 @noindent
-This program prints, in our special format, all the third fields that
-contain a positive number in our input.  Therefore, when given the following input:
+此程序用我们特定的格式打印所有输入中第三个域是正数的域。因此，当有下面的输入时：
 
 @example
  1.2   3.4    5.6   7.8
@@ -15248,15 +15110,14 @@ contain a positive number in our input.  Therefore, when given the following inp
 @end example
 
 @noindent
-this program, using our function to format the results, prints:
+用我们的程序格式，则会打印：
 
 @example
    5.6
   21.2
 @end example
 
-This function deletes all the elements in an array (recall that the
-extra whitespace signifies the start of the local variable list):
+下面这个函数删除数组中的所有元素（回忆一下额外的空格来标识本地变量列表）：
 
 @example
 function delarray(a,    i)
@@ -15266,21 +15127,9 @@ function delarray(a,    i)
 @}
 @end example
 
-When working with arrays, it is often necessary to delete all the elements
-in an array and start over with a new list of elements
-(@pxref{Delete}).
-Instead of having
-to repeat this loop everywhere that you need to clear out
-an array, your program can just call @code{delarray()}.
-(This guarantees portability.  The use of @samp{delete @var{array}} to delete
-the contents of an entire array is a relatively recent@footnote{Late in 2012.}
-addition to the POSIX standard.)
+当与数组一起执行时，常常需要删除数组中的所有元素，并开始一个新的元素列表（查看 @pxref{Delete}）。为了不在每个要清除数组的地方都要重复地写这样的循环，你的程序就只调用 @code{delarray()}。（这保证了移植性。@samp{delete @var{array}} 的使用用来删除整个数组是最新近 才加入到 POSIX 标准中的。@footnote{2012 年的晚些时候。}）
 
-The following is an example of a recursive function.  It takes a string
-as an input parameter and returns the string in reverse order.
-Recursive functions must always have a test that stops the recursion.
-In this case, the recursion terminates when the input string is
-already empty:
+下面是一个递归函数的例子。它取一个字串作为输出参数，并返回逆序字串。递归函数必须有一个测试条件来停止递归。在这种情况下，在输入串为空时就结束递归：
 
 @c 8/2014: Thanks to Mike Brennan for the improved formulation
 @cindex @code{rev()} user-defined function
@@ -15294,8 +15143,7 @@ function rev(str)
 @}
 @end example
 
-If this function is in a file named @file{rev.awk}, it can be tested
-this way:
+如果这个函数在一个名字为 @file{rev.awk} 的文件中，我们可以这么来测试：
 
 @example
 $ @kbd{echo "Don't Panic!" |}
@@ -15303,11 +15151,7 @@ $ @kbd{echo "Don't Panic!" |}
 @print{} !cinaP t'noD
 @end example
 
-The C @code{ctime()} function takes a timestamp and returns it as a string,
-formatted in a well-known fashion.
-The following example uses the built-in @code{strftime()} function
-(@pxref{Time Functions})
-to create an @command{awk} version of @code{ctime()}:
+C 的 @code{ctime()} 函数输入一个时间戳，并返回一个用常用的形式格式化的字串。下面的例子使用内置函数 @code{strftime()}（查看 @ref{Time Functions}）来创建一个 @command{awk} 版本的 @code{ctime()}。
 
 @cindex @code{ctime()} user-defined function
 @example
@@ -15327,18 +15171,13 @@ function ctime(ts,    format)
 @c endfile
 @end example
 
-You might think that @code{ctime()} could use @code{PROCINFO["strftime"]}
-for its format string. That would be a mistake, because @code{ctime()} is
-supposed to return the time formatted in a standard fashion, and user-level
-code could have changed @code{PROCINFO["strftime"]}.
+你可能认为 @code{ctime()} 可以使用 @code{PROCINFO["strftime"]} 来作为格式串。但那会是个错误，因为 @code{ctime()} 假设返回的是标准的格式，而用户级的代码可能已经更改了 @code{PROCINFO["strftime"]}。
 
 @node Function Caveats
-@subsection Calling User-Defined Functions
+@subsection 调用用户自定义函数
 
 @cindex functions, user-defined, calling
-@dfn{Calling a function} means causing the function to run and do its job.
-A function call is an expression and its value is the value returned by
-the function.
+调@dfn{用一个函数}会导致那个函数被执行。调用调用是一个表达式，其值就是函数返回的值。
 
 @menu
 * Calling A Function::          Don't use spaces.
@@ -15347,45 +15186,26 @@ the function.
 @end menu
 
 @node Calling A Function
-@subsubsection Writing a Function Call
+@subsubsection 如何调用函数
 
-A function call consists of the function name followed by the arguments
-in parentheses.  @command{awk} expressions are what you write in the
-call for the arguments.  Each time the call is executed, these
-expressions are evaluated, and the values become the actual arguments.  For
-example, here is a call to @code{foo()} with three arguments (the first
-being a string concatenation):
+函数调用包含函数名，后面再跟着在括号中的参数。@command{awk} 表达式就是用把参数写在函数调用中。每次调用执行时，这些表达式会先求值，然后值为成为实际的参数。例如，下面是一个用三个参数调用 @code{foo()} 函数例子（第一个参数是一个字串连接）：
 
 @example
 foo(x y, "lose", 4 * z)
 @end example
 
-@quotation CAUTION
-Whitespace characters (spaces and TABs) are not allowed
-between the function name and the opening parenthesis of the argument list.
-If you write whitespace by mistake, @command{awk} might think that you mean
-to concatenate a variable with an expression in parentheses.  However, it
-notices that you used a function name and not a variable name, and reports
-an error.
+@quotation 注意
+在函数名了参数列表的开括号之间的空白（空格与 TABs）是不允许的。如果你不小心写了个空白在里面，@command{awk} 可能将你的意思理解成来连接一个变量与括号表达式的值。但是，最后它会注意到你使用了一个函数名，而不是一个变量名，因此会报一个错误。
 @end quotation
 
 @node Variable Scope
-@subsubsection Controlling Variable Scope
+@subsubsection 控制变量作用域
 
 @cindex local variables, in a function
 @cindex variables, local to a function
-Unlike in many languages,
-there is no way to make a variable local to a @code{@{} @dots{} @code{@}} block in
-@command{awk}, but you can make a variable local to a function. It is
-good practice to do so whenever a variable is needed only in that
-function.
+不像其他的很多语言，在 @command{awk} 没有办法使一个变量只在 @code{@{} @dots{} @code{@}} 块中有作用，但是你可以使一个变量成为一个函数的本地变量。这么做是一个很好的实践，在任何时候在函数中使用一个变量时，都将其置成本地变量。
 
-To make a variable local to a function, simply declare the variable as
-an argument after the actual function arguments
-(@pxref{Definition Syntax}).
-Look at the following example, where variable
-@code{i} is a global variable used by both functions @code{foo()} and
-@code{bar()}:
+为了使一个变量成为函数的本地变量，只需要简单地在实际的参数（查看 @pxref{Definition Syntax}）的后面声明就可以。看下面的例子，变量 @code{i} 是一个全局变量，即可以被 @code{foo()} 使用，也可以被 @code{bar()} 使用：
 
 @example
 function bar()
@@ -15410,9 +15230,7 @@ BEGIN @{
 @}
 @end example
 
-Running this script produces the following, because the @code{i} in
-functions @code{foo()} and @code{bar()} and at the top level refer to the same
-variable instance:
+执行这个脚本，则会产生下面的输出，因为 @code{i} 在 @code{foo()} 函数与 @code{bar()} 函数中以及在最顶层都指向同一个变量实体：
 
 @example
 top's i=10
@@ -15424,9 +15242,7 @@ foo's i=3
 top's i=3
 @end example
 
-If you want @code{i} to be local to both @code{foo()} and @code{bar()}, do as
-follows (the extra space before @code{i} is a coding convention to
-indicate that @code{i} is a local variable, not an argument):
+如果你想 @code{i} 成为 @code{foo()} 与 @code{bar()} 的本地变量，近下面这么做（在 @code{i} 之前的额外空格是一种编码习惯，以用来表示 @code{i} 是一个本地变量，而不是一个参数）：
 
 @example
 function bar(    i)
@@ -15451,7 +15267,7 @@ BEGIN @{
 @}
 @end example
 
-Running the corrected script produces the following:
+执行修正过的脚本产生如下输出：
 
 @example
 top's i=10
@@ -15463,11 +15279,7 @@ foo's i=1
 top's i=10
 @end example
 
-Besides scalar values (strings and numbers), you may also have
-local arrays.  By using a parameter name as an array, @command{awk}
-treats it as an array, and it is local to the function.
-In addition, recursive calls create new arrays.
-Consider this example:
+除了标量（字串与数值）外，你也可以有本地数组。通过将某个变量名用作数组，@command{awk} 就会将其当为数组，并且是函数的本地数组。另外，递归调用会创建新的数组。考虑下面的例子：
 
 @example
 function some_func(p1,      a)
@@ -15491,7 +15303,7 @@ BEGIN @{
 @}
 @end example
 
-When run, this program produces the following output:
+当执行时，程序产生下面的输出：
 
 @example
 At level 4, index 3 is not found in a
@@ -15505,23 +15317,14 @@ At level 2, index 2 is found in a
 @end example
 
 @node Pass By Value/Reference
-@subsubsection Passing Function Arguments by Value Or by Reference
+@subsubsection 函数变量中的传参与传引用
 
-In @command{awk}, when you declare a function, there is no way to
-declare explicitly whether the arguments are passed @dfn{by value} or
-@dfn{by reference}.
+在 @command{awk} 中，当你声明一个函数，没有办法显式地声明参数是通过传@dfn{值}还是传@dfn{引用}。
 
-Instead, the passing convention is determined at runtime when
-the function is called, according to the following rule:
-if the argument is an array variable, then it is passed by reference.
-Otherwise, the argument is passed by value.
+相反，传递规范是在函数调用时根据下面的规则来动态确定的：如果参数是一个数组变量，则是通过传引用。否则，参数就是通过传值。
 
 @cindex call by value
-Passing an argument by value means that when a function is called, it
-is given a @emph{copy} of the value of this argument.
-The caller may use a variable as the expression for the argument, but
-the called function does not know this---it only knows what value the
-argument had.  For example, if you write the following code:
+当调用参数对参数进行传值，意是是说，它给了参数一个@emph{复本}。调用者使用变量来作用参数的表达式，但是被调用的函数却并不知道这回事——它只知道参数具有什么样的值。例如，如果你写了下面的代码：
 
 @example
 foo = "bar"
@@ -15529,12 +15332,8 @@ z = myfunc(foo)
 @end example
 
 @noindent
-then you should not think of the argument to @code{myfunc()} as being
-``the variable @code{foo}.''  Instead, think of the argument as the
-string value @code{"bar"}.
-If the function @code{myfunc()} alters the values of its local variables,
-this has no effect on any other variables.  Thus, if @code{myfunc()}
-does this:
+则你不要将 @code{myfunc()} 的参数想象为“@code{foo} 变量”。相反，则应该将参数想为字串值 @code{"bar"}。
+如果函数 @code{myfunc()} 改变了它本地变量的值，它对于其他的变量没有任何影响。所以，如果 @code{myfunc()} 执行：
 
 @example
 function myfunc(str)
@@ -15546,26 +15345,15 @@ function myfunc(str)
 @end example
 
 @noindent
-to change its first argument variable @code{str}, it does @emph{not}
-change the value of @code{foo} in the caller.  The role of @code{foo} in
-calling @code{myfunc()} ended when its value (@code{"bar"}) was computed.
-If @code{str} also exists outside of @code{myfunc()}, the function body
-cannot alter this outer value, because it is shadowed during the
-execution of @code{myfunc()} and cannot be seen or changed from there.
+来改变它的参数变量 @code{str}，它@emph{不会}更改调用者 @code{foo} 的值。在调用 @code{myfunc()} 中 @code{foo} 的角色就在它的值（@code{"bar"}）被计算完后结束了。如果 @code{str} 也在 @code{myfunc()} 之外存在，则函数体不能更改外面的值，因为它已经在 @code{myfunc()} 执行时被遮盖掉了，不能从那个地方被看到，也不能被改变。
 
 @cindex call by reference
 @cindex arrays, as parameters to functions
 @cindex functions, arrays as parameters to
-However, when arrays are the parameters to functions, they are @emph{not}
-copied.  Instead, the array itself is made available for direct manipulation
-by the function.  This is usually termed @dfn{call by reference}.
-Changes made to an array parameter inside the body of a function @emph{are}
-visible outside that function.
+但是，当调用函数传递的是一个数组时，就@emph{不会}执行复制。相反，数组变量本身会被函数进行直接操作。这个在术语上一般叫作@dfn{引用调用}。在函数体内对于数组的更改在函数外部也@emph{是}可见的。
 
-@quotation NOTE
-Changing an array parameter inside a function
-can be very dangerous if you do not watch what you are doing.
-For example:
+@quotation 提示
+如果你看不到你所做的事情，在函数中改变数组参数会非常危险。如：
 
 @example
 function changeit(array, ind, nvalue)
@@ -15582,15 +15370,12 @@ BEGIN @{
 @end example
 
 @noindent
-prints @samp{a[1] = 1, a[2] = two, a[3] = 3}, because
-@code{changeit()} stores @code{"two"} in the second element of @code{a}.
+会打印 @samp{a[1] = 1, a[2] = two, a[3] = 3}，因为 @code{changeit()} 会将 @code{"two"} 存储到 @code{a} 的第二个元素中。
 @end quotation
 
 @cindex undefined functions
 @cindex functions, undefined
-Some @command{awk} implementations allow you to call a function that
-has not been defined. They only report a problem at runtime, when the
-program actually tries to call the function. For example:
+有一些 @command{awk} 实现可以让你调用还没有定义的函数。当程序实际上试图调用时，它只在运行时报告问题。如：
 
 @example
 BEGIN @{
@@ -15604,64 +15389,38 @@ function bar() @{ @dots{} @}
 @end example
 
 @noindent
-Because the @samp{if} statement will never be true, it is not really a
-problem that @code{foo()} has not been defined.  Usually, though, it is a
-problem if a program calls an undefined function.
+因为 @samp{if} 语句决不会为 true，@code{foo()} 没有定义也不会是个真正的问题。但是，一般情况下，如果程序调用一个没有定义的函数确实是个问题。
 
 @cindex lint checking, undefined functions
-If @option{--lint} is specified
-(@pxref{Options}),
-@command{gawk} reports calls to undefined functions.
+如果指定了 @option{--lint} 参数（查看 @ref{Options}），@command{gawk} 会报告调用用了未定义的函数。
 
 @cindex portability, @code{next} statement in user-defined functions
-Some @command{awk} implementations generate a runtime
-error if you use either the @code{next} statement
-or the @code{nextfile} statement
-(@pxref{Next Statement}, and
+如果你在用户自定义函数中使用了 @code{next} 语句或者 @code{nextfile} 语句（查看 @ref{Next Statement}，以及一些 
 @ifdocbook
-@ref{Nextfile Statement})
+ @ref{Next Statement}），
 @end ifdocbook
 @ifnotdocbook
-@pxref{Nextfile Statement})
+ @ref{Next Statement}），
 @end ifnotdocbook
-inside a user-defined function.
-@command{gawk} does not have this limitation.
+@command{awk} 实现会产生一个运行时错误。@command{gawk} 则没有这个限制。 
 
 @node Return Statement
-@subsection The @code{return} Statement
+@subsection @code{return} 语句
 @cindex @code{return} statement@comma{} user-defined functions
 
-As seen in several earlier examples,
-the body of a user-defined function can contain a @code{return} statement.
-This statement returns control to the calling part of the @command{awk} program.  It
-can also be used to return a value for use in the rest of the @command{awk}
-program.  It looks like this:
+如在之前的几个例子中所见到的，用户自定义的函数体内可以包含一个 @code{return} 语句。这个语句将控制返回到 @command{awk} 程序调用的地方。也可以用于返回一个值，以在 @command{awk} 程序的后面来使用。看来起其形式如下：
 
 @display
 @code{return} [@var{expression}]
 @end display
 
-The @var{expression} part is optional.
-Due most likely to an oversight, POSIX does not define what the return
-value is if you omit the @var{expression}.  Technically speaking, this
-makes the returned value undefined, and therefore, unpredictable.
-In practice, though, all versions of @command{awk} simply return the
-null string, which acts like zero if used in a numeric context.
+@var{expression} 的部分是可选的。极有可能是因为疏忽，POSIX 没有定义如果 @var{expression} 被省略的情况下该返回什么样的值。从技术上说，这会使返回的值是未定义的，因此也是不可预测的。但是在实践中，所有的 @command{awk} 版本都是简单地返回一个空串，在需要数值的上下文则为 0。
 
-A @code{return} statement without an @var{expression} is assumed at the end of
-every function definition.  So, if control reaches the end of the function
-body, then technically the function returns an unpredictable value.
-In practice, it returns the empty string.  @command{awk}
-does @emph{not} warn you if you use the return value of such a function.
+@code{return} 语句中没有 @var{expression} 被假设为每一个函数定义的完成处。所以，如果控制到达了函数体的尾部，函数技术性地返回一个不可预测的值。在实践中，它返回一个空串。@command{awk} 在你使用这样的函数返回值是@emph{不会}产生告警。
 
-Sometimes, you want to write a function for what it does, not for
-what it returns.  Such a function corresponds to a @code{void} function
-in C, C++, or Java, or to a @code{procedure} in Ada.  Thus, it may be appropriate to not
-return any value; simply bear in mind that you should not be using the
-return value of such a function.
+有时，你想写的函数你关注的是它所做的，而不是它所返回的。这样的函数与 C 、C++ 或者 Java 中的 @code{void} 函数以及 Ada 中的 @code{procedure} 函数对应。所以，不返回任何值是恰当的，只需要简单地记住不要使用这些参数的返回值即可。
 
-The following is an example of a user-defined function that returns a value
-for the largest number among the elements of an array:
+下面的例子是一个返回数组元素中最大的数值的用户自定义函数：
 
 @example
 function maxelt(vec,   i, ret)
@@ -15676,17 +15435,9 @@ function maxelt(vec,   i, ret)
 
 @cindex programming conventions, function parameters
 @noindent
-You call @code{maxelt()} with one argument, which is an array name.  The local
-variables @code{i} and @code{ret} are not intended to be arguments;
-there is nothing to stop you from passing more than one argument
-to @code{maxelt()} but the results would be strange.  The extra space before
-@code{i} in the function parameter list indicates that @code{i} and
-@code{ret} are local variables.
-You should follow this convention when defining functions.
+你用一个参数来调用 @code{maxelt()}，这个参数是一个数组名。本地变量 @code{i} 以及 @code{ret} 都不是用来作参数的，没有什么可以阻止你传递多于一个参数到 @code{maxelt()} 中，但那会产生奇怪的结果。在参数列表中，@code{i} 之前额外的空格表示 @code{i} 与 @code{ret} 都是本地变量。你在定义函数时应该使用这些的习惯。
 
-The following program uses the @code{maxelt()} function.  It loads an
-array, calls @code{maxelt()}, and then reports the maximum number in that
-array:
+下面的程序会使用 @code{maxelt()} 函数。它装入一个数组，然后调用 @code{maxelt()} 然后报告数组中的最大元素：
 
 @example
 function maxelt(vec,   i, ret)
@@ -15709,7 +15460,7 @@ END @{
 @}
 @end example
 
-Given the following input:
+如果有下面的输入：
 
 @example
  1 5 23 8 16
@@ -15720,16 +15471,12 @@ Given the following input:
 @end example
 
 @noindent
-the program reports (predictably) that 99,385 is the largest value
-in the array.
+则程序报告（可预测的）99,385 是数组中最大的值。
 
 @node Dynamic Typing
-@subsection Functions and Their Effects on Variable Typing
+@subsection 函数与其在变量类型上的影响
 
-@command{awk} is a very fluid language.
-It is possible that @command{awk} can't tell if an identifier
-represents a scalar variable or an array until runtime.
-Here is an annotated sample program:
+@command{awk} 是一种非常随意的语言。@command{awk} 有可能办法告诉你一个标识符是一个标量变量还是一个数组，直到运行时才会知道。这是一个用来说明的例子程序：
 
 @example
 function foo(a)
@@ -15746,16 +15493,12 @@ BEGIN @{
 @}
 @end example
 
-In this example, the first call to @code{foo()} generates
-a fatal error, so @command{awk} will not report the second
-error. If you comment out that call, though, then @command{awk}
-does report the second error.
+在这个例子中，第一次调用 @code{foo()} 会产生一个致命错误，所以 @command{awk} 不会报告第二个错误。如果你将这个调用注释掉，则 @command{awk} 会报第二个错误。
 
-Usually, such things aren't a big issue, but it's worth
-being aware of them.
+一般来说，这种事不是什么大问题，但是值得注意。
 
 @node Indirect Calls
-@section Indirect Function Calls
+@section 间接函数调用
 
 @cindex indirect function calls
 @cindex function calls, indirect
@@ -15763,27 +15506,15 @@ being aware of them.
 @cindex pointers to functions
 @cindex differences in @command{awk} and @command{gawk}, indirect function calls
 
-This section describes an advanced, @command{gawk}-specific extension.
+这一节描述了一种高级的，特定于 @command{gawk} 的扩展。
 
-Often, you may wish to defer the choice of function to call until runtime.
-For example, you may have different kinds of records, each of which
-should be processed differently.
+经常的，你希望在直接运行时才确定你要调用的函数。例如，你有不同类型的记录，每一个都要有不同的处理方式。
 
-Normally, you would have to use a series of @code{if}-@code{else}
-statements to decide which function to call.  By using @dfn{indirect}
-function calls, you can specify the name of the function to call as a
-string variable, and then call the function.  Let's look at an example.
+正常情况下，你不得不用一系列的 @code{if}-@code{else} 语句来决定要调用哪一个函数。通过使用@dfn{间接}函数调用，你可以指定函数的名字为一个字串，然后来再调用函数。让我们来看下一例子：
 
-Suppose you have a file with your test scores for the classes you
-are taking, and
-you wish to get the sum and the average of
-your test scores.
-The first field is the class name. The following fields
-are the functions to call to process the data, up to a ``marker''
-field @samp{data:}.  Following the marker, to the end of the record,
-are the various numeric test scores.
+假设你有一个文件，里面有你的选择的课程的测试成绩，并且你希望取得这些成绩的总合与平均值。第一个域是一个课程名。后面的域是函数调用要处理的数组，直到一个域标识 @samp{data:} 为止，在标识后面到记录的末尾，都是一系列的测试成绩。
 
-Here is the initial file:
+这里最开始的文件：
 
 @example
 @c file eg/data/class_data1
@@ -15793,7 +15524,7 @@ English_401 sum average data: 100.0 95.6 87.1 93.4
 @c endfile
 @end example
 
-To process the data, you might write initially:
+为了处理数据，你可能开始这么写：
 
 @example
 @{
@@ -15809,25 +15540,19 @@ To process the data, you might write initially:
 @end example
 
 @noindent
-This style of programming works, but can be awkward.  With @dfn{indirect}
-function calls, you tell @command{gawk} to use the @emph{value} of a
-variable as the @emph{name} of the function to call.
+这样风格的程序也可以，但是看起来有点别扭。通过@dfn{间接}函数调用，你告诉 @command{gawk} 使用函数@emph{名称}变量的@emph{值}作为函数来调用。
 
 @cindex @code{@@}-notation for indirect function calls
 @cindex indirect function calls, @code{@@}-notation
 @cindex function calls, indirect, @code{@@}-notation for
-The syntax is similar to that of a regular function call: an identifier
-immediately followed by an opening parenthesis, any arguments, and then
-a closing parenthesis, with the addition of a leading @samp{@@}
-character:
+语法非常类似于常规的函数调用：一个标识符，后面跟着一个开括号，所有的参数，然后是一个闭括号，加上一个前导的 @samp{@@} 符号：
 
 @example
 the_func = "sum"
 result = @@the_func()   # calls the sum() function
 @end example
 
-Here is a full program that processes the previously shown data,
-using indirect function calls:
+这是处理前所示的数据的完整程序，使用的是间接函数调用：
 
 @example
 @c file eg/prog/indirectcall.awk
@@ -15866,9 +15591,7 @@ function sum(first, last,   ret, i)
 @c endfile
 @end example
 
-These two functions expect to work on fields; thus, the parameters
-@code{first} and @code{last} indicate where in the fields to start and end.
-Otherwise, they perform the expected computations and are not unusual:
+这两个函数期望是工作于域，因此，参数 @code{first} 与 @code{last} 表示域处理的开始与结束。否则，它们执行是期望的计算但不正确：
 
 @example
 @c file eg/prog/indirectcall.awk
@@ -15895,18 +15618,11 @@ Otherwise, they perform the expected computations and are not unusual:
 @c endfile
 @end example
 
-This is the main processing for each record. It prints the class name (with
-underscores replaced with spaces). It then finds the start of the actual data,
-saving it in @code{start}.
-The last part of the code loops through each function name (from @code{$2} up to
-the marker, @samp{data:}), calling the function named by the field. The indirect
-function call itself occurs as a parameter in the call to @code{printf}.
-(The @code{printf} format string uses @samp{%s} as the format specifier so that we
-can use functions that return strings, as well as numbers. Note that the result
-from the indirect call is concatenated with the empty string, in order to force
-it to be a string value.)
+这是处理每个记录的主过程。它打印课程名（将下划线替换成空格）。然后查找实际数据的开始，并将它保存在 @code{start} 中。
+代码的最后一部分是循环每一个函数名（从 @code{$2} 到 @samp{data:} 标识），调用域所表示的名字。间接调用函数将其作为 @code{printf} 函数的一个参数。
+（@code{printf} 的格式串使用 @samp{%s} 作为格式指定符，所以我们可以使用返回字串的函数，当然也包括数值。注意从间接调用返回的结果与空串进行合并，是为将其强制转换为字串值。）
 
-Here is the result of running the program:
+这是执行程序的结果：
 
 @example
 $ @kbd{gawk -f indirectcall.awk class_data1}
@@ -15923,17 +15639,10 @@ $ @kbd{gawk -f indirectcall.awk class_data1}
 @print{}     average: <94.025>
 @end example
 
-The ability to use indirect function calls is more powerful than you may
-think at first.  The C and C++ languages provide ``function pointers,'' which
-are a mechanism for calling a function chosen at runtime.  One of the most
-well-known uses of this ability is the C @code{qsort()} function, which sorts
-an array using the famous ``quicksort'' algorithm
-(see @uref{http://en.wikipedia.org/wiki/Quicksort, the Wikipedia article}
-for more information).  To use this function, you supply a pointer to a comparison
-function.  This mechanism allows you to sort arbitrary data in an arbitrary
-fashion.
+可以使用间接函数调用的能力比初看起来要强大得多。C 与 C++ 语言提供了“函数指针”，那也是一个在执行时选择调用函数的机制。这个能力用得最多的是 C @code{qsort()} 函数，该函数使用有名的快速排序
+（查看 @uref{http://en.wikipedia.org/wiki/Quicksort, Wikipedia 的文档} 来了解更多的信息）算法来对数组进行排序。为了使用这个函数，你需要指定一个用于比较的函数指针。这个机制可以使用对任意以及任何方式对数据进行排序。
 
-We can do something similar using @command{gawk}, like this:
+我们用 @command{gawk} 也可以做同样的事情，如：
 
 @example
 @c file eg/lib/quicksort.awk
@@ -15987,12 +15696,9 @@ function quicksort_swap(data, i, j,      temp)
 @c endfile
 @end example
 
-The @code{quicksort()} function receives the @code{data} array, the starting and ending
-indices to sort (@code{left} and @code{right}), and the name of a function that
-performs a ``less than'' comparison.  It then implements the quicksort algorithm.
+@code{quicksort()} 函数接收 @code{data} 数组，以及要进行排序的开始与结束下标（@code{left} 与 @code{right}），以及执行“less than”比较的函数名。之后实现 quicksort 算法。
 
-To make use of the sorting function, we return to our previous example. The
-first thing to do is write some comparison functions:
+为使用这个排序函数，我们再回到之前的例子。第一件事情就是要写一个比较函数：
 
 @example
 @c file eg/prog/indirectcall.awk
@@ -16012,14 +15718,9 @@ function num_ge(left, right)
 @c endfile
 @end example
 
-The @code{num_ge()} function is needed to perform a descending sort; when used
-to perform a ``less than'' test, it actually does the opposite (greater than
-or equal to), which yields data sorted in descending order.
+@code{num_ge()} 函数在执行降序排序时需要，当执行 “less than” 的测试时，其执行的刚才是相反的（即大于或者等于），这会产生一个降序。
 
-Next comes a sorting function.  It is parameterized with the starting and
-ending field numbers and the comparison function. It builds an array with
-the data and calls @code{quicksort()} appropriately, and then formats the
-results as a single string:
+下面则是排序函数。这是一个参数化了 starting 与 ending 域数值与比较函数的函数。它创建有 data 数组并调用 @code{quicksort()} 函数。然后将结果作为一个字串输出：
 
 @example
 @c file eg/prog/indirectcall.awk
@@ -16045,8 +15746,7 @@ function do_sort(first, last, compare,      data, i, retval)
 @c endfile
 @end example
 
-Finally, the two sorting functions call @code{do_sort()}, passing in the
-names of the two comparison functions:
+最后，两个排序函数调用 @code{do_sort()}，并将两个比较函数名传递进去：
 
 @example
 @c file eg/prog/indirectcall.awk
@@ -16066,7 +15766,7 @@ function rsort(first, last)
 @c endfile
 @end example
 
-Here is an extended version of the @value{DF}:
+这是@value{DF}的扩展版本：
 
 @example
 @c file eg/data/class_data2
@@ -16076,7 +15776,7 @@ English_401 sum average sort rsort data: 100.0 95.6 87.1 93.4
 @c endfile
 @end example
 
-Finally, here are the results when the enhanced program is run:
+最后，这是增强过的程序的运行结果：
 
 @example
 $ @kbd{gawk -f quicksort.awk -f indirectcall.awk class_data2}
@@ -16099,33 +15799,23 @@ $ @kbd{gawk -f quicksort.awk -f indirectcall.awk class_data2}
 @print{}     rsort: <100.0 95.6 93.4 87.1>
 @end example
 
-Another example where indirect functions calls are useful can be found in
-processing arrays. This is described in @ref{Walking Arrays}.
+另一个使用间接函数非常有用的地方可以在处理数组的地方找到。这在 @ref{Walking Arrays}，中有描述。
 
-Remember that you must supply a leading @samp{@@} in front of an indirect function call.
+要记住，在调用间接函数之前，必须在其前面放置一个 @samp{@@} 符号。
 
-Starting with @value{PVERSION} 4.1.2 of @command{gawk}, indirect function
-calls may also be used with built-in functions and with extension functions
-(@pxref{Dynamic Extensions}). There are some limitations when calling
-built-in functions indirectly, as follows.
+从 4.1.2 @value{PVERSION}开始，@command{gawk} 间接调用也可以用于内置函数以及扩展函数（查看 @pxref{Dynamic Extensions}）。他们在使用间接调用内置函数时有一些限制，如下：
 
 @itemize @value{BULLET}
 @item
-You cannot pass a regular expression constant to a built-in function
-through an indirect function call.@footnote{This may change in a future
-version; recheck the documentation that comes with your version of
-@command{gawk} to see if it has.} This applies to the @code{sub()},
-@code{gsub()}, @code{gensub()}, @code{match()}, @code{split()} and
-@code{patsplit()} functions.
+通过间接调用，你不可以传递正则表达式常量到一个内置函数中。
+@footnote{这个在未来的版本可能会改变：要检查与你的 @command{gawk} 一起的文档来查看是否已经改变。}
+这同时也适用于 @code{sub()}，@code{gsub()}，@code{gensub()}，@code{match()}，@code{split()} 与 @code{patsplit()} 函数。
 
 @item
-If calling @code{sub()} or @code{gsub()}, you may only pass two arguments,
-since those functions are unusual in that they update their third argument.
-This means that @code{$0} will be updated.
+如果调用 @code{sub()} 或者 @code{gsub()}，你只可以传递两个参数，因为这些函数通常会更改它它们的第三个参数。这表示 @code{$0} 会被改变。
 @end itemize
 
-@command{gawk} does its best to make indirect function calls efficient.
-For example, in the following case:
+@command{gawk} 会尽力地使间接函数调用非常高效。如，在下面的例子中：
 
 @example
 for (i = 1; i <= n; i++)
@@ -16133,76 +15823,47 @@ for (i = 1; i <= n; i++)
 @end example
 
 @noindent
-@command{gawk} looks up the actual function to call only once.
+@command{gawk} 实际上只查找一次要调用的函数。
 
 @node Functions Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-@command{awk} provides built-in functions and lets you define your own
-functions.
+@command{awk} 提供了内置函数，也可以让你自己定义函数。
 
 @item
-POSIX @command{awk} provides three kinds of built-in functions: numeric,
-string, and I/O.  @command{gawk} provides functions that sort arrays, work
-with values representing time, do bit manipulation, determine variable
-type (array versus scalar), and internationalize and localize programs.
-@command{gawk} also provides several extensions to some of standard
-functions, typically in the form of additional arguments.
+POSIX @command{awk} 提供了三种内置函数：数值，字串与 I/O。@command{gawk} 提供了对数组排序的函数，处理时间的函数，执行位操作的函数，确定变量类型的函数（数组还是标量），与国际化与本地化的函数。@command{gawk} 也提供了标准函数的扩展，典型的是针对额外参数的形式。
 
 @item
-Functions accept zero or more arguments and return a value.  The
-expressions that provide the argument values are completely evaluated
-before the function is called. Order of evaluation is not defined.
-The return value can be ignored.
+函数接收 0 个或者更多的参数，并返回一个值。提供参数值的表达式在函数调用前会首先全部求值。求值的顺序是未定义的。返回值可以被忽略。
 
 @item
-The handling of backslash in @code{sub()} and @code{gsub()} is not simple.
-It is more straightforward in @command{gawk}'s @code{gensub()} function,
-but that function still requires care in its use.
+@code{sub()} 与 @code{gsub()} 函数对于反斜杠的处理有点复杂。在 @command{gawk} 的 @code{gensub()} 函数中则更直接一点，但是使用这个函数也需要注意。
 
 @item
-User-defined functions provide important capabilities but come with
-some syntactic inelegancies. In a function call, there cannot be any
-space between the function name and the opening left parenthesis of the
-argument list.  Also, there is no provision for local variables, so the
-convention is to add extra parameters, and to separate them visually
-from the real parameters by extra whitespace.
+用户定义的函数提供了很重要的能力，但是其语法确并不优雅。在函数调用时，在函数名与参数列表的开括号之间不可以有空格。也没有提供本地变量，所以习惯是添加额外的参数，并用空格可视化地将它们与参数列表分开。
 
 @item
-User-defined functions may call other user-defined (and built-in)
-functions and may call themselves recursively. Function parameters
-``hide'' any global variables of the same names.
-You cannot use the name of a reserved variable (such as @code{ARGC})
-as the name of a parameter in user-defined functions.
+用户自定义函数可以调用其他的用户自定义函数（以及内置函数），也可以递归地调用它们自己。函数参数会“隐藏”任何的同名的全局参数。你不可以使用保留的变量（如 @code{ARGC} 来作为自定义函数的参数名字。
 
 @item
-Scalar values are passed to user-defined functions by value. Array
-parameters are passed by reference; any changes made by the function to
-array parameters are thus visible after the function has returned.
+标量值是通过传值方式传递到用户自定义函数的。数组参数则是通过传引用，函数对于数组的任何改变都会在函数返回之后可见。
 
 @item
-Use the @code{return} statement to return from a user-defined function.
-An optional expression becomes the function's return value.  Only scalar
-values may be returned by a function.
+使用 @code{return} 语言来从用户自定义函数中返回。可选的表达式成为函数的返回值。函数只可以返回标量值。
 
 @item
-If a variable that has never been used is passed to a user-defined
-function, how that function treats the variable can set its nature:
-either scalar or array.
+如果传递到用户自定义函数中的变量从来没有被使用过，那么函数如何来看待这个变量：要么是标题要么是数组。
 
 @item
-@command{gawk} provides indirect function calls using a special syntax.
-By setting a variable to the name of a function, you can
-determine at runtime what function will be called at that point in the
-program. This is equivalent to function pointers in C and C++.
+@command{gawk} 使用特殊语法，提供了间接函数调用。通过将某个变量的值设置成函数名，你可以在运行时确定在想说点要调用的函数。这个与 C 跟 C++ 中的函数指针等同。
 
 @end itemize
 
 
 @ifnotinfo
-@part @value{PART2}Problem Solving with @command{awk}
+@part @value{PART2}用 @command{awk} 来解决问题
 @end ifnotinfo
 
 @ifdocbook
@@ -16220,16 +15881,13 @@ It contains the following chapters:
 @end ifdocbook
 
 @node Library Functions
-@chapter A Library of @command{awk} Functions
+@chapter @command{awk} 函数库
 @cindex libraries of @command{awk} functions
 @cindex functions, library
 @cindex functions, user-defined, library of
 
-@ref{User-defined} describes how to write
-your own @command{awk} functions.  Writing functions is important, because
-it allows you to encapsulate algorithms and program tasks in a single
-place.  It simplifies programming, making program development more
-manageable and making programs more readable.
+在 @ref{User-defined}，描述了如何来写你自己的 @command{awk} 函数。写函数是很重要的，因为它可以让你将算法与程序任务封闭在一个单独的地方。同时，它也简化编程，使得程序开发更有可管理性，更可读。
+#TODO20171117
 
 @cindex Kernighan, Brian
 @cindex Plauger, P.J.@:

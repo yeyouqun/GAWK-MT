@@ -338,3 +338,13 @@
 改动
 > 随着输入的域分割，当 fieldsep 的值为 “ ” 时，前缀和后缀的空格都会在赋值给数组 array 中的元素的时候被忽略，
 > 但是在 seps 中不会被忽略，并且 array 数组元素是you连续的空格分割。
+
+## 9.1.6
+英文原文
+> The result of an XOR operation is 1 if either bit is 1, but not both.
+ 
+译文原文
+> XOR 的操作结果是有一个位 1 则为 1，而不是两个为 1。
+
+改动
+> XOR 的操作结果是有一个位 1 则为 1，但不能两个都为 1。
