@@ -15135,76 +15135,46 @@ It contains the following chapters:
 @cindex functions, user-defined, library of
 
 在 @ref{User-defined}，描述了如何来写你自己的 @command{awk} 函数。写函数是很重要的，因为它可以让你将算法与程序任务封闭在一个单独的地方。同时，它也简化编程，使得程序开发更有可管理性，更可读。
-#TODO20171117
 
 @cindex Kernighan, Brian
 @cindex Plauger, P.J.@:
-In their seminal 1976 book, @cite{Software Tools},@footnote{Sadly, over 35
-years later, many of the lessons taught by this book have yet to be
-learned by a vast number of practicing programmers.} Brian Kernighan
-and P.J.@: Plauger wrote:
+Brian Kernighan 与 P.J.@: Plauger 在他们 1976 年的书，@cite{Software Tools} 
+@footnote{很惨的是，35 年之后，这本书中所教的经验还没有被大量的实践中的程序员所学到。}
+中写到：
 
 @quotation
-Good Programming is not learned from generalities, but by seeing how
-significant programs can be made clean, easy to read, easy to maintain and
-modify, human-engineered, efficient and reliable, by the application of
-common sense and good programming practices.  Careful study and imitation
-of good programs leads to better writing.
+好的编程不是从一般性来学习，而是通过运用常识与编程实践，看程序如何能够写得清晰，易读，易维护与修改，可被人工程化，高效与可靠。仔细学习与模拟好的编程可以写得更好。
 @end quotation
 
-In fact, they felt this idea was so important that they placed this
-statement on the cover of their book.  Because we believe strongly
-that their statement is correct, this @value{CHAPTER} and @ref{Sample
-Programs}, provide a good-sized body of code for you to read and, we hope,
-to learn from.
+实际上，他们觉得这些思想是如何重要，以致于它们将这个表述放在书的封面上。由于我们强烈地认为这个表述是无此正确的，所在在这@value{CHAPTER}中与 @ref{Sample Programs}，提供了大小合适的代码来让你学习，我们希望你能从中学到什么。
 
-This @value{CHAPTER} presents a library of useful @command{awk} functions.
-Many of the sample programs presented later in this @value{DOCUMENT}
-use these functions.
-The functions are presented here in a progression from simple to complex.
+这一@value{CHAPTER}呈现了 @command{awk} 中有很有用的函数库。很多后面的例子代码都使用这些函数。这里呈现的函数从简单到复杂进行变化。
 
 @cindex Texinfo
-@ref{Extract Program}
-presents a program that you can use to extract the source code for
-these example library functions and programs from the Texinfo source
-for this @value{DOCUMENT}.
-(This has already been done as part of the @command{gawk} distribution.)
+在 @ref{Extract Program}，中提交了一个程序，你可以用来从这些例子库函数中提取源代码，以及从本@value{DOCUMENT}的 Texinfo 源代码中提出程序。（这已经作为 @command{gawk} 发行版本的一部份完成了。）
 
 @ifclear FOR_PRINT
-If you have written one or more useful, general-purpose @command{awk} functions
-and would like to contribute them to the @command{awk} user community, see
-@ref{How To Contribute}, for more information.
+如果你写了一些有用的，通用目的的 @command{awk} 程序，并且想将它们贡献给 @command{awk} 社区，查看 @ref{How To Contribute}，来获取更多的信息。
 @end ifclear
 
 @cindex portability, example programs
-The programs in this @value{CHAPTER} and in
-@ref{Sample Programs},
-freely use @command{gawk}-specific features.
-Rewriting these programs for different implementations of @command{awk}
-is pretty straightforward:
+这一@value{CHAPTER}以及 @ref{Sample Programs} 中的程序，可以自由地使用 @command{gawk} 特有的特性。为不同的 @command{awk} 实现重写这些程序也相当地直接：
 
 @itemize @value{BULLET}
 @item
-Diagnostic error messages are sent to @file{/dev/stderr}.
-Use @samp{| "cat 1>&2"} instead of @samp{> "/dev/stderr"} if your system
-does not have a @file{/dev/stderr}, or if you cannot use @command{gawk}.
+区别错误信息并发送到 @file{/dev/stderr}。如果你的系统中没有 @file{/dev/stderr}，或者你无法使用 @command{gawk}，
+则使用 @samp{| "cat 1>&2"} 而不是 @samp{> "/dev/stderr"}。
 
 @item
-A number of programs use @code{nextfile}
-(@pxref{Nextfile Statement})
-to skip any remaining input in the input file.
+有很多的程序中使用 @code{nextfile}（查看 @pxref{Nextfile Statement}）来跳过任意剩下的输入文件的输入。
 
 @item
 @c 12/2000: Thanks to Nelson Beebe for pointing out the output issue.
 @cindex case sensitivity, example programs
 @cindex @code{IGNORECASE} variable, in example programs
-Finally, some of the programs choose to ignore upper- and lowercase
-distinctions in their input. They do so by assigning one to @code{IGNORECASE}.
-You can achieve almost the same effect@footnote{The effects are
-not identical.  Output of the transformed
-record will be in all lowercase, while @code{IGNORECASE} preserves the original
-contents of the input record.} by adding the following rule to the
-beginning of the program:
+最后，某些程序选择忽略输入中的大小写。它们是通过将 @code{IGNORECASE} 赋值为 1 来实现的。你可以得到几乎相同的效果，
+@footnote{效果是不完全相同。变化记录的输出所有的都是小写。而 @code{IGNORECASE} 保持了输入记录的最初值。}
+只要将下面的规则加到程序的开始：
 
 @example
 # ignore case
@@ -15212,8 +15182,7 @@ beginning of the program:
 @end example
 
 @noindent
-Also, verify that all regexp and string constants used in
-comparisons use only lowercase letters.
+同时，确定所有的正则表达式以及用在比较中的字串常量全都是小写字母。
 @end itemize
 
 @menu
@@ -15232,71 +15201,36 @@ comparisons use only lowercase letters.
 @end menu
 
 @node Library Names
-@section Naming Library Function Global Variables
+@section 命名函数库的全局变量
 
 @cindex names, arrays/variables
 @cindex names, functions
 @cindex namespace issues
 @cindex @command{awk} programs, documenting
 @cindex documentation, of @command{awk} programs
-Due to the way the @command{awk} language evolved, variables are either
-@dfn{global} (usable by the entire program) or @dfn{local} (usable just by
-a specific function).  There is no intermediate state analogous to
-@code{static} variables in C.
+由于 @command{awk} 语言的演化方案，变量要么是@dfn{全局}的（可以在整个程序中使用），要么是@dfn{本地}的（只在特定的函数中使用）。没有与 C 中的 @code{static} 变量类似的中间状态。
 
 @cindex variables, global, for library functions
 @cindex private variables
 @cindex variables, private
-Library functions often need to have global variables that they can use to
-preserve state information between calls to the function---for example,
-@code{getopt()}'s variable @code{_opti}
-(@pxref{Getopt Function}).
-Such variables are called @dfn{private}, as the only functions that need to
-use them are the ones in the library.
+库函数常常需要有全局变量来保存在调用函数之间的状态信息——比如，@code{getopt()} 的变量 @code{_opti}（查看 @pxref{Getopt Function}）。这样的变量称为@dfn{私有}变量，因为在库中使用它们的函数只有一个。
 
-When writing a library function, you should try to choose names for your
-private variables that will not conflict with any variables used by
-either another library function or a user's main program.  For example, a
-name like @code{i} or @code{j} is not a good choice, because user programs
-often use variable names like these for their own purposes.
+当写一个库函数的时候，你应该要尝试选择你自己的私有变量的名字，这样不会与其他的库函数或者用户主程序所使用的变量冲突。如像名字 @code{i} 或者 @code{j} 就不是好的选择，因此用户程序常常使用这些类似的名字来用任自己的目的。
 
 @cindex programming conventions, private variable names
-The example programs shown in this @value{CHAPTER} all start the names of their
-private variables with an underscore (@samp{_}).  Users generally don't use
-leading underscores in their variable names, so this convention immediately
-decreases the chances that the variable names will be accidentally shared
-with the user's program.
+在本@value{CHAPTER}中呈现的例子代码中，所有私有变量的名字都以下划线开始（@samp{_}）。用户一般来说不会使用前导的下划线来命名变量，所以这样的惯例立即降低了变量名字偶然与用户程序冲突的机率。
 
 @cindex @code{_} (underscore), in names of private variables
 @cindex underscore (@code{_}), in names of private variables
-In addition, several of the library functions use a prefix that helps
-indicate what function or set of functions use the variables---for example,
-@code{_pw_byname()} in the user database routines
-(@pxref{Passwd Functions}).
-This convention is recommended, as it even further decreases the
-chance of inadvertent conflict among variable names.  Note that this
-convention is used equally well for variable names and for private
-function names.@footnote{Although all the library routines could have
-been rewritten to use this convention, this was not done, in order to
-show how our own @command{awk} programming style has evolved and to
-provide some basis for this discussion.}
+另外，有几个库函数还使用相应的前缀，用来指示什么样的函数或者函数集来使用变量——如，在用户数据库例程中的 @code{_pw_byname()}（查看 @pxref{Passwd Functions}）。这样的惯例我们是推荐的，因为这更进一步降低了不小心的变量名字冲突机率。要注意，这样的惯例也可用于变量名与私有函数名。 
+@footnote{尽管所有的库例程都使用这样的惯例进行了重写，但是还没有完成。为了显示我们自己的 @command{awk} 程序风格的演化，也为了这些讨论提供一些基础素材。}
 
-As a final note on variable naming, if a function makes global variables
-available for use by a main program, it is a good convention to start those
-variables' names with a capital letter---for
-example, @code{getopt()}'s @code{Opterr} and @code{Optind} variables
-(@pxref{Getopt Function}).
-The leading capital letter indicates that it is global, while the fact that
-the variable name is not all capital letters indicates that the variable is
-not one of @command{awk}'s predefined variables, such as @code{FS}.
+在函数命名上还有最后一个提示，如果函数使全局变量可被主程序使用，那么惯例上需要以一个大写字母来开始变量的名字——如 @code{getopt()} 的 @code{Opterr} 与 @code{Optind} 变量（查看 @pxref{Getopt Function}）。前导的大写字母表示这是一个全局变量，而变量的名字不全是大写字母则是表示变量不是 @command{awk} 预定义的变量，比如 @code{FS}。
 
 @cindex @option{--dump-variables} option, using for library functions
-It is also important that @emph{all} variables in library
-functions that do not need to save state are, in fact, declared
-local.@footnote{@command{gawk}'s @option{--dump-variables} command-line
-option is useful for verifying this.} If this is not done, the variables
-could accidentally be used in the user's program, leading to bugs that
-are very difficult to track down:
+在库中的函数的@emph{所有}变量实际上不用于存储状态的变量都声明为本地变量也非常重要。
+@footnote{@command{gawk} 的 @option{--dump-variables} 命令行选项用来验证这个非常有用。}
+如果不是这么做的，变量有可能偶然在用户程序中使用，从而导致非常难以追踪的 Bug。
 
 @example
 function lib_func(x, y,    l1, l2)
@@ -15312,25 +15246,15 @@ function lib_func(x, y,    l1, l2)
 @cindex libraries of @command{awk} functions, associative arrays and
 @cindex functions, library, associative arrays and
 @cindex Tcl
-A different convention, common in the Tcl community, is to use a single
-associative array to hold the values needed by the library function(s), or
-``package.''  This significantly decreases the number of actual global names
-in use.  For example, the functions described in
-@ref{Passwd Functions}
-might have used array elements @code{@w{PW_data["inited"]}}, @code{@w{PW_data["total"]}},
-@code{@w{PW_data["count"]}}, and @code{@w{PW_data["awklib"]}}, instead of
-@code{@w{_pw_inited}}, @code{@w{_pw_awklib}}, @code{@w{_pw_total}},
-and @code{@w{_pw_count}}.
+在 Tcl 社区中也有相同的问题，但是使用不同的惯例，即用单一的关联数组来存储库函数或者“包”所使用的值。这更进一步地降低了实际全局使用的变量的数目。
+例如，在 @ref{Passwd Functions} 中描述的函数，已经使用数组元素 @code{@w{PW_data["inited"]}}，@code{@w{PW_data["total"]}}，@code{@w{PW_data["count"]}} 与 @code{@w{PW_data["awklib"]}}，而不是使用 @code{@w{_pw_inited}}，@code{@w{_pw_awklib}}，@code{@w{_pw_total}} 与 @code{@w{_pw_count}}。
 
-The conventions presented in this @value{SECTION} are exactly
-that: conventions. You are not required to write your programs this
-way---we merely recommend that you do so.
+这@value{SECTION}中所呈现的惯例就是：约定俗成。但你不需要按这种方式来写你的程序——我们只是建议你这么做。
 
 @node General Functions
-@section General Programming
+@section 通用编程
 
-This @value{SECTION} presents a number of functions that are of general
-programming use.
+这一@value{SECTION}中呈现了在通用编程中使用到的几个函数。
 
 @menu
 * Strtonum Function::           A replacement for the built-in
@@ -15349,11 +15273,9 @@ programming use.
 @end menu
 
 @node Strtonum Function
-@subsection Converting Strings to Numbers
+@subsection 将数值转换成字串
 
-The @code{strtonum()} function (@pxref{String Functions})
-is a @command{gawk} extension.  The following function
-provides an implementation for other versions of @command{awk}:
+@code{strtonum()} 函数（查看 @ref{String Functions}）是一个 @command{gawk} 扩展。下面的函数提供了 @command{awk} 中另一个版本的实现：
 
 @example
 @c file eg/lib/strtonum.awk
@@ -15424,48 +15346,24 @@ function mystrtonum(str,        ret, n, i, k, c)
 @c endfile
 @end example
 
-The function first looks for C-style octal numbers (base 8).
-If the input string matches a regular expression describing octal
-numbers, then @code{mystrtonum()} loops through each character in the
-string.  It sets @code{k} to the index in @code{"1234567"} of the current
-octal digit.
-The return value will either be the same number as the digit, or zero
-if the character is not there, which will be true for a @samp{0}.
-This is safe, because the regexp test in the @code{if} ensures that
-only octal values are converted.
+函数首先找 C 风格的八进制数（以 8 为底）。如果输出串匹配一个描述八进制的正则表达式，则 @code{mystrtonum()} 迭代在串中的每一个字符。它将 @code{k} 设置成当前八进制数在 @code{"1234567"} 中的索引。返回值要么是与数字相同的值，或者在不存在这个字符时返回 0。那就是真正的 @samp{0}。这是安全的，因为在 @code{if} 中的正则表达式保证了只有八进制才会进行转换。
 
-Similar logic applies to the code that checks for and converts a
-hexadecimal value, which starts with @samp{0x} or @samp{0X}.
-The use of @code{tolower()} simplifies the computation for finding
-the correct numeric value for each hexadecimal digit.
+相同的逻辑也可以应用到转换十六进制的代码中，这些值以 @samp{0x} 或者 @samp{0X} 开头。使用 @code{tolower()} 可以简化查找每个十六进制位数字的计算。
 
-Finally, if the string matches the (rather complicated) regexp for a
-regular decimal integer or floating-point number, the computation
-@samp{ret = str + 0} lets @command{awk} convert the value to a
-number.
+最后，如果字串匹配（相当复杂的）常规十进制或者浮点数的正则表达式，则 @samp{ret = str + 0} 的计算可以让 @command{awk} 将这个值转换成一个数。
 
-A commented-out test program is included, so that the function can
-be tested with @command{gawk} and the results compared to the built-in
-@code{strtonum()} function.
+被注释掉的是测试程序，所以函数可以用 @command{gawk} 来测试，并且结果可以用来与内置的 @code{strtonum()} 函数结果来比较。
 
 @node Assert Function
-@subsection Assertions
+@subsection 断言
 
 @cindex assertions
 @cindex @code{assert()} function (C library)
 @cindex libraries of @command{awk} functions, assertions
 @cindex functions, library, assertions
 @cindex @command{awk} programs, lengthy, assertions
-When writing large programs, it is often useful to know
-that a condition or set of conditions is true.  Before proceeding with a
-particular computation, you make a statement about what you believe to be
-the case.  Such a statement is known as an
-@dfn{assertion}.  The C language provides an @code{<assert.h>} header file
-and corresponding @code{assert()} macro that a programmer can use to make
-assertions.  If an assertion fails, the @code{assert()} macro arranges to
-print a diagnostic message describing the condition that should have
-been true but was not, and then it kills the program.  In C, using
-@code{assert()} looks this:
+当写一个很大的程序的时候，常常了解一些条件或者某集合的条件为 true 是很有用的。在执行特定计算之前，你要写一条语句你确信条件成立。这样的语句被称为@dfn{断言}。
+C 语言提供了 @code{<assert.h>} 头文件以及相应的 @code{assert()} 宏，这样程序可以用它来作断言。如果断言失败，@code{assert()} 宏会打印一些诊断信息以描述条件应该为 true，但实际上不是，然后杀死程序。在 C 语言中，像这样来使用 @code{assert()}：
 
 @example
 #include <assert.h>
@@ -15477,18 +15375,14 @@ int myfunc(int a, double b)
 @}
 @end example
 
-If the assertion fails, the program prints a message similar to this:
+如果断言失败，程序打印像下面这样的信息：
 
 @example
 prog.c:5: assertion failed: a <= 5 && b >= 17.1
 @end example
 
 @cindex @code{assert()} user-defined function
-The C language makes it possible to turn the condition into a string for use
-in printing the diagnostic message.  This is not possible in @command{awk}, so
-this @code{assert()} function also requires a string version of the condition
-that is being tested.
-Following is the function:
+C 语言可以使条件转换为字串，并在打印诊断信息里使用。但在 @command{awk} 中却不可能，所以 @code{assert()} 函数也需要一个测试条件的字串版本。下面则是字串函数：
 
 @example
 @c file eg/lib/assert.awk
@@ -15523,22 +15417,10 @@ END @{
 @c endfile
 @end example
 
-The @code{assert()} function tests the @code{condition} parameter. If it
-is false, it prints a message to standard error, using the @code{string}
-parameter to describe the failed condition.  It then sets the variable
-@code{_assert_exit} to one and executes the @code{exit} statement.
-The @code{exit} statement jumps to the @code{END} rule. If the @code{END}
-rule finds @code{_assert_exit} to be true, it exits immediately.
+@code{assert()} 函数测试 @code{condition} 参数。如果失败，则打印一个信息到标准输出，并使用 @code{string} 参数来描述失败的条件。
+然后它将变量 @code{_assert_exit} 设置成 1，并执行 @code{exit} 语句。@code{exit} 语句会跳到 @code{END} 规则中来执行。如果 @code{END} 规则发现 @code{_assert_exit} 为 true，就会立即退出。
 
-The purpose of the test in the @code{END} rule is to
-keep any other @code{END} rules from running.  When an assertion fails, the
-program should exit immediately.
-If no assertions fail, then @code{_assert_exit} is still
-false when the @code{END} rule is run normally, and the rest of the
-program's @code{END} rules execute.
-For all of this to work correctly, @file{assert.awk} must be the
-first source file read by @command{awk}.
-The function can be used in a program in the following way:
+在 @code{END} 规则中测试的目的是要保证任意的其他 @code{END} 规则不被执行。当断言失败，程序应该立即退出。如果断言通过，则 @code{_assert_exit} 则依然是 false，当 @code{END} 规则执行时，程序的其他的 @code{END} 规则则也会被执行。为了使这一切都正确执行，@file{assert.awk} 必须成为 @command{awk} 读取的第一个源代码文件。函数可以通过下面的方式被使用：
 
 @example
 function myfunc(a, b)
@@ -15549,29 +15431,20 @@ function myfunc(a, b)
 @end example
 
 @noindent
-If the assertion fails, you see a message similar to the following:
+如果断言失败，你可以看到如下的信息：
 
 @example
 mydata:1357: assertion failed: a <= 5 && b >= 17.1
 @end example
 
 @cindex @code{END} pattern, @code{assert()} user-defined function and
-There is a small problem with this version of @code{assert()}.
-An @code{END} rule is automatically added
-to the program calling @code{assert()}.  Normally, if a program consists
-of just a @code{BEGIN} rule, the input files and/or standard input are
-not read. However, now that the program has an @code{END} rule, @command{awk}
-attempts to read the input @value{DF}s or standard input
-(@pxref{Using BEGIN/END}),
-most likely causing the program to hang as it waits for input.
+这个版本的 @code{assert()} 有一个小问题。一个 @code{END} 规则会自动加到调用 @code{assert()} 函数的程序中。正常情况下，如果程序由 @code{BEGIN} 规则组成，输入文件与/或者标准输入不会被读取。但是，现在程序有一个 @code{END} 规则，@command{awk} 会尝试读取输入文件的数据或者标准输入的数据（查看 @pxref{Using BEGIN/END}），很有可能导致程序挂起，因引它可能会一直等待输入。
 
 @cindex @code{BEGIN} pattern, @code{assert()} user-defined function and
-There is a simple workaround to this:
-make sure that such a @code{BEGIN} rule always ends
-with an @code{exit} statement.
+有一个很简单的解决方法：确保这这样的 @code{BEGIN} 规则总是用一个 @code{exit} 语句来结束。
 
 @node Round Function
-@subsection Rounding Numbers
+@subsection 数值舍入舍出
 
 @cindex rounding numbers
 @cindex numbers, rounding
@@ -15580,17 +15453,7 @@ with an @code{exit} statement.
 @cindex @code{print} statement, @code{sprintf()} function and
 @cindex @code{printf} statement, @code{sprintf()} function and
 @cindex @code{sprintf()} function, @code{print}/@code{printf} statements and
-The way @code{printf} and @code{sprintf()}
-(@pxref{Printf})
-perform rounding often depends upon the system's C @code{sprintf()}
-subroutine.  On many machines, @code{sprintf()} rounding is @dfn{unbiased},
-which means it doesn't always round a trailing .5 up, contrary
-to naive expectations.  In unbiased rounding, .5 rounds to even,
-rather than always up, so 1.5 rounds to 2 but 4.5 rounds to 4.  This means
-that if you are using a format that does rounding (e.g., @code{"%.0f"}),
-you should check what your system does.  The following function does
-traditional rounding; it might be useful if your @command{awk}'s @code{printf}
-does unbiased rounding:
+@code{printf} 与 @code{sprintf} 的工作方式（查看 @pxref{Printf}）执行的舍入舍出常常依赖于系统的 C 函数 @code{sprintf} 例程。在很多的机器上，@code{sprintf} 舍入舍出是@dfn{没有偏向的}，即是说，它并不总是把 0.5 向上舍入，这与很自然的预期相反。在没有偏向的舍入舍出中。.5 会偶数舍入舍出，而并不总是舍入，所以，1.5 舍入为 2，而 4.5 则舍出为 4。这就是说，如果你使用一个不舍入舍出的格式（比如 @code{"%.0f"}），你应该检查你的系统所执行的结果。下面的函数总是执行传输的舍入舍出，如果你的 @command{awk} 的 @code{printf} 执行的是没有偏向的舍入舍出，则可能很有用。
 
 @cindex @code{round()} user-defined function
 @example
@@ -15638,17 +15501,13 @@ function round(x,   ival, aval, fraction)
 @end example
 
 @node Cliff Random Function
-@subsection The Cliff Random Number Generator
+@subsection Cliff 随机数生成器
 @cindex random numbers, Cliff
 @cindex Cliff random numbers
 @cindex numbers, Cliff random
 @cindex functions, library, Cliff random numbers
 
-The
-@uref{http://mathworld.wolfram.com/CliffRandomNumberGenerator.html, Cliff random number generator}
-is a very simple random number generator that ``passes the noise sphere test
-for randomness by showing no structure.''
-It is easily programmed, in less than 10 lines of @command{awk} code:
+@uref{http://mathworld.wolfram.com/CliffRandomNumberGenerator.html, Cliff 随机数产生器}是一个非常简单的随机为数生成器，即“通过无结构显示来为随机性传递噪声球测试”。他很容易编程，不到 10 行的 @command{awk} 代码就可以完成：
 
 @cindex @code{cliff_rand()} user-defined function
 @example
@@ -15676,28 +15535,18 @@ function cliff_rand()
 @c endfile
 @end example
 
-This algorithm requires an initial ``seed'' of 0.1.  Each new value
-uses the current seed as input for the calculation.
-If the built-in @code{rand()} function
-(@pxref{Numeric Functions})
-isn't random enough, you might try using this function instead.
+算法需要一个初始的种子值，为 0.1。每个新值都使用当前的种子的作为输出来进行计算。如果内置 @code{rand()} 函数（查看 @pxref{Numeric Functions}）不够随机，你可以使用这个函数来代替。
 
 @node Ordinal Functions
-@subsection Translating Between Characters and Numbers
+@subsection 在字符与数值之间变换
 
 @cindex libraries of @command{awk} functions, character values as numbers
 @cindex functions, library, character values as numbers
 @cindex characters, values of as numbers
 @cindex numbers, as values of characters
-One commercial implementation of @command{awk} supplies a built-in function,
-@code{ord()}, which takes a character and returns the numeric value for that
-character in the machine's character set.  If the string passed to
-@code{ord()} has more than one character, only the first one is used.
+一个商业版本的 @command{awk} 实现提供了内置的函数 @code{ord()}，输入一个字符，然后返回那个字符在机器的字符集中的数值值。如果传递到 @code{ord()} 函数为字串，则会有多个字符，但是只有第一个字符被转换。
 
-The inverse of this function is @code{chr()} (from the function of the same
-name in Pascal), which takes a number and returns the corresponding character.
-Both functions are written very nicely in @command{awk}; there is no real
-reason to build them into the @command{awk} interpreter:
+这个函数相反的函数则为 @code{chr()}（来自由 Pascal 同名函数），它输入一个数值，然后返回相应的字符。这两个函数在 @command{awk} 中都可以很容易实现，因此没有真实的理由要将他们构建进行 @command{awk} 解析器：
 
 @cindex @code{ord()} user-defined function
 @cindex @code{chr()} user-defined function
@@ -15750,28 +15599,13 @@ function _ord_init(    low, high, i, t)
 @cindex EBCDIC
 @cindex Unicode
 @cindex mark parity
-Some explanation of the numbers used by @code{_ord_init()} is worthwhile.
-The most prominent character set in use today is ASCII.@footnote{This
-is changing; many systems use Unicode, a very large character set
-that includes ASCII as a subset.  On systems with full Unicode support,
-a character can occupy up to 32 bits, making simple tests such as
-used here prohibitively expensive.}
-Although an
-8-bit byte can hold 256 distinct values (from 0 to 255), ASCII only
-defines characters that use the values from 0 to 127.@footnote{ASCII
-has been extended in many countries to use the values from 128 to 255
-for country-specific characters.  If your  system uses these extensions,
-you can simplify @code{_ord_init()} to loop from 0 to 255.}
-In the now distant past,
-at least one minicomputer manufacturer
+被 @code{_ord_init()} 所使用的数值需要一些解释。今天所使用的最重要的字符集就是 ASCII。
+@footnote{这个正在改变：很多的系统使用 Unicode。这是一种很大的字符集，ASCII 是它的一个子集。在完全支持 Unicode 的系统中，一个字符可以占到 32 位。使得这里所使用的简单测试有可能也非常消耗性能。}
+尽管 8 位的字节可以表示 256 个不同的值（从 0 到 255 ），ASCII 只定义了从 0 到 127 之间的字符。
+@footnote{ASCII 被扩展到很多的国家，并使用到 128 到 255 之间的值表示特定国家的字符。如果你的系统使用这些扩展，你可简化 @code{_ord_init()} 来迭代从0 到 255 的数值。}
+在很久的过去，至少有一个迷你计算机厂商
 @c Pr1me, blech
-used ASCII, but with mark parity, meaning that the leftmost bit in the byte
-is always 1.  This means that on those systems, characters
-have numeric values from 128 to 255.
-Finally, large mainframe systems use the EBCDIC character set, which
-uses all 256 values.
-There are other character sets in use on some older systems, but
-they are not really worth worrying about:
+使用 ASCII，但是带一个校验位，即字节的最高位总是 1。这表示，在这样的系统中，字符的值是从 128 到 255。最后，很多的大型机使用 EBCDIC 字符集。这个集中使用所有的 256 个字符。在一些旧系统中也使用其他的字符集，但是没有必须为此操心了。
 
 @example
 @c file eg/lib/ord.awk
@@ -15801,31 +15635,18 @@ function chr(c)
 @c endfile
 @end example
 
-An obvious improvement to these functions is to move the code for the
-@code{@w{_ord_init}} function into the body of the @code{BEGIN} rule.  It was
-written this way initially for ease of development.
-There is a ``test program'' in a @code{BEGIN} rule, to test the
-function.  It is commented out for production use.
+这个函数的一个明显改进是将 @code{@w{_ord_init}} 函数的代码移到了 @code{BEGIN} 规则中。这么做的最初目的是为了开发的方便。
 
 @node Join Function
-@subsection Merging an Array into a String
+@subsection 将数组合并成字串
 
 @cindex libraries of @command{awk} functions, merging arrays into strings
 @cindex functions, library, merging arrays into strings
 @cindex strings, merging arrays into
 @cindex arrays, merging into strings
-When doing string processing, it is often useful to be able to join
-all the strings in an array into one long string.  The following function,
-@code{join()}, accomplishes this task.  It is used later in several of
-the application programs
-(@pxref{Sample Programs}).
+当处理字串时，可以将数组的所有字串连接为一个长的字串常常很有用。下面的 @code{join()} 函数来做这样的工作。它在后面的几个应用程序中被使用到（查看 @pxref{Sample Programs}）。
 
-Good function design is important; this function needs to be general, but it
-should also have a reasonable default behavior.  It is called with an array
-as well as the beginning and ending indices of the elements in the array to be
-merged.  This assumes that the array indices are numeric---a reasonable
-assumption, as the array was likely created with @code{split()}
-(@pxref{String Functions}):
+好的函数设计是很重要的，这个函数应该是通用的，但是它也应该有一个合理的默认行为。这个函数合用一个数组以及要合并的开始与结束索引，作为参数。它假设数组的索引是数值的——这是合理的假充，因此数组有可能使用 @code{split()} 函数创建的（查看 @ref{String Functions}）：
 
 @cindex @code{join()} user-defined function
 @example
@@ -15855,35 +15676,19 @@ function join(array, start, end, sep,    result, i)
 @c endfile
 @end example
 
-An optional additional argument is the separator to use when joining the
-strings back together.  If the caller supplies a nonempty value,
-@code{join()} uses it; if it is not supplied, it has a null
-value.  In this case, @code{join()} uses a single space as a default
-separator for the strings.  If the value is equal to @code{SUBSEP},
-then @code{join()} joins the strings with no separator between them.
-@code{SUBSEP} serves as a ``magic'' value to indicate that there should
-be no separation between the component strings.@footnote{It would
-be nice if @command{awk} had an assignment operator for concatenation.
-The lack of an explicit operator for concatenation makes string operations
-more difficult than they really need to be.}
+一个可选的参数是用来连接字串的分隔符。如果调用者提供了非空的值，@code{join()} 则使用它，如果没有提供，其值则为空值。在这种情况下，@code{join()} 使用一个空格来作为默认的字串分隔符。如果值与 @code{SUBSEP} 的值相同，则 @code{join()} 会在连接的字串中不使用分隔符。@code{SUBSEP} 作为一个“魔法”值来指示不要在字串组件之间使用分隔符。 
+@footnote{如果 @command{awk} 有一个赋值操作符来进行连接就很好了。缺少一个显式的连接操作符使得字串操作比实际需要的要难一些。}
 
 @node Getlocaltime Function
-@subsection Managing the Time of Day
+@subsection 管理时间
 
 @cindex libraries of @command{awk} functions, managing, time
 @cindex functions, library, managing time
 @cindex timestamps, formatted
 @cindex time, managing
-The @code{systime()} and @code{strftime()} functions described in
-@ref{Time Functions}
-provide the minimum functionality necessary for dealing with the time of day
-in human-readable form.  Although @code{strftime()} is extensive, the control
-formats are not necessarily easy to remember or intuitively obvious when
-reading a program.
+在 @ref{Time Functions}，描述的 @code{systime()} 与 @code{strftime()} 函数，提供了最小的功能需求来处理人可读形式的时间处理。尽管 @code{strftime()} 是扩展的，格式控制不容易记住，或者在读程序时意思不这么明显。
 
-The following function, @code{getlocaltime()}, populates a user-supplied array
-with preformatted time information.  It returns a string with the current
-time formatted in the same way as the @command{date} utility:
+下面的函数 @code{getlocaltime()} 使用用户提供的预定义时间格式信息数组。它返回一个与 @command{date} 工具产生一样的的时间格式的字串：
 
 @cindex @code{getlocaltime()} user-defined function
 @example
@@ -15959,20 +15764,12 @@ function getlocaltime(time,    ret, now, i)
 @c endfile
 @end example
 
-The string indices are easier to use and read than the various formats
-required by @code{strftime()}.  The @code{alarm} program presented in
-@ref{Alarm Program}
-uses this function.
-A more general design for the @code{getlocaltime()} function would have
-allowed the user to supply an optional timestamp value to use instead
-of the current time.
+这些字串下标很容易使用并比 @code{strftime()} 所使用的一系列的格式要容易。在 @ref{Alarm Program}，呈现的 @code{alarm} 程序，使用了这个函数。@code{getlocaltime()} 函数更通用的设计可以允许用户提供一个可选的时间戳值，而不是仅使用当前时间。
 
 @node Readfile Function
-@subsection Reading a Whole File at Once
+@subsection 一次读取整个文件
 
-Often, it is convenient to have the entire contents of a file available
-in memory as a single string. A straightforward but naive way to
-do that might be as follows:
+如果将整个文件的内容都放在内存中作为一个字串经常很有用。一个直接的，但是比较幼稚的方法可能如下：
 
 @example
 function readfile(file,    tmp, contents)
@@ -15989,12 +15786,9 @@ function readfile(file,    tmp, contents)
 @}
 @end example
 
-This function reads from @code{file} one record at a time, building
-up the full contents of the file in the local variable @code{contents}.
-It works, but is not necessarily efficient.
+这个函数一次从文件 @code{file} 读取一个记录，然后用文件的内容来构建本地变量 @code{contents}。这有用，但是不够高效。
 
-The following function, based on a suggestion by Denis Shirokov,
-reads the entire contents of the named file in one shot:
+下面的函数，使用由 Denis Shirokov 提的建议，来一次读取指定名字的文件内容：
 
 @cindex @code{readfile()} user-defined function
 @example
@@ -16023,15 +15817,10 @@ function readfile(file,     tmp, save_rs)
 @c endfile
 @end example
 
-It works by setting @code{RS} to @samp{^$}, a regular expression that
-will never match if the file has contents.  @command{gawk} reads data from
-the file into @code{tmp}, attempting to match @code{RS}.  The match fails
-after each read, but fails quickly, such that @command{gawk} fills
-@code{tmp} with the entire contents of the file.
-(@xref{Records} for information on @code{RT} and @code{RS}.)
+通过将 @code{RS} 设置成 @samp{^$}，即一个一定不会匹配文件内容的正则表达式。@command{gawk} 从文件中读取内容到 @code{tmp} 中，并尝试匹配 @code{RS}。每次读后的匹配都失败，但很匹配失败很快，这样 @command{gawk} 将 @code{tmp} 的内容用文件的内容来进行填充。
+（查看 @xref{Records}，来获取 @code{RT} 与 @code{RS} 的信息）
 
-In the case that @code{file} is empty, the return value is the null
-string.  Thus, calling code may use something like:
+如果文件 @code{file} 为空，则返回值为空串。所以，调用代码可以使用这样的代码：
 
 @example
 contents = readfile("/some/path")
@@ -16039,14 +15828,12 @@ if (length(contents) == 0)
     # file was empty @dots{}
 @end example
 
-This tests the result to see if it is empty or not. An equivalent
-test would be @samp{contents == ""}.
+这里测试结果看其是否为空还是不为空，一个等同的测试为 @samp{contents == ""}。
 
-@xref{Extension Sample Readfile} for an extension function that
-also reads an entire file into memory.
+查看 @xref{Extension Sample Readfile}，来查看扩展的函数，它也将整个文件的内容读取到内存中。
 
 @node Shell Quoting
-@subsection Quoting Strings to Pass to the Shell
+@subsection 将字串用引号引起并传递给 Shell
 
 @c included by permission
 @ignore
@@ -16057,8 +15844,7 @@ From: Mike Brennan <mike@madronabluff.com>
 To: Arnold Robbins <arnold@skeeve.com>
 @end ignore
 
-Michael Brennan offers the following programming pattern,
-which he uses frequently:
+Michael Brennan 提供了下面的编程模式，他经常是这么使用：
 
 @example
 #! /bin/sh
@@ -16070,14 +15856,13 @@ awkp='
 @var{input_program} | awk "$awkp" | /bin/sh
 @end example
 
-For example, a program of his named @command{flac-edit} has this form:
+比如，他的一个程序名为 @command{flac-edit} 就使用这种形式：
 
 @example
 $ @kbd{flac-edit -song="Whoope! That's Great" file.flac}
 @end example
 
-It generates the following output, which is to be piped to
-the shell (@file{/bin/sh}):
+它产生下面的输出，这些输出通过管道输出给 Shell（@file{/bin/sh}）：
 
 @example
 chmod +w file.flac
@@ -16086,9 +15871,7 @@ LANG=en_US.88591 metaflac --set-tag=TITLE='Whoope! That'"'"'s Great' file.flac
 chmod -w file.flac
 @end example
 
-Note the need for shell quoting.  The function @code{shell_quote()}
-does it.  @code{SINGLE} is the one-character string @code{"'"} and
-@code{QSINGLE} is the three-character string @code{"\"'\""}:
+注意 Shell 需要引号。函数 @code{shell_quote()} 就是来做这个事情的。@code{SINGLE} 是一个一字符的串 @code{"'"}，而 @code{QSINGLE} 是一个三字符的串 @code{"\"'\""}：
 
 @example
 @c file eg/lib/shellquote.awk
@@ -16124,13 +15907,13 @@ function shell_quote(s,             # parameter
 @end example
 
 @node Data File Management
-@section @value{DDF} Management
+@section @value{DDF}管理
+
 
 @cindex files, managing
 @cindex libraries of @command{awk} functions, managing, data files
 @cindex functions, library, managing data files
-This @value{SECTION} presents functions that are useful for managing
-command-line @value{DF}s.
+本@value{SECTION}呈现的函数用于管理命令行@value{DF}非常有用。
 
 @menu
 * Filetrans Function::          A function for handling data file transitions.
@@ -16141,29 +15924,15 @@ command-line @value{DF}s.
 @end menu
 
 @node Filetrans Function
-@subsection Noting @value{DDF} Boundaries
+@subsection 注意@value{DDF}的边界
 
 @cindex files, managing, data file boundaries
 @cindex files, initialization and cleanup
-The @code{BEGIN} and @code{END} rules are each executed exactly once, at
-the beginning and end of your @command{awk} program, respectively
-(@pxref{BEGIN/END}).
-We (the @command{gawk} authors) once had a user who mistakenly thought that the
-@code{BEGIN} rules were executed at the beginning of each @value{DF} and the
-@code{END} rules were executed at the end of each @value{DF}.
+@code{BEGIN} 与 @code{END} 规则相应地在你的 @command{awk} 程序的开始与结束执行一次（查看 @pxref{BEGIN/END}）。我们（@command{gawk} 的作者们）遇到过一个用户，错误地认为 @code{BEGIN} 规则在每个@value{DF}的开始都执行，而 @code{END} 规则在每个@value{DF}的结束时执行。
 
-When informed
-that this was not the case, the user requested that we add new special
-patterns to @command{gawk}, named @code{BEGIN_FILE} and @code{END_FILE}, that
-would have the desired behavior.  He even supplied us the code to do so.
+当被通知说事情不是这样的，用户请求我们加一个新的特定模式到 @command{gawk} 中，称为 @code{BEGIN_FILE} 与 @code{END_FILE}，这些都则具有所期望的行为。他甚至为我们提供这么做的代码。
 
-Adding these special patterns to @command{gawk} wasn't necessary;
-the job can be done cleanly in @command{awk} itself, as illustrated
-by the following library program.
-It arranges to call two user-supplied functions, @code{beginfile()} and
-@code{endfile()}, at the beginning and end of each @value{DF}.
-Besides solving the problem in only nine(!) lines of code, it does so
-@emph{portably}; this works with any implementation of @command{awk}:
+给 @command{gawk} 加这个特殊模式并不是必需的，@command{awk} 自己都就可以很清楚地完成这个事情，如下面的函数程序所解释的一样。它会调用两个用户自己提供的函数 ，@code{beginfile()} 与 @code{endfile()} 分别在每个@value{DF}的开始与结束。不但@emph{很好地}用 9 行代码解决上面的问题，而且还可移植称，这在任何 @command{awk} 实现版本都可工作。
 
 @example
 # transfile.awk
@@ -16187,33 +15956,16 @@ FILENAME != _oldfilename @{
 END @{ endfile(FILENAME) @}
 @end example
 
-This file must be loaded before the user's ``main'' program, so that the
-rule it supplies is executed first.
+这个文件必须在用户的主程序之前装入，因此这里所提供的规则会首先执行。
 
-This rule relies on @command{awk}'s @code{FILENAME} variable, which
-automatically changes for each new @value{DF}.  The current @value{FN} is
-saved in a private variable, @code{_oldfilename}.  If @code{FILENAME} does
-not equal @code{_oldfilename}, then a new @value{DF} is being processed and
-it is necessary to call @code{endfile()} for the old file.  Because
-@code{endfile()} should only be called if a file has been processed, the
-program first checks to make sure that @code{_oldfilename} is not the null
-string.  The program then assigns the current @value{FN} to
-@code{_oldfilename} and calls @code{beginfile()} for the file.
-Because, like all @command{awk} variables, @code{_oldfilename} is
-initialized to the null string, this rule executes correctly even for the
-first @value{DF}.
+这个规则依赖于 @command{awk} 的 @code{FILENAME} 变量，这个变量在处理每个新的@value{DF}时自动变化。
+当前的@value{DF}存储在一个私有变量，@code{_oldfilename} 中。如果 @code{FILENAME} 与 @code{_oldfilename} 不相同，则一个新的数据文件正在被处理，则有必须为旧文件调用 @code{endfile()}。因为 @code{endfile()} 仅在一个文件被处理完后会调用，所以，程序首先要检查确定 @code{_oldfilename} 不是一个空串。程序然后将当前@value{FN}赋值给 @code{_oldfilename} 然后为当前文件调用 @code{beginfile()}。像 @command{awk} 的变量一样，因为 @code{_oldfilename} 被初始化为空串，这个规则甚至在读取第一个@value{DF}时也是正确的。
 
-The program also supplies an @code{END} rule to do the final processing for
-the last file.  Because this @code{END} rule comes before any @code{END} rules
-supplied in the ``main'' program, @code{endfile()} is called first.  Once
-again, the value of multiple @code{BEGIN} and @code{END} rules should be clear.
+程序也提供一个 @code{END} 规则来处理最后一个文件。因为这个 @code{END} 规则在任何其他的由主程序提供 @code{END} 规则之前，因此 @code{endfile()} 会首先被调用。再一次地， 多个 @code{BEGIN} 与 @code{END} 规则的值应该被清除。
 
 @cindex @code{beginfile()} user-defined function
 @cindex @code{endfile()} user-defined function
-If the same @value{DF} occurs twice in a row on the command line, then
-@code{endfile()} and @code{beginfile()} are not executed at the end of the
-first pass and at the beginning of the second pass.
-The following version solves the problem:
+如果同样的@value{DF}在一个命令中出现了两次，则 @code{endfile()} 与 @code{beginfile()} 在第一轮结束的时候不会被执行，而在第二轮开始的时候执行。下面的版本解决了这个问题：
 
 @example
 @c file eg/lib/ftrans.awk
@@ -16241,40 +15993,22 @@ END @{ endfile(_filename_) @}
 @c endfile
 @end example
 
-@ref{Wc Program}
-shows how this library function can be used and
-how it simplifies writing the main program.
+在 @ref{Wc Program}，中展示了这个库函数可以用于以及如何来简化主程序的编写。
 
-@sidebar So Why Does @command{gawk} Have @code{BEGINFILE} and @code{ENDFILE}?
+@sidebar 那么为什么 @command{gawk} 需要 @code{BEGINFILE} 与 @code{ENDFILE}?
 
-You are probably wondering, if @code{beginfile()} and @code{endfile()}
-functions can do the job, why does @command{gawk} have
-@code{BEGINFILE} and @code{ENDFILE} patterns?
+你可能很奇怪，如果 @code{beginfile()} 与 @code{endfile()} 函数可以做相同的事情，为什么 @command{gawk} 还要有 @code{BEGINFILE} 与 @code{ENDFILE} 模式呢？
 
-Good question.  Normally, if @command{awk} cannot open a file, this
-causes an immediate fatal error.  In this case, there is no way for a
-user-defined function to deal with the problem, as the mechanism for
-calling it relies on the file being open and at the first record.  Thus,
-the main reason for @code{BEGINFILE} is to give you a ``hook'' to catch
-files that cannot be processed.  @code{ENDFILE} exists for symmetry,
-and because it provides an easy way to do per-file cleanup processing.
-For more information, refer to @ref{BEGINFILE/ENDFILE}.
+问题很好。正常情况下，如果 @command{awk} 没法打开一个文件，这会立即导致一个致使错误。在这种情况下，对于用户自己定义的函数来讲，就没有办法来处理这个问题。因为调用函数的机制依赖于正在被打开的文件及其第一条记录。所以，@code{BEGINFILE} 的主要原因是给你一个“勾子”来捕获不能被处理的文件。要取得更多的信息，请查看 @ref{BEGINFILE/ENDFILE}。
 @end sidebar
 
 @node Rewind Function
-@subsection Rereading the Current File
+@subsection 重新读取当前文件
 
 @cindex files, reading
-Another request for a new built-in function was for a
-function that would make it possible to reread the current file.
-The requesting user didn't want to have to use @code{getline}
-(@pxref{Getline})
-inside a loop.
+对于内置函数的另一个请求则是加入这样的一个函数使其可以重新读取当前文件。请求的用户不想在循环中使用 @code{getline}（查看 @pxref{Getline}）。
 
-However, as long as you are not in the @code{END} rule, it is
-quite easy to arrange to immediately close the current input file
-and then start over with it from the top.
-For lack of a better name, we'll call the function @code{rewind()}:
+但是，只要你还不在 @code{END} 规则中，就非常容易安排立即关闭当前文件，然新头开始处理这个文件。由于缺少好名字，我们把它取名为 @code{rewind()}：
 
 @cindex @code{rewind()} user-defined function
 @example
@@ -16308,16 +16042,9 @@ function rewind(    i)
 @c endfile
 @end example
 
-The @code{rewind()} function relies on the @code{ARGIND} variable
-(@pxref{Auto-set}), which is specific to @command{gawk}.  It also
-relies on the @code{nextfile} keyword (@pxref{Nextfile Statement}).
-Because of this, you should not call it from an @code{ENDFILE} rule.
-(This isn't necessary anyway, because @command{gawk} goes to the next
-file as soon as an @code{ENDFILE} rule finishes!)
+@code{rewind()} 函数依赖于 @code{ARGIND} 变量（查看 @pxref{Auto-set}），这个变量是 @command{gawk} 特有的。同时也依赖于 @code{nextfile} 关键词（查看 @pxref{Nextfile Statement}）。由于这个原因，你不可以在 @code{ENDFILE} 规则中调用它。（也没有必要，因此 @command{gawk} 只要 @code{ENDFILE} 一结束就开始了下一个文件！）
 
-You need to be careful calling @code{rewind()}.  You can end up
-causing infinite recursion if you don't pay attention. Here is an
-example use:
+你需要小心地调用 @code{rewind()}。如果你不注意的话，可能会引发无限循环而结束程序。这里是一个使用的例子：
 
 @example
 $ @kbd{cat data}
@@ -16346,18 +16073,14 @@ $ @kbd{gawk -f rewind.awk -f test.awk data }
 @end example
 
 @node File Checking
-@subsection Checking for Readable @value{DDF}s
+@subsection 检查可读的@value{DDF}
 
 @cindex troubleshooting, readable data files
 @cindex readable data files@comma{} checking
 @cindex files, skipping
-Normally, if you give @command{awk} a @value{DF} that isn't readable,
-it stops with a fatal error.  There are times when you might want to
-just ignore such files and keep going.@footnote{The @code{BEGINFILE}
-special pattern (@pxref{BEGINFILE/ENDFILE}) provides an alternative
-mechanism for dealing with files that can't be opened.  However, the
-code here provides a portable solution.} You can do this by prepending
-the following program to your @command{awk} program:
+一般情况下，如果你提供 @command{awk} 一个@value{DF}是不可读的，它会以致使错误而结束。有一些时候，你可能想忽略这样的问题并往下走。
+@footnote{@code{BEGINFILE} 特定模式（查看 @pxref{BEGINFILE/ENDFILE}）提供了另一种机制来处理那些不可以打开的文件。但是，这里的代码提供了一种可移植的方案。}
+你可以将下面的程序插入到你的 @command{awk} 程序中：
 
 @cindex @code{readable.awk} program
 @example
@@ -16389,33 +16112,18 @@ BEGIN @{
 @end example
 
 @cindex troubleshooting, @code{getline} function
-This works, because the @code{getline} won't be fatal.
-Removing the element from @code{ARGV} with @code{delete}
-skips the file (because it's no longer in the list).
-See also @ref{ARGC and ARGV}.
+这个可以工作，因为 @code{getline} 不会导致致使错误。将 @code{delete} 从 @code{ARGV} 数组中移除元素以跳过这些文件（因此它不再在列表中）。查看 @ref{ARGC and ARGV}。
 
-Because @command{awk} variable names only allow the English letters,
-the regular expression check purposely does not use character classes
-such as @samp{[:alpha:]} and @samp{[:alnum:]}
-(@pxref{Bracket Expressions}).
+由于 @command{awk} 变量名字只允许是英文字母，所以正则表达式检查有意不使用字符类，如 @samp{[:alpha:]} 与 @samp{[:alnum:]} （查看 
+@pxref{Bracket Expressions}）。
 
 @node Empty Files
-@subsection Checking for Zero-Length Files
+@subsection 检查长度为零的文件
 
-All known @command{awk} implementations silently skip over zero-length files.
-This is a by-product of @command{awk}'s implicit
-read-a-record-and-match-against-the-rules loop: when @command{awk}
-tries to read a record from an empty file, it immediately receives an
-end-of-file indication, closes the file, and proceeds on to the next
-command-line @value{DF}, @emph{without} executing any user-level
-@command{awk} program code.
+所有已知的 @command{awk} 实现都默默地跳过长度为零的文件。这是由 @command{awk} 隐式规则“读取记录并匹配规则”循环产生的结果。当 @command{awk} 尝试读取空文件记录时，它立即会接收到文件结束的指示，然后会关闭文件，并处理命令行中的下一个@value{DF}，而@emph{不会}执行任务用户层的 @command{awk} 程序代码。
 
-Using @command{gawk}'s @code{ARGIND} variable
-(@pxref{Built-in Variables}), it is possible to detect when an empty
-@value{DF} has been skipped.  Similar to the library file presented
-in @ref{Filetrans Function}, the following library file calls a function named
-@code{zerofile()} that the user must provide.  The arguments passed are
-the @value{FN} and the position in @code{ARGV} where it was found:
+使用 @command{gawk} 的 @code{ARGIND} 变量（查看 @pxref{Built-in Variables}），有可能来检测当遇到一个空@value{DF}时则跳过。
+与在 @ref{Filetrans Function}，呈现的库文件相似，下面的库文件会调用用户必须提供的函数，名为 @code{zerofile()}。传递的参数为@value{FN}，以及其在 @code{ARGV} 中的位置：
 
 @cindex @code{zerofile.awk} program
 @example
@@ -16448,34 +16156,22 @@ END @{
 @c endfile
 @end example
 
-The user-level variable @code{Argind} allows the @command{awk} program
-to track its progress through @code{ARGV}.  Whenever the program detects
-that @code{ARGIND} is greater than @samp{Argind + 1}, it means that one or
-more empty files were skipped.  The action then calls @code{zerofile()} for
-each such file, incrementing @code{Argind} along the way.
+用户层的变量 @code{Argind} 允许 @command{awk} 程序跟踪它的 @code{ARGV} 进度。
+无论什么时候程序检测到了 @code{ARGIND} 大于 @samp{Argind + 1}，这就表示一到多个的文件名已经被跳过了。然后调用 @code{zerofile()} 的动作来处理每一个文件，并递增 Argind 变量。
 
-The @samp{Argind != ARGIND} rule simply keeps @code{Argind} up to date
-in the normal case.
+@samp{Argind != ARGIND} 中是简单地来使 @code{Argind} 在正常情况下更新为最新状态。
 
-Finally, the @code{END} rule catches the case of any empty files at
-the end of the command-line arguments.  Note that the test in the
-condition of the @code{for} loop uses the @samp{<=} operator,
-not @samp{<}.
+最后 @code{END} 规则会捕获在命令行最后的参数中的空文件。注意在 @code{for} 循环中使用的测试条件，是 使用 @samp{<=} 操作符而不是 @samp{<}。
 
 @node Ignoring Assigns
-@subsection Treating Assignments as @value{FFN}s
+@subsection 将赋值当成是@value{FFN}
 
 @cindex assignments as filenames
 @cindex filenames, assignments as
-Occasionally, you might not want @command{awk} to process command-line
-variable assignments
-(@pxref{Assignment Options}).
-In particular, if you have a @value{FN} that contains an @samp{=} character,
-@command{awk} treats the @value{FN} as an assignment and does not process it.
+有时候，你不想 @command{awk} 来处理命令行的变量赋值（查看 @pxref{Assignment Options}）。
+尤其是你有一个文件中包含 @samp{=} 符号，@command{awk} 会将这个@value{FN}当成一个赋值，而不会处理它。
 
-Some users have suggested an additional command-line option for @command{gawk}
-to disable command-line assignments.  However, some simple programming with
-a library file does the trick:
+一些用户曾建议了一个额外的命令行选项来给 @command{gawk} 去禁用命令行的赋值。但是，一些库文件中的简单的程序就可以解决：
 
 @cindex @code{noassign.awk} program
 @example
@@ -16506,24 +16202,18 @@ BEGIN @{
 @c endfile
 @end example
 
-You then run your program this way:
+然后你这么来运行程序：
 
 @example
 awk -v No_command_assign=1 -f noassign.awk -f yourprog.awk *
 @end example
 
-The function works by looping through the arguments.
-It prepends @samp{./} to
-any argument that matches the form
-of a variable assignment, turning that argument into a @value{FN}.
+函数会迭代所有的参数。它会在匹配变量赋值形式的参数前插入 @samp{./}，来将参数转换为@value{FN}。
 
-The use of @code{No_command_assign} allows you to disable command-line
-assignments at invocation time, by giving the variable a true value.
-When not set, it is initially zero (i.e., false), so the command-line arguments
-are left alone.
+通过给 @code{No_command_assign} 在调用时赋值为 true，可以让你调用时禁用命令行中的赋值。当没有设置时，它的初始值为 0（即 false），所以命令行参数就不会变化。
 
 @node Getopt Function
-@section Processing Command-Line Options
+@section 处理命令行选项
 
 @cindex libraries of @command{awk} functions, command-line options
 @cindex functions, library, command-line options
@@ -16531,36 +16221,15 @@ are left alone.
 @cindex options, command-line, processing
 @cindex functions, library, C library
 @cindex arguments, processing
-Most utilities on POSIX-compatible systems take options on
-the command line that can be used to change the way a program behaves.
-@command{awk} is an example of such a program
-(@pxref{Options}).
-Often, options take @dfn{arguments} (i.e., data that the program needs to
-correctly obey the command-line option).  For example, @command{awk}'s
-@option{-F} option requires a string to use as the field separator.
-The first occurrence on the command line of either @option{--} or a
-string that does not begin with @samp{-} ends the options.
+在 POSIX 兼容的系统上的大多数工具都从命令行中取得选项，用此来改变程序的行为方式。@command{awk} 是一个这样的例子（查看 @ref{Options}）。
+经常地，选项都会有@dfn{参数}（即程序命令行要正确遵守选项的所需要的数据）。例如 @command{awk} 的 @option{-F} 选项，需要一个串来作为域的分隔符。第一个出现在命令行中的 @option{--} 或者不能 @samp{-} 开头的字串结束选项。
 
 @cindex @code{getopt()} function (C library)
-Modern Unix systems provide a C function named @code{getopt()} for processing
-command-line arguments.  The programmer provides a string describing the
-one-letter options. If an option requires an argument, it is followed in the
-string with a colon.  @code{getopt()} is also passed the
-count and values of the command-line arguments and is called in a loop.
-@code{getopt()} processes the command-line arguments for option letters.
-Each time around the loop, it returns a single character representing the
-next option letter that it finds, or @samp{?} if it finds an invalid option.
-When it returns @minus{}1, there are no options left on the command line.
+现在的 Unix 系统提供了 C 函数，名字为 @code{getopt()} 来处理命令行参数。程序员提供一个字串用来描述单字母的选项。如果选项需要一个参数，则它在字串后后面会跟一个冒号。@code{getopt()} 同时也传递命令行参数的数量与值，并在循环中进行调用。@code{getopt()} 为选项字母处理命令行参数。每次迭代循环，它就返回一个代表下一个它所发现的选项字母，或者为无效的选项的时候，返回 @samp{?}。当返回 @minus{}1 时，表示命令行中没有要处理的选项了。
 
-When using @code{getopt()}, options that do not take arguments can be
-grouped together.  Furthermore, options that take arguments require that the
-argument be present.  The argument can immediately follow the option letter,
-or it can be a separate command-line argument.
+当使用 @code{getopt()} 时，没有带参数的选项可以被合并在一起。另外，需要带参数选项需要参数与要提供。参数可以直接跟在选项字母后面，或者也可以是一个分离的命令行参数。
 
-Given a hypothetical program that takes
-three command-line options, @option{-a}, @option{-b}, and @option{-c}, where
-@option{-b} requires an argument, all of the following are valid ways of
-invoking the program:
+假设有一个假想的程序，接收三个命令行参数，@option{-a}，@option{-b} 与 @option{-c}，而 @option{-b} 需要一个参数，下面所有的该当都是有效的调用程序的方式：
 
 @example
 prog -a -b foo -c data1 data2 data3
@@ -16568,33 +16237,25 @@ prog -ac -bfoo -- data1 data2 data3
 prog -acbfoo data1 data2 data3
 @end example
 
-Notice that when the argument is grouped with its option, the rest of
-the argument is considered to be the option's argument.
-In this example, @option{-acbfoo} indicates that all of the
-@option{-a}, @option{-b}, and @option{-c} options were supplied,
-and that @samp{foo} is the argument to the @option{-b} option.
+注意到，当参数与它的选项进行组合时，参数后面的部分都被当成是选项的参数。在这个例子中，@option{-abcfoo} 表示所有的 @option{-a}，@option{-b} 与 @option{-c} 选项，并且 @samp{foo} 是 @option{-b} 选项的参数。
 
-@code{getopt()} provides four external variables that the programmer can use:
+@code{getopt()} 提供了 4 个外部的变量，供程序员使用：
 
 @table @code
 @item optind
-The index in the argument value array (@code{argv}) where the first
-nonoption command-line argument can be found.
+在参数值数组（@code{argv}）中的索引，在这个数组中，可以找到第一个不是选项的命令参数。
 
 @item optarg
-The string value of the argument to an option.
+某此选项的参数的字串值。
 
 @item opterr
-Usually @code{getopt()} prints an error message when it finds an invalid
-option.  Setting @code{opterr} to zero disables this feature.  (An
-application might want to print its own error message.)
+通常情况下，@code{getopt()} 在找到一个无效的选项的时候会打印一个错误消息。将 @code{opterr} 设置为 0 可以禁用这个特性。（应用程序可能想打印自己的错误消息。）
 
 @item optopt
-The letter representing the command-line option.
+代表命令行选项的字母。
 @end table
 
-The following C fragment shows how @code{getopt()} might process command-line
-arguments for @command{awk}:
+下面的 C 代码版本展示了 @code{getopt()} 如何来处理 @command{awk} 命令行参数的可能方式：
 
 @example
 int
@@ -16627,22 +16288,13 @@ main(int argc, char *argv[])
 @}
 @end example
 
-As a side point, @command{gawk} actually uses the GNU @code{getopt_long()}
-function to process both normal and GNU-style long options
-(@pxref{Options}).
+插一句，@command{gawk} 实际上是使用 GNU 的 @code{getopt_long()} 函数来处理常规的选项以及 GNU 风格的长选项（查看 @ref{Options}）。
 
-The abstraction provided by @code{getopt()} is very useful and is quite
-handy in @command{awk} programs as well.  Following is an @command{awk}
-version of @code{getopt()}.  This function highlights one of the
-greatest weaknesses in @command{awk}, which is that it is very poor at
-manipulating single characters.  Repeated calls to @code{substr()} are
-necessary for accessing individual characters
-(@pxref{String Functions}).@footnote{This
-function was written before @command{gawk} acquired the ability to
-split strings into single characters using @code{""} as the separator.
-We have left it alone, as using @code{substr()} is more portable.}
+由 @code{getopt()} 提供的抽象非常有用，并且在 @command{awk} 程序中也非常方便。下面是一个 @command{awk} 版本的 @code{getopt()}。
+这个函数突出了 @command{awk} 中最弱的一个方面，即它在处理单个字符的时候非常差。重复地调用 @code{substr()} 在读取单个字符时是必须的（查看 @ref{String Functions}）。 
+@footnote{这个版本在 @command{gawk} 要求用 @code{""} 将字串分隔为字符的能力之前写成的。我们已经不管它了，因为用 @code{substr()} 可移植性更好。}
 
-The discussion that follows walks through the code a bit at a time:
+下面一点点地来解释代码：
 
 @cindex @code{getopt()} user-defined function
 @example
@@ -16676,15 +16328,10 @@ The discussion that follows walks through the code a bit at a time:
 @c endfile
 @end example
 
-The function starts out with comments presenting
-a list of the global variables it uses,
-what the return values are, what they mean, and any global variables that
-are ``private'' to this library function.  Such documentation is essential
-for any program, and particularly for library functions.
+函数以注释开始，说明了它所使用的全局变量的一个列表，返回的值是什么，他们又表示什么，以及这个库函数所私有的全局变量。这样的文档对于任何程序来讲都是很重要的，尤其是对于库函数。
 
-The @code{getopt()} function first checks that it was indeed called with
-a string of options (the @code{options} parameter).  If @code{options}
-has a zero length, @code{getopt()} immediately returns @minus{}1:
+@code{getopt()} 函数首先检查确实是以选项的串来进行调用的（@code{options} 参数）。
+如果 @code{options} 的长度为 0，则 @code{getopt()} 会立即返回 @minus{}1 ：
 
 @cindex @code{getopt()} user-defined function
 @example
@@ -16707,17 +16354,9 @@ function getopt(argc, argv, options,    thisopt, i)
 @c endfile
 @end example
 
-The next thing to check for is the end of the options.  A @option{--}
-ends the command-line options, as does any command-line argument that
-does not begin with a @samp{-}.  @code{Optind} is used to step through
-the array of command-line arguments; it retains its value across calls
-to @code{getopt()}, because it is a global variable.
+下个要做的事情是要检查选项的结束。@option{--} 用于结束命令行选项，因为没有任何的命令行参数不是以 @samp{-} 开始。@code{Optind} 用来一个个地迭代命令行参数数组，它在调用 @code{getopt()} 的过程中一直保留它的值，因为它是一个全局变量。
 
-The regular expression that is used, @code{@w{/^-[^:[:space:]/}},
-checks for a @samp{-} followed by anything
-that is not whitespace and not a colon.
-If the current command-line argument does not match this pattern,
-it is not an option, and it ends option processing. Continuing on:
+在这里使用了正则表达式 @code{@w{/^-[^:[:space:]/}}，用于检查 @samp{-} 后面跟任意的不是空格与冒号的字符。如果命令行参数不匹配这个模式，则它就不是一个选项，然后结束处理。后续：
 
 @example
 @c file eg/lib/getopt.awk
@@ -16739,32 +16378,15 @@ it is not an option, and it ends option processing. Continuing on:
 @c endfile
 @end example
 
-The @code{_opti} variable tracks the position in the current command-line
-argument (@code{argv[Optind]}).  If multiple options are
-grouped together with one @samp{-} (e.g., @option{-abx}), it is necessary
-to return them to the user one at a time.
+@code{_opti} 变量用于跟踪当前命令行参数的位置（@code{argv[Optind]}）。如果有多个选项用 @samp{-} 合并在一起（如，@option{-abx}），则有必要一次返回一个。
 
-If @code{_opti} is equal to zero, it is set to two, which is the index in
-the string of the next character to look at (we skip the @samp{-}, which
-is at position one).  The variable @code{thisopt} holds the character,
-obtained with @code{substr()}.  It is saved in @code{Optopt} for the main
-program to use.
+如果 @code{_opti} 的等于 0，则被设置为 2，这个值是字串中下一个要查找字符的位置（我们跳过 @samp{-}，而它的位置是 1 ）。变量 @code{thisopt} 保存用 @code{substr()} 取得的字符。它被保存于 @code{Optopt} 以备主程序的使用。
 
-If @code{thisopt} is not in the @code{options} string, then it is an
-invalid option.  If @code{Opterr} is nonzero, @code{getopt()} prints an error
-message on the standard error that is similar to the message from the C
-version of @code{getopt()}.
+如果 @code{thisopt} 不在选项串 @code{options} 中，则它不是一个有效的选项。如果 @code{Opterr} 的值为非 0，@code{getopt()} 打印一个错误信息到标准错误输出上，这个与 C 版本的 @code{getopt()} 的信息类似。
 
-Because the option is invalid, it is necessary to skip it and move on to the
-next option character.  If @code{_opti} is greater than or equal to the
-length of the current command-line argument, it is necessary to move on
-to the next argument, so @code{Optind} is incremented and @code{_opti} is reset
-to zero. Otherwise, @code{Optind} is left alone and @code{_opti} is merely
-incremented.
+由于选项是无效的，就有必须跳过它并处理下一个选项字符。如果 @code{_opti} 大于或者等于当前命令行参数的个长度，则有必要移动到下一个参数。所以，@code{Optind} 被递增，@code{_opti} 被设置为 0。否则的话，@code{Optind} 不会改变，而只递增 @code{_opti}。
 
-In any case, because the option is invalid, @code{getopt()} returns @code{"?"}.
-The main program can examine @code{Optopt} if it needs to know what the
-invalid option letter actually is. Continuing on:
+在任何情况下，由于选项是无效的，@code{getopt()} 都返回 @code{"?"}。主程序可以检查 @code{Optopt} 以确定无效的选项到底是什么。继续：
 
 @example
 @c file eg/lib/getopt.awk
@@ -16780,13 +16402,8 @@ invalid option letter actually is. Continuing on:
 @c endfile
 @end example
 
-If the option requires an argument, the option letter is followed by a colon
-in the @code{options} string.  If there are remaining characters in the
-current command-line argument (@code{argv[Optind]}), then the rest of that
-string is assigned to @code{Optarg}.  Otherwise, the next command-line
-argument is used (@samp{-xFOO} versus @samp{@w{-x FOO}}). In either case,
-@code{_opti} is reset to zero, because there are no more characters left to
-examine in the current command-line argument. Continuing:
+如果选项需要一个参数，在选项字串 @code{options} 中的选项字母后面会跟着一个冒号。如果在当前的命令参数列表中（@code{argv[Optind]}）还有字符，则字串后面的内容会被赋值给 @code{Optarg}。否则就使用下一个命令参数（@samp{-xFOO} 对 @samp{@w{-x FOO}}）。
+在任一情况下，@code{_opti} 都被设置为 0，因为没有更多的字符剩下来检查当前的命令行参数。继续：
 
 @example
 @c file eg/lib/getopt.awk
@@ -16800,18 +16417,9 @@ examine in the current command-line argument. Continuing:
 @c endfile
 @end example
 
-Finally, if @code{_opti} is either zero or greater than the length of the
-current command-line argument, it means this element in @code{argv} is
-through being processed, so @code{Optind} is incremented to point to the
-next element in @code{argv}.  If neither condition is true, then only
-@code{_opti} is incremented, so that the next option letter can be processed
-on the next call to @code{getopt()}.
+最后，如果 @code{_opti} 为 0 或者大于当前命令行参数的长度，则它表示元素在 argv 中已经处理了，所以，@code{Optind} 被递增以指向下一个 @code{argv} 中的元素。如果没有一个条件为 true，则只有 @code{_opti} 被递增，所以下一个选项字母可以在下次调用 @code{getopt()} 时被处理。
 
-The @code{BEGIN} rule initializes both @code{Opterr} and @code{Optind} to one.
-@code{Opterr} is set to one, because the default behavior is for @code{getopt()}
-to print a diagnostic message upon seeing an invalid option.  @code{Optind}
-is set to one, because there's no reason to look at the program name, which is
-in @code{ARGV[0]}:
+@code{BEGIN} 规则中将 @code{Opterr} 与 @code{Optind} 都设置为 1。@code{Opterr} 被设置为 1 的原因是 @code{getopt()} 的默认行为就是在发现无效选项的时候打印诊断信息。@code{Optind} 设置为 1 是因为没有原因要去查看程序名，因为程序名存在 @code{ARGV[0]} 中：
 
 @example
 @c file eg/lib/getopt.awk
@@ -16833,8 +16441,7 @@ BEGIN @{
 @c endfile
 @end example
 
-The rest of the @code{BEGIN} rule is a simple test program.  Here are the
-results of two sample runs of the test program:
+@code{BEGIN} 规则的剩下部分就是一个很简单的测试程序。这是两上例子，运行测试程序时的结果：
 
 @example
 $ @kbd{awk -f getopt.awk -v _getopt_test=1 -- -a -cbARG bax -x}
@@ -16854,51 +16461,32 @@ $ @kbd{awk -f getopt.awk -v _getopt_test=1 -- -a -x -- xyz abc}
 @print{}         ARGV[5] = <abc>
 @end example
 
-In both runs, the first @option{--} terminates the arguments to
-@command{awk}, so that it does not try to interpret the @option{-a},
-etc., as its own options.
+在两次运行里，第一个 @option{--} 会终结 @command{awk} 中的参数，所以它不会试图去将 @option{-a} 等等来当成自己的选项。
 
-@quotation NOTE
-After @code{getopt()} is through,
-user-level code must clear out all the elements of @code{ARGV} from 1
-to @code{Optind}, so that @command{awk} does not try to process the
-command-line options as @value{FN}s.
+@quotation 提示
+在 @code{getopt()} 完成后，用户层代码必须清除所有的 @code{ARGV} 元素，从索引 1 到 @code{Optind}，所以，@command{awk} 不会试图去把命令行选项当成@value{FN}来处理。
 @end quotation
 
-Using @samp{#!} with the @option{-E} option may help avoid
-conflicts between your program's options and @command{gawk}'s options,
-as @option{-E} causes @command{gawk} to abandon processing of
-further options
-(@pxref{Executable Scripts} and
+使用 @samp{#!} 并带上 @option{-E} 选项可以避免将你的程序的选项与 @command{gawk} 的选项的冲突，因为 @option{-E} 选项会导致 @command{gawk} 放弃处理后续的选项（查看 @pxref{Executable Scripts}，以及 
 @ifnotdocbook
-@pxref{Options}).
+@ref{Options}）。
 @end ifnotdocbook
 @ifdocbook
-@ref{Options}).
+@ref{Options}）。
 @end ifdocbook
 
-Several of the sample programs presented in
-@ref{Sample Programs},
-use @code{getopt()} to process their arguments.
+在 @ref{Sample Programs}，中的几个例子使用 @code{getopt()} 来处理它们的参数。
 
 @node Passwd Functions
-@section Reading the User Database
+@section 读取用户数据库
 
 @cindex libraries of @command{awk} functions, user database, reading
 @cindex functions, library, user database@comma{} reading
 @cindex user database@comma{} reading
 @cindex database, users@comma{} reading
 @cindex @code{PROCINFO} array
-The @code{PROCINFO} array
-(@pxref{Built-in Variables})
-provides access to the current user's real and effective user and group ID
-numbers, and, if available, the user's supplementary group set.
-However, because these are numbers, they do not provide very useful
-information to the average user.  There needs to be some way to find the
-user information associated with the user and group ID numbers.  This
-@value{SECTION} presents a suite of functions for retrieving information from the
-user database.  @xref{Group Functions}
-for a similar suite that retrieves information from the group database.
+@code{PROCINFO} 数组（查看 @pxref{Built-in Variables}）提供了访问当前用户直实与有效的用户与组 ID 数值的方式，并且如果可用，用户的补充的组集也可以访问。但是，因为这些都是些数值，它们没有提供非常有用的信息给到普通的用户。必须有什么样的方法来找到与用户与组 ID 数组相关的用户信息。
+这一@value{SECTION}就是提供一组函数来从用户数据库中返回信息。查看 @xref{Group Functions}，可了解从组数据库中返回信息的一组函数。
 
 @cindex @code{getpwent()} function (C library)
 @cindex @code{getpwent()} user-defined function
@@ -16907,26 +16495,13 @@ for a similar suite that retrieves information from the group database.
 @cindex account information
 @cindex password file
 @cindex files, password
-The POSIX standard does not define the file where user information is
-kept.  Instead, it provides the @code{<pwd.h>} header file
-and several C language subroutines for obtaining user information.
-The primary function is @code{getpwent()}, for ``get password entry.''
-The ``password'' comes from the original user database file,
-@file{/etc/passwd}, which stores user information along with the
-encrypted passwords (hence the name).
+POSIX 标准没有定义用户的信息存在哪。相反，它提供了 @code{<pwd.h>} 头文件以及几个 C 语言例程来获取用户的信息。主要的函数有 @code{getpwent()}，用来“get password entry”（获取密码项）。密码来自于最初的用户数据库文件，@file{/etc/passwd}，在里面存储了用户信息以及加密过的密码（与名字有相关）。
 
 @cindex @command{pwcat} program
-Although an @command{awk} program could simply read @file{/etc/passwd}
-directly, this file may not contain complete information about the
-system's set of users.@footnote{It is often the case that password
-information is stored in a network database.} To be sure you are able to
-produce a readable and complete version of the user database, it is necessary
-to write a small C program that calls @code{getpwent()}.  @code{getpwent()}
-is defined as returning a pointer to a @code{struct passwd}.  Each time it
-is called, it returns the next entry in the database.  When there are
-no more entries, it returns @code{NULL}, the null pointer.  When this
-happens, the C program should call @code{endpwent()} to close the database.
-Following is @command{pwcat}, a C program that ``cats'' the password database:
+尽管 @command{awk} 程序可以简单直接地读取 @file{/etc/passwd} 文件，但是文件并没有包含系统中用户集的完整信息。
+@footnote{用户的密码信息很多情况下都存储在网络数据库中。}
+为了确保你能够产生可读的以及完整的用户数据版本，有必要调用 @code{getpwent()} 来写一个小的 C 程序。@code{getpwent()} 定义为返回 @code{struct passwd} 的指针。每次调用，它都返回下一个项。当没有更多的项时，则返回 @code{NULL}，即空指针。
+当出现这个结果后，C 程序则要调用 @code{endpwent()} 来关闭数据库。下面是 @command{pwcat}，一个 C 程序用来“连接”密码数据库：
 
 @example
 @c file eg/lib/pwcat.c
@@ -16998,40 +16573,32 @@ main(int argc, char **argv)
 @c endfile
 @end example
 
-If you don't understand C, don't worry about it.
-The output from @command{pwcat} is the user database, in the traditional
-@file{/etc/passwd} format of colon-separated fields.  The fields are:
+如果你不理解 C 代码，也没有关系。@command{pwcat} 的输出就是以传统的 @file{/etc/passwd} 的冒号分隔域的格式输出用户数据库。这些域是：
 
 @table @asis
 @item Login name
-The user's login name.
+用户的登录名。
 
 @item Encrypted password
-The user's encrypted password.  This may not be available on some systems.
+用户加密过的密码。这在某些系统上可能得不到。
 
 @item User-ID
-The user's numeric user ID number.
-(On some systems, it's a C @code{long}, and not an @code{int}.  Thus,
-we cast it to @code{long} for all cases.)
+用户的数值 ID。（在一些系统上，这是一个 C 的 @code{long} 类型，而不是 @code{int} 型，所以，我们在所有的情况下都转换为 @code{long}。）
 
 @item Group-ID
-The user's numeric group ID number.
-(Similar comments about @code{long} versus @code{int} apply here.)
+用户的组数值 ID。（内容与刚才所述的 @code{long} 与 @code{int} 类型的解释类似。）
 
 @item Full name
-The user's full name, and perhaps other information associated with the
-user.
+用户的全名，以及与这个用户相关的其他信息。
 
 @item Home directory
-The user's login (or ``home'') directory (familiar to shell programmers as
-@code{$HOME}).
+用户的登录目录（或者“home”）（Shell 程序员熟悉的 @code{$HOME}）。
 
 @item Login shell
-The program that is run when the user logs in.  This is usually a
-shell, such as Bash.
+当用户登录时所要运行的程序。一般来说是一个 Shell 程序，如 Bash。
 @end table
 
-A few lines representative of @command{pwcat}'s output are as follows:
+@command{pwcat} 的输出的几行内容例子如下：
 
 @cindex Jacobs, Andrew
 @cindex Robbins, Arnold
@@ -17049,9 +16616,7 @@ $ @kbd{pwcat}
 @dots{}
 @end example
 
-With that introduction, following is a group of functions for getting user
-information.  There are several functions here, corresponding to the C
-functions of the same names:
+根据之前的一些说明，下面是一组函数用来取得用户的信息的函数。这里有几个函数与 C 中同名的函数对应：
 
 @cindex @code{_pw_init()} user-defined function
 @example
@@ -17108,48 +16673,20 @@ function _pw_init(    oldfs, oldrs, olddol0, pwcat, using_fw, using_fpat)
 @end example
 
 @cindex @code{BEGIN} pattern, @code{pwcat} program
-The @code{BEGIN} rule sets a private variable to the directory where
-@command{pwcat} is stored.  Because it is used to help out an @command{awk} library
-routine, we have chosen to put it in @file{/usr/local/libexec/awk};
-however, you might want it to be in a different directory on your system.
+@code{BEGIN} 规则将私有变量设置为 @command{pwcat} 所在的目录。因为它用于辅助 @command{awk} 的库例程。我们已经将其放在 @file{/usr/local/libexec/awk} 中，但是，你可能想放到你的系统中的另外一个位置。
 
-The function @code{_pw_init()} fills three copies of the user information
-into three associative arrays.  The arrays are indexed by username
-(@code{_pw_byname}), by user ID number (@code{_pw_byuid}), and by order of
-occurrence (@code{_pw_bycount}).
-The variable @code{_pw_inited} is used for efficiency, as @code{_pw_init()}
-needs to be called only once.
+函数 @code{_pw_init()} 会将用户信息的三个复本填入到三个相关的数组。数组由用户名进行（@code{_pw_byname})，用户 ID（@code{_pw_byuid})，以及出现的顺序（@code{_pw_bycount}）进行索引。变量 @code{_pw_inited} 为了高效而设置，因此 @code{_pw_init()} 只需要调用一次。
 
 @cindex @code{PROCINFO} array, testing the field splitting
 @cindex @code{getline} command, @code{_pw_init()} function
-Because this function uses @code{getline} to read information from
-@command{pwcat}, it first saves the values of @code{FS}, @code{RS}, and @code{$0}.
-It notes in the variable @code{using_fw} whether field splitting
-with @code{FIELDWIDTHS} is in effect or not.
-Doing so is necessary, as these functions could be called
-from anywhere within a user's program, and the user may have his
-or her own way of splitting records and fields.
-This makes it possible to restore the correct
-field-splitting mechanism later.  The test can only be true for
-@command{gawk}.  It is false if using @code{FS} or @code{FPAT},
-or on some other @command{awk} implementation.
+由于函数使用 @code{getline} 来从 @command{pwcat} 中读取信息，它首先将 @code{FS}，@code{RS} 与 @code{$0} 的值存起来。使用 @code{using_fw} 变量来表示域是否是用 @code{FIELDWIDTHS} 来进行分割。这么做是有必要的，因为这些函数也可从用户程序的任何地方进行调用，并且用户有它自己的记录域的分割方式。这样，通过这样的方式使我们可以恢复正确的分割机制。测试只针对 @command{gawk}。在某此 @command{awk} 实现中，如果使用 @code{FS} 或者 @code{FPAT}，则这个值为 false。
 
-The code that checks for using @code{FPAT}, using @code{using_fpat}
-and @code{PROCINFO["FS"]}, is similar.
+检查是否使用 @code{FPAT} 的代码利用 @code{using_fpat} 变量与 @code{PROCINFO["FS"]} 也是类似的情况。
 
-The main part of the function uses a loop to read database lines, split
-the lines into fields, and then store the lines into each array as necessary.
-When the loop is done, @code{@w{_pw_init()}} cleans up by closing the pipeline,
-setting @code{@w{_pw_inited}} to one, and restoring @code{FS}
-(and @code{FIELDWIDTHS} or @code{FPAT}
-if necessary), @code{RS}, and @code{$0}.
-The use of @code{@w{_pw_count}} is explained shortly.
+函数的主体部分使用循环来读取数据库行，并将它们分割为不同的域，然后将行存储到数组中以备使用。当循环结束时，@code{@w{_pw_init()}} 通过关闭管线清理，并将 @code{@w{_pw_inited}} 设置为 1，然后恢复 @code{FS} 的值（如果必要的情况下也恢复 @code{FIELDWIDTHS} 与 @code{FPAT}），@code{RS} 的值与 @code{$0} 的值。@code{@w{_pw_count}} 的使用后面再解释。
 
 @cindex @code{getpwnam()} function (C library)
-The @code{getpwnam()} function takes a username as a string argument. If that
-user is in the database, it returns the appropriate line. Otherwise, it
-relies on the array reference to a nonexistent
-element to create the element with the null string as its value:
+@code{getpwnam()} 函数取用户名的字串为参数。如果用户在数据库中，则其返回相应的行。否则，通过指向一个不存在的元素的引用会创建一个值为空串的元素。
 
 @cindex @code{getpwnam()} user-defined function
 @example
@@ -17164,6 +16701,7 @@ function getpwnam(name)
 @end group
 @end example
 
+#TODO20171120
 @cindex @code{getpwuid()} function (C library)
 Similarly, the @code{getpwuid()} function takes a user ID number
 argument. If that user number is in the database, it returns the
