@@ -348,3 +348,17 @@
 
 改动
 > XOR 的操作结果是有一个位 1 则为 1，但不能两个都为 1。
+
+## 11.2.1
+英文原文
+> A common use of cut might be to pull out just the login names of
+> logged-on users from the output of who.
+> For example, the following
+> pipeline generates a sorted, unique list of the logged-on users:
+ 
+译文原文
+> 例如 who 的输出，下面的管线会产生有序的，唯一的登录到系统中的用户列表：
+
+改动
+> cut 通常的使用方式可能是从命令 who 的输出结果中仅仅抽出已登录用户的登录名。
+> 例如，下面的管线会产生有序的，唯一的登录到系统中的用户列表：

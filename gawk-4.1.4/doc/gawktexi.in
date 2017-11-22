@@ -16701,11 +16701,8 @@ function getpwnam(name)
 @end group
 @end example
 
-#TODO20171120
 @cindex @code{getpwuid()} function (C library)
-Similarly, the @code{getpwuid()} function takes a user ID number
-argument. If that user number is in the database, it returns the
-appropriate line. Otherwise, it returns the null string:
+类似地，@code{getpwuid()} 函数使用用户的 ID 值作为参数。如果用户数组在数据库中，则返回相应的行，否则返回一个空串：
 
 @cindex @code{getpwuid()} user-defined function
 @example
@@ -16719,9 +16716,7 @@ function getpwuid(uid)
 @end example
 
 @cindex @code{getpwent()} function (C library)
-The @code{getpwent()} function simply steps through the database, one entry at
-a time.  It uses @code{_pw_count} to track its current position in the
-@code{_pw_bycount} array:
+@code{getpwent()} 函数简单地遍历数据库，一次一项。它使用 @code{_pw_count} 来跟踪 @code{_pw_bycount} 数组中的位置：
 
 @cindex @code{getpwent()} user-defined function
 @example
@@ -16737,8 +16732,7 @@ function getpwent()
 @end example
 
 @cindex @code{endpwent()} function (C library)
-The @code{@w{endpwent()}} function resets @code{@w{_pw_count}} to zero, so that
-subsequent calls to @code{getpwent()} start over again:
+@code{@w{endpwent()}} 函数重新将 @code{@w{_pw_count}} 设置为 0，所以后续对于 @code{getpwent()} 的调用会重头开始：
 
 @cindex @code{endpwent()} user-defined function
 @example
@@ -16750,30 +16744,14 @@ function endpwent()
 @c endfile
 @end example
 
-A conscious design decision in this suite is that each subroutine calls
-@code{@w{_pw_init()}} to initialize the database arrays.
-The overhead of running
-a separate process to generate the user database, and the I/O to scan it,
-are only incurred if the user's main program actually calls one of these
-functions.  If this library file is loaded along with a user's program, but
-none of the routines are ever called, then there is no extra runtime overhead.
-(The alternative is move the body of @code{@w{_pw_init()}} into a
-@code{BEGIN} rule, which always runs @command{pwcat}.  This simplifies the
-code but runs an extra process that may never be needed.)
+在这一组例程的一致设计决策是每一个例程都调用 @code{@w{_pw_init()}} 来初始化数组库数组。运行另一个进程来产生用户数组库，以及扫描数据库的负担仅在用户的主程序程序调用其中的某个函数才会产生。如果这个库文件与用户程序一起装载，但是又没有调用其中的任何例程，则不会有任何的运行时负担。（另一个选择是将 @code{@w{_pw_init()}} 的执行体移到 @code{BEGIN} 规则中，在这里部会执行 pwcat。这简化了代码，但是会运行一些从来不会需要的额外过程。）
 
-In turn, calling @code{_pw_init()} is not too expensive, because the
-@code{_pw_inited} variable keeps the program from reading the data more than
-once.  If you are worried about squeezing every last cycle out of your
-@command{awk} program, the check of @code{_pw_inited} could be moved out of
-@code{_pw_init()} and duplicated in all the other functions.  In practice,
-this is not necessary, as most @command{awk} programs are I/O-bound,
-and such a change would clutter up the code.
+再者，调用 @code{_pw_init()} 代价也不高，因为 @code{_pw_inited} 变量会使程序从数据库中读取数据次数不会出于一次。如果你担心这样的测试会遍历在你的程序中，你也可以将检查 @code{_pw_inited} 的代码表从 @code{_pw_init()} 移出去，并复制到所有的其他函数中。在实践中，这是没有必要的，因为大多数的 @command{awk} 程序都是 I/O 型的，这样改变会弄乱代码。
 
-The @command{id} program in @ref{Id Program}
-uses these functions.
+在 @ref{Id Program}，中的 @command{id} 程序会使用到这些函数。
 
 @node Group Functions
-@section Reading the Group Database
+@section 读取组数据库
 
 @cindex libraries of @command{awk} functions, group database, reading
 @cindex functions, library, group database@comma{} reading
@@ -16786,18 +16764,8 @@ uses these functions.
 @cindex account information
 @cindex group file
 @cindex files, group
-Much of the discussion presented in
-@ref{Passwd Functions}
-applies to the group database as well.  Although there has traditionally
-been a well-known file (@file{/etc/group}) in a well-known format, the POSIX
-standard only provides a set of C library routines
-(@code{<grp.h>} and @code{getgrent()})
-for accessing the information.
-Even though this file may exist, it may not have
-complete information.  Therefore, as with the user database, it is necessary
-to have a small C program that generates the group database as its output.
-@command{grcat}, a C program that ``cats'' the group database,
-is as follows:
+在 @ref{Passwd Functions}，中讨论的很多问题也都可以用于组数据库中。尽管传统上以大家都了解的格式与文件（@file{/etc/group}）存储，但是 POSIX 标准只提供了一组 C 库函数（@code{<grp.h>} 与 @code{getgrent()}）来访问信息。就算存在这些文件，但是也可能没有完整的信息。因此，与用户数据库一样，也有必要来写一个小的 C 程序来产生组信息。
+@command{grcat} 则是一个这样的 C 程序用来“cat”组数据库，如下：
 
 @cindex @command{grcat} program
 @example
@@ -16879,34 +16847,24 @@ main(int argc, char **argv)
 @end ignore
 @end example
 
-Each line in the group database represents one group.  The fields are
-separated with colons and represent the following information:
+在组数据库中的一行代表一个组。域则通过冒号来分隔，表示如下信息：
 
 @table @asis
 @item Group Name
-The group's name.
+组名。
 
 @item Group Password
-The group's encrypted password. In practice, this field is never used;
-it is usually empty or set to @samp{*}.
+组的加密密码。在实践中，这个域不会使用到，通过为空或者设置为 @samp{*}。
 
 @item Group ID Number
+组的数值 ID，将名字与数值关联在文件中必须是唯一的。（在一些系统上，它是 C 的 @code{long} 类型，而不是 @code{int} 类型。所以，我们都将其转换为 @code{long}。）
 The group's numeric group ID number;
-the association of name to number must be unique within the file.
-(On some systems it's a C @code{long}, and not an @code{int}.  Thus,
-we cast it to @code{long} for all cases.)
 
 @item Group Member List
-A comma-separated list of usernames.  These users are members of the group.
-Modern Unix systems allow users to be members of several groups
-simultaneously.  If your system does, then there are elements
-@code{"group1"} through @code{"group@var{N}"} in @code{PROCINFO}
-for those group ID numbers.
-(Note that @code{PROCINFO} is a @command{gawk} extension;
-@pxref{Built-in Variables}.)
+一个逗号分隔的用户列表。这些用户是组的成员。现代的 Unix 系统允许用户同时是多个组的成员。如果你的系统可以支持，则在 @code{PROCINFO} 中会为这些组 ID 存储元素 @code{"group1"} 到 @code{"group@var{N}"}。（注意，@code{PROCINFO} 是一个 @command{gawk} 扩展，查看 @pxref{Built-in Variables}）
 @end table
 
-Here is what running @command{grcat} might produce:
+运行 @command{grcat} 时产生的输出可能如下：
 
 @example
 $ @kbd{grcat}
@@ -16919,8 +16877,7 @@ $ @kbd{grcat}
 @dots{}
 @end example
 
-Here are the functions for obtaining information from the group database.
-There are several, modeled after the C library functions of the same names:
+这些函数用来从组数据库中获取信息。有几个，按照 C 库函数的方式来命名：
 
 @cindex @code{getline} command, @code{_gr_init()} user-defined function
 @cindex @code{_gr_init()} user-defined function
@@ -16993,55 +16950,26 @@ function _gr_init(    oldfs, oldrs, olddol0, grcat,
 @c endfile
 @end example
 
-The @code{BEGIN} rule sets a private variable to the directory where
-@command{grcat} is stored.  Because it is used to help out an @command{awk} library
-routine, we have chosen to put it in @file{/usr/local/libexec/awk}.  You might
-want it to be in a different directory on your system.
+@code{BEGIN} 规则将存储 @command{grcat} 所有的目录存储在私有变量中。因此这用于指出 @command{awk} 库函数的位置。我们将其放在 @file{/usr/local/libexec/awk} 中。可能你会选择存在另一个地方。
 
-These routines follow the same general outline as the user database routines
-(@pxref{Passwd Functions}).
-The @code{@w{_gr_inited}} variable is used to
-ensure that the database is scanned no more than once.
-The @code{@w{_gr_init()}} function first saves @code{FS},
-@code{RS}, and
-@code{$0}, and then sets @code{FS} and @code{RS} to the correct values for
-scanning the group information.
-It also takes care to note whether @code{FIELDWIDTHS} or @code{FPAT}
-is being used, and to restore the appropriate field-splitting mechanism.
+这些例程遵循与用户数据库例程一样的框架（查看 @pxref{Passwd Functions}）。@code{@w{_gr_inited}} 变量用于保证数据库只被扫描一次。@code{@w{_gr_init()}} 函数首先存储 @code{FS}，@code{RS} 以及 @code{$0} 值，然后将 @code{FS} 与 @code{RS} 的值设置成正则扫描组信息的格式。同时也会注意是否是用 @code{FIELDWIDTHS} 或者 @code{FPAT}，后面以用来恢复恰当的域分割机制。
 
-The group information is stored in several associative arrays.
-The arrays are indexed by group name (@code{@w{_gr_byname}}), by group ID number
-(@code{@w{_gr_bygid}}), and by position in the database (@code{@w{_gr_bycount}}).
-There is an additional array indexed by username (@code{@w{_gr_groupsbyuser}}),
-which is a space-separated list of groups to which each user belongs.
+组信息存储在几个关联的数组中。数组由组名（@code{@w{_gr_byname}})，组ID（@code{@w{_gr_bygid}}），以及在数据库中的位置（@code{@w{_gr_bycount}}）来索引。还有一个数组由用户名来索引（@code{@w{_gr_groupsbyuser}}），这是每个用户所属的组，每一个用空格分割。
 
-Unlike in the user database, it is possible to have multiple records in the
-database for the same group.  This is common when a group has a large number
-of members.  A pair of such entries might look like the following:
+与用户数据库不同，它有可能在一个数据库有多个记录有相同的组名。当这个组有很多的成员的时候这很正常。两个这样的项看起来像：
 
 @example
 tvpeople:*:101:johnny,jay,arsenio
 tvpeople:*:101:david,conan,tom,joan
 @end example
 
-For this reason, @code{_gr_init()} looks to see if a group name or
-group ID number is already seen.  If so, the usernames are
-simply concatenated onto the previous list of users.@footnote{There is a
-subtle problem with the code just presented.  Suppose that
-the first time there were no names. This code adds the names with
-a leading comma. It also doesn't check that there is a @code{$4}.}
+因为这个，@code{_gr_init()} 要查看是否有相同的组名与组 ID 值。如果有，用户名只是简单地连接到前面的用户列表中。 
+@footnote{刚才展示的代码有一个很细微的问题。假设第一次时是没有名字的，则这个代码会将名字前面带逗号加入。同时也没有检测是否有第 4 个域，@code{$4}。}
 
-Finally, @code{_gr_init()} closes the pipeline to @command{grcat}, restores
-@code{FS} (and @code{FIELDWIDTHS} or @code{FPAT}, if necessary), @code{RS}, and @code{$0},
-initializes @code{_gr_count} to zero
-(it is used later), and makes @code{_gr_inited} nonzero.
+最后，@code{_gr_init()} 关闭 @command{grcat} 的管线，恢复 @code{FS} （如果有必要也恢复 @code{FIELDWIDTHS} 或者 @code{FPAT}），@code{RS} 与 @code{$0} 的值，将 @code{_gr_count} 的值恢复为 0 （后面会使用到），并使 @code{_gr_inited} 为非零。
 
 @cindex @code{getgrnam()} function (C library)
-The @code{getgrnam()} function takes a group name as its argument, and if that
-group exists, it is returned.
-Otherwise, it
-relies on the array reference to a nonexistent
-element to create the element with the null string as its value:
+@code{getgrnam()} 函数取组名为参数，如果存在相应的组，则返回。否则其所依赖的数组，会以空串创建一个元素：
 
 @cindex @code{getgrnam()} user-defined function
 @example
@@ -17055,8 +16983,7 @@ function getgrnam(group)
 @end example
 
 @cindex @code{getgrgid()} function (C library)
-The @code{getgrgid()} function is similar; it takes a numeric group ID and
-looks up the information associated with that group ID:
+@code{getgrgid()} 函数类似，以数值的组 ID 为参数，来查找与这个 ID 相关的组的信息：
 
 @cindex @code{getgrgid()} user-defined function
 @example
@@ -17070,8 +16997,7 @@ function getgrgid(gid)
 @end example
 
 @cindex @code{getgruser()} function (C library)
-The @code{getgruser()} function does not have a C counterpart. It takes a
-username and returns the list of groups that have the user as a member:
+@code{getgruser()} 函数没有相应的 C 例程对应。它取用户名为参数，并返回该组中的成员用户的列表：
 
 @cindex @code{getgruser()} function, user-defined
 @example
@@ -17085,8 +17011,7 @@ function getgruser(user)
 @end example
 
 @cindex @code{getgrent()} function (C library)
-The @code{getgrent()} function steps through the database one entry at a time.
-It uses @code{_gr_count} to track its position in the list:
+@code{getgrent()} 函数迭代数据库，一次一个。它使用 @code{_gr_count} 来跟踪在列表中的位置：
 
 @cindex @code{getgrent()} user-defined function
 @example
@@ -17102,8 +17027,7 @@ function getgrent()
 @end example
 
 @cindex @code{endgrent()} function (C library)
-The @code{endgrent()} function resets @code{_gr_count} to zero so that @code{getgrent()} can
-start over again:
+@code{endgrent()} 函数将 @code{_gr_count} 设置为 0，因此 @code{getgrent()} 可以重头开始：
 
 @cindex @code{endgrent()} user-defined function
 @example
@@ -17115,31 +17039,16 @@ function endgrent()
 @c endfile
 @end example
 
-As with the user database routines, each function calls @code{_gr_init()} to
-initialize the arrays.  Doing so only incurs the extra overhead of running
-@command{grcat} if these functions are used (as opposed to moving the body of
-@code{_gr_init()} into a @code{BEGIN} rule).
+与用户数据库列表相似，每一个函数都调用 @code{_gr_init()} 来初始化数组。这么做，使用 @command{grcat} 时导致一些额外的负担（相对于将 @code{_gr_init()} 的执行体移到 @code{BEGIN} 规则中）。
 
-Most of the work is in scanning the database and building the various
-associative arrays.  The functions that the user calls are themselves very
-simple, relying on @command{awk}'s associative arrays to do work.
+大多数的工作都集中于扫描数据库，并且建立多个关联数组。用户自己所调用的函数则相当简单，这依赖于 @command{awk} 的关联数组所做的工作。
 
-The @command{id} program in @ref{Id Program}
-uses these functions.
+在 @ref{Id Program}，中的 @command{id} 程序会使用到这些函数。
 
 @node Walking Arrays
-@section Traversing Arrays of Arrays
+@section 遍历多维数组
 
-@ref{Arrays of Arrays} described how @command{gawk}
-provides arrays of arrays.  In particular, any element of
-an array may be either a scalar or another array. The
-@code{isarray()} function (@pxref{Type Functions})
-lets you distinguish an array
-from a scalar.
-The following function, @code{walk_array()}, recursively traverses
-an array, printing the element indices and values.
-You call it with the array and a string representing the name
-of the array:
+在 @ref{Arrays of Arrays}，中描述了 @command{gawk} 如何来提供多维数组。特别是，数组的任意元素即可以是标量，也可以是另一个数组。@code{isarray()} 函数（查看 @pxref{Type Functions}）可以让你将标量与数组区分。下面的函数，@code{walk_array()} 递归地遍历数组，打印数组的索引以及值。你可以通过数组与代表这个数组的字串名来调用这个函数：
 
 @cindex @code{walk_array()} user-defined function
 @example
@@ -17157,11 +17066,7 @@ function walk_array(arr, name,      i)
 @end example
 
 @noindent
-It works by looping over each element of the array. If any given
-element is itself an array, the function calls itself recursively,
-passing the subarray and a new string representing the current index.
-Otherwise, the function simply prints the element's name, index, and value.
-Here is a main program to demonstrate:
+函数通过循环迭代数组的每一个元素来工作。如果数组的元素是一个数组，则函数会递归地调用自己，将子数组与表示当前索引的字串传递过去。否则，函数简单地打印元素的名字，索引以及它的值。这里是演示的主程序：
 
 @example
 BEGIN @{
@@ -17176,7 +17081,7 @@ BEGIN @{
 @}
 @end example
 
-When run, the program produces the following output:
+当执行时，产生下面的输出：
 
 @example
 $ @kbd{gawk -f walk_array.awk}
@@ -17188,10 +17093,7 @@ $ @kbd{gawk -f walk_array.awk}
 @print{} a[4][2] = 42
 @end example
 
-The function just presented simply prints the
-name and value of each scalar array element. However, it is easy to
-generalize it, by passing in the name of a function to call
-when walking an array. The modified function looks like this:
+函数仅是简单地打印名字与每个标量的数组元素。但是，也很容易来进行通用化，只要传递一个要遍历数组的函数名就可以做到。修改过后的函数看起来如下：
 
 @example
 @c file eg/lib/processarray.awk
@@ -17210,26 +17112,25 @@ function process_array(arr, name, process, do_arrays,   i, new_name)
 @c endfile
 @end example
 
-The arguments are as follows:
+参数如下：
 
 @table @code
 @item arr
-The array.
+相应的数组。
 
 @item name
-The name of the array (a string).
+数组名（字串）。
 
 @item process
-The name of the function to call.
+要调用的函数名。
 
 @item do_arrays
-If this is true, the function can handle elements that are subarrays.
+如果为 true，函数可以处理为子数组的元素。
 @end table
 
-If subarrays are to be processed, that is done before walking them further.
+如果子数组要被处理，则在进一步迭代时进行处理。
 
-When run with the following scaffolding, the function produces the same
-results as does the earlier version of @code{walk_array()}:
+当展开执行时，函数产生与早前的 @code{walk_array()} 函数一样的输出结果：
 
 @example
 BEGIN @{
@@ -17250,43 +17151,34 @@ function do_print(name, element)
 @end example
 
 @node Library Functions Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-Reading programs is an excellent way to learn Good Programming.
-The functions and programs provided in this @value{CHAPTER} and the next
-are intended to serve that purpose.
+阅读程序是学习编程的最好方法。在这章以及下一@value{CHAPTER}中提供的函数以及程序就用于这样的目的。
 
 @item
-When writing general-purpose library functions, put some thought into how
-to name any global variables so that they won't conflict with variables
-from a user's program.
+当写通用目的的库函数时，要用一此些规则来命令任意的全局变量，这样它他不会与用户程序的变量冲突。
 
 @item
-The functions presented here fit into the following categories:
+这里呈现的函数可以分为下面的类型：
 
 @c nested list
 @table @asis
-@item General problems
-Number-to-string conversion, testing assertions, rounding, random number
-generation, converting characters to numbers, joining strings, getting
-easily usable time-of-day information, and reading a whole file in
-one shot
+@item 一般问题
+数组到字串的转换，测试断言，舍入舍出，随机数产生，将字符转换为数组，连接字串，方便地取得时间间信息，一次读取所有文件。
 
-@item Managing @value{DF}s
-Noting @value{DF} boundaries, rereading the current file, checking for
-readable files, checking for zero-length files, and treating assignments
-as @value{FN}s
+@item 管理@value{DF}
+提示@value{DF}的边界，重读当前文件，检查文件的可读性，检查 0 长度文件，以及将赋值当成@value{FN}处理。
 
-@item Processing command-line options
-An @command{awk} version of the standard C @code{getopt()} function
+@item 处理命令行选项
+@command{awk} 版本的标准 C 函数 @code{getopt()}。
 
-@item Reading the user and group databases
-Two sets of routines that parallel the C library versions
+@item 读取用户与组数据库
+两个与 C 版本的库函数相同的函数集。
 
-@item Traversing arrays of arrays
-Two functions that traverse an array of arrays to any depth
+@item 遍历数
+两个函数用来进行任意深度的多维数组的遍历。
 @end table
 @c end nested list
 
@@ -17294,13 +17186,11 @@ Two functions that traverse an array of arrays to any depth
 
 @c EXCLUDE START
 @node Library Exercises
-@section Exercises
+@section 练习
 
 @enumerate
 @item
-In @ref{Empty Files}, we presented the @file{zerofile.awk} program,
-which made use of @command{gawk}'s @code{ARGIND} variable.  Can this
-problem be solved without relying on @code{ARGIND}?  If so, how?
+在 @ref{Empty Files}，中我们呈现了 @file{zerofile.awk} 程序，这个程序利用 @command{gawk} 的 @code{ARGIND} 变量。这个问题是否不依赖 @code{ARGIND} 变量就可以解决？如果可以，如何解决？
 
 @ignore
 # zerofile2.awk --- same thing, portably
@@ -17337,28 +17227,18 @@ END @{
 @end ignore
 
 @item
-As a related challenge, revise that code to handle the case where
-an intervening value in @code{ARGV} is a variable assignment.
+作为相关的挑战，修改代码来处理这样的情形，在 @code{ARGV} 中的插入值是一个变量赋值。
 
 @ignore
 @c June 13 2015: Antonio points out that this is answered in the text. Ooops.
 @item
-@ref{Walking Arrays} presented a function that walked a multidimensional
-array to print it out.  However, walking an array and processing
-each element is a general-purpose operation.  Generalize the
-@code{walk_array()} function by adding an additional parameter named
-@code{process}.
+在 @ref{Walking Arrays}，中呈现了一个遍历一个多维数组并打印其元素的函数。但是，遍历与处理数组的每一个元素是一个通用的操作。通用化 @code{walk_array()} 函数只需要加入名为 @code{process} 的额外参数。
 
-Then, inside the loop, instead of printing the array element's index and
-value, use the indirect function call syntax (@pxref{Indirect Calls})
-on @code{process}, passing it the index and the value.
+然后，在循环中，将打印数组元素索引与值的操作，替换为以间接函数调用 @code{process} 的语法（查看 @ref{Indirect Calls}），并将索引与值传递进去。
 
-When calling @code{walk_array()}, you would pass the name of a
-user-defined function that expects to receive an index and a value,
-and then processes the element.
+当调用 @code{walk_array()} 时，你要传递用户自定义的函数，该函数期望接收索引与值，然后来处理相应的元素。
 
-Test your new version by printing the array; you should end up with
-output identical to that of the original version.
+通过打印数组来测试你的新版本的代码，你打印的格式应与最初版本的打印格式相同。
 @end ignore
 
 @end enumerate
@@ -17366,37 +17246,22 @@ output identical to that of the original version.
 
 
 @node Sample Programs
-@chapter Practical @command{awk} Programs
+@chapter 实用的 @command{awk} 程序
 @cindex @command{awk} programs, examples of
 
 @c FULLXREF ON
-@ref{Library Functions},
-presents the idea that reading programs in a language contributes to
-learning that language.  This @value{CHAPTER} continues that theme,
-presenting a potpourri of @command{awk} programs for your reading
-enjoyment.
+在 @ref{Library Functions} 中呈现了读程序的代码来进行程序语言的学习的观点。这一章继续这样的主题，并通过呈现各种各样的 @command{awk} 程序以享读者。
 @c FULLXREF OFF
 @ifnotinfo
-There are three @value{SECTION}s.
-The first describes how to run the programs presented
-in this @value{CHAPTER}.
+这一@value{CHAPTER}有三个@value{SECTION}。
+第一@value{SECTION}描述如可来进行这一章中提供的程序。
 
-The second presents @command{awk}
-versions of several common POSIX utilities.
-These are programs that you are hopefully already familiar with,
-and therefore whose problems are understood.
-By reimplementing these programs in @command{awk},
-you can focus on the @command{awk}-related aspects of solving
-the programming problems.
+第二@value{SECTION}呈现 @command{awk} 版本的几个通用的 POSIX 工具。这些程序希望你也已经熟悉了，并且也了解了这些工具的问题。通过用 @command{awk} 重新实现这些工具，你可以将焦点集中于 @command{awk} 相关的解决程序问题的方面。
 
-The third is a grab bag of interesting programs.
-These solve a number of different data-manipulation and management
-problems.  Many of the programs are short, which emphasizes @command{awk}'s
-ability to do a lot in just a few lines of code.
+第三@value{SECTION}则是一些有趣的程序集合。这些程序解决了很多数组处理与管理相关的问题。很多的程序都很短，以用于强调 @command{awk} 用几行代码即可处理很多事情的能力。
 @end ifnotinfo
 
-Many of these programs use library functions presented in
-@ref{Library Functions}.
+这当中的很多程序会使用在 @ref{Library Functions}，中出现过的库函数。
 
 @menu
 * Running Examples::            How to run these examples.
@@ -17407,50 +17272,38 @@ Many of these programs use library functions presented in
 @end menu
 
 @node Running Examples
-@section Running the Example Programs
+@section 运行例子程序
 
-To run a given program, you would typically do something like this:
+要运行一个程序，典型的情况下你输入下面的代码：
 
 @example
 awk -f @var{program} -- @var{options} @var{files}
 @end example
 
 @noindent
-Here, @var{program} is the name of the @command{awk} program (such as
-@file{cut.awk}), @var{options} are any command-line options for the
-program that start with a @samp{-}, and @var{files} are the actual @value{DF}s.
+在这里，@var{program} 是 @command{awk} 程序的名字（如 @file{cut.awk}），选项 @var{options} 则是任意程序的命令行选项，以 @samp{-} 开头，而 @var{files} 则是实际的@value{DF}。
 
-If your system supports the @samp{#!} executable interpreter mechanism
-(@pxref{Executable Scripts}),
-you can instead run your program directly:
+如果你的系统支持 @samp{#!} 可执行解释器机制（查看 @pxref{Executable Scripts}），你可以直接这么输入：
 
 @example
 cut.awk -c1-8 myfiles > results
 @end example
 
-If your @command{awk} is not @command{gawk}, you may instead need to use this:
+如果 @command{awk} 不是 @command{gawk}，你可能要这么来使用：
 
 @example
 cut.awk -- -c1-8 myfiles > results
 @end example
 
 @node Clones
-@section Reinventing Wheels for Fun and Profit
+@section 为快乐与评测重新发明轮子
 @cindex POSIX, programs@comma{} implementing in @command{awk}
 
-This @value{SECTION} presents a number of POSIX utilities implemented in
-@command{awk}.  Reinventing these programs in @command{awk} is often enjoyable,
-because the algorithms can be very clearly expressed, and the code is usually
-very concise and simple.  This is true because @command{awk} does so much for you.
+本@value{SECTION}中呈现了几个用 @command{awk} 语言实现的 POSIX 工具。重新用 @command{awk} 来发明这些程序，只是好玩，因此算法可以被清晰地表达，而且代码一般来说都非常精简与简单。因为 @command{awk} 确实为你做了很多的事情了。
 
-It should be noted that these programs are not necessarily intended to
-replace the installed versions on your system.
-Nor may all of these programs be fully compliant with the most recent
-POSIX standard.  This is not a problem; their
-purpose is to illustrate @command{awk} language programming for ``real-world''
-tasks.
+也要注意到，这些程序没有必要要去替换系统中已经安装的版本。其中也没有程序被完全地实现了最近的 POSIX 标准。但这不是个问题，它们的目的是用于解释 @command{awk} 程序语言为“现实世界”的任务的编程方式。
 
-The programs are presented in alphabetical order.
+程序以字母顺序呈现。
 
 @menu
 * Cut Program::                 The @command{cut} utility.
@@ -17463,56 +17316,40 @@ The programs are presented in alphabetical order.
 @end menu
 
 @node Cut Program
-@subsection Cutting Out Fields and Columns
+@subsection 剪切域与列
 
 @cindex @command{cut} utility
 @cindex @command{cut} utility
 @cindex fields, cutting
 @cindex columns, cutting
-The @command{cut} utility selects, or ``cuts,'' characters or fields
-from its standard input and sends them to its standard output.
-Fields are separated by TABs by default,
-but you may supply a command-line option to change the field
-@dfn{delimiter} (i.e., the field-separator character). @command{cut}'s
-definition of fields is less general than @command{awk}'s.
+@command{cut} 这个工具从它的标准输入中选择，或者说“切分”，字符或者域并输出这些字符到它的标准输出中。域默认是通过 TABs 来进行分隔的，但是你可以提供一个命令行参数来改变@dfn{域界定符}（即域分隔符）。@command{cut} 的域定义没有 @command{awk} 的域那么一般化。
 
-A common use of @command{cut} might be to pull out just the login names of
-logged-on users from the output of @command{who}.  For example, the following
-pipeline generates a sorted, unique list of the logged-on users:
+@command{cut} 通常的使用方式可能是从命令 @command{who} 的输出结果中仅仅抽出已登录用户的登录名。
+例如，下面的管线会产生有序的，唯一的登录到系统中的用户列表：
 
 @example
 who | cut -c1-8 | sort | uniq
 @end example
 
-The options for @command{cut} are:
+@command{cut} 的选项有：
 
 @table @code
 @item -c @var{list}
-Use @var{list} as the list of characters to cut out.  Items within the list
-may be separated by commas, and ranges of characters can be separated with
-dashes.  The list @samp{1-8,15,22-35} specifies characters 1 through
-8, 15, and 22 through 35.
+使用 @var{list} 作为要切分的字符列表。在列表中的项可以用逗号分隔，某个范围的字符可以用横杠来分隔。列表 @samp{1-8,15,22-35} 指定了 1 到 8 的字符，15 以及 22 到 35 之间的字符。
 
 @item -f @var{list}
-Use @var{list} as the list of fields to cut out.
+使用 @var{list} 作为要切分的域列表。
 
 @item -d @var{delim}
-Use @var{delim} as the field-separator character instead of the TAB
-character.
+使用 @var{delim} 作用域分隔符，而不是使用 TAB 字符。
 
 @item -s
-Suppress printing of lines that do not contain the field delimiter.
+会抑制打印那些不含有域界定符的行。
 @end table
 
-The @command{awk} implementation of @command{cut} uses the @code{getopt()} library
-function (@pxref{Getopt Function})
-and the @code{join()} library function
-(@pxref{Join Function}).
+@command{awk} 的 @command{cut} 实现使用 @code{getopt()} 库函数（查看 @pxref{Getopt Function}）以及 @code{join()} 库函数（查看 @pxref{Join Function}）。
 
-The program begins with a comment describing the options, the library
-functions needed, and a @code{usage()} function that prints out a usage
-message and exits.  @code{usage()} is called if invalid arguments are
-supplied:
+程序以描述选项的注释开始，需要的库函数以及一个 @code{usage()} 函数来打印使用信息后退出。@code{usage()} 在遇到一个无效的参数时会被调用：
 
 @cindex @code{cut.awk} program
 @example
@@ -17550,15 +17387,7 @@ function usage()
 
 @cindex @code{BEGIN} pattern, running @command{awk} programs and
 @cindex @code{FS} variable, running @command{awk} programs and
-Next comes a @code{BEGIN} rule that parses the command-line options.
-It sets @code{FS} to a single TAB character, because that is @command{cut}'s
-default field separator. The rule then sets the output field separator to be the
-same as the input field separator.  A loop using @code{getopt()} steps
-through the command-line options.  Exactly one of the variables
-@code{by_fields} or @code{by_chars} is set to true, to indicate that
-processing should be done by fields or by characters, respectively.
-When cutting by characters, the output field separator is set to the null
-string:
+接下来就轮到 @code{BEGIN} 规则，在里面对命令行进行选项分析。它将 @code{FS} 设置为单个的 TAB 字符，因此那是 @command{cut} 的默认域分隔符。使用 @code{getopt()} 来进行循环命令行中的选项。@code{by_fields} 与 @code{by_chars} 中只有一个变量被设置为 true，以指示处理是通过域来完成还是通过字符来完成。当以字符来切分时，输出域分隔符被设置为空串：
 
 @example
 @c file eg/prog/cut.awk
@@ -17596,28 +17425,12 @@ BEGIN @{
 @end example
 
 @cindex field separators, spaces as
-The code must take
-special care when the field delimiter is a space.  Using
-a single space (@code{@w{" "}}) for the value of @code{FS} is
-incorrect---@command{awk} would separate fields with runs of spaces,
-TABs, and/or newlines, and we want them to be separated with individual
-spaces.
-To this end, we save the original space character in the variable
-@code{fs} for later use; after setting @code{FS} to @code{"[ ]"} we can't
-use it directly to see if the field delimiter character is in the string.
+代码必须小心处理域分界符为空格的情况。使用单独的空格（@code{@w{" "}}）来作为 @code{FS} 的值是不正确的——@command{awk} 会用连续的空格、TABs 与/或换行符来进行域分割，但我们是想用单独的空格来进行切分。
+为了达到这一效果，我们把原始的空格字符串存在变量 @code{fs} 里以备之后使用；在把 @code{FS} 设置为 @code{"[ ]"} 之后，我们不能直接用它查看是否域分界符在这个字符串中。
 
-Also remember that after @code{getopt()} is through
-(as described in @ref{Getopt Function}),
-we have to
-clear out all the elements of @code{ARGV} from 1 to @code{Optind},
-so that @command{awk} does not try to process the command-line options
-as @value{FN}s.
+同时也要记住当 @code{getopt()} 完成（在 @ref{Getopt Function}，中进行了描述），我们要清除在 @code{ARGV} 中 1 到 @code{Optind} 中的所有元素，这样 @command{awk} 不会将这些命令行参数当成@value{FN}进行处理。
 
-After dealing with the command-line options, the program verifies that the
-options make sense.  Only one or the other of @option{-c} and @option{-f}
-should be used, and both require a field list.  Then the program calls
-either @code{set_fieldlist()} or @code{set_charlist()} to pull apart the
-list of fields or characters:
+在处理了命令行选项后，程序要验证选项是否是有用的。只有 @option{-c} 与 @option{-f} 之一被使用，而两者都需要一个域列表。然后程序调用 @code{set_fieldlist()} 或者 @code{set_charlist()} 来将域或者字符表进行拆分：
 
 @example
 @c file eg/prog/cut.awk
@@ -17640,15 +17453,7 @@ list of fields or characters:
 @c endfile
 @end example
 
-@code{set_fieldlist()} splits the field list apart at the commas
-into an array.  Then, for each element of the array, it looks to
-see if the element is actually a range, and if so, splits it apart.
-The function checks the range
-to make sure that the first number is smaller than the second.
-Each number in the list is added to the @code{flist} array, which
-simply lists the fields that will be printed.  Normal field splitting
-is used.  The program lets @command{awk} handle the job of doing the
-field splitting:
+@code{set_fieldlist()} 将列表以逗号进行分割，并存储到数组中。然后对数组中的每个元素，查看其是否是一个范围，如果是，则将其分开。函数检查范围以确保第一个数值是小于第二个数值的。在列表中每一个数值都会加到 @code{flist} 数组中，这个数组只是简单地记录要打印的域。使用的是常规的域分割策略。程序使 @command{awk} 处理域分割的工作：
 
 @example
 @c file eg/prog/cut.awk
@@ -17676,25 +17481,10 @@ function set_fieldlist(        n, m, i, j, k, f, g)
 @c endfile
 @end example
 
-The @code{set_charlist()} function is more complicated than
-@code{set_fieldlist()}.
-The idea here is to use @command{gawk}'s @code{FIELDWIDTHS} variable
-(@pxref{Constant Size}),
-which describes constant-width input.  When using a character list, that is
-exactly what we have.
+@code{set_charlist()} 函数要比 @code{set_fieldlist()} 要复杂得多。这里的想法是利用 @command{gawk} 的 @code{FIELDWIDTHS} 变量（查看 @pxref{Constant Size}），这个变量描述了输入的常量宽度。当使用字符列表时，这正是我们所需要的。
 
-Setting up @code{FIELDWIDTHS} is more complicated than simply listing the
-fields that need to be printed.  We have to keep track of the fields to
-print and also the intervening characters that have to be skipped.
-For example, suppose you wanted characters 1 through 8, 15, and
-22 through 35.  You would use @samp{-c 1-8,15,22-35}.  The necessary value
-for @code{FIELDWIDTHS} is @code{@w{"8 6 1 6 14"}}.  This yields five
-fields, and the fields to print
-are @code{$1}, @code{$3}, and @code{$5}.
-The intermediate fields are @dfn{filler},
-which is stuff in between the desired data.
-@code{flist} lists the fields to print, and @code{t} tracks the
-complete field list, including filler fields:
+设置 @code{FIELDWIDTHS} 的值要比简单地列表那些要打印的域要简单得多。我们要跟踪要打印的域以及要跳过的中间字符。例如，假设你想要的字符为 1 到 8，15，以及 22 到 35。可需要使用 @samp{-c 1-8,15,22-35}。
+@code{FIELDWIDTHS} 的值应该是 @code{@w{"8 6 1 6 14"}}。这会产生 5 个域，要打印的域为 @code{$1}，@code{$3} 与 @code{$5}。中间的域则是填充符，是所需要的域之间的字符。@code{flist} 列出了要打印的域，@code{t} 则是用来跟踪完整的域列表，包括填充域：
 
 @example
 @c file eg/prog/cut.awk
@@ -17742,18 +17532,9 @@ function set_charlist(    field, i, j, f, g, n, m, t,
 @c endfile
 @end example
 
-Next is the rule that processes the data.  If the @option{-s} option
-is given, then @code{suppress} is true.  The first @code{if} statement
-makes sure that the input record does have the field separator.  If
-@command{cut} is processing fields, @code{suppress} is true, and the field
-separator character is not in the record, then the record is skipped.
+下一个则是处理数据的规则。如果指定了 @option{-s} 选项，则 @code{suppress} 为 true。第一个 @code{if} 语句确保输入的记录中确实包含域分隔符。如果 @command{cut} 正在处理域，而 @code{suppress} 为 true，并且域分隔字符不在记录中，则这条记录会被跳过。
 
-If the record is valid, then @command{gawk} has split the data
-into fields, either using the character in @code{FS} or using fixed-length
-fields and @code{FIELDWIDTHS}.  The loop goes through the list of fields
-that should be printed.  The corresponding field is printed if it contains data.
-If the next field also has data, then the separator character is
-written out between the fields:
+如果记录是有效的，则 @command{gawk} 会将记录分割成域，要么使用的是 @code{FS} 中的字符，要么是使用固定宽度的方式，以及 @code{FIELDWIDTHS} 方式。循环迭代那些要被打印的域列表。如果其包含相应数据，则打印相应的域。如果下一个域也包含数据，则在两个域之间输出分隔符：
 
 @example
 @c file eg/prog/cut.awk
@@ -17773,75 +17554,49 @@ written out between the fields:
 @c endfile
 @end example
 
-This version of @command{cut} relies on @command{gawk}'s @code{FIELDWIDTHS}
-variable to do the character-based cutting.  It is possible in
-other @command{awk} implementations to use @code{substr()}
-(@pxref{String Functions}), but
-it is also extremely painful.
-The @code{FIELDWIDTHS} variable supplies an elegant solution to the problem
-of picking the input line apart by characters.
+这个版本的 @command{cut} 依赖于 @command{gawk} 的 @code{FIELDWIDTHS} 变量来做基于字符的切分。也可以在其他的 @command{awk} 实现中使用 @code{substr()}（查看 @ref{String Functions}），但是那实现起来也很痛苦。@code{FIELDWIDTHS} 变量提供了一种很优雅的解决方法来处理被字符分割的输入行。
 
 
 @node Egrep Program
-@subsection Searching for Regular Expressions in Files
+@subsection 用正则表达式在文件中搜索
 
 @cindex regular expressions, searching for
 @cindex searching, files for regular expressions
 @cindex files, searching for regular expressions
 @cindex @command{egrep} utility
-The @command{egrep} utility searches files for patterns.  It uses regular
-expressions that are almost identical to those available in @command{awk}
-(@pxref{Regexp}).
-You invoke it as follows:
+@command{egrep} 工具要来按模式搜索文件内容。它使用的正则表达式几乎与 @command{awk} 所使用的一样（查看 @pxref{Regexp}）。你这么来调用：
 
 @display
 @command{egrep} [@var{options}] @code{'@var{pattern}'} @var{files} @dots{}
 @end display
 
-The @var{pattern} is a regular expression.  In typical usage, the regular
-expression is quoted to prevent the shell from expanding any of the
-special characters as @value{FN} wildcards.  Normally, @command{egrep}
-prints the lines that matched.  If multiple @value{FN}s are provided on
-the command line, each output line is preceded by the name of the file
-and a colon.
+@var{pattern} 是一个正则表达式。在典型的使用情况下，正则表达式会被引起来，以避免 Shell 将一些特殊字符扩展为@value{FN}的通配符。一般情况下，@command{egrep} 打印匹配的行。如果在命令行中提供了多个@value{FN}，则每个输出行前都带上文件名，后面跟着冒号：
 
-The options to @command{egrep} are as follows:
+@command{egrep} 的选项如下：
 
 @table @code
 @item -c
-Print out a count of the lines that matched the pattern, instead of the
-lines themselves.
+打印匹配 pattern 的行的总数，而不是匹配行本身。
 
 @item -s
-Be silent.  No output is produced and the exit value indicates whether
-the pattern was matched.
+静默处理，不产生输出，并且用退出值来表示是否有匹配的行。
 
 @item -v
-Invert the sense of the test. @command{egrep} prints the lines that do
-@emph{not} match the pattern and exits successfully if the pattern is not
-matched.
+对匹配测试取反。@command{egrep} 打印那些不匹配模式的行，并且如果匹配@emph{没有}成功，则以成功退出。
 
 @item -i
-Ignore case distinctions in both the pattern and the input data.
+忽略 pattern 与输入数据的大小写。
 
 @item -l
-Only print (list) the names of the files that matched, not the lines that matched.
+只打印（列出）匹配的文件名，而不是匹配的行。
 
 @item -e @var{pattern}
-Use @var{pattern} as the regexp to match.  The purpose of the @option{-e}
-option is to allow patterns that start with a @samp{-}.
+使用 @var{pattern} 为要匹配的正则表达式。@option{-e} 选项的目的是允许模式可以以 @samp{-} 开始。
 @end table
 
-This version uses the @code{getopt()} library function
-(@pxref{Getopt Function})
-and the file transition library program
-(@pxref{Filetrans Function}).
+这个版本使用 @code{getopt()} 库函数（查看 @pxref{Getopt Function}）以及文件转换库程序（查看 @pxref{Filetrans Function}）。
 
-The program begins with a descriptive comment and then a @code{BEGIN} rule
-that processes the command-line arguments with @code{getopt()}.  The @option{-i}
-(ignore case) option is particularly easy with @command{gawk}; we just use the
-@code{IGNORECASE} predefined variable
-(@pxref{Built-in Variables}):
+程序以描述性的注释开始，然后是 @code{BEGIN} 规则调用 @code{getopt()} 函数来处理命令行参数。 @option{-i}（忽略大小写）选项对于 @command{gawk} 来说尤其简单，我们只使用预定义的 @code{IGNORECASE} 变量就可以实现（查看 @pxref{Built-in Variables}）：
 
 @cindex @code{egrep.awk} program
 @example
@@ -17887,13 +17642,7 @@ BEGIN @{
 @c endfile
 @end example
 
-Next comes the code that handles the @command{egrep}-specific behavior. If no
-pattern is supplied with @option{-e}, the first nonoption on the
-command line is used.  The @command{awk} command-line arguments up to @code{ARGV[Optind]}
-are cleared, so that @command{awk} won't try to process them as files.  If no
-files are specified, the standard input is used, and if multiple files are
-specified, we make sure to note this so that the @value{FN}s can precede the
-matched lines in the output:
+接下来则是处理 @command{egrep} 相关的行为。如果没有使用 @option{-e} 选项提供 pattern 参数，则会使用命令行中的第一个非选项参数。@command{awk} 中到 @code{ARGV[Optind]} 中的参数会被清空，所以 @command{awk} 不会尝试将它们当成文件进行处理。如果没有指定文件，则使用标准的输入，而如果指定的多个文件，我们要确保要看到这种情况，因此@value{FN}要出现在输出的行之前：
 
 @example
 @c file eg/prog/egrep.awk
@@ -17914,17 +17663,11 @@ matched lines in the output:
 @c endfile
 @end example
 
-The last two lines are commented out, as they are not needed in
-@command{gawk}.  They should be uncommented if you have to use another version
-of @command{awk}.
+最后两行被注释掉了，因为在 @command{gawk} 中不需要。如果你使用其他版本的 @command{awk}，则你可能需要将他们反注释回来。
 
-The next set of lines should be uncommented if you are not using
-@command{gawk}.  This rule translates all the characters in the input line
-into lowercase if the @option{-i} option is specified.@footnote{It
-also introduces a subtle bug;
-if a match happens, we output the translated line, not the original.}
-The rule is
-commented out as it is not necessary with @command{gawk}:
+如果你不是使用的 @command{gawk}，下面是要被反注释掉的行。这个规则在指定了 @option{-i} 参数时，将所有的输入行中的字符转换为小写。
+@footnote{这里同时也引入了一个隐蔽的 Bug，如果发生了匹配，我们输出被转换了的行，而不是原来的行。}
+它们被注释掉，是因为这些代码在 @command{gawk} 中使用。
 
 @example
 @c file eg/prog/egrep.awk
@@ -17935,12 +17678,7 @@ commented out as it is not necessary with @command{gawk}:
 @c endfile
 @end example
 
-The @code{beginfile()} function is called by the rule in @file{ftrans.awk}
-when each new file is processed.  In this case, it is very simple; all it
-does is initialize a variable @code{fcount} to zero. @code{fcount} tracks
-how many lines in the current file matched the pattern.
-Naming the parameter @code{junk} shows we know that @code{beginfile()}
-is called with a parameter, but that we're not interested in its value:
+当每处理一个新文件的时候，@code{beginfile()} 函数在 @file{ftrans.awk} 中被调用。在这种情况下，是非常简单的，所要要做的事情就是初始化变量 @code{fcount} 为 0。@code{fcount} 用来跟踪当前的文件中有多少行匹配 pattern。名字为 @code{junk} 的参数显示 @code{beginfile()} 会使用一个参数来调用，但是我们对其值不感兴趣：
 
 @example
 @c file eg/prog/egrep.awk
@@ -17951,14 +17689,7 @@ function beginfile(junk)
 @c endfile
 @end example
 
-The @code{endfile()} function is called after each file has been processed.
-It affects the output only when the user wants a count of the number of lines that
-matched.  @code{no_print} is true only if the exit status is desired.
-@code{count_only} is true if line counts are desired.  @command{egrep}
-therefore only prints line counts if printing and counting are enabled.
-The output format must be adjusted depending upon the number of files to
-process.  Finally, @code{fcount} is added to @code{total}, so that we
-know the total number of lines that matched the pattern:
+当每一个文件被处理完后，会调用 @code{endfile()}。它只会在用户想知道有多少行匹配时才会影响输出。@code{no_print} 需要退出状态时才为会 true。@code{count_only} 如果要统计时才会为 true。如果打印与统计被启用，@code{egrep} 因此只打印行统计数。输出的格式必须根据要处理的文件进行处理。最后，@code{fcount} 被加进 @code{total}，因此我们可以知道总共有多少行匹配了 pattern：
 
 @example
 @c file eg/prog/egrep.awk
@@ -17976,27 +17707,11 @@ function endfile(file)
 @c endfile
 @end example
 
-The @code{BEGINFILE} and @code{ENDFILE} special patterns
-(@pxref{BEGINFILE/ENDFILE}) could be used, but then the program would be
-@command{gawk}-specific. Additionally, this example was written before
-@command{gawk} acquired @code{BEGINFILE} and @code{ENDFILE}.
+@code{BEGINFILE} 与 @code{ENDFILE} 这两个特殊模式（查看 @pxref{BEGINFILE/ENDFILE}）也可以使用，但是程序必须是用 @command{gawk} 来运行的。另外，这个例子写于 @command{gawk} 加入 @code{BEGINFILE} 与 @code{ENDFILE} 特性之前。
 
-The following rule does most of the work of matching lines. The variable
-@code{matches} is true if the line matched the pattern. If the user
-wants lines that did not match, the sense of @code{matches} is inverted
-using the @samp{!} operator. @code{fcount} is incremented with the value of
-@code{matches}, which is either one or zero, depending upon a
-successful or unsuccessful match.  If the line does not match, the
-@code{next} statement just moves on to the next record.
+下面的规则处理了大部分的匹配行的工作。变量 @code{matches} 在行匹配 pattern 时为真。如果用户想要不匹配的行，则 @code{matches} 的意义就用 @samp{!} 被反过来使用。@code{fcount} 会用 @code{matches} 的值一起递增，根据匹配成功与否，其要么是 0，要么是 1。如果行不匹配，则 @code{next} 语句会调用，用于处理下一条记录。
 
-A number of additional tests are made, but they are only done if we
-are not counting lines.  First, if the user only wants the exit status
-(@code{no_print} is true), then it is enough to know that @emph{one}
-line in this file matched, and we can skip on to the next file with
-@code{nextfile}.  Similarly, if we are only printing @value{FN}s, we can
-print the @value{FN}, and then skip to the next file with @code{nextfile}.
-Finally, each line is printed, with a leading @value{FN} and colon
-if necessary:
+下面执行了很多的测试，但是它们只会在我们不进行行统计时执行。首先，如果用户想要的是退出状态（@code{no_print} 为 true），则只需要知道文件中的某@emph{一}行是否匹配就可以了，然后我们可以用 @code{nextfile} 来跳到下一个文件。相似地，如果我们仅需要打印@value{FN}，我们则打印@value{FN}后用 @code{nextfile} 语句来跳到下一个文件。最后，我们会打印每一行，如果需要的话，在其前面加入@value{FN}与冒号：
 
 @cindex @code{!} (exclamation point), @code{!} operator
 @cindex exclamation point (@code{!}), @code{!} operator
@@ -18030,8 +17745,7 @@ if necessary:
 @c endfile
 @end example
 
-The @code{END} rule takes care of producing the correct exit status. If
-there are no matches, the exit status is one; otherwise, it is zero:
+@code{END} 规则要处理好正确的返回状态。如果没有匹配，则退出状态为 1，否则为 0 ：
 
 @example
 @c file eg/prog/egrep.awk
@@ -18041,8 +17755,7 @@ END @{
 @c endfile
 @end example
 
-The @code{usage()} function prints a usage message in case of invalid options,
-and then exits:
+@code{usage()} 函数用来在输入无效选项的时候打印使用信息，然后退出：
 
 @example
 @c file eg/prog/egrep.awk
@@ -18057,16 +17770,12 @@ function usage()
 
 
 @node Id Program
-@subsection Printing Out User Information
+@subsection 打印用户信息
 
 @cindex printing, user information
 @cindex users, information about, printing
 @cindex @command{id} utility
-The @command{id} utility lists a user's real and effective user ID numbers,
-real and effective group ID numbers, and the user's group set, if any.
-@command{id} only prints the effective user ID and group ID if they are
-different from the real ones.  If possible, @command{id} also supplies the
-corresponding user and group names.  The output might look like this:
+@command{id} 工具列出用户的真实与有效的用户 ID 值，真实与有效的组 ID 值，如果有的话，包含用户的组集。@command{id} 只有在它同于真实的ID 的情况下，才打印有效的用户 ID 与组 ID。如果可能，@command{id} 也提供了相应的前户与组名。输出可能如下：
 
 @example
 $ @kbd{id}
@@ -18074,25 +17783,11 @@ $ @kbd{id}
 @end example
 
 @cindex @code{PROCINFO} array, and user and group ID numbers
-This information is part of what is provided by @command{gawk}'s
-@code{PROCINFO} array (@pxref{Built-in Variables}).
-However, the @command{id} utility provides a more palatable output than just
-individual numbers.
+这里的信息一部份是由 @command{gawk} 的 @code{PROCINFO} 数组来提供的（查看 @pxref{Built-in Variables}）。但是，@command{id} 工具会提供比单纯的数组更好的输出。
 
-Here is a simple version of @command{id} written in @command{awk}.
-It uses the user database library functions
-(@pxref{Passwd Functions})
-and the group database library functions
-(@pxref{Group Functions})
-from @ref{Library Functions}.
+这里是 @command{id} 的一个简单的版本，用 @command{awk} 写成。它使用来自于 @ref{Library Functions}，的用户数据库函数（查看 @pxref{Passwd Functions}） 以及组数据库函数（查看 @pxref{Group Functions}）。
 
-The program is fairly straightforward.  All the work is done in the
-@code{BEGIN} rule.  The user and group ID numbers are obtained from
-@code{PROCINFO}.
-The code is repetitive.  The entry in the user database for the real user ID
-number is split into parts at the @samp{:}. The name is the first field.
-Similar code is used for the effective user ID number and the group
-numbers:
+程序相当直接。所有的工作都在 @code{BEGIN} 规则中完成。用户以及组 ID 值从 @code{PROCINFO} 中取得。代码是可重复的。在用户数据库中的用于真实用户ID 的项被用 @samp{:} 分割成不同的部分。第一项是名字。相应的代码也可以用于有效的用户 ID 与组相关的值：
 
 @cindex @code{id.awk} program
 @example
@@ -18169,63 +17864,34 @@ function pr_first_field(str,  a)
 @c endfile
 @end example
 
-The test in the @code{for} loop is worth noting.
-Any supplementary groups in the @code{PROCINFO} array have the
-indices @code{"group1"} through @code{"group@var{N}"} for some
-@var{N} (i.e., the total number of supplementary groups).
-However, we don't know in advance how many of these groups
-there are.
+在 @code{for} 循环中的测试值得注意一下。任意在 @code{PROCINFO} 数组中的补充的值都有索引从 @code{"group1"} 到某个值 @var{N} 的 @code{"group@var{N}"}（即补充组的总数）。但是，我们事先不知道有多少个这样的组。
 
-This loop works by starting at one, concatenating the value with
-@code{"group"}, and then using @code{in} to see if that value is
-in the array (@pxref{Reference to Elements}).  Eventually, @code{i} is incremented past
-the last group in the array and the loop exits.
+循环从 1 开始，将值是 @code{"group"} 进行连接，然后使用 @code{in} 操作符来查看相应的值是否在数组中（查看 @ref{Reference to Elements}）。最后，@code{i} 会递增越过数组中的最后一个组，然后循环退出。
 
-The loop is also correct if there are @emph{no} supplementary
-groups; then the condition is false the first time it's
-tested, and the loop body never executes.
+循环在@emph{没有}补充组的情况下也是正确的，这样第一次测试时条件就为 false，这样循环就根本没有执行过。
 
-The @code{pr_first_field()} function simply isolates out some
-code that is used repeatedly, making the whole program
-shorter and cleaner. In particular, moving the check for
-the empty string into this function saves several lines of code.
+@code{pr_first_field()} 函数简单地隔离一些要重复使用的代码，使得整个程序更短更清晰。特别是将检测空串的代码移进个函数中。
 
 
 @node Split Program
-@subsection Splitting a Large File into Pieces
+@subsection 将大文件分片
 
 @c FIXME: One day, update to current POSIX version of split
 
 @cindex files, splitting
 @cindex @code{split} utility
-The @command{split} program splits large text files into smaller pieces.
-Usage is as follows:@footnote{This is the traditional usage. The
-POSIX usage is different, but not relevant for what the program
-aims to demonstrate.}
+@command{split} 工具将大的文本文件分割成更小了几个。用法如下： 
+@footnote{这是传统的用法。POSIX 的用法是不同的，但是对于要程序要说明的东西是无关的。}
 
 @display
 @command{split} [@code{-@var{count}}] [@var{file}] [@var{prefix}]
 @end display
 
-By default,
-the output files are named @file{xaa}, @file{xab}, and so on. Each file has
-1,000 lines in it, with the likely exception of the last file. To change the
-number of lines in each file, supply a number on the command line
-preceded with a minus sign (e.g., @samp{-500} for files with 500 lines in them
-instead of 1,000).  To change the names of the output files to something like
-@file{myfileaa}, @file{myfileab}, and so on, supply an additional
-argument that specifies the @value{FN} prefix.
+默认情况下，输出文件命名为 @file{xaa}，@file{xab} 等等。每个文件有一千行，最后一个文件例外 。为了每个文件中的行数，在命令行中输入一个数值，前面带一个减号（如 @samp{-500} 使每个文件中有 500 行，而不是 1000 行）。为了改变输出文件的名字为诸如 @file{myfileaa}，@file{myfileab} 等等，则提供一个额外的参数来指定@value{FN}的前缀。
 
-Here is a version of @command{split} in @command{awk}. It uses the
-@code{ord()} and @code{chr()} functions presented in
-@ref{Ordinal Functions}.
+下面是 @command{awk} 版本的 split。它使用在 @ref{Ordinal Functions}，中的 @code{ord()} 与 @code{chr()} 函数。
 
-The program first sets its defaults, and then tests to make sure there are
-not too many arguments.  It then looks at each argument in turn.  The
-first argument could be a minus sign followed by a number. If it is, this happens
-to look like a negative number, so it is made positive, and that is the
-count of lines.  The @value{DF} name is skipped over and the final argument
-is used as the prefix for the output @value{FN}s:
+程序首先设置它的默认行为，然后测试以确保不会有太多的参数。然后依次查看每个参数。第一个参数可以一个负号，后面跟一个数值。如果果，这看起来就像是一个负数，所以使其为正数，即是行的数值。@value{DF}名被忽略过去，最后一个参数用于输出@value{FN}的前缀：
 
 @cindex @code{split.awk} program
 @example
@@ -18272,13 +17938,7 @@ BEGIN @{
 @c endfile
 @end example
 
-The next rule does most of the work. @code{tcount} (temporary count) tracks
-how many lines have been printed to the output file so far. If it is greater
-than @code{count}, it is time to close the current file and start a new one.
-@code{s1} and @code{s2} track the current suffixes for the @value{FN}. If
-they are both @samp{z}, the file is just too big.  Otherwise, @code{s1}
-moves to the next letter in the alphabet and @code{s2} starts over again at
-@samp{a}:
+下一个规则做剩下的大部分的事情，@code{tcount}（temporary count）跟踪当前已经有多少行输出到了输出文件中。如果其大于 @code{count}，则要关闭当前的文件然后开启一个新的文件。@code{s1} 与 @code{s2} 跟踪当前的文件名前缀。如果他们两个都是 @samp{z}，则表示文件太大了。否则，@code{s1} 移动到字母表中的下一个字母，@code{s2} 则从 @samp{a} 开始：
 
 @c else on separate line here for page breaking
 @example
@@ -18308,7 +17968,7 @@ moves to the next letter in the alphabet and @code{s2} starts over again at
 @end example
 
 @noindent
-The @code{usage()} function simply prints an error message and exits:
+@code{usage()} 函数简单地打印错误并输出：
 
 @example
 @c file eg/prog/split.awk
@@ -18320,48 +17980,31 @@ function usage()
 @c endfile
 @end example
 
-This program is a bit sloppy; it relies on @command{awk} to automatically close the last file
-instead of doing it in an @code{END} rule.
-It also assumes that letters are contiguous in the character set,
-which isn't true for EBCDIC systems.
+这个程序程序有一点滑头，他依赖于 @command{awk} 来自动关闭最后一个文件，而不是在 @code{END} 规则中来处理。同时，它也假设字母在字符集中是连续的，这在 EBCDIC 的系统中是不成立的。
 
 @ifset FOR_PRINT
-You might want to consider how to eliminate the use of
-@code{ord()} and @code{chr()}; this can be done in such a
-way as to solve the EBCDIC issue as well.
+你可能会考虑怎么避免使用 @code{ord()} 和 @code{chr()}；这也能通过和解决 EBCDIC 问题同样的方式解决。
 @end ifset
 
 
 @node Tee Program
-@subsection Duplicating Output into Multiple Files
+@subsection 将输出复制到多个文件中
 
 @cindex files, multiple@comma{} duplicating output into
 @cindex output, duplicating into files
 @cindex @code{tee} utility
-The @code{tee} program is known as a ``pipe fitting.''  @code{tee} copies
-its standard input to its standard output and also duplicates it to the
-files named on the command line.  Its usage is as follows:
+@code{tee} 程序是一个“管道适配器”。@code{tee} 将他的标准输出到它的标准输出中，并将其复制到命令行中拉丁指定的文件名中。它的用法如下：
 
 @display
 @command{tee} [@option{-a}] @var{file} @dots{}
 @end display
 
-The @option{-a} option tells @code{tee} to append to the named files, instead of
-truncating them and starting over.
+@option{-a} 选项告诉 @code{tee} 将内容附加到命令的文件中，而不是将这些文件行清除再重新开始。
 
-The @code{BEGIN} rule first makes a copy of all the command-line arguments
-into an array named @code{copy}.
-@code{ARGV[0]} is not needed, so it is not copied.
-@code{tee} cannot use @code{ARGV} directly, because @command{awk} attempts to
-process each @value{FN} in @code{ARGV} as input data.
+@code{BEGIN} 规则首先生成所有命令行参数的复本到名为 @code{copy} 的数组中。@code{ARGV[0]} 是不需要的，所以它不会被复制。@code{tee} 不可以直接使用 @code{ARGV} 因为 @command{awk} 会尝试将 @code{ARGV} 中的@value{FN}当成输入的数据。
 
 @cindex flag variables
-If the first argument is @option{-a}, then the flag variable
-@code{append} is set to true, and both @code{ARGV[1]} and
-@code{copy[1]} are deleted. If @code{ARGC} is less than two, then no
-@value{FN}s were supplied and @code{tee} prints a usage message and exits.
-Finally, @command{awk} is forced to read the standard input by setting
-@code{ARGV[1]} to @code{"-"} and @code{ARGC} to two:
+如果第一个参数是 @option{-a}，然后标志变量 @code{append} 被设置为 true，@code{ARGV[1]} 与 @code{copy[1]} 两个元素都被删除。如果 @code{ARGC} 小于 2，则表示没有提供@value{FN}，则 @code{tee} 会打印一个使用信息然后退出。最后，@command{awk} 被强制从标准输入中读取数据，只要将 @code{ARGV[1]} 的值设置为 @code{"-"}，同时 @code{ARGC} 设置为 2 ：
 
 @cindex @code{tee.awk} program
 @example
@@ -18401,9 +18044,7 @@ BEGIN @{
 @c endfile
 @end example
 
-The following single rule does all the work.  Because there is no pattern, it is
-executed for each line of input.  The body of the rule simply prints the
-line into each file on the command line, and then to the standard output:
+下面简单的规则执行所有的工作。由于没有模式，所以它会对每一个输入行都执行。规则的执行体只是简单地打印行到每个命令行上的文件，然后再打印到标准输出中：
 
 @example
 @c file eg/prog/tee.awk
@@ -18421,7 +18062,7 @@ line into each file on the command line, and then to the standard output:
 @end example
 
 @noindent
-It is also possible to write the loop this way:
+也可以这么来写循环：
 
 @example
 for (i in copy)
@@ -18432,14 +18073,9 @@ for (i in copy)
 @end example
 
 @noindent
-This is more concise, but it is also less efficient.  The @samp{if} is
-tested for each record and for each output file.  By duplicating the loop
-body, the @samp{if} is only tested once for each input record.  If there are
-@var{N} input records and @var{M} output files, the first method only
-executes @var{N} @samp{if} statements, while the second executes
-@var{N}@code{*}@var{M} @samp{if} statements.
+这样更精简，但是却没有这么高效。@samp{if} 会对每个记录以及每个输出文件都进行测试。通过复制循环体，@samp{if} 对每个输入记录只执行一次测试。如果有 @var{N} 个输入记录，并且有 @var{M} 个输出文件，第一种方法只执行 @var{N} 个 @samp{if} 语句，而第二种方法会执行 @var{N}@code{*}@var{M} 个 @samp{if} 语句。
 
-Finally, the @code{END} rule cleans up by closing all the output files:
+最后，@code{END} 规则通过关闭所有的输出文件来进行清理：
 
 @example
 @c file eg/prog/tee.awk
@@ -18451,79 +18087,51 @@ END @{
 @end example
 
 @node Uniq Program
-@subsection Printing Nonduplicated Lines of Text
+@subsection 打印去重文本行
 
 @c FIXME: One day, update to current POSIX version of uniq
 
 @cindex printing, unduplicated lines of text
 @cindex text@comma{} printing, unduplicated lines of
 @cindex @command{uniq} utility
-The @command{uniq} utility reads sorted lines of data on its standard
-input, and by default removes duplicate lines.  In other words, it only
-prints unique lines---hence the name.  @command{uniq} has a number of
-options. The usage is as follows:
+@command{uniq} 工具从它的标准输入中读取经过排序的行，并且默认地移除重复的行。也就是说，它只打印唯一的行——如此名字所表示的意思。@command{uniq} 有很多的选项。其使用方法如下：
 
 @display
 @command{uniq} [@option{-udc} [@code{-@var{n}}]] [@code{+@var{n}}] [@var{inputfile} [@var{outputfile}]]
 @end display
 
-The options for @command{uniq} are:
+@command{uniq} 的选项如下：
 
 @table @code
 @item -d
-Print only repeated (duplicated) lines.
+只打印重复的（有复本）的行。
 
 @item -u
-Print only nonrepeated (unique) lines.
+只打印不重复的（唯一的）行。
 
 @item -c
-Count lines. This option overrides @option{-d} and @option{-u}.  Both repeated
-and nonrepeated lines are counted.
+统计行。这个选项会覆盖 @option{-d} 与 @option{-u}。重复的与非重复的行都会被统计。
 
 @item -@var{n}
-Skip @var{n} fields before comparing lines.  The definition of fields
-is similar to @command{awk}'s default: nonwhitespace characters separated
-by runs of spaces and/or TABs.
+在比较行前跳过 @var{n} 个域。域的定义与 @command{awk} 的默认的类似：被一连续的空格与/或者 TABs 分隔的非空白字符。
 
 @item +@var{n}
-Skip @var{n} characters before comparing lines.  Any fields specified with
-@samp{-@var{n}} are skipped first.
+在比较行前跳过 @var{n} 个字符。通过 @samp{-@var{n}} 指定的任何域会首先被跳过。
 
 @item @var{inputfile}
-Data is read from the input file named on the command line, instead of from
-the standard input.
+数据从在命令行中指定的文件中读取，而不是从标准输入读取。
 
 @item @var{outputfile}
-The generated output is sent to the named output file, instead of to the
-standard output.
+将产生的输出发送到 @var{outputfile} 命名的文件中，而不是到标准输出中。
 @end table
 
-Normally @command{uniq} behaves as if both the @option{-d} and
-@option{-u} options are provided.
+一般情况下，@command{uniq} 的行为就像 @option{-d} 与 @option{-u} 两个选项都指定的一样。
 
-@command{uniq} uses the
-@code{getopt()} library function
-(@pxref{Getopt Function})
-and the @code{join()} library function
-(@pxref{Join Function}).
+@command{uniq} 使用 @code{getopt()} 库函数（查看 @pxref{Getopt Function}）以及 @code{join()} 库函数（查看 @pxref{Join Function}）。
 
-The program begins with a @code{usage()} function and then a brief outline of
-the options and their meanings in comments.
-The @code{BEGIN} rule deals with the command-line arguments and options. It
-uses a trick to get @code{getopt()} to handle options of the form @samp{-25},
-treating such an option as the option letter @samp{2} with an argument of
-@samp{5}. If indeed two or more digits are supplied (@code{Optarg} looks
-like a number), @code{Optarg} is
-concatenated with the option digit and then the result is added to zero to make
-it into a number.  If there is only one digit in the option, then
-@code{Optarg} is not needed. In this case, @code{Optind} must be decremented so that
-@code{getopt()} processes it next time.  This code is admittedly a bit
-tricky.
+程序以 @code{usage()} 函数开始以及一些写在注释中的简单的选项及其含义的说明。@code{BEGIN} 规则处命令行参数与选项。它使用了一个技巧来让 @code{getopt()} 处理如 @samp{-25} 这个的选项，将这样的选项当做是字母 @samp{2} 的选项与其参数 @samp{5}。如果实际上提供了两个或者多个数字（@code{Optarg} 看起来像一个数值），@code{Optarg} 会与选项数字一连接，然后结果与 0 相加来使其转换为数值。如果只有一个数值在选项中，@code{Optarg} 就不需要了。在这种情况下，@code{Optind} 必须被递减，这样 @code{getopt()} 会在下一轮中处理它。这个代码确实玩了一点花招。
 
-If no options are supplied, then the default is taken, to print both
-repeated and nonrepeated lines.  The output file, if provided, is assigned
-to @code{outputfile}.  Early on, @code{outputfile} is initialized to the
-standard output, @file{/dev/stdout}:
+如果没有提供选项，则会使用默认的行为，即打印重复与非重复的行。如果提供了输出文件，将其被赋值给 @code{outputfile}。在早期，@code{outputfile} 被初始化为标准输出，即 @file{/dev/stdout}：
 
 @cindex @code{uniq.awk} program
 @example
@@ -18598,21 +18206,9 @@ BEGIN @{
 @c endfile
 @end example
 
-The following function, @code{are_equal()}, compares the current line,
-@code{$0}, to the previous line, @code{last}.  It handles skipping fields
-and characters.  If no field count and no character count are specified,
-@code{are_equal()} returns one or zero depending upon the result of a
-simple string comparison of @code{last} and @code{$0}.
+下面的函数 @code{are_equal()} 用来将当前行，@code{$0}，与前一行 @code{last} 进行比较。它处理要跳过的域与字符。如果没有指定域统计以及字符统计，@code{are_equal()} 返回 1，或者 0，这依赖于 @code{last} 与 @code{$0} 字串的简单的比较结果。
 
-Otherwise, things get more complicated.  If fields have to be skipped,
-each line is broken into an array using @code{split()} (@pxref{String
-Functions}); the desired fields are then joined back into a line
-using @code{join()}.  The joined lines are stored in @code{clast} and
-@code{cline}.  If no fields are skipped, @code{clast} and @code{cline}
-are set to @code{last} and @code{$0}, respectively.  Finally, if
-characters are skipped, @code{substr()} is used to strip off the leading
-@code{charcount} characters in @code{clast} and @code{cline}.  The two
-strings are then compared and @code{are_equal()} returns the result:
+不然的话，事情会变量更加复杂。如果要跳过域，每一行都会用 @code{split()}（查看 @ref{String Functions}）拆分成数组，留下来的域然后再用 @code{join()} 组合成一行。被组合的行存回 @code{clast} 与 @code{cline} 中。如果没有域要跳过，@code{clast} 与 @code{cline} 则被设置成 @code{last} 与 @code{$0}。最后，如果有字符要跳过，@code{substr()} 用于清除 @code{clast} 与 @code{cline} 中前面 @code{count} 个的字符。两个字串然后进行比较，@code{are_equal()} 返回比较的结果：
 
 @example
 @c file eg/prog/uniq.awk
@@ -18640,25 +18236,13 @@ function are_equal(    n, m, clast, cline, alast, aline)
 @c endfile
 @end example
 
-The following two rules are the body of the program.  The first one is
-executed only for the very first line of data.  It sets @code{last} equal to
-@code{$0}, so that subsequent lines of text have something to be compared to.
+下面的两个规则是程序体。第一个只用在数据的第一行。它将 @code{last} 设置为 @code{$0}，所以，后续的行才有可以比较的东西。
 
-The second rule does the work. The variable @code{equal} is one or zero,
-depending upon the results of @code{are_equal()}'s comparison. If @command{uniq}
-is counting repeated lines, and the lines are equal, then it increments the @code{count} variable.
-Otherwise, it prints the line and resets @code{count},
-because the two lines are not equal.
+第二个规则执行相应的工作。变量 @code{equal} 为 1 或者 0，则依赖于 @code{are_equal()} 的比较结果。如果 @command{uniq} 正在统计重复的行，而行是相同的，则其会递增 @code{count} 变量。否则，它打印行然后重新设置 @code{count}，因为两行已经不相同了。
 
-If @command{uniq} is not counting, and if the lines are equal, @code{count} is incremented.
-Nothing is printed, as the point is to remove duplicates.
-Otherwise, if @command{uniq} is counting repeated lines and more than
-one line is seen, or if @command{uniq} is counting nonrepeated lines
-and only one line is seen, then the line is printed, and @code{count}
-is reset.
+如果 @command{uniq} 不在统计中，而比较结果是相同的，@code{count} 则会被递增。不会打印输出行，因为要移除重复的行。否则，如果 @command{uniq} 正在统计重复的行，并且有看到了多于一行相同行，或者如果 @command{uniq} 在统计非重复的行，则只会见到一行，然后该行会被打印输出，而 @code{count} 会被重置。
 
-Finally, similar logic is used in the @code{END} rule to print the final
-line of input data:
+最后，@code{END} 打印输入数据的最后一行的规则也采用相似的逻辑：
 
 @example
 @c file eg/prog/uniq.awk
@@ -18727,7 +18311,7 @@ suggestion.
 
 
 @node Wc Program
-@subsection Counting Things
+@subsection 统计
 
 @c FIXME: One day, update to current POSIX version of wc
 
@@ -18737,50 +18321,33 @@ suggestion.
 @cindex characters, counting
 @cindex lines, counting
 @cindex @command{wc} utility
-The @command{wc} (word count) utility counts lines, words, and characters in
-one or more input files. Its usage is as follows:
+@command{wc}（word count）工具用来统计一个或者多个文件中的行，字与字符。它的用法如下：
 
 @display
 @command{wc} [@option{-lwc}] [@var{files} @dots{}]
 @end display
 
-If no files are specified on the command line, @command{wc} reads its standard
-input. If there are multiple files, it also prints total counts for all
-the files.  The options and their meanings are as follows:
+如果在命令行中没有指定文件，@command{wc} 则从标准输入中读取。如果有多个文件，则它会打印所有文件的总的统计信息。@command{wc} 的选项及其意义如下：
 
 @table @code
 @item -l
-Count only lines.
+只统计行。
 
 @item -w
-Count only words.
-A ``word'' is a contiguous sequence of nonwhitespace characters, separated
-by spaces and/or TABs.  Luckily, this is the normal way @command{awk} separates
-fields in its input data.
+只统计单词。一个“单词”是一个连续的非空白字符字符序列，相互之间以空格与/或者 TABs 来分割。幸运的是这也是 @command{awk} 对输入数据进行域分割的常规方式。
 
 @item -c
-Count only characters.
+只统计字符。
 @end table
 
-Implementing @command{wc} in @command{awk} is particularly elegant,
-because @command{awk} does a lot of the work for us; it splits lines into
-words (i.e., fields) and counts them, it counts lines (i.e., records),
-and it can easily tell us how long a line is.
+@command{awk} 中的 @command{wc} 实现特定优雅，因为 @command{awk} 已经为我们做了很多的事情了，@command{awk} 将行分割成单词（即域）然后统计它们，也统计行（即记录），它也可以很容易地告诉我们行的长度是多少。
 
-This program uses the @code{getopt()} library function
-(@pxref{Getopt Function})
-and the file-transition functions
-(@pxref{Filetrans Function}).
+程序使用到 @code{getopt()} 函数（查看 @pxref{Getopt Function}）以及文件转换函数
+（查看 @pxref{Filetrans Function}）。
 
-This version has one notable difference from traditional versions of
-@command{wc}: it always prints the counts in the order lines, words,
-and characters.  Traditional versions note the order of the @option{-l},
-@option{-w}, and @option{-c} options on the command line, and print the
-counts in that order.
+这个版本与传统的 @command{wc} 版本没有什么特别的不同：它总是按行，单词，字符这样的顺序来打印统计。传统的版本会注意到 @option{-l}，@option{-w}，@option{-c} 选项在命令行中的顺序，并以选项的顺序来打印统计。
 
-The @code{BEGIN} rule does the argument processing.  The variable
-@code{print_total} is true if more than one file is named on the
-command line:
+@code{BEGIN} 规则作参数处理。变量 @code{print_total} 在命令行中有多于一个文件的情况下为 true：
 
 @cindex @code{wc.awk} program
 @example
@@ -18828,9 +18395,7 @@ BEGIN @{
 @c endfile
 @end example
 
-The @code{beginfile()} function is simple; it just resets the counts of lines,
-words, and characters to zero, and saves the current @value{FN} in
-@code{fname}:
+@code{beginfile()} 函数很简单，它仅是把行数，单词数与字符数设置为 0，并将当前的@value{FN}存在 @code{fname} 中：
 
 @example
 @c file eg/prog/wc.awk
@@ -18842,10 +18407,7 @@ function beginfile(file)
 @c endfile
 @end example
 
-The @code{endfile()} function adds the current file's numbers to the
-running totals of lines, words, and characters.  It then prints out those
-numbers for the file that was just read. It relies on @code{beginfile()}
-to reset the numbers for the following @value{DF}:
+@code{endfile()} 函数将当前文件的数值加到总的行，单词与字符数上。然后为刚才所读取的文件打印相应的数值。它依赖于 @code{beginfile()} 来重置后面的@value{DF}的数值：
 
 @example
 @c file eg/prog/wc.awk
@@ -18867,15 +18429,9 @@ function endfile(file)
 @c endfile
 @end example
 
-There is one rule that is executed for each line. It adds the length of
-the record, plus one, to @code{chars}.@footnote{Because @command{gawk}
-understands multibyte locales, this code counts characters, not bytes.}
-Adding one plus the record length
-is needed because the newline character separating records (the value
-of @code{RS}) is not part of the record itself, and thus not included
-in its length.  Next, @code{lines} is incremented for each line read,
-and @code{words} is incremented by the value of @code{NF}, which is the
-number of ``words'' on this line:
+有一个对每个行都执行的规则。在里面会对记录的长度加到 @code{chars} 上，再加上 1。
+@footnote{由于 @command{gawk} 可以处理多字节的本地语言设置，所以这个代码统计的是字符，而不是字节。}
+将记录的长度加 1 是因为换行符用来分割记录（即 @code{RS} 的值）但它又不是记录的一部分，因此不包含在长度里。后面，对每一行读取时 @code{lines} 会递增，而 @code{words} 会递增 @code{NF} 的值，而它的值就是本条行中“单词”的个数：
 
 @example
 @c file eg/prog/wc.awk
@@ -18888,7 +18444,7 @@ number of ``words'' on this line:
 @c endfile
 @end example
 
-Finally, the @code{END} rule simply prints the totals for all the files:
+最后，@code{END} 规则简单地铺所有文件的总合：
 
 @example
 @c file eg/prog/wc.awk
@@ -18907,10 +18463,9 @@ END @{
 @end example
 
 @node Miscellaneous Programs
-@section A Grab Bag of @command{awk} Programs
+@section @command{awk} 程序的大集合
 
-This @value{SECTION} is a large ``grab bag'' of miscellaneous programs.
-We hope you find them both interesting and enjoyable.
+这一@value{SECTION}中是一个不同程序的“大集合”。我们希望你会觉得他们即有趣也很好玩。
 
 @menu
 * Dupword Program::             Finding duplicated words in a document.
@@ -18931,41 +18486,24 @@ We hope you find them both interesting and enjoyable.
 @end menu
 
 @node Dupword Program
-@subsection Finding Duplicated Words in a Document
+@subsection 查找文档中的重复字
 
 @cindex words, duplicate@comma{} searching for
 @cindex searching, for words
 @cindex documents@comma{} searching
+在写大量的单调文章的常见错误就是会偶然输入重复的词。一般情况下你会看到似下面的东西“the the program does the following@dots{}”。当文件是在线的时候，重复的词常常出现在一行的尾部以及另一行的行首，因此很难进行定位。
 A common error when writing large amounts of prose is to accidentally
 duplicate words.  Typically you will see this in text as something like ``the
 the program does the following@dots{}''  When the text is online, often
 the duplicated words occur at the end of one line and the
-@iftex
-the
-@end iftex
-beginning of
-another, making them very difficult to spot.
 @c as here!
 
-This program, @file{dupword.awk}, scans through a file one line at a time
-and looks for adjacent occurrences of the same word.  It also saves the last
-word on a line (in the variable @code{prev}) for comparison with the first
-word on the next line.
+@file{dupword.awk} 这个程序会扫描整个文件，一次一行，并查找同一个字符的的连续出现。它同时也保存一行中的最后一个单词（放在变量 @code{prev} 中），用于与下一个单词的第一个单词进行比较。
 
 @cindex Texinfo
-The first two statements make sure that the line is all lowercase,
-so that, for example, ``The'' and ``the'' compare equal to each other.
-The next statement replaces nonalphanumeric and nonwhitespace characters
-with spaces, so that punctuation does not affect the comparison either.
-The characters are replaced with spaces so that formatting controls
-don't create nonsense words (e.g., the Texinfo @samp{@@code@{NF@}}
-becomes @samp{codeNF} if punctuation is simply deleted).  The record is
-then resplit into fields, yielding just the actual words on the line,
-and ensuring that there are no empty fields.
+头两个语句要确保行全是小写的，所以，像“The”与“the”可以相互进行比较。下一条语句会替换非字母数字与非空格字符为空格，所以标点符号也不会影响比较。用空格替换字符这样格式控制字符不会创建一些没有意义的单词（如 Texinfo 中的 @samp{@@code@{NF@}} 在简单地删除标点的情况下会变成 @samp{codeNF}）。记录然后会被分割为域，产生了一行中的实际单词，并且保证不会有空的域。
 
-If there are no fields left after removing all the punctuation, the
-current record is skipped.  Otherwise, the program loops through each
-word, comparing it to the previous one:
+如果在移除了所有的标点后没有域，则当前的记录会被跳过。否则程序会迭代每一个单词，并且其前一个单词进行比较：
 
 @cindex @code{dupword.awk} program
 @example
@@ -19001,11 +18539,13 @@ word, comparing it to the previous one:
 @end example
 
 @node Alarm Program
-@subsection An Alarm Clock Program
+@subsection 报警时钟程序
 @cindex insomnia, cure for
 @cindex Robbins, Arnold
 @quotation
-@i{Nothing cures insomnia like a ringing alarm clock.}
+@i{
+没有什么像闹钟一样可以治愈失眠。
+}
 @author Arnold Robbins
 @end quotation
 @cindex Quanstrom, Erik
@@ -19031,32 +18571,19 @@ Aharon Robbins <arnold@skeeve.com> wrote:
 >Arnold
 @end ignore
 @quotation
-@i{Sleep is for web developers.}
+@i{
+睡眠是给 Web 开发者的。
+}
 @author Erik Quanstrom
 @end quotation
 
 @cindex time, alarm clock example program
 @cindex alarm clock example program
-The following program is a simple ``alarm clock'' program.
-You give it a time of day and an optional message.  At the specified time,
-it prints the message on the standard output. In addition, you can give it
-the number of times to repeat the message as well as a delay between
-repetitions.
+下面的程序是一个简单的“闹钟”程序。你给它一个时间以及一个可选的消息，在指定的时间上，它会打印消息到标准输出上。另外，你可以给它一个消息重复的资料，以及重复之间的延迟时间。
 
-This program uses the @code{getlocaltime()} function from
-@ref{Getlocaltime Function}.
+这个程序使用 @code{getlocaltime()} 函数（查看 @ref{Getlocaltime Function}）。
 
-All the work is done in the @code{BEGIN} rule.  The first part is argument
-checking and setting of defaults: the delay, the count, and the message to
-print.  If the user supplied a message without the ASCII BEL
-character (known as the ``alert'' character, @code{"\a"}), then it is added to
-the message.  (On many systems, printing the ASCII BEL generates an
-audible alert. Thus, when the alarm goes off, the system calls attention
-to itself in case the user is not looking at the computer.)
-Just for a change, this program uses a @code{switch} statement
-(@pxref{Switch Statement}), but the processing could be done with a series of
-@code{if}-@code{else} statements instead.
-Here is the program:
+在 @code{BEGIN} 规则中完成所有的工作。第一部分是参数检查，并设置默认值：delay，count，以及要打印的 message。如果用户提供了一个不带 ASCII BEL 字符的消息（为“alert”字符，@code{\a}），然后它会被加到 message 中。（在很多的系统中，打印 ASCII BEL 会产生一个可以听得到的报警块。所以， 当报警消除时，系统会在用户没有看电脑时来唤起其注意。）只是为了做一些改变，这个程序使用 @code{switch} 语句（查看 @pxref{Switch Statement}），但是处理也可以用一系列的 @code{if}-@code{else} 语句来完成。下面是程序：
 
 @cindex @code{alarm.awk} program
 @example
@@ -19120,11 +18647,7 @@ BEGIN @{
 @c endfile
 @end example
 
-The next @value{SECTION} of code turns the alarm time into hours and minutes,
-converts it (if necessary) to a 24-hour clock, and then turns that
-time into a count of the seconds since midnight.  Next it turns the current
-time into a count of seconds since midnight.  The difference between the two
-is how long to wait before setting off the alarm:
+代码的下一@value{SECTION}会将报警时间转换为小时分钟，并转换（如果有必要的话）为一个 24 小时制的时间，然后将时间转换为从午夜以来的秒数。后面它会将当前的时候转换为从午夜以来的秒数。两个时间之间的差就是要设置报警要等待的时间：
 
 @example
 @c file eg/prog/alarm.awk
@@ -19159,14 +18682,7 @@ is how long to wait before setting off the alarm:
 @end example
 
 @cindex @command{sleep} utility
-Finally, the program uses the @code{system()} function
-(@pxref{I/O Functions})
-to call the @command{sleep} utility.  The @command{sleep} utility simply pauses
-for the given number of seconds.  If the exit status is not zero,
-the program assumes that @command{sleep} was interrupted and exits. If
-@command{sleep} exited with an OK status (zero), then the program prints the
-message in a loop, again using @command{sleep} to delay for however many
-seconds are necessary:
+最后，程序使用 @code{system()} 函数（查看 @pxref{I/O Functions}）来调用 @command{sleep} 工具。@command{sleep} 工具会暂停给定的秒数。如果其退出时间不是 0，而程序会假设休眠中断并退出。如果 @command{sleep} 退出，退出代码为 0，则程序会在循环中打印消息，然后再通过 @command{sleep} 来迟延不管多少必要的秒时间：
 
 @example
 @c file eg/prog/alarm.awk
@@ -19189,70 +18705,45 @@ seconds are necessary:
 @end example
 
 @node Translate Program
-@subsection Transliterating Characters
+@subsection 转换字符
 
 @cindex characters, transliterating
 @cindex @command{tr} utility
-The system @command{tr} utility transliterates characters.  For example, it is
-often used to map uppercase letters into lowercase for further processing:
+系统的 @command{tr} 工具用来进行字符的一对一转换。例如，用来将大写字母转换为小写字母以便进行进一步的处理：
 
 @example
 @var{generate data} | tr 'A-Z' 'a-z' | @var{process data} @dots{}
 @end example
 
-@command{tr} requires two lists of characters.@footnote{On some older
-systems, including Solaris, the system version of @command{tr} may require
-that the lists be written as range expressions enclosed in square brackets
-(@samp{[a-z]}) and quoted, to prevent the shell from attempting a
-@value{FN} expansion.  This is not a feature.}  When processing the input, the
-first character in the first list is replaced with the first character
-in the second list, the second character in the first list is replaced
-with the second character in the second list, and so on.  If there are
-more characters in the ``from'' list than in the ``to'' list, the last
-character of the ``to'' list is used for the remaining characters in the
-``from'' list.
+@command{tr} 需要两个字符列表。 
+@footnote{在一些旧的系统上，包括 Solaris，@command{tr} 的系统版本可能需要列表要写在范围表达式，并包含在方括号中（@samp{[a-z]}），引起来，为的是避免 Shell 会尝试对@value{FN}扩展。但这不是个特性。}
+当处理输入时，在第一个字符列表中的第一个字符会被第二个列表中的第一个字符替换，而第一个字符列表中的第二个字符会被第二个字符列表中的第二个字符替换，以此类推。如果在“from”列表中有比“to”列表中更多的字符，则在“to”中的最后的字符用来替换在“from”列表中的其他字符。
 
-Once upon a time,
+以前，
 @c early or mid-1989!
-a user proposed adding a transliteration function
-to @command{gawk}.
+有用户建议在 @command{gawk} 中加入字符转换函数。
 @c Wishing to avoid gratuitous new features,
 @c at least theoretically
-The following program was written to
-prove that character transliteration could be done with a user-level
-function.  This program is not as complete as the system @command{tr} utility,
-but it does most of the job.
+下面的程序可以证明用户层的函数也可以用来实现字符的转换功能。这个程序没有 @command{tr} 工具那么完整，但是可以做大部份的事情。
 
-The @command{translate} program was written long before @command{gawk}
-acquired the ability to split each character in a string into separate
-array elements.  Thus, it makes repeated use of the @code{substr()},
-@code{index()}, and @code{gsub()} built-in functions (@pxref{String
-Functions}).  There are two functions.  The first, @code{stranslate()},
-takes three arguments:
+转换程序 @command{translate} 是在 @command{gawk} 取得对每个字串中的字符进行分割到数组中的能力很久之前写的。所以，它重复地使用 @code{substr()}，@code{index()} 与 @code{gsub()} 等内置函数（查看 @ref{String Functions}）。下面有两个函数，第一个函数 @code{stranslate()}，有三个参数：
 
 @table @code
 @item from
-A list of characters from which to translate
+要转换的字符列表。
 
 @item to
-A list of characters to which to translate
+要转换成的字符列表。
 
 @item target
-The string on which to do the translation
+要执行转换的字串。
 @end table
 
-Associative arrays make the translation part fairly easy. @code{t_ar} holds
-the ``to'' characters, indexed by the ``from'' characters.  Then a simple
-loop goes through @code{from}, one character at a time.  For each character
-in @code{from}, if the character appears in @code{target},
-it is replaced with the corresponding @code{to} character.
+关联数组使得转换部分非常容易。@code{t_ar} 保存“to”的字符，并用“from”的字符作为索引。然后一个简单的循环来循环 @code{from} 字符，一次一个字符。对在 @code{from} 中的每个字符，如果字符出现在 @code{target} 中，则它被替换为 @code{to} 中的相应字符。
 
-The @code{translate()} function calls @code{stranslate()}, using @code{$0}
-as the target.  The main program sets two global variables, @code{FROM} and
-@code{TO}, from the command line, and then changes @code{ARGV} so that
-@command{awk} reads from the standard input.
+@code{translate()} 函数调用 @code{stranslate()}，并将 @code{$0} 作为 @code{target} 参数。主程序用来自由命令行的值设置两个全局变量，@code{FROM} 与 @code{TO}，然后将 @code{ARGV} 更改为 @command{awk} 从标准输入中读取。
 
-Finally, the processing rule simply calls @code{translate()} for each record:
+最后，处理规则只是简单地调用 @code{translate()} 来处理每一条记录：
 
 @cindex @code{translate.awk} program
 @example
@@ -19319,72 +18810,39 @@ BEGIN @{
 @c endfile
 @end example
 
-It is possible to do character transliteration in a user-level
-function, but it is not necessarily efficient, and we (the @command{gawk}
-developers) started to consider adding a built-in function.  However,
-shortly after writing this program, we learned that Brian Kernighan
-had added the @code{toupper()} and @code{tolower()} functions to his
-@command{awk} (@pxref{String Functions}).  These functions handle the
-vast majority of the cases where character transliteration is necessary,
-and so we chose to simply add those functions to @command{gawk} as well
-and then leave well enough alone.
+有可能在用户层的函数中来执行字符转换，但是没有这么高效，我们（即 @command{gawk} 的开发者）开始考虑添加一个内置的函数。但是，在完成这个程序之后不久，我们了解到 Brian Kernighan 已经加入了 @code{toupper()} 与 @code{tolower()} 函数到它的 @command{gawk} 中（查看 @ref{String Functions}）。这些函数处理处理了大量的所需要的字符转换的主要部分，因此我们只好选择来简单地将这些函数加到 @command{gawk}，并保证它们足够独立。
 
-An obvious improvement to this program would be to set up the
-@code{t_ar} array only once, in a @code{BEGIN} rule. However, this
-assumes that the ``from'' and ``to'' lists
-will never change throughout the lifetime of the program.
+对这个程序的明显提升就是在 @code{BEGIN} 规则中仅设置 @code{t_ar} 数组一次。但是，这假设“from”与“to”的列表在程序的生命期内不会改变。
 
-Another obvious improvement is to enable the use of ranges,
-such as @samp{a-z}, as allowed by the @command{tr} utility.
-Look at the code for @file{cut.awk} (@pxref{Cut Program})
-for inspiration.
+另一个明显的改进，就是允许使用 @command{tr} 工具所使用的范围，如 @samp{a-z}。查看 @file{cut.awk}（查看 @pxref{Cut Program}）代码来查看其中的灵感。
 
 
 @node Labels Program
-@subsection Printing Mailing Labels
+@subsection 打印邮件标题
 
 @cindex printing, mailing labels
 @cindex mailing labels@comma{} printing
-Here is a ``real-world''@footnote{``Real world'' is defined as
-``a program actually used to get something done.''}
-program.  This
-script reads lists of names and
-addresses and generates mailing labels.  Each page of labels has 20 labels
-on it, two across and 10 down.  The addresses are guaranteed to be no more
-than five lines of data.  Each address is separated from the next by a blank
-line.
+这里是一个“真实世界” 中的程序。
+@footnote{“真实世界”定义为“就是实际上用来处理某些事情的程序”。}
+这个脚本读取名字与地址列表，然后产生邮件标签。标签的每一页有 20 个标签在里头，2 行 10 列。地址保证多于 5 行。每一个地方都通过一个空行与下一个地方进行分隔。
 
-The basic idea is to read 20 labels' worth of data.  Each line of each label
-is stored in the @code{line} array.  The single rule takes care of filling
-the @code{line} array and printing the page when 20 labels have been read.
+基本的想法是读取 20 个标签的数据。每个标签的每一行都存在 @code{line} 数组中。一个单独的规则来处理填充 @code{line} 数组，并在读到 20 个标签的时候打印页。
 
-The @code{BEGIN} rule simply sets @code{RS} to the empty string, so that
-@command{awk} splits records at blank lines
-(@pxref{Records}).
-It sets @code{MAXLINES} to 100, because 100 is the maximum number
-of lines on the page
+@code{BEGIN} 规则简单地将 @code{RS} 设置成空串，因此 @command{awk} 会将记录以空行分割（查看 @pxref{Records}）。然后将 @code{MAXLINES} 设置为 100，因此 100 是在页中的最大行数
 @iftex
-(@math{20 @cdot 5 = 100}).
+（@math{20 @cdot 5 = 100}）。
 @end iftex
 @ifnottex
 @ifnotdocbook
-(20 * 5 = 100).
+（20 * 5 = 100）。
 @end ifnotdocbook
 @end ifnottex
 @docbook
-(20 &sdot; 5 = 100).
+（20 &sdot; 5 = 100）。
 @end docbook
 
-Most of the work is done in the @code{printpage()} function.
-The label lines are stored sequentially in the @code{line} array.  But they
-have to print horizontally: @code{line[1]} next to @code{line[6]},
-@code{line[2]} next to @code{line[7]}, and so on.  Two loops
-accomplish this.  The outer loop, controlled by @code{i}, steps through
-every 10 lines of data; this is each row of labels.  The inner loop,
-controlled by @code{j}, goes through the lines within the row.
-As @code{j} goes from 0 to 4, @samp{i+j} is the @code{j}th line in
-the row, and @samp{i+j+5} is the entry next to it.  The output ends up
-looking something like this:
+大多数的工作是在 @code{printpage()} 函数中完成的。标签行被顺序地存在 @code{line} 数组中。
+但是他们要水平地打印出来：@code{line[1]} 后面是 @code{line[6]}，@code{line[2]} 与 @code{line[7]} 相邻，等等。用两个循环来完成这个功能。外层的循环通过 @code{i} 来控制，用来迭代数据的每 10 行，这是每一行的标签。内循环，通过 @code{j} 控制，不用迭代一行中的内容。当 @code{j} 从 0 迭代到 4，则 @samp{i+j} 就是行中的第 @code{j} 行。 @samp{i+j+5} 则为下一行。输出最终输出可能如下：
 
 @example
 line 1          line 6
@@ -19396,16 +18854,11 @@ line 5          line 10
 @end example
 
 @noindent
-The @code{printf} format string @samp{%-41s} left-aligns
-the data and prints it within a fixed-width field.
+@code{printf} 的 @samp{%-41s} 字串表示是左对齐数据，并在固定的宽度域上进行打印。
 
-As a final note, an extra blank line is printed at lines 21 and 61, to keep
-the output lined up on the labels.  This is dependent on the particular
-brand of labels in use when the program was written.  You will also note
-that there are two blank lines at the top and two blank lines at the bottom.
+作为最后提示，在行 21 与行 61 中会有一个空行输出，来保持输出行是标签是对齐的。这依赖于写程序时所使用的特别的标签类型。你也需要注意，在开头与结尾都有两个空行。
 
-The @code{END} rule arranges to flush the final page of labels; there may
-not have been an even multiple of 20 labels in the data:
+@code{END} 规则用来将最后页的标签输出，因为有可能没有多个整 20 个标签存在：
 
 @cindex @code{labels.awk} program
 @example
@@ -19473,18 +18926,13 @@ END @{
 @end example
 
 @node Word Sorting
-@subsection Generating Word-Usage Counts
+@subsection 生成字使用统计
 
 @cindex words, usage counts@comma{} generating
 
-When working with large amounts of text, it can be interesting to know
-how often different words appear.  For example, an author may overuse
-certain words, in which case he or she might wish to find synonyms to substitute
-for words that appear too often. This @value{SUBSECTION} develops a
-program for counting words and presenting the frequency information
-in a useful format.
+当要处理大量的文本的时候，如果了解单词的使用频率是一件很有趣的事情。例如，作者可能会容易使用特定的词，在这种情况下，他或者她可能想找一些同义词来代替那些出现得太频繁的词。这一@value{SUBSECTION}中开发了一个这样的程序来统计单词以及它出现的频率，并以一种有用的方式输出这些信息。
 
-At first glance, a program like this would seem to do the job:
+乍看之下，像下面这样的程序可以完成这样的功能：
 
 @example
 # wordfreq-first-try.awk --- print list of word frequencies
@@ -19500,41 +18948,23 @@ END @{
 @}
 @end example
 
-The program relies on @command{awk}'s default field-splitting
-mechanism to break each line up into ``words'' and uses an
-associative array named @code{freq}, indexed by each word, to count
-the number of times the word occurs. In the @code{END} rule,
-it prints the counts.
+程序依赖于 @command{awk} 的默认域分割机制来将每一行分割成词并使用关联数组 @code{freq} 来存储它们，用单词来作为索引，来统计单词出现的次数，在 @code{END} 规则中来打印统计。
 
-This program has several problems that prevent it from being
-useful on real text files:
+这个程序有几个问题会导致其处理真实文本时有可用程度：
 
 @itemize @value{BULLET}
 @item
-The @command{awk} language considers upper- and lowercase characters to be
-distinct.  Therefore, ``bartender'' and ``Bartender'' are not treated
-as the same word.  This is undesirable, because words are capitalized
-if they begin sentences in normal text, and a frequency analyzer should
-not be sensitive to capitalization.
+@command{awk} 语言会把大写与小定是有区别的。所以，“bartender”与“Bartender”会当成不一样的词。这不是想要的结果，因为单词在正常的文本中的句首，会进行首字大写，而频率分析器却对首字大写不敏感。
 
 @item
-Words are detected using the @command{awk} convention that fields are
-separated just by whitespace.  Other characters in the input (except
-newlines) don't have any special meaning to @command{awk}.  This means that
-punctuation characters count as part of words.
+单词的检测使用的是 @command{awk} 默认使用空格进行域分割的惯例。在输入中的其他字符（不包含换行符）对于 @command{awk} 来说没有特殊的含义。这表示标点符号也会成为单词的一部分。
 
 @item
-The output does not come out in any useful order.  You're more likely to be
-interested in which words occur most frequently or in having an alphabetized
-table of how frequently each word occurs.
+输出不会有什么有用的顺序。你更有可能对最常出现的单词感兴趣，或者形成一个字母表来表示每个单词的出现频率。
 @end itemize
 
 @cindex @command{sort} utility
-The first problem can be solved by using @code{tolower()} to remove case
-distinctions.  The second problem can be solved by using @code{gsub()}
-to remove punctuation characters.  Finally, we solve the third problem
-by using the system @command{sort} utility to process the output of the
-@command{awk} script.  Here is the new version of the program:
+第一个问题可以通过 @code{tolower()} 来移除大小定来解决。第三个问题可以用 @code{gsub()} 移除标点符号来解决。最后，我们通过使用系统的 @command{sort} 工具处理 @command{awk} 脚本的输出来解决第三个问题。这是一个新版本的程序：
 
 @cindex @code{wordfreq.awk} program
 @example
@@ -19556,34 +18986,22 @@ END @{
 @}
 @end example
 
-The regexp @code{/[^[:alnum:]_[:blank:]]/} might have been written
-@code{/[[:punct:]]/}, but then underscores would also be removed,
-and we want to keep them.
+正则表达式 @code{/[^[:alnum:]_[:blank:]]/} 本可以写在 @code{/[[:punct:]]/}，但是下划线也要移除，但我们想保留它。
 
-Assuming we have saved this program in a file named @file{wordfreq.awk},
-and that the data is in @file{file1}, the following pipeline:
+假设我们把这个程序保留为名字为 @file{wordfreq.awk} 的文件，数据在 @file{file1} 中，则下面的管程：
 
 @example
 awk -f wordfreq.awk file1 | sort -k 2nr
 @end example
 
 @noindent
-produces a table of the words appearing in @file{file1} in order of
-decreasing frequency.
+会产生出现在 @file{file1} 中的单词频率的降序表。
 
-The @command{awk} program suitably massages the
-data and produces a word frequency table, which is not ordered.
-The @command{awk} script's output is then sorted by the @command{sort}
-utility and printed on the screen.
+@command{awk} 程序适合于处理信息以及数据来产生单词频率表，但是不是有序的。@command{awk} 的脚本输出然后通过 @command{sort} 工具来排序，然后再打印到屏幕上。
 
-The options given to @command{sort}
-specify a sort that uses the second field of each input line (skipping
-one field), that the sort keys should be treated as numeric quantities
-(otherwise @samp{15} would come before @samp{5}), and that the sorting
-should be done in descending (reverse) order.
+提交给 @command{sort} 工具的选择指定排序使用每个输入行的第二个域（跳过第一个域），排序键被当成数值量来对待（不然 @samp{15} 会排在 @samp{5} 之前），然后排序会以降序（逆序）的方式来执行。
 
-The @command{sort} could even be done from within the program, by changing
-the @code{END} action to:
+@command{sort} 甚至可以在程序中完成，只要把 @code{END} 的动作改成如下：
 
 @example
 @c file eg/prog/wordfreq.awk
@@ -19596,36 +19014,17 @@ END @{
 @c endfile
 @end example
 
-This way of sorting must be used on systems that do not
-have true pipes at the command-line (or batch-file) level.
-See the general operating system documentation for more information on how
-to use the @command{sort} program.
+这种方式的排序必须使用在那些在命令行一层没有真正的管道的的系统上（或者批处理文件）。查看操作系统上如何使用 @command{sort} 程序的文档来获取更多信息。
 
 @node History Sorting
-@subsection Removing Duplicates from Unsorted Text
+@subsection 从未排序的文本中去重
 
 @cindex lines, duplicate@comma{} removing
-The @command{uniq} program
-(@pxref{Uniq Program})
-removes duplicate lines from @emph{sorted} data.
+@command{uniq} 程序（查看 @pxref{Uniq Program}）在@emph{经过排序}的数据中移除重复的行。
 
-Suppose, however, you need to remove duplicate lines from a @value{DF} but
-that you want to preserve the order the lines are in.  A good example of
-this might be a shell history file.  The history file keeps a copy of all
-the commands you have entered, and it is not unusual to repeat a command
-several times in a row.  Occasionally you might want to compact the history
-by removing duplicate entries.  Yet it is desirable to maintain the order
-of the original commands.
+但是，你可能需要移除@value{DF}中的重复的行，而又想保留行中的顺序。这样处理的一个合适的例子就是 Shell 的 histroy 文件。history 文件保留了你已经输入过的命令的复本，在一行中重复几次相同的命令的情况并不多见。有时候，你可能想移除重复的行来压缩文件。但是还要保留最初命令行的顺序。
 
-This simple program does the job.  It uses two arrays.  The @code{data}
-array is indexed by the text of each line.
-For each line, @code{data[$0]} is incremented.
-If a particular line has not
-been seen before, then @code{data[$0]} is zero.
-In this case, the text of the line is stored in @code{lines[count]}.
-Each element of @code{lines} is a unique command, and the indices of
-@code{lines} indicate the order in which those lines are encountered.
-The @code{END} rule simply prints out the lines, in order:
+下面这个简单的程序可以完成这个工作。它会使用两个数组。 @code{data} 数组由每行的文本来作索引。对每一行，@code{data[$0]} 会进行递增。如果某个特定的行之前没有出现过，则 @code{data[$0]} 会是 0。在这种情况下，那一行的文本会存在 @code{lines[count]} 中。@code{lines} 中的元素都是唯一的，而 @code{lines} 的索引表示了行出现的顺序。@code{END} 规则中介简单地按顺序打印这些行：
 
 @cindex Rakitzis, Byron
 @cindex @code{histsort.awk} program
@@ -19659,96 +19058,57 @@ END @{
 @c endfile
 @end example
 
-This program also provides a foundation for generating other useful
-information.  For example, using the following @code{print} statement in the
-@code{END} rule indicates how often a particular command is used:
+这个程序也提供了用于产生有用信息的一个基础。如，在 @code{END} 规则中使用下面的 @code{print} 语句表示特定命令使用的频度：
 
 @example
 print data[lines[i]], lines[i]
 @end example
 
 @noindent
-This works because @code{data[$0]} is incremented each time a line is
-seen.
+这么做有效是因为 @code{data[$0]} 在行每出现一次都会进行递增。
 
 @node Extract Program
-@subsection Extracting Programs from Texinfo Source Files
+@subsection 从 Texinfo 源文件中提取程序
 
 @cindex Texinfo, extracting programs from source files
 @cindex files, Texinfo@comma{} extracting programs from
 @ifnotinfo
-Both this chapter and the previous chapter
-(@ref{Library Functions})
-present a large number of @command{awk} programs.
+在本章与前一章（查看 @ref{Library Functions}）中，都展示了大量的 @command{awk} 程序。
 @end ifnotinfo
 @ifinfo
-The nodes
-@ref{Library Functions},
-and @ref{Sample Programs},
-are the top level nodes for a large number of @command{awk} programs.
+章节 @ref{Library Functions} 和 @ref{Sample Programs} 是高等级的内容，关于更多的 @command{awk} 程序。
 @end ifinfo
-If you want to experiment with these programs, it is tedious to type
-them in by hand.  Here we present a program that can extract parts of a
-Texinfo input file into separate files.
+如果你想实践这些程序，如果再次手工输出这些程序则就太繁琐了。这里，我们展示了一个程序可以从 Texinfo 的输入文件中提出部分到一个独立的文件中。
 
 @cindex Texinfo
-This @value{DOCUMENT} is written in @uref{http://www.gnu.org/software/texinfo/, Texinfo},
-the GNU Project's document formatting language.
-A single Texinfo source file can be used to produce both
-printed documentation, with @TeX{}, and online documentation.
+本@value{DOCUMENT} 是用 @uref{http://www.gnu.org/software/texinfo/, Texinfo} 写成的，这是 GNU 项目的文档格式语言。一个单独的 Texinfo 源文件可以用来产生打印的 @TeX{} 文档，也可以产生在线文档。
 @ifnotinfo
-(Texinfo is fully documented in the book
-@cite{Texinfo---The GNU Documentation Format},
-available from the Free Software Foundation,
-and also available @uref{http://www.gnu.org/software/texinfo/manual/texinfo/, online}.)
+（Texinfo 在书 @cite{Texinfo---The GNU Documentation Format} 有完整的文档，也可从自由软件基金会取得，也可以在
+@uref{http://www.gnu.org/software/texinfo/manual/texinfo/, 网上} 取得。）
 @end ifnotinfo
 @ifinfo
-(The Texinfo language is described fully, starting with
-@inforef{Top, , Texinfo, texinfo,Texinfo---The GNU Documentation Format}.)
+（Texinfo 语言有详细的文档，从 @inforef{Top, , Texinfo, texinfo,Texinfo---The GNU Documentation Format} 开始了解。）
 @end ifinfo
 
-For our purposes, it is enough to know three things about Texinfo input
-files:
+对于我们自己的目的，知道 Texinfo 输入文件的三件事情就够了：
 
 @itemize @value{BULLET}
 @item
-The ``at'' symbol (@samp{@@}) is special in Texinfo, much as
-the backslash (@samp{\}) is in C
-or @command{awk}.  Literal @samp{@@} symbols are represented in Texinfo source
-files as @samp{@@@@}.
+“at” 符号（@samp{@@}）在 Texinfo 中是特殊符号，就像是在 C 或者 @command{awk} 中的反斜杠一样（@samp{\}）。字面的 @samp{@@} 在 Texinfo 源文件中由 @samp{@@@@} 来表示。
 
 @item
-Comments start with either @samp{@@c} or @samp{@@comment}.
-The file-extraction program works by using special comments that start
-at the beginning of a line.
+注释同 @samp{@@c} 开始，或者由 @samp{@@comment} 开始。文件提出程序通过使用在行首开始的特殊的注释。
 
 @item
-Lines containing @samp{@@group} and @samp{@@end group} commands bracket
-example text that should not be split across a page boundary.
-(Unfortunately, @TeX{} isn't always smart enough to do things exactly right,
-so we have to give it some help.)
+包含 @samp{@@group} 与 @samp{@@end group} 命令包含例子文本不可以分页。（不幸的是，@TeX{} 不总是足够来做正确的事情，因此我们还得给它一些帮助。）
 @end itemize
 
-The following program, @file{extract.awk}, reads through a Texinfo source
-file and does two things, based on the special comments.
-Upon seeing @samp{@w{@@c system @dots{}}},
-it runs a command, by extracting the command text from the
-control line and passing it on to the @code{system()} function
-(@pxref{I/O Functions}).
-Upon seeing @samp{@@c file @var{filename}}, each subsequent line is sent to
-the file @var{filename}, until @samp{@@c endfile} is encountered.
-The rules in @file{extract.awk} match either @samp{@@c} or
-@samp{@@comment} by letting the @samp{omment} part be optional.
-Lines containing @samp{@@group} and @samp{@@end group} are simply removed.
-@file{extract.awk} uses the @code{join()} library function
-(@pxref{Join Function}).
+下面的程序 @file{extract.awk} 从 Texinfo 源文件中读取，并根据特殊注释做两件事情。当看到 @samp{@w{@@c system @dots{}}} 时，它执行一个命令，并从命令文本中提取控制行并将其传递给 @code{system()} 函数
+（查看 @pxref{I/O Functions}）。当看到 @samp{@@c file @var{filename}} 时，其后续的行将被发送到文件 @var{filename} 中，直到看到 @samp{@@c endfile} 为止。
+在 @file{extract.awk} 规则中，要么匹配 @samp{@@c} 要么匹配 @samp{@@comment}，只要将 @samp{omment} 成为可选的部分即可。包含 @samp{@@group} 与 @samp{@@end group} 的行，只是简单地移除。@file{extract.awk} 使用到 @code{join()} 库函数（查看 @pxref{Join Function}）。
 
-The example programs in the online Texinfo source for @cite{@value{TITLE}}
-(@file{gawktexi.in}) have all been bracketed inside @samp{file} and
-@samp{endfile} lines.  The @command{gawk} distribution uses a copy of
-@file{extract.awk} to extract the sample programs and install many
-of them in a standard directory where @command{gawk} can find them.
-The Texinfo file looks something like this:
+在 @cite{@value{TITLE}} （@file{gawktexi.in}）的 Texinfo 的源代码中的例子程序都已经包含在 @samp{file} 与 @samp{endfile} 中的行里。
+@command{gawk} 发行版本使用 @file{extract.awk} 的一个复本来提取例子程序，并将他们中的多数安装到了标准的 @command{gawk} 可查找到目录中。Texinfo 文件看起来这样：
 
 @example
 @dots{}
@@ -19771,12 +19131,9 @@ END @@@{ print "Always avoid bored archaeologists!" @@@}
 @dots{}
 @end example
 
-@file{extract.awk} begins by setting @code{IGNORECASE} to one, so that
-mixed upper- and lowercase letters in the directives won't matter.
+@file{extract.awk} 将 @code{IGNORECASE} 设置为 1，所以大小写混合在指示符中不会有什么影响。
 
-The first rule handles calling @code{system()}, checking that a command is
-given (@code{NF} is at least three) and also checking that the command
-exits with a zero exit status, signifying OK:
+第一个规则处理 @code{system()} 调用，检查要执行的命令（@code{NF} 至少为 3 ）并且也检查命令出代码为是否为 0，即表示执行 OK：
 
 @cindex @code{extract.awk} program
 @example
@@ -19815,40 +19172,16 @@ BEGIN    @{ IGNORECASE = 1 @}
 @end example
 
 @noindent
-The variable @code{e} is used so that the rule
-fits nicely on the @value{PAGE}.
+变量 @code{e} 用来使规则很好地匹配页 @value{PAGE}。
 
-The second rule handles moving data into files.  It verifies that a
-@value{FN} is given in the directive.  If the file named is not the
-current file, then the current file is closed.  Keeping the current file
-open until a new file is encountered allows the use of the @samp{>}
-redirection for printing the contents, keeping open-file management
-simple.
+第二个规则将数据移动到文件中。它会检查在指示符中给出的@value{FN}。如果文件名不是当前的文件，然后当前文件就会被关闭。让当前的文件一直打开到处理下一个新文件，这样你可以使用 @samp{>} 来重定向打印内容，打开文件的管理也很简单。
 
-The @code{for} loop does the work.  It reads lines using @code{getline}
-(@pxref{Getline}).
-For an unexpected end-of-file, it calls the @code{@w{unexpected_eof()}}
-function.  If the line is an ``endfile'' line, then it breaks out of
-the loop.
-If the line is an @samp{@@group} or @samp{@@end group} line, then it
-ignores it and goes on to the next line.
-Similarly, comments within examples are also ignored.
+@code{for} 循环处理真正的工作。它使用 @code{getline} （查看 @pxref{Getline}）来读取行。对于一个未期望的文件尾，它会调用 @code{@w{unexpected_eof()}} 函数。如果行是一个 @samp{endfile} 行，则它就跳出循环。如果行是 @samp{@@group} 或者 @samp{@@end group} 行，则它会忽略掉，然后继续处理下一行。类似地，例子中的注释也被忽略掉。
 
-Most of the work is in the following few lines.  If the line has no @samp{@@}
-symbols, the program can print it directly.
-Otherwise, each leading @samp{@@} must be stripped off.
-To remove the @samp{@@} symbols, the line is split into separate elements of
-the array @code{a}, using the @code{split()} function
-(@pxref{String Functions}).
-The @samp{@@} symbol is used as the separator character.
-Each element of @code{a} that is empty indicates two successive @samp{@@}
-symbols in the original line.  For each two empty elements (@samp{@@@@} in
-the original file), we have to add a single @samp{@@} symbol back in.
+大多数的工作都在下面几行。如果行中没有 @samp{@@} 符号，则程序可以直接打印它，否则每一个前导的 @samp{@@} 必须被去掉。为了移除 @samp{@@} 符号，使用 @code{split()} 函数（查看 @ref{String Functions}）行被分割成 @code{a} 数组的不同元素。
+@samp{@@} 符号被用于分隔符。@code{a} 的每一个空元素表示在原行中的两个连续的 @samp{@@} 符号。对每两个空元素（在原文件中的 @samp{@@@@}），我们需要加一个 @samp{@@} 符号进来。
 
-When the processing of the array is finished, @code{join()} is called with the
-value of @code{SUBSEP} (@pxref{Multidimensional}),
-to rejoin the pieces back into a single
-line.  That line is then printed to the output file:
+当数组的处理已经完成，@code{join()} 则被以 @code{SUBSEP} 的值调用（查看 @pxref{Multidimensional}），用以将分散的块连接成一个单独的行。该行然后被打印到输出文件中：
 
 @example
 @c file eg/prog/extract.awk
@@ -19893,18 +19226,9 @@ line.  That line is then printed to the output file:
 @c endfile
 @end example
 
-An important thing to note is the use of the @samp{>} redirection.
-Output done with @samp{>} only opens the file once; it stays open and
-subsequent output is appended to the file
-(@pxref{Redirection}).
-This makes it easy to mix program text and explanatory prose for the same
-sample source file (as has been done here!) without any hassle.  The file is
-only closed when a new @value{DF} name is encountered or at the end of the
-input file.
+这里要注意一个重要的事情就是 @samp{>} 重定向符的使用。用 @samp{>} 输出只会打开一次文件，然后会一保持打开，后续的输出操作会附加到文件中（查看 @pxref{Redirection}）。这使得很容易混合程序文本与针对相同源文件的解释性的文字（正如这里所做的一样）而没有任何问题。文件只在处理一个新的@value{DF}的时候才会被关闭，或者在输入文件输入结束时关闭。
 
-Finally, the function @code{@w{unexpected_eof()}} prints an appropriate
-error message and then exits.
-The @code{END} rule handles the final cleanup, closing the open file:
+最后，@code{@w{unexpected_eof()}} 函数打印合适的错误信息并退出。@code{END} 规则处理最后的清理工作，关闭打开的文件：
 
 @example
 @c file eg/prog/extract.awk
@@ -19925,31 +19249,19 @@ END @{
 @end example
 
 @node Simple Sed
-@subsection A Simple Stream Editor
+@subsection 一个简单的流编辑器
 
 @cindex @command{sed} utility
 @cindex stream editors
-The @command{sed} utility is a @dfn{stream editor}, a program that reads a
-stream of data, makes changes to it, and passes it on.
-It is often used to make global changes to a large file or to a stream
-of data generated by a pipeline of commands.
-Although @command{sed} is a complicated program in its own right, its most common
-use is to perform global substitutions in the middle of a pipeline:
+@command{sed} 是一个流编辑器，它是一个@dfn{读取数据流}，改变它然后传递它的程序。通过它被用来对一个大的文件或者由命令的管程产生的数据流做一些全局性的更改。尽管 @command{sed} 在它那边来说是一个很复杂的程序，但是它的通常用法是在管线的中途做一些全局性的替换：
 
 @example
 @var{command1} < orig.data | sed 's/old/new/g' | @var{command2} > result
 @end example
 
-Here, @samp{s/old/new/g} tells @command{sed} to look for the regexp
-@samp{old} on each input line and globally replace it with the text
-@samp{new} (i.e., all the occurrences on a line).  This is similar to
-@command{awk}'s @code{gsub()} function
-(@pxref{String Functions}).
+如 @samp{s/old/new/g} 告诉 @command{sed} 在每一个输入行查找正则表达式 @samp{old}，并全局性地替换它为 @samp{new} （即在一行中所有出现）。这个与 @command{awk} 的 @code{gsub()} 函数（查看 @ref{String Functions}）非常类似。
 
-The following program, @file{awksed.awk}, accepts at least two command-line
-arguments: the pattern to look for and the text to replace it with. Any
-additional arguments are treated as @value{DF} names to process. If none
-are provided, the standard input is used:
+下面的程序，@file{awksed.awk} 接收至少两个命令行参数：一个是要查找的模式，以及替换它的文本。任何其他的参数都当成是要处理的@value{DF}名。如果没有提供文件名，则使用标准输入：
 
 @cindex Brennan, Michael
 @cindex @command{awksed.awk} program
@@ -19999,56 +19311,25 @@ BEGIN @{
 @c endfile
 @end example
 
-The program relies on @command{gawk}'s ability to have @code{RS} be a regexp,
-as well as on the setting of @code{RT} to the actual text that terminates the
-record (@pxref{Records}).
+程序依赖于 @command{gawk} 可以将 @code{RS} 赋值为正则表达式的能力，以及设置 @code{RT} 为实际的结束记录的文本（查看 @pxref{Records}）。
 
-The idea is to have @code{RS} be the pattern to look for. @command{gawk}
-automatically sets @code{$0} to the text between matches of the pattern.
-This is text that we want to keep, unmodified.  Then, by setting @code{ORS}
-to the replacement text, a simple @code{print} statement outputs the
-text we want to keep, followed by the replacement text.
+思路就是让 @code{RS} 成为要查找的模式。@command{gawk} 会处置设置 @code{$0} 为在匹配模式之间的文本。这就是我们想要保留的，不经修改的文本。然后，设置 @code{ORS} 为替换的文件。一个简单的 @code{print} 语句输出我们想要保留的文本，后面跟着要替换的文本。
 
-There is one wrinkle to this scheme, which is what to do if the last record
-doesn't end with text that matches @code{RS}.  Using a @code{print}
-statement unconditionally prints the replacement text, which is not correct.
-However, if the file did not end in text that matches @code{RS}, @code{RT}
-is set to the null string.  In this case, we can print @code{$0} using
-@code{printf}
-(@pxref{Printf}).
+这个方法有一个不完美的地方，即如果最后一条记录不是以匹配 @code{RS} 的文本结束该怎么办。使用 @code{print} 语句无条件地打印替换文本是不正确的。但是，如果文件不是以匹配 @code{RS} 的文本结束，@code{RT} 会被设置成空串。在这种情况下，我们可以使用 @code{printf} 来打印 @code{$0}。（查看 @pxref{Printf}）
 
-The @code{BEGIN} rule handles the setup, checking for the right number
-of arguments and calling @code{usage()} if there is a problem. Then it sets
-@code{RS} and @code{ORS} from the command-line arguments and sets
-@code{ARGV[1]} and @code{ARGV[2]} to the null string, so that they are
-not treated as @value{FN}s
-(@pxref{ARGC and ARGV}).
+@code{BEGIN} 规则处理环境的设置，检查参数的正确数值，并在出问题时调用 @code{usage()} 函数。然后再设置 @code{RS} 与 @code{ORS} 为从命令行中取得的参数，并调协 @code{ARGV[1]} 与 @code{ARGV[2]} 为空串，这样它们就不会被当成文件名来处理（查看 @pxref{ARGC and ARGV}）。
 
-The @code{usage()} function prints an error message and exits.
-Finally, the single rule handles the printing scheme outlined earlier,
-using @code{print} or @code{printf} as appropriate, depending upon the
-value of @code{RT}.
+@code{usage()} 函数会打印一个错误信息并退出。最后，一个简单的规则根据 @code{RT} 的值来相应地使用 @code{print} 与 @code{printf} 来打印之前确定好的方案。
 
 @node Igawk Program
-@subsection An Easy Way to Use Library Functions
+@subsection 使用库函数的简单方式
 
 @cindex libraries of @command{awk} functions, example program for using
 @cindex functions, library, example program for using
-In @ref{Include Files}, we saw how @command{gawk} provides a built-in
-file-inclusion capability.  However, this is a @command{gawk} extension.
-This @value{SECTION} provides the motivation for making file inclusion
-available for standard @command{awk}, and shows how to do it using a
-combination of shell and @command{awk} programming.
+在 @ref{Include Files} 中我们看到了 @command{gawk} 如何来提供内置的文件包含能力。但是，这是 @command{gawk} 的扩展。
+这一@value{SECTION}提供了让标准的 @command{awk} 有文件包含能力的动机，以及如何通过 Shell 与 @command{awk} 的编程组合来实现。
 
-Using library functions in @command{awk} can be very beneficial. It
-encourages code reuse and the writing of general functions. Programs are
-smaller and therefore clearer.
-However, using library functions is only easy when writing @command{awk}
-programs; it is painful when running them, requiring multiple @option{-f}
-options.  If @command{gawk} is unavailable, then so too is the @env{AWKPATH}
-environment variable and the ability to put @command{awk} functions into a
-library directory (@pxref{Options}).
-It would be nice to be able to write programs in the following manner:
+使用在 @command{awk} 中的库函数用处非常大。它鼓励代码重用来写一些通用函数。程序看起来会更小更清晰。但是，写 @command{awk} 程序时使用库函数非常容易，但是运行他们时却很痛苦，因为需要多个 @option{-f} 选项。如果 @command{gawk} 不可用，则通过 @env{AWKPATH} 环境来变量来将 @command{awk} 函数放到库目录的能力也一样痛苦（查看 @ref{Options}）。如果能以下面的方式来写程序则就非常好了：
 
 @example
 # library functions
@@ -20064,112 +19345,66 @@ BEGIN @{
 @}
 @end example
 
-The following program, @file{igawk.sh}, provides this service.
-It simulates @command{gawk}'s searching of the @env{AWKPATH} variable
-and also allows @dfn{nested} includes (i.e., a file that is included
-with @code{@@include} can contain further @code{@@include} statements).
-@command{igawk} makes an effort to only include files once, so that nested
-includes don't accidentally include a library function twice.
+下面的程序 @file{igawk.sh} 提供了这样的服务。它模拟 @command{gawk} 的搜索 @env{AWKPATH} 变量的行为，并允许@dfn{嵌套}的包含（即被 @code{@@include} 包含的文件可以再包含 @code{@@include} 语句）。@command{igawk} 努力使文件只被包含一次，因此嵌套的包含不会偶然包含一个库函数两次。
 
-@command{igawk} should behave just like @command{gawk} externally.  This
-means it should accept all of @command{gawk}'s command-line arguments,
-including the ability to have multiple source files specified via
-@option{-f} and the ability to mix command-line and library source files.
+@command{igawk} 应该外在表现得像 @command{gawk}。这就是说，它可以接收所有的 @command{gawk} 的命令行参数，包含通过 @option{-f} 指定多个源文件的能力以及能够混用命令行与库源文件的能力。
 
-The program is written using the POSIX Shell (@command{sh}) command
-language.@footnote{Fully explaining the @command{sh} language is beyond
-the scope of this book. We provide some minimal explanations, but see
-a good shell programming book if you wish to understand things in more
-depth.} It works as follows:
+程序使用 POSIX Shell（@command{sh}）命令语言写成。
+@footnote{完整的 @command{sh} 语言的解释超出了这本书的范围。我们提供了一些最小的说明，但是如果你想更深入地理解，请阅读一个好的 Shell 编程书。}
+它工作方式如下：
 
 @enumerate
 @item
-Loop through the arguments, saving anything that doesn't represent
-@command{awk} source code for later, when the expanded program is run.
+当程序展开执行时，循环迭代参数，保存所有不代表 @command{awk} 源代码的参数以备用。
 
 @item
-For any arguments that do represent @command{awk} text, put the arguments into
-a shell variable that will be expanded.  There are two cases:
+对于任何不代表 @command{awk} 文件的参数，将参数放到一个可展开的 Shell 变量中。有两种情形：
 
 @enumerate a
 @item
-Literal text, provided with @option{-e} or @option{--source}.  This
-text is just appended directly.
+对于由 @option{-e} 或者 @option{--source} 提供的字面文本。这个文本只是直接进行附加。
 
 @item
-Source @value{FN}s, provided with @option{-f}.  We use a neat trick and
-append @samp{@@include @var{filename}} to the shell variable's contents.
-Because the file-inclusion program works the way @command{gawk} does, this
-gets the text of the file included in the program at the correct point.
+由 @option{-f} 参数提供的源@value{FN}。我们使用一个小技巧，并附加 @samp{@@include @var{filename}} 到 Shell 变量的内容中。由于文件包含程序如 @command{gawk} 一样的工作方式，这可以在正确的点取得程序中包含的文件的文本。
 @end enumerate
 
 @item
-Run an @command{awk} program (naturally) over the shell variable's contents to expand
-@code{@@include} statements.  The expanded program is placed in a second
-shell variable.
+在 Shell 变量之上，执行 @command{awk} 程序（自然地）来展开 @code{@@include} 语句。被展开的程序放放在第二个 Shell 变量中。
 
 @item
-Run the expanded program with @command{gawk} and any other original command-line
-arguments that the user supplied (such as the @value{DF} names).
+用 @command{gawk} 运行展开的程序以及其他的用户提供的命令参数（例如@value{DF}名）。
 @end enumerate
 
-This program uses shell variables extensively: for storing command-line arguments and
-the text of the @command{awk} program that will expand the user's program, for the
-user's original program, and for the expanded program.  Doing so removes some
-potential problems that might arise were we to use temporary files instead,
-at the cost of making the script somewhat more complicated.
+这个程序扩展地使用 Shell 变量：用于存储命令行参数以及将会展开用户程序的 @command{awk} 程序的文本，用于用户的初始程序以及展开的程序。这么做可以移除一些当我们使用临时文件而导致的潜在的问题，但是代价就是使脚本带来一定的复杂性。
 
-The initial part of the program turns on shell tracing if the first
-argument is @samp{debug}.
+程序的开始部分，如果第一个参数是 @samp{debug}，则打开 Shell 的跟踪。
 
-The next part loops through all the command-line arguments.
-There are several cases of interest:
+下一个部分会循环所有的命令行参数。有几个情况非常有意思：
 
 @c @asis for docbook
 @table @asis
 @item @option{--}
-This ends the arguments to @command{igawk}.  Anything else should be passed on
-to the user's @command{awk} program without being evaluated.
+这由于结束 @command{igawk} 的参数。其他的任意参数应该被原样地传递到用户的 @command{awk} 程序。
 
 @item @option{-W}
-This indicates that the next option is specific to @command{gawk}.  To make
-argument processing easier, the @option{-W} is appended to the front of the
-remaining arguments and the loop continues.  (This is an @command{sh}
-programming trick.  Don't worry about it if you are not familiar with
-@command{sh}.)
+这表示下一个选项是特定于 @command{gawk} 的。为了使参数处理更加容易，@option{-W} 被附加到剩下的参数的前面，然后继续循环。（这是一个 @command{sh} 的编程技巧。如果你不熟悉 @command{sh} 也不用担心。）
 
 @item @option{-v}, @option{-F}
-These are saved and passed on to @command{gawk}.
+这会被存储并被传递给 @command{gawk}。
 
 @item @option{-f}, @option{--file}, @option{--file=}, @option{-Wfile=}
-The @value{FN} is appended to the shell variable @code{program} with an
-@code{@@include} statement.
-The @command{expr} utility is used to remove the leading option part of the
-argument (e.g., @samp{--file=}).
-(Typical @command{sh} usage would be to use the @command{echo} and @command{sed}
-utilities to do this work.  Unfortunately, some versions of @command{echo} evaluate
-escape sequences in their arguments, possibly mangling the program text.
-Using @command{expr} avoids this problem.)
+使用 @code{@@include} 语句把@value{FN}附加到 Shell 变量程序 @code{program}。@command{expr} 工具用于移除参数前面的的选项部分（比如 @samp{--file=}）。（典型的 @command{sh} 用法应该是使用 @command{echo} 以及 @command{sed} 工具来做这样的事情。很不幸的是，有一些版本的 @command{echo} 会对它的参数列表中的转义序列进行求值，有可能会弄乱程序文本。使用 @command{expr} 可以避免这个问题。）
 
 @item @option{--source}, @option{--source=}, @option{-Wsource=}
-The source text is appended to @code{program}.
+源代码被附加到程序 @code{program} 中。
 
 @item @option{--version}, @option{-Wversion}
-@command{igawk} prints its version number, runs @samp{gawk --version}
-to get the @command{gawk} version information, and then exits.
+@command{igawk} 打印它的版本号，运行 @samp{gawk --version} 来取得 @command{gawk} 的版本信息，然后退出。
 @end table
 
-If none of the @option{-f}, @option{--file}, @option{-Wfile}, @option{--source},
-or @option{-Wsource} arguments are supplied, then the first nonoption argument
-should be the @command{awk} program.  If there are no command-line
-arguments left, @command{igawk} prints an error message and exits.
-Otherwise, the first argument is appended to @code{program}.
-In any case, after the arguments have been processed,
-the shell variable
-@code{program} contains the complete text of the original @command{awk}
-program.
+如果 @option{-f}，@option{--file}，@option{-Wfile}，@option{--source} 或者 @option{-Wsource} 参数一个都没有提供，则第一个非选项参数会用作 @command{awk} 的程序。如果没有其他的命令行参数，@command{igawk} 打印一个错误信息后退出。否则，第一个参数会被附加到程序 @code{program}。在任何情况下，在参数被处理后，Shell 变量程序包含最初 @command{awk} 程序的完全的文本。
 
-The program is as follows:
+程序如下：
 
 @cindex @code{igawk.sh} program
 @example
@@ -20262,6 +19497,7 @@ fi
 @c endfile
 @end example
 
+#TODO20171122
 The @command{awk} program to process @code{@@include} directives
 is stored in the shell variable @code{expand_prog}.  Doing this keeps
 the shell script readable.  The @command{awk} program
