@@ -20270,35 +20270,13 @@ fi
 @c endfile
 @end example
 
-#TODO20171122
-The @command{awk} program to process @code{@@include} directives
-is stored in the shell variable @code{expand_prog}.  Doing this keeps
-the shell script readable.  The @command{awk} program
-reads through the user's program, one line at a time, using @code{getline}
-(@pxref{Getline}).  The input
-@value{FN}s and @code{@@include} statements are managed using a stack.
-As each @code{@@include} is encountered, the current @value{FN} is
-``pushed'' onto the stack and the file named in the @code{@@include}
-directive becomes the current @value{FN}.  As each file is finished,
-the stack is ``popped,'' and the previous input file becomes the current
-input file again.  The process is started by making the original file
-the first one on the stack.
+处理 @code{@@include} 指令的 @command{awk} 程序被存储在 Shell 的变量 @code{expand_prog} 中。这么做可以使得 Shell 脚本更可读。@command{awk} 程序使用 @code{getline} （查看 @pxref{Getline}）读取用户的程序，一次一行。输入文件名以及 @code{@@include} 语句使用栈来管理。
+每遇到一个 @code{@@include}，当前的文件名会被推到栈中，在 @code{@@include} 中的@value{FN}则成为当前@value{FN}。每完成一个文件，则会对栈进行弹出，这样前一个文件会成为当前文件。处理是以最开始的文件作为栈中的第一个文件开始的。
 
-The @code{pathto()} function does the work of finding the full path to
-a file.  It simulates @command{gawk}'s behavior when searching the
-@env{AWKPATH} environment variable
-(@pxref{AWKPATH Variable}).
-If a @value{FN} has a @samp{/} in it, no path search is done.
-Similarly, if the @value{FN} is @code{"-"}, then that string is
-used as-is.  Otherwise,
-the @value{FN} is concatenated with the name of each directory in
-the path, and an attempt is made to open the generated @value{FN}.
-The only way to test if a file can be read in @command{awk} is to go
-ahead and try to read it with @code{getline}; this is what @code{pathto()}
-does.@footnote{On some very old versions of @command{awk}, the test
-@samp{getline junk < t} can loop forever if the file exists but is empty.}
-If the file can be read, it is closed and the @value{FN}
-is returned:
+@code{pathto()} 函数处理查找文件全路径的事情。它模拟 @command{gawk} 的查找 @env{AWKPATH}（查看 @pxref{AWKPATH Variable}） 环境变量的行为。如果文件名中有 @samp{/}，则不会进行路径搜索。
+类似地，如果@value{FN}是@code{"-"}，则相应的字串则原样不变。否则，@value{FN}被与路径中的每一个上进进行连接，并尝试打开生成的@value{FN}。唯一的测试文件是否可在 @command{awk} 中进行读取的方式是继续通过 @code{getline} 来尝试读取，这正是 @code{pathto()} 所做的。
+@footnote{在一些非常老的 @command{awk} 版本中，如果文件存在但为空，@samp{getline junk < t} 这样的测试能够永远循环。}
+如果文件可读，则关闭它，把返回@value{FN}：
 
 @ignore
 An alternative way to test for the file's existence would be to call
@@ -20335,10 +20313,7 @@ function pathto(file,    i, t, junk)
 @c endfile
 @end example
 
-The main program is contained inside one @code{BEGIN} rule.  The first thing it
-does is set up the @code{pathlist} array that @code{pathto()} uses.  After
-splitting the path on @samp{:}, null elements are replaced with @code{"."},
-which represents the current directory:
+主程序包含在 @code{BEGIN} 规则中。它所做的第一件事情就是设置一个 @code{pathlist} 数组给 @code{pathto()} 使用。在使用 @samp{:} 分割路径之后，空的元素用 @code{"."} 进行替换，它表示的是当前路径：
 
 @example
 @c file eg/prog/igawk.sh
@@ -20352,22 +20327,12 @@ BEGIN @{
 @c endfile
 @end example
 
-The stack is initialized with @code{ARGV[1]}, which will be @code{"/dev/stdin"}.
-The main loop comes next.  Input lines are read in succession. Lines that
-do not start with @code{@@include} are printed verbatim.
-If the line does start with @code{@@include}, the @value{FN} is in @code{$2}.
-@code{pathto()} is called to generate the full path.  If it cannot, then the program
-prints an error message and continues.
+栈使用 @code{ARGV[1]} 来进行初始化，它的值为 @code{"/dev/stdin"}。后面则是主循环。输入行会一行行连续。不能 @code{@@include} 开始的行则会原样打印。如果行确实是以 @code{@@include} 开始的，则@value{FN}会存储在 @code{$2} 中。
+@code{pathto()} 用来产生完整的路径。如果没法产生，程序则打印一个错误信息后继续。
 
-The next thing to check is if the file is included already.  The
-@code{processed} array is indexed by the full @value{FN} of each included
-file and it tracks this information for us.  If the file is
-seen again, a warning message is printed. Otherwise, the new @value{FN} is
-pushed onto the stack and processing continues.
+下一个要做的事情就是检查文件是否已经被包含。已经处理的数组 @code{processed} 用已经包含的@value{FN}的全名来进行索引，它会为我们跟踪相应的信息。如果文件再次看到，会打印一个警告信息。否则新的@value{FN}会被推到栈中并继续处理。
 
-Finally, when @code{getline} encounters the end of the input file, the file
-is closed and the stack is popped.  When @code{stackptr} is less than zero,
-the program is done:
+最后，当 @code{getline} 遇到了输入的文件尾，文件则被关闭，栈弹出。当 @code{stackptr} 小于 0 时，程序完成：
 
 @example
 @c file eg/prog/igawk.sh
@@ -20407,39 +20372,24 @@ EOF
 @c endfile
 @end example
 
-The shell construct @samp{@var{command} << @var{marker}} is called
-a @dfn{here document}.  Everything in the shell script up to the
-@var{marker} is fed to @var{command} as input.  The shell processes
-the contents of the here document for variable and command substitution
-(and possibly other things as well, depending upon the shell).
+Shell 的 @samp{@var{command} << @var{marker}} 结构称为@dfn{就地文档}。在 Shell 脚本中的到这个标志 @var{marker} 的所有内容都被当成是 @var{command} 的输入。 Shell 处理就地文档的内容用于变量与命令的替换（也可以是其他的事情，这要看 Shell）。
 
-The shell construct @samp{$(@dots{})} is called @dfn{command substitution}.
-The output of the command inside the parentheses is substituted
-into the command line.
-Because the result is used in a variable assignment,
-it is saved as a single string, even if the results contain whitespace.
+Shell 的 @samp{$(@dots{})} 这样的结构称为@dfn{命令替换}。在括号中的命令的输出会替换命令行。因为结果会在变量赋值中使用，它会被存成一个单独的字串，就算结果包含空格。
 
-The expanded program is saved in the variable @code{processed_program}.
-It's done in these steps:
+展开的程序被保存在变量 @code{processed_program} 中。它通过下面几步来完成：
 
 @enumerate
 @item
-Run @command{gawk} with the @code{@@include}-processing program (the
-value of the @code{expand_prog} shell variable) reading standard input.
+与从标准输入读取的 @code{@@include} 程序一起执行 @command{gawk}（即 @code{expand_prog} Shell 变量的值）。
 
 @item
-Standard input is the contents of the user's program,
-from the shell variable @code{program}.
-Feed its contents to @command{gawk} via a here document.
+标准输入是用户程序的内容，来自于 Shell 变量程序 @code{program}。将它的内容通过就地文档的方式灌入 @command{gawk} 中。
 
 @item
-Save the results of this processing in the shell variable
-@code{processed_program} by using command substitution.
+将这个处理的结果使用命令替换存到 Shell 变量 @code{processed_program} 中。
 @end enumerate
 
-The last step is to call @command{gawk} with the expanded program,
-along with the original
-options and command-line arguments that the user supplied:
+最后一步使用展开的程序以及用户提供的最初的选项以及命令行参数调用 @command{gawk} ：
 
 @example
 @c file eg/prog/igawk.sh
@@ -20447,70 +20397,39 @@ eval gawk $opts -- '"$processed_program"' '"$@@"'
 @c endfile
 @end example
 
-The @command{eval} command is a shell construct that reruns the shell's parsing
-process.  This keeps things properly quoted.
+@command{eval} 命令是一个 Shell 结果用来重新执行 Shell 的分析过程。这使得内容会被恰当地引起来。
 
-This version of @command{igawk} represents the fifth version of this program.
-There are four key simplifications that make the program work better:
+@command{igawk} 的这个版本呈现了这个程序的第五个版本。有 4 个关键的简化使得程序运行得更好：
 
 @itemize @value{BULLET}
 @item
-Using @code{@@include} even for the files named with @option{-f} makes building
-the initial collected @command{awk} program much simpler; all the
-@code{@@include} processing can be done once.
+使用 @code{@@include} 使得最开始的集合 @command{awk} 程序更简单，即使是使用 @option{-f} 指定的文件名，所有的 @code{@@include} 处理都可以一次完成。
 
 @item
-Not trying to save the line read with @code{getline}
-in the @code{pathto()} function when testing for the
-file's accessibility for use with the main program simplifies things
-considerably.
+当测试文件的可访问性，以在主程序中使用时，不会尝试存储在 @code{pathto()} 函数中使用 @code{getline} 读取的行。这使得事情得到相当的简化。
 
 @item
-Using a @code{getline} loop in the @code{BEGIN} rule does it all in one
-place.  It is not necessary to call out to a separate loop for processing
-nested @code{@@include} statements.
+在 @code{BEGIN} 规则中使用 @code{getline} 在一个地方就完成所有的工作。没有必要再调用另外一个循环来处理嵌套的 @code{@@include} 语句。
 
 @item
-Instead of saving the expanded program in a temporary file, putting it in a shell variable
-avoids some potential security problems.
-This has the disadvantage that the script relies upon more features
-of the @command{sh} language, making it harder to follow for those who
-aren't familiar with @command{sh}.
+不将展开的程序存在一个临时文件中，而是将它们放在一个 Shell 变量中可以避免一些潜在的安全问题。但这也有缺点，因为脚本要依赖于 @command{sh} 语言的更多特性，使得那些不熟悉 @command{sh} 的人很验证于跟踪。
 @end itemize
 
-Also, this program illustrates that it is often worthwhile to combine
-@command{sh} and @command{awk} programming together.  You can usually
-accomplish quite a lot, without having to resort to low-level programming
-in C or C++, and it is frequently easier to do certain kinds of string
-and argument manipulation using the shell than it is in @command{awk}.
+同时 ，这个程序也说明了将 @command{sh} 与 @command{awk} 程序混合使用是值得一试的。你可以通过这样来完成很多的事情，不用寻求更加底层的 C 或者 C++ 语言，通常在 Shell 中要比 @command{awk} 也更容易来处理特定类型的字串与参数操作。
 
-Finally, @command{igawk} shows that it is not always necessary to add new
-features to a program; they can often be layered on top.@footnote{@command{gawk}
-does @code{@@include} processing itself in order to support the use
-of @command{awk} programs as Web CGI scripts.}
+最后 @command{igawk} 展示了给程序添加新的特性并不总是必要的，它们可以一层层叠加来实现。 
+@footnote{@command{gawk} 自己来处理 @code{@@include}，为的是支持将 @command{awk} 程序用作 WEB CGI 脚本。}
 
 
 @node Anagram Program
-@subsection Finding Anagrams from a Dictionary
+@subsection 从字典中查找单词
 
 @cindex anagrams, finding
-An interesting programming challenge is to
-search for @dfn{anagrams} in a
-word list (such as
-@file{/usr/share/dict/words} on many GNU/Linux systems).
-One word is an anagram of another if both words contain
-the same letters
-(e.g., ``babbling'' and ``blabbing'').
+一个有趣的编程挑战就是在一个单词列表中查找@dfn{同字母异序词}（词的字母顺序变换后组成的新词，如在很多的 GNU/Linux 系统中的 @file{/usr/share/dict/words}）。如果两个单词包含相同的字母，则一个单词是另一个单词的字谜（如 “babbling” 与 “blabbing”）。
 
-Column 2, Problem C, of Jon Bentley's @cite{Programming Pearls}, Second
-Edition, presents an elegant algorithm.  The idea is to give words that
-are anagrams a common signature, sort all the words together by their
-signatures, and then print them.  Dr.@: Bentley observes that taking the
-letters in each word and sorting them produces those common signatures.
+Jon Bentley 所著的书 @cite{Programming Pearls}，第二版，第二卷的问题 C，提出了一个优雅的算法。其思想是给单词的字谜一个共同的简单，并通过这些签名来对单词进行排序，然后打印它们。Bentley 博士发现发现用每个单词中出现的字母，并对它们排序来作为单词的签名.
 
-The following program uses arrays of arrays to bring together
-words with the same signature and array sorting to print the words
-in sorted order:
+下面的程序使用多维数组来将有相同签名的单词组织在一起，以及对数组排序来以有序的方式打印单词：
 
 @cindex @code{anagram.awk} program
 @example
@@ -20543,11 +20462,7 @@ in sorted order:
 @c endfile
 @end example
 
-The program starts with a header, and then a rule to skip
-possessives in the dictionary file. The next rule builds
-up the data structure. The first dimension of the array
-is indexed by the signature; the second dimension is the word
-itself:
+程序以一个头部开始，然后跳过在字典文件中的所有格。下一个规则则是用来建立数组结构。数组的第一维由签名来进行索引，第二维则是单词本身：
 
 @example
 @c file eg/prog/anagram.awk
@@ -20558,9 +20473,7 @@ itself:
 @c endfile
 @end example
 
-The @code{word2key()} function creates the signature.
-It splits the word apart into individual letters,
-sorts the letters, and then joins them back together:
+@code{word2key()} 用来创建签名，它将单词分成一个个的字符，并对字符进行排序，然后再将它全合并：
 
 @example
 @c file eg/prog/anagram.awk
@@ -20579,10 +20492,7 @@ function word2key(word,     a, i, n, result)
 @c endfile
 @end example
 
-Finally, the @code{END} rule traverses the array
-and prints out the anagram lists.  It sends the output
-to the system @command{sort} command because otherwise
-the anagrams would appear in arbitrary order:
+最后，@code{END} 规则用来遍历数组，然后打出出字谜列表。它会将输出系统的 @command{sort} 工具，因为不这么处理，字谜就会以随机的顺序出现：
 
 @example
 @c file eg/prog/anagram.awk
@@ -20604,7 +20514,7 @@ END @{
 @c endfile
 @end example
 
-Here is some partial output when the program is run:
+程序运行时，下面是部分输出：
 
 @example
 $ @kbd{gawk -f anagram.awk /usr/share/dict/words | grep '^b'}
@@ -20622,26 +20532,21 @@ babery yabber
 
 
 @node Signature Program
-@subsection And Now for Something Completely Different
+@subsection 来些新鲜的
 
 @cindex signature program
 @cindex Brini, Davide
-The following program was written by Davide Brini
+下面的程序由 Davide Brini 编写并发布在了@uref{http://backreference.org/2011/02/03/obfuscated-awk/, 他的网站}上。
 @c (@email{dave_br@@gmx.com})
-and is published on @uref{http://backreference.org/2011/02/03/obfuscated-awk/,
-his website}.
-It serves as his signature in the Usenet group @code{comp.lang.awk}.
-He supplies the following copyright terms:
+它用来作为他在 Usenet 小组 @code{comp.lang.awk} 的签名。它提供了下面的版本声明：
 
 @quotation
 Copyright @copyright{} 2008 Davide Brini
 
-Copying and distribution of the code published in this page, with or without
-modification, are permitted in any medium without royalty provided the copyright
-notice and this notice are preserved.
+无论是否修改都允许在任何介质上，复制发布本页中公开的代码，而不需要提供正式的版本声明，只要保留本提示即可。
 @end quotation
 
-Here is the program:
+这里它的程序：
 
 @example
 awk 'BEGIN@{O="~"~"~";o="=="=="==";o+=+o;x=O""O;while(X++<=x+o+o)c=c"%c";
@@ -20651,9 +20556,7 @@ O+X*(o*(o+O)+O),+x+O+X*o,x*(x-o),(o+X+x)*o*o-(x-O-O),O+(X-x)*(X+O),x-O@}'
 @end example
 
 @cindex Johansen, Chris
-We leave it to you to determine what the program does.  (If you are
-truly desperate to understand it, see Chris Johansen's explanation,
-which is embedded in the Texinfo source file for this @value{DOCUMENT}.)
+程序做的事情由你来确定。（如果你真的在理解它时绝望了，查看 Chris Johansen 的解释，该解释内嵌在本@value{DOCUMENT}的 Texinfo 源文件中。
 
 @ignore
 To: "Arnold Robbins" <arnold@skeeve.com>
@@ -20734,92 +20637,55 @@ BEGIN {
 @end ignore
 
 @node Programs Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-The programs provided in this @value{CHAPTER}
-continue on the theme that reading programs is an excellent way to learn
-Good Programming.
+本@value{CHAPTER}中提供的程序，延续了这样的主旨，就是要学好编程的终极方法就是去阅读程序。
 
 @item
-Using @samp{#!} to make @command{awk} programs directly runnable makes
-them easier to use.  Otherwise, invoke the program using @samp{awk
--f @dots{}}.
+使用 @samp{#!} 来使用 @command{awk} 程序可以直接运行而更好使用。否则就得这么来调用程序：@samp{awk -f @dots{}}。
 
 @item
-Reimplementing standard POSIX programs in @command{awk} is a pleasant
-exercise; @command{awk}'s expressive power lets you write such programs
-in relatively few lines of code, yet they are functionally complete
-and usable.
+用 @command{awk} 重新实现标准的 POSIX 程序是一个令人愉快的练习，@command{awk} 的表达的威力你以让你用很少的代码就来写出这样的程序，同时功能完备并且可用。
 
 @item
-One of standard @command{awk}'s weaknesses is working with individual
-characters.  The ability to use @code{split()} with the empty string as
-the separator can considerably simplify such tasks.
+@command{awk} 的一个弱点之一就是在处理单个字符的时候。使用 @code{split()} 以及空串来作为分隔符字串的能力可以极大地简化这个工作。
 
 @item
-The examples here demonstrate the usefulness of the library
-functions from @ref{Library Functions}
-for a number of real (if small) programs.
+这里的例子表明了来自 @ref{Library Functions} 的库函数对于很多的（小）程序的用处。
 
 @item
-Besides reinventing POSIX wheels, other programs solved a selection of
-interesting problems, such as finding duplicate words in text, printing
-mailing labels, and finding anagrams.
+除了重新发明 POSIX 轮子，其他的程序可以解释很多的有趣的问题，如查找文本中的重复单词，打印邮件标签，或者查找字谜等。
 
 @end itemize
 
 @c EXCLUDE START
 @node Programs Exercises
-@section Exercises
+@section 练习
 
 @enumerate
 @item
-Rewrite @file{cut.awk} (@pxref{Cut Program})
-using @code{split()} with @code{""} as the separator.
+使用 @code{""} 作为分隔符来调用 @code{split()} 来重写 @file{cut.awk}（查看 @pxref{Cut Program}）。
 
 @item
-In @ref{Egrep Program}, we mentioned that @samp{egrep -i} could be
-simulated in versions of @command{awk} without @code{IGNORECASE} by
-using @code{tolower()} on the line and the pattern. In a footnote there,
-we also mentioned that this solution has a bug: the translated line is
-output, and not the original one.  Fix this problem.
+在 @ref{Egrep Program}，中我们提到过 @samp{egrep -i} 可以使用 @code{tolower()} 用于行与模式来模拟 @command{awk} 中没有 @code{IGNORECASE} 版本的情况。在那个里的一个脚注中，我们也提到这个解决方案有一个 Bug：被转换的行输出后，不是原来的那行。请修复这个问题。
 @c Exercise: Fix this, w/array and new line as key to original line
 
 @item
-The POSIX version of @command{id} takes options that control which
-information is printed.  Modify the @command{awk} version
-(@pxref{Id Program}) to accept the same arguments and perform in the
-same way.
+POSIX 版本的 @command{id} 通过选项来控制要打印什么样的信息。修改 @command{awk} 版本（查看 @pxref{Id Program}）来接收相同的参数并执行相同的结果。
 
 @item
-The @code{split.awk} program (@pxref{Split Program}) assumes
-that letters are contiguous in the character set,
-which isn't true for EBCDIC systems.
-Fix this problem.
-(Hint: Consider a different way to work through the alphabet,
-without relying on @code{ord()} and @code{chr()}.)
+@code{split.awk} 程序（查看 @pxref{Split Program}）假设字母在字符集是连续的，但是对于 EBCDIC 的系统上却不是这样的。请修复这个问题。（提示：考虑一种不同的方法来遍历字母表，而不是使用 @code{ord()} 与 @code{chr()} 函数。）
 
 @item
-In @file{uniq.awk} (@pxref{Uniq Program}, the
-logic for choosing which lines to print represents a @dfn{state
-machine}, which is ``a device that can be in one of a set number of stable
-conditions depending on its previous condition and on the present values
-of its inputs.''@footnote{This is the definition returned from entering
-@code{define: state machine} into Google.}
-Brian Kernighan suggests that
-``an alternative approach to state machines is to just read
-the input into an array, then use indexing.  It's almost always
-easier code, and for most inputs where you would use this, just
-as fast.''  Rewrite the logic to follow this
-suggestion.
+在 @file{uniq.awk} 中（查看 @pxref{Uniq Program}），选择哪一些来打印的逻辑表式一种@dfn{状态机}，即“某个设备可以处于某些稳定的状态依赖于其前面的状态以及它输入的当前值”。
+@footnote{这个是由输入 @code{define: state machine} 到 Google 返回的定义。}
+Brian Kernighan 则建议“状态机的另一种方式是只将输入读到数组中，然后直接使用索引。这几乎总是能够使用更简单的代码来实现，在你使用这个方式的大多数输入中，是非常快的。”请根据这样的建议来重写上面的逻辑。
 
 
 @item
-Why can't the @file{wc.awk} program (@pxref{Wc Program}) just
-use the value of @code{FNR} in @code{endfile()}?
-Hint: Examine the code in @ref{Filetrans Function}.
+为什么 @file{wc.awk}（查看 @pxref{Wc Program}）程序不可以在 @code{endfile()} 中使用 @code{FNR} 的值？提示：检查 @ref{Filetrans Function}，中的代码。
 
 @ignore
 @command{wc} can't just use the value of @code{FNR} in
@@ -20829,20 +20695,13 @@ you will see that @code{FNR} has already been reset by the time
 @end ignore
 
 @item
-Manipulation of individual characters in the @command{translate} program
-(@pxref{Translate Program}) is painful using standard @command{awk}
-functions.  Given that @command{gawk} can split strings into individual
-characters using @code{""} as the separator, how might you use this
-feature to simplify the program?
+在转换程序 @command{translate}（查看 @pxref{Translate Program}）中使用标准 @command{awk} 函数操作单个的字符是很痛苦的。假设 @command{gawk} 可以用 @code{""} 作分隔符来将字串分割为单独的字符，你会如何使用这个特定来简化程序？
 
 @item
-The @file{extract.awk} program (@pxref{Extract Program}) was written
-before @command{gawk} had the @code{gensub()} function.  Use it
-to simplify the code.
+@file{extract.awk} 程序（查看 @pxref{Extract Program}）是在 @command{gawk} 有 @code{gensub()} 函数之前写的。使用它来简化代码。
 
 @item
-Compare the performance of the @file{awksed.awk} program
-(@pxref{Simple Sed}) with the more straightforward:
+用更直接的方式来比较 @file{awksed.awk} 程序（查看 @pxref{Simple Sed}）的性能：
 
 @example
 BEGIN @{
@@ -20855,8 +20714,7 @@ BEGIN @{
 @end example
 
 @item
-What are the advantages and disadvantages of @file{awksed.awk} versus
-the real @command{sed} utility?
+与真正的 @command{sed} 工具比起来，@file{awksed.awk} 有什么样的优缺点？
 
 @ignore
   Advantage: egrep regexps
@@ -20867,10 +20725,7 @@ Others?
 @end ignore
 
 @item
-In @ref{Igawk Program}, we mentioned that not trying to save the line
-read with @code{getline} in the @code{pathto()} function when testing
-for the file's accessibility for use with the main program simplifies
-things considerably.  What problem does this engender though?
+在 @ref{Igawk Program} 中我们提到，当在测试文件的可访问性时，不要尝试在 @code{pathto()} 函数中将 @code{getline} 读取的行进行保存，可以与主程序的一起使用时，极大地简化实现。那么这里面到底有什么问题？
 @c answer, reading from "-" or /dev/stdin
 
 @cindex search paths
@@ -20879,41 +20734,28 @@ things considerably.  What problem does this engender though?
 @cindex files, source@comma{} search path for
 @cindex directories, searching
 @item
-As an additional example of the idea that it is not always necessary to
-add new features to a program, consider the idea of having two files in
-a directory in the search path:
+作为并不总是需要给程序加新功能的想法的一个额外的例子就是，假设有两个文件在搜索路径下的想法：
 
 @table @file
 @item default.awk
-This file contains a set of default library functions, such
-as @code{getopt()} and @code{assert()}.
+这个文件包含默认函数集，如 @code{getopt()} 与 @code{assert()}。
 
 @item site.awk
-This file contains library functions that are specific to a site or
-installation; i.e., locally developed functions.
-Having a separate file allows @file{default.awk} to change with
-new @command{gawk} releases, without requiring the system administrator to
-update it each time by adding the local functions.
+这个文件包含的库函数特定于某个点或者安装版本，如本地的开发函数。用这样的一个独立文件可以使 @file{default.awk} 跟随 @command{gawk} 版本一同更新，而不需要系统的管理员添加一个本地函数的时候总是要更新它。
 @end table
 
-One user
+某个用户
 @c Karl Berry, karl@ileaf.com, 10/95
-suggested that @command{gawk} be modified to automatically read these files
-upon startup.  Instead, it would be very simple to modify @command{igawk}
-to do this. Since @command{igawk} can process nested @code{@@include}
-directives, @file{default.awk} could simply contain @code{@@include}
-statements for the desired library functions.
-Make this change.
+曾经建议 @command{gawk} 要修改成自动地在启动时读取这些文件。但是修改 @command{igawk} 来实现这个功能会更加简单。因为 @command{igawk} 可以处理嵌套的 @code{@@include} 指示符，@file{default.awk} 可以只是简单地包含 @code{@@include} 语句来引入所需要的库函数。请你做这些修改。
 
 @item
-Modify @file{anagram.awk} (@pxref{Anagram Program}), to avoid
-the use of the external @command{sort} utility.
+修改 @file{anagram.awk}（查看 @pxref{Anagram Program}）来避免使用外部的 @command{sort} 工具。
 
 @end enumerate
 @c EXCLUDE END
 
 @ifnotinfo
-@part @value{PART3}Moving Beyond Standard @command{awk} with @command{gawk}
+@part @value{PART3} 用 @command{gawk} 超越标准 @command{awk}
 @end ifnotinfo
 
 @ifdocbook
@@ -20939,7 +20781,7 @@ It contains the following chapters:
 @end ifdocbook
 
 @node Advanced Features
-@chapter Advanced Features of @command{gawk}
+@chapter @command{gawk} 的高级特性
 @cindex @command{gawk}, features, advanced
 @cindex advanced features, @command{gawk}
 @ignore
@@ -20953,46 +20795,29 @@ who knows where you live."
 @cindex Langston, Peter
 @cindex English, Steve
 @quotation
-@i{Write documentation as if whoever reads it is
-a violent psychopath who knows where you live.}
+@i{
+写文档就要像把读它的人当成知道你住在哪的狂暴的精神变态者。
+}
 @author Steve English, as quoted by Peter Langston
 @end quotation
 
-This @value{CHAPTER} discusses advanced features in @command{gawk}.
-It's a bit of a ``grab bag'' of items that are otherwise unrelated
-to each other.
-First, we look at a command-line option that allows @command{gawk} to recognize
-nondecimal numbers in input data, not just in @command{awk}
-programs.
-Then, @command{gawk}'s special features for sorting arrays are presented.
-Next, two-way I/O, discussed briefly in earlier parts of this
-@value{DOCUMENT}, is described in full detail, along with the basics
-of TCP/IP networking.  Finally, we see how @command{gawk}
-can @dfn{profile} an @command{awk} program, making it possible to tune
-it for performance.
+这一@value{CHAPTER}讨论 @command{gawk} 中的高级特性。他们只是互不相关的程序大麻袋中的一小点。首先，我们会看一下使 @command{gawk} 不识别输入数据，而不仅仅是在 @command{awk} 程序中的十进制点的选项。然后，再讨论 @command{gawk} 所特有的对数组进行排序的特性。接下来是双路 I/O 问题，在这之前有过简单的讨论，这里将与 TCP/IP 网络一起进行详细的讨论。最后，我们看一下 @command{gawk} 如何来进行@dfn{评测} @command{awk} 程序，这样可以来对它进行性能上的调优。
 
 @c FULLXREF ON
-Additional advanced features are discussed in separate @value{CHAPTER}s of their
-own:
+其他的高级特性则在其他的@value{CHAPTER}中进行讨论：
 
 @itemize @value{BULLET}
 @item
-@ref{Internationalization}, discusses how to internationalize
-your @command{awk} programs, so that they can speak multiple
-national languages.
+@ref{Internationalization}，讨论如何来对你的 @command{awk} 程序进行国际化，这样它们可以说多国语言。
 
 @item
-@ref{Debugger}, describes @command{gawk}'s built-in command-line
-debugger for debugging @command{awk} programs.
+@ref{Debugger}，描述了 @command{gawk} 的内置的命令行调试器来进行 @command{gawk} 程序的调试。
 
 @item
-@ref{Arbitrary Precision Arithmetic}, describes how you can use
-@command{gawk} to perform arbitrary-precision arithmetic.
+@ref{Arbitrary Precision Arithmetic}，展示了你如何来使用 @command{gawk} 来进行任意精度的算术运算。
 
 @item
-@ref{Dynamic Extensions},
-discusses the ability to dynamically add new built-in functions to
-@command{gawk}.
+@ref{Dynamic Extensions}，讨论动态地给 @command{gawk} 添加新的内置函数的能力。
 @end itemize
 @c FULLXREF OFF
 
@@ -21007,14 +20832,13 @@ discusses the ability to dynamically add new built-in functions to
 @end menu
 
 @node Nondecimal Data
-@section Allowing Nondecimal Input Data
+@section 允许非十进制数数据输入
 @cindex @option{--non-decimal-data} option
 @cindex advanced features, nondecimal input data
 @cindex input, data@comma{} nondecimal
 @cindex constants, nondecimal
 
-If you run @command{gawk} with the @option{--non-decimal-data} option,
-you can have nondecimal values in your input data:
+如果你用 @option{--non-decimal-data} 这个选项来运行 @command{gawk}，你可以在你的输入数据中使用非十进制数数值：
 
 @example
 $ @kbd{echo 0123 123 0x123 |}
@@ -21022,8 +20846,7 @@ $ @kbd{echo 0123 123 0x123 |}
 @print{} 83, 123, 291
 @end example
 
-For this feature to work, write your program so that
-@command{gawk} treats your data as numeric:
+为了你这个特性可以工作，你需要在写程序时让 @command{gawk} 将这些数据当成是数值：
 
 @example
 $ @kbd{echo 0123 123 0x123 | gawk '@{ print $1, $2, $3 @}'}
@@ -21031,11 +20854,7 @@ $ @kbd{echo 0123 123 0x123 | gawk '@{ print $1, $2, $3 @}'}
 @end example
 
 @noindent
-The @code{print} statement treats its expressions as strings.
-Although the fields can act as numbers when necessary,
-they are still strings, so @code{print} does not try to treat them
-numerically.  You need to add zero to a field to force it to
-be treated as a number.  For example:
+@code{print} 语句将它的表达式当成是字串。尽管域在需要的时候可以表现成一个数值，但它们依然是字串，所以 @code{print} 不会尝试将它们以数值来看待。你需要向域加上一个 0 来强制它被当成数值。比如：
 
 @example
 $ @kbd{echo 0123 123 0x123 | gawk --non-decimal-data '}
@@ -21045,35 +20864,23 @@ $ @kbd{echo 0123 123 0x123 | gawk --non-decimal-data '}
 @print{} 83 123 291
 @end example
 
-Because it is common to have decimal data with leading zeros, and because
-using this facility could lead to surprising results, the default is to leave it
-disabled.  If you want it, you must explicitly request it.
+由于有十进制数之前有前导的 0 是很常见的，也由于使用这样的方式可能导致令人惊讶的结果，默认的情况是禁用的。如果你想使用，你必须显式地来指定它。
 
 @cindex programming conventions, @code{--non-decimal-data} option
 @cindex @option{--non-decimal-data} option, @code{strtonum()} function and
 @cindex @code{strtonum()} function (@command{gawk}), @code{--non-decimal-data} option and
-@quotation CAUTION
-@emph{Use of this option is not recommended.}
-It can break old programs very badly.
-Instead, use the @code{strtonum()} function to convert your data
-(@pxref{String Functions}).
-This makes your programs easier to write and easier to read, and
-leads to less surprising results.
+@quotation 注意
+@emph{不推荐使用这个选项。}它会导致旧程序非常糟糕地破坏。相反，要使用 @code{strtonum()} 函数来转换你的数据（查看 @ref{String Functions}）。这也使得你的程序更容易写，也更容易读，结果也不那么令人惊讶。
 
-This option may disappear in a future version of @command{gawk}.
+这个选项可能在 @command{gawk} 的后续版本中消失。
 @end quotation
 
 @node Array Sorting
-@section Controlling Array Traversal and Array Sorting
+@section 控制数组排序与遍历
 
-@command{gawk} lets you control the order in which a
-@samp{for (@var{indx} in @var{array})}
-loop traverses an array.
+@command{gawk} 可以让你在 @samp{for (@var{indx} in @var{array})} 的循环迭代数组时控制其顺序。
 
-In addition, two built-in functions, @code{asort()} and @code{asorti()},
-let you sort arrays based on the array values and indices, respectively.
-These two functions also provide control over the sorting criteria used
-to order the elements during sorting.
+另外，有两个内置的函数，@code{asort()} 与 @code{asorti()} 让你用基于数组的值与索引来对数组进行排序。还有两个函数用来在排序过程中控制元素的顺序的排序方案。
 
 @menu
 * Controlling Array Traversal:: How to use PROCINFO["sorted_in"].
@@ -21081,28 +20888,17 @@ to order the elements during sorting.
 @end menu
 
 @node Controlling Array Traversal
-@subsection Controlling Array Traversal
+@subsection 控制数据遍历
 
-By default, the order in which a @samp{for (@var{indx} in @var{array})} loop
-scans an array is not defined; it is generally based upon
-the internal implementation of arrays inside @command{awk}.
+在默认情况下，在 @samp{for (@var{indx} in @var{array})} 循环中来扫描数组的顺序是未定义的，它一般基于 @command{awk} 中对于数组的实现。
 
-Often, though, it is desirable to be able to loop over the elements
-in a particular order that you, the programmer, choose.  @command{gawk}
-lets you do this.
+通常情况下，做为程序员的你是想来以某种特定的顺序来循环数组中的元素的。@command{gawk} 可以让你做到这个。
 
-@ref{Controlling Scanning} describes how you can assign special,
-predefined values to @code{PROCINFO["sorted_in"]} in order to
-control the order in which @command{gawk} traverses an array
-during a @code{for} loop.
+@ref{Controlling Scanning} 中描述了你可以赋值给某个特定预定义的变量 @code{PROCINFO["sorted_in"]} 以来控制 @command{gawk} 在 @code{for} 循环数组时的顺序。
 
-In addition, the value of @code{PROCINFO["sorted_in"]} can be a
-function name.@footnote{This is why the predefined sorting orders
-start with an @samp{@@} character, which cannot be part of an identifier.}
-This lets you traverse an array based on any custom criterion.
-The array elements are ordered according to the return value of this
-function.  The comparison function should be defined with at least
-four arguments:
+另外，@code{PROCINFO["sorted_in"]} 的值可以是一个函数名。 
+@footnote{这就是为什么预定义的排序顺序都以 @samp{@@} 字符开头，它不可以是标识符的一部份。}
+这让你用自己定义的方案来遍历数组。数组的元素的排序由这个函数的返回值来决定。比较函数应该定义成至少有四个参数：
 
 @example
 function comp_func(i1, v1, i2, v2)
@@ -21112,27 +20908,20 @@ function comp_func(i1, v1, i2, v2)
 @}
 @end example
 
-Here, @code{i1} and @code{i2} are the indices, and @code{v1} and @code{v2}
-are the corresponding values of the two elements being compared.
-Either @code{v1} or @code{v2}, or both, can be arrays if the array being
-traversed contains subarrays as values.
-(@xref{Arrays of Arrays} for more information about subarrays.)
-The three possible return values are interpreted as follows:
+这里面 @code{i1} 与 @code{i2} 是索引，而 @code{v1} 与 @code{v2} 是两个正在比较的元素的值。如果正在被遍历的数组包含了子数组元素，@code{v1} 与 @code{v2} 之一或者两者都可能是数组。（查看 @xref{Arrays of Arrays}，来取得子数组的更多信息）三中可能的返回值如下所述：
 
 @table @code
 @item comp_func(i1, v1, i2, v2) < 0
-Index @code{i1} comes before index @code{i2} during loop traversal.
+在循环遍历时，索引 @code{i1} 会先于 @code{i2}。
 
 @item comp_func(i1, v1, i2, v2) == 0
-Indices @code{i1} and @code{i2}
-come together, but the relative order with respect to each other is undefined.
+索引 @code{i1} 与 @code{i2} 是相同的，但是其相对顺序是未定义的。
 
 @item comp_func(i1, v1, i2, v2) > 0
-Index @code{i1} comes after index @code{i2} during loop traversal.
+索引 @code{i1} 后在 @code{i2} 之后。
 @end table
 
-Our first comparison function can be used to scan an array in
-numerical order of the indices:
+我们的第一个比较函数可以以索引的数值顺序来扫描数组：
 
 @example
 function cmp_num_idx(i1, v1, i2, v2)
@@ -21142,8 +20931,7 @@ function cmp_num_idx(i1, v1, i2, v2)
 @}
 @end example
 
-Our second function traverses an array based on the string order of
-the element values rather than by indices:
+我们的第二个函数基于元素的字串值来遍历数组，而不是基于索引：
 
 @example
 function cmp_str_val(i1, v1, i2, v2)
@@ -21157,9 +20945,7 @@ function cmp_str_val(i1, v1, i2, v2)
 @}
 @end example
 
-The third
-comparison function makes all numbers, and numeric strings without
-any leading or trailing spaces, come out first during loop traversal:
+第三个比较函数使所有的数值，前后没空格的数字字串，会在循环时在前面：
 
 @example
 function cmp_num_str_val(i1, v1, i2, v2,   n1, n2)
@@ -21175,8 +20961,7 @@ function cmp_num_str_val(i1, v1, i2, v2,   n1, n2)
 @}
 @end example
 
-Here is a main program to demonstrate how @command{gawk}
-behaves using each of the previous functions:
+这是一个说明 @command{gawk} 使用前面不同函数时的不同表现时的主程序：
 
 @example
 BEGIN @{
@@ -21199,7 +20984,7 @@ BEGIN @{
 @}
 @end example
 
-Here are the results when the program is run:
+这是程序执行时的结果：
 
 @example
 $ @kbd{gawk -f compdemo.awk}
@@ -21225,9 +21010,7 @@ $ @kbd{gawk -f compdemo.awk}
 @print{}     data[20] = two
 @end example
 
-Consider sorting the entries of a GNU/Linux system password file
-according to login name.  The following program sorts records
-by a specific field position and can be used for this purpose:
+考虑对 GNU/Linux 系统的密码文件中的项按登录名来排序。下面的程序对特定域位置的比较来进行记录的排序可用于这个目的：
 
 @example
 # passwd-sort.awk --- simple program to sort by field position
@@ -21256,12 +21039,7 @@ END @{
 @}
 @end example
 
-The first field in each entry of the password file is the user's login name,
-and the fields are separated by colons.
-Each record defines a subarray,
-with each field as an element in the subarray.
-Running the program produces the
-following output:
+密码文件中的每一项的第一个域是用户的登录名，域之间通过冒号分隔。每个记录都定义了一个子数组，每个域都是子数组中的一个元素。执行程序会产生如下输出：
 
 @example
 $ @kbd{gawk -v POS=1 -F: -f sort.awk /etc/passwd}
@@ -21271,11 +21049,7 @@ $ @kbd{gawk -v POS=1 -F: -f sort.awk /etc/passwd}
 @dots{}
 @end example
 
-The comparison should normally always return the same value when given a
-specific pair of array elements as its arguments.  If inconsistent
-results are returned, then the order is undefined.  This behavior can be
-exploited to introduce random order into otherwise seemingly
-ordered data:
+当给定一个特定的数组元素对时，比较应该总是返回相同的值。如果返回了不一致的值，则顺序是未定义的。这个行为可以用来给看起来有序的数据引入随机顺序：
 
 @example
 function cmp_randomize(i1, v1, i2, v2)
@@ -21285,17 +21059,7 @@ function cmp_randomize(i1, v1, i2, v2)
 @}
 @end example
 
-As already mentioned, the order of the indices is arbitrary if two
-elements compare equal.  This is usually not a problem, but letting
-the tied elements come out in arbitrary order can be an issue, especially
-when comparing item values.  The partial ordering of the equal elements
-may change the next time the array is traversed, if other elements are added to or
-removed from the array.  One way to resolve ties when comparing elements
-with otherwise equal values is to include the indices in the comparison
-rules.  Note that doing this may make the loop traversal less efficient,
-so consider it only if necessary.  The following comparison functions
-force a deterministic order, and are based on the fact that the
-(string) indices of two elements are never equal:
+如早前所提到的，如果两个元素比较相同，则两个元素的索引的顺序是任意的。这一般都不是什么问题，但是让两个在一起的元素以任意的顺序出现却是个问题，特别是大比较两者的值的时候。如果其他的元素加入或者从数组中移除，对相同元素间的部分排序在下次数组遍历时会改变。解决这个绑定元素的问题的方法之一是，当比较两元素值相同时，要再比较它们的索引。这么做的话，会使得循环遍历没有那高效，所以，只在必要的时候考虑使用它。下面的比较函数会一定会有确定的顺序，是基于两个元素的索引（字串）肯定不相同这样的事实：
 
 @example
 function cmp_numeric(i1, v1, i2, v2)
@@ -21318,38 +21082,22 @@ function cmp_string(i1, v1, i2, v2)
 @c is to maintain the original order of the items, which is a meaningless
 @c concept for a list constructed from a hash.
 
-A custom comparison function can often simplify ordered loop
-traversal, and the sky is really the limit when it comes to
-designing such a function.
+一个定制的比较函数常常可以简单循环遍历，而设计这样的函数的限制只受限于天空的大小。
 
-When string comparisons are made during a sort, either for element
-values where one or both aren't numbers, or for element indices
-handled as strings, the value of @code{IGNORECASE}
-(@pxref{Built-in Variables}) controls whether
-the comparisons treat corresponding upper- and lowercase letters as
-equivalent or distinct.
+当在进行排序时，如果使用的是字串比较，元素值之一或者两者都不会是数值，或者元素的索引会被当成字串来处理，@code{IGNORECASE} 的值（查看 @pxref{Built-in Variables}）控制比较是否将对应的大小写字母当成一样的字符来看待。
 
-Another point to keep in mind is that in the case of subarrays,
-the element values can themselves be arrays; a production comparison
-function should use the @code{isarray()} function
-(@pxref{Type Functions})
-to check for this, and choose a defined sorting order for subarrays.
+还要记住的一点是在子数组的情况下，元素值本身可以是数组，比较函数的结果应该使用 @code{isarray()} 函数（查看 @pxref{Type Functions}）来检测，并使用为子数组定义好的顺序。
 
-All sorting based on @code{PROCINFO["sorted_in"]}
-is disabled in POSIX mode,
-because the @code{PROCINFO} array is not special in that case.
+所有基于 @code{PROCINFO["sorted_in"]} 的排序在 POSIX 模式下都被禁用，因为 @code{PROCINFO} 数组在此种情况下并没有特殊的含义。
 
-As a side note, sorting the array indices before traversing
-the array has been reported to add a 15% to 20% overhead to the
-execution time of @command{awk} programs. For this reason,
-sorted array traversal is not the default.
+另一个提示就是，在遍历数组时对数组索引的排序已经有报告说会增加 @command{awk} 程序执行时 15 % 到 20 % 的负荷。由于这个原因，排序数组的遍历不作为默认行为。
 
 @c The @command{gawk}
 @c maintainers believe that only the people who wish to use a
 @c feature should have to pay for it.
 
 @node Array Sorting Functions
-@subsection Sorting Array Values and Indices with @command{gawk}
+@subsection 用 @command{gawk} 对数组进行值与键的排序
 
 @cindex arrays, sorting
 @cindexgawkfunc{asort}
@@ -21357,11 +21105,7 @@ sorted array traversal is not the default.
 @cindexgawkfunc{asorti}
 @cindex @code{asorti()} function (@command{gawk}), arrays@comma{} sorting
 @cindex sort function, arrays, sorting
-In most @command{awk} implementations, sorting an array requires writing
-a @code{sort()} function.  This can be educational for exploring
-different sorting algorithms, but usually that's not the point of the program.
-@command{gawk} provides the built-in @code{asort()} and @code{asorti()}
-functions (@pxref{String Functions}) for sorting arrays.  For example:
+在大多数的 @command{awk} 实现中，对数组排序需要写一个 @code{sort()} 函数。这对于学习不同的排序算法也是很有教育作用的，但是通过那不是程序的重点。@command{gawk} 提供了内置的 @code{asort()} 与 @code{asorti()} 函数（查看 @pxref{String Functions}）来对数组排序。如：
 
 @example
 @var{populate the array} data
@@ -21370,20 +21114,11 @@ for (i = 1; i <= n; i++)
     @var{do something with} data[i]
 @end example
 
-After the call to @code{asort()}, the array @code{data} is indexed from 1
-to some number @var{n}, the total number of elements in @code{data}.
-(This count is @code{asort()}'s return value.)
-@code{data[1]} @value{LEQ} @code{data[2]} @value{LEQ} @code{data[3]}, and so on.
-The default comparison is based on the type of the elements
-(@pxref{Typing and Comparison}).
-All numeric values come before all string values,
-which in turn come before all subarrays.
+在调用 @code{asort()} 之后，数组数据 @code{data} 已经从 1 到某个数 @var{n}，即 @code{data} 数组元素中的总数，进行了索引。（这个统计作为 @code{asort()} 的返回值。）@code{data[1]} @value{LEQ} @code{data[2]} @value{LEQ} @code{data[3]} 依此类推。
+默认的比较是基于元素的类型（查看 @pxref{Typing and Comparison}）。所有的数值类型在字串类型之前，然后是所有的子数组。
 
 @cindex side effects, @code{asort()} function
-An important side effect of calling @code{asort()} is that
-@emph{the array's original indices are irrevocably lost}.
-As this isn't always desirable, @code{asort()} accepts a
-second argument:
+调用 @code{asort()} 函数的一个重要的副作用是@emph{数组的原始的索引不可恢复地丢失了}。这并不总是所要的结果。@code{asort()} 可以授受第二个参数：
 
 @example
 @var{populate the array} source
@@ -21392,15 +21127,9 @@ for (i = 1; i <= n; i++)
     @var{do something with} dest[i]
 @end example
 
-In this case, @command{gawk} copies the @code{source} array into the
-@code{dest} array and then sorts @code{dest}, destroying its indices.
-However, the @code{source} array is not affected.
+在这种情况下，@command{gawk} 会复制 @code{source} 数组到 @code{dest} 数组中，然后对 @code{dest} 进行排序，并导致其索引的破坏。但是，@code{source} 数组则不影响。
 
-Often, what's needed is to sort on the values of the @emph{indices}
-instead of the values of the elements.  To do that, use the
-@code{asorti()} function.  The interface and behavior are identical to
-that of @code{asort()}, except that the index values are used for sorting
-and become the values of the result array:
+经常情况下，是需要对@emph{索引}的值进行排序，而不是对元素的值进行排序。为了实现这个功能，则使用 @code{asorti()} 函数。这个接口与其行为与 @code{asort()} 是一样的，只是使用索引的值来进行排序，并且成为结果数组的值：
 
 @example
 @{ source[$0] = some_func($0) @}
@@ -21417,51 +21146,27 @@ END @{
 @}
 @end example
 
-So far, so good. Now it starts to get interesting.  Both @code{asort()}
-and @code{asorti()} accept a third string argument to control comparison
-of array elements.  When we introduced @code{asort()} and @code{asorti()}
-in @ref{String Functions}, we ignored this third argument; however,
-now is the time to describe how this argument affects these two functions.
+到目前为止都还好。现在开始进入最有趣的部分。@code{asort()} 与 @code{asorti()} 都接收第三个字串参数来控制数组元素的比较。当我们在 @ref{String Functions}，引入 @code{asort()} 与 @code{asorti()} 时，我们忽略了第三个参数，但是现在是时候来描述这个参数如何来影响这两个函数。
 
-Basically, the third argument specifies how the array is to be sorted.
-There are two possibilities.  As with @code{PROCINFO["sorted_in"]},
-this argument may be one of the predefined names that @command{gawk}
-provides (@pxref{Controlling Scanning}), or it may be the name of a
-user-defined function (@pxref{Controlling Array Traversal}).
+基本上，第三个参数用来指定数组如何来进行排序。有两个可能。如 @code{PROCINFO["sorted_in"]} 一样，这个参数可以是 @command{gawk} 所提供的预定义名字中的一个（查看 @pxref{Controlling Scanning}），或者也可以用户自定义函数的名字（查看 @pxref{Controlling Array Traversal}）。
 
-In the latter case, @emph{the function can compare elements in any way
-it chooses}, taking into account just the indices, just the values,
-or both.  This is extremely powerful.
+在后面的情况下，@emph{指定的函数可以以任何选择的方式来比较元素}，可以只考虑索引，也可以只考虑值，或者两者都考虑。这就相当强大了。
 
-Once the array is sorted, @code{asort()} takes the @emph{values} in
-their final order and uses them to fill in the result array, whereas
-@code{asorti()} takes the @emph{indices} in their final order and uses
-them to fill in the result array.
+一旦数组经过排序，@code{asort()} 会取得最终顺序的值，并使用他们填入到结果数组中，而 @code{asorti()} 取最终顺序的@emph{索引}并使用它们填充到结果数组中。
 
 @cindex reference counting, sorting arrays
-@quotation NOTE
-Copying array indices and elements isn't expensive in terms of memory.
-Internally, @command{gawk} maintains @dfn{reference counts} to data.
-For example, when @code{asort()} copies the first array to the second one,
-there is only one copy of the original array elements' data, even though
-both arrays use the values.
+@quotation 提示
+复制数组的索引与元素在内存中代价并不高。在内部，@command{gawk} 会保持数据的@dfn{参考计数}。如当 @code{asort()} 复制第一个元素到第二个时，只会有一个元素数据的复本，就算两个数组使用这个值。
 @end quotation
 
 @c Document It And Call It A Feature. Sigh.
 @cindex @command{gawk}, @code{IGNORECASE} variable in
 @cindex arrays, sorting, and @code{IGNORECASE} variable
 @cindex @code{IGNORECASE} variable, and array sorting functions
-Because @code{IGNORECASE} affects string comparisons, the value
-of @code{IGNORECASE} also affects sorting for both @code{asort()} and @code{asorti()}.
-Note also that the locale's sorting order does @emph{not}
-come into play; comparisons are based on character values only.@footnote{This
-is true because locale-based comparison occurs only when in
-POSIX-compatibility mode, and because @code{asort()} and @code{asorti()} are
-@command{gawk} extensions, they are not available in that case.}
+因为 @code{IGNORECASE} 可以影响字串比较，@code{IGNORECASE} 的值也会影响 @code{asort()} 与 @code{asorti()} 的排序。也要注意本地语言设置中的排序则@emph{不会}有影响，比较只基于字符的值。 
+@footnote{因为基于本地语言设置的比较只会出现在 POSIX 的兼容模式中，因此这确实是真的，并且由于 @code{asort()} 与 @code{asorti()} 是 @command{gawk} 的扩展，在上面的设置中，它们是不可用的。}
 
-The following example demonstrates the use of a comparison function with
-@code{asort()}.  The comparison function, @code{case_fold_compare()}, maps
-both values to lowercase in order to compare them ignoring case.
+下面的是把 @code{asort()} 用于比较函数的例子。比较函数 @code{case_fold_compare()} 为了能忽略大小写比较，把两者的值都转换成小写字母。
 
 @example
 # case_fold_compare --- compare as strings, ignoring case
@@ -21480,7 +21185,7 @@ function case_fold_compare(i1, v1, i2, v2,    l, r)
 @}
 @end example
 
-And here is the test program for it:
+下面是它的测试程序：
 
 @example
 # Test program
@@ -21503,7 +21208,7 @@ BEGIN @{
 @}
 @end example
 
-When run, we get the following:
+当程序运行的时候，我们得到以下输出：
 
 @example
 $ @kbd{gawk -f case_fold_compare.awk}
@@ -21512,7 +21217,7 @@ $ @kbd{gawk -f case_fold_compare.awk}
 @end example
 
 @node Two-way I/O
-@section Two-Way Communications with Another Process
+@section 与其他进程进行双向通信
 
 @c 8/2014. Neither Mike nor BWK saw this as relevant. Commenting it out.
 @ignore
@@ -21549,10 +21254,7 @@ Mike Brennan
 
 @cindex advanced features, processes@comma{} communicating with
 @cindex processes, two-way communications with
-It is often useful to be able to
-send data to a separate program for
-processing and then read the result.  This can always be
-done with temporary files:
+把数据发向另一个单独的程序，处理后再读取结果通常都非常有用。这可以通过临时文件来做到：
 
 @example
 # Write the data for processing
@@ -21569,25 +21271,16 @@ system("rm " tempfile)
 @end example
 
 @noindent
-This works, but not elegantly.  Among other things, it requires that
-the program be run in a directory that cannot be shared among users;
-for example, @file{/tmp} will not do, as another user might happen
-to be using a temporary file with the same name.@footnote{Michael
-Brennan suggests the use of @command{rand()} to generate unique
-@value{FN}s. This is a valid point; nevertheless, temporary files
-remain more difficult to use than two-way pipes.} @c 8/2014
+这可以工作，但是没那么优雅。在其他事情间，它需要程序运行一个不能被其全用户共享的目录中，比如 @file{/tmp} 就不可以，因为其他的用户有可能碰巧使用相同文件名的临时文件。
+@footnote{Michael Brenna 建议使用 @command{rand()} 来产生唯一的@value{FN}。这是个有效的观点，但是，临时文件比起双路管道来讲还是困难些。} @c 8/2014
 
 @cindex coprocesses
 @cindex input/output, two-way
 @cindex @code{|} (vertical bar), @code{|&} operator (I/O)
 @cindex vertical bar (@code{|}), @code{|&} operator (I/O)
 @cindex @command{csh} utility, @code{|&} operator, comparison with
-However, with @command{gawk}, it is possible to
-open a @emph{two-way} pipe to another process.  The second process is
-termed a @dfn{coprocess}, as it runs in parallel with @command{gawk}.
-The two-way connection is created using the @samp{|&} operator
-(borrowed from the Korn shell, @command{ksh}):@footnote{This is very
-different from the same operator in the C shell and in Bash.}
+但是，使用 @command{gawk} 可以打开一个@emph{双路}的管道到另一个进程中。第二个进程被称为@dfn{并程}，因为它与 @command{gawk} 一道运行。双路连接使用 @samp{|&} 操作符来建立（从 Korn shell，@command{ksh} 借来的）： 
+@footnote{这与 Bash 与 C Shell 中的操作符非常不同。}
 
 @example
 do @{
@@ -21597,59 +21290,28 @@ do @{
 close("subprogram")
 @end example
 
-The first time an I/O operation is executed using the @samp{|&}
-operator, @command{gawk} creates a two-way pipeline to a child process
-that runs the other program.  Output created with @code{print}
-or @code{printf} is written to the program's standard input, and
-output from the program's standard output can be read by the @command{gawk}
-program using @code{getline}.
-As is the case with processes started by @samp{|}, the subprogram
-can be any program, or pipeline of programs, that can be started by
-the shell.
+第一次使用 @samp{|&} 操作符执行 I/O 操作时，@command{gawk} 会创建一个双路管线到进行另一个程序的子进程中。用 @code{print} 或者 @code{printf} 创建的输出会被写到程序的标准输入中，而程序的标准输出可以被 @command{gawk} 的程序使用 @code{getline} 来读取。与通过 @samp{|} 创建的程序一样，子程序可以是任何程序，或者程序的管线，可被 Shell 启动。
 
-There are some cautionary items to be aware of:
+要了解的几个注意点是：
 
 @itemize @value{BULLET}
 @item
-As the code inside @command{gawk} currently stands, the coprocess's
-standard error goes to the same place that the parent @command{gawk}'s
-standard error goes. It is not possible to read the child's
-standard error separately.
+就目前 @command{gawk} 中的代码，并程的标准错误会输出到父进程 @command{gawk} 的标准错误输出的地方。不可以单独读取子进程的标准错误。
 
 @cindex deadlocks
 @cindex buffering, input/output
 @cindex @code{getline} command, deadlock and
 @item
-I/O buffering may be a problem.  @command{gawk} automatically
-flushes all output down the pipe to the coprocess.
-However, if the coprocess does not flush its output,
-@command{gawk} may hang when doing a @code{getline} in order to read
-the coprocess's results.  This could lead to a situation
-known as @dfn{deadlock}, where each process is waiting for the
-other one to do something.
+I/O 缓存可能是个问题。@command{gawk} 会自动地刷出所有的输出到并程管道。但是，如果并程没有刷出它的输出，@command{gawk} 可能在执行 @code{getline} 以读取并程的输出时而挂起。这会导致所谓的@dfn{死锁}问题，在这种情形下，每个进程都在等待对方做些什么事情。
 @end itemize
 
 @cindex @code{close()} function, two-way pipes and
-It is possible to close just one end of the two-way pipe to
-a coprocess, by supplying a second argument to the @code{close()}
-function of either @code{"to"} or @code{"from"}
-(@pxref{Close Files And Pipes}).
-These strings tell @command{gawk} to close the end of the pipe
-that sends data to the coprocess or the end that reads from it,
-respectively.
+可以只关闭到并程的双路管道的一边，只需要为 @code{close()} 函数的提供第二个参数，即 @code{"to"} 或者 @code{"from"}（查看 @pxref{Close Files And Pipes}）。这些字串通知 @command{gawk} 关闭管道的一端，即发送数到并程的一端，或者从其读取的一端。
 
 @cindex @command{sort} utility, coprocesses and
-This is particularly necessary in order to use
-the system @command{sort} utility as part of a coprocess;
-@command{sort} must read @emph{all} of its input
-data before it can produce any output.
-The @command{sort} program does not receive an end-of-file indication
-until @command{gawk} closes the write end of the pipe.
+当使用 @command{sort} 系统工具作为并程的一部分时，上面的行为尤其重要，@command{sort} 必须在产生所有的输出之前先读取@emph{所有的}输入数据。@command{sort} 程序直到 @command{gawk} 关键管道的写一端后，@command{sort} 才会接收到 end-of-file 的指示。
 
-When you have finished writing data to the @command{sort}
-utility, you can close the @code{"to"} end of the pipe, and
-then start reading sorted data via @code{getline}.
-For example:
+当你完成了数据输出到 @command{sort} 工具，你可以关闭管道的 @code{"to"} 端，然后用 @code{getline} 从已经排序的数据中读取结果。例如：
 
 @example
 BEGIN @{
@@ -21666,36 +21328,20 @@ BEGIN @{
 @}
 @end example
 
-This program writes the letters of the alphabet in reverse order, one
-per line, down the two-way pipe to @command{sort}.  It then closes the
-write end of the pipe, so that @command{sort} receives an end-of-file
-indication.  This causes @command{sort} to sort the data and write the
-sorted data back to the @command{gawk} program.  Once all of the data
-has been read, @command{gawk} terminates the coprocess and exits.
+这个程序将字母表的字母以逆序方式写入，一次一行，写到 @command{sort} 的双路管道中。之后关闭管道的写端，因此 @command{sort} 会接收到 end-of-file 指示。这会导致 @command{sort} 来排序数据，然后将排序后的数据写回到 @command{gawk} 程序。只要所有的数据被读取完毕，@command{gawk} 会结束并程，然后退出。
 
-As a side note, the assignment @samp{LC_ALL=C} in the @command{sort}
-command ensures traditional Unix (ASCII) sorting from @command{sort}.
-This is not strictly necessary here, but it's good to know how to do this.
+另外一个提示是，在 @command{sort} 命令的 @samp{LC_ALL=C} 赋值用来保证传统的 Unix（ASCII）排序。在这里并不是严格需要，但是知道如何来做也是很好的。
 
-Be careful when closing the @code{"from"} end of a two-way pipe; in this
-case @command{gawk} waits for the child process to exit, which may cause
-your program to hang.  (Thus, this particular feature is of much less
-use in practice than being able to close the @code{"to"} end.)
+当关闭一个双路管道的 @code{"from"} 端的时候要小心；在这个例子中 @command{gawk} 等待子进程退出，这可能会引起你的程序挂起。
+（因此，这个特性在实际中不如能关闭 @code{"to"} 端那么有用。）
 
-@quotation CAUTION
-It is a fatal error to write to the @code{"to"} end of a two-way
-pipe which has been closed. It is also a fatal error to read
-from the @code{"from"} end of a two-way pipe that has been closed.
+@quotation 注意
+写一个双路管道的已关闭的 @code{"to"} 端是一个致命错误。读一个双路管道已关闭的 @code{"from"} 端也是一个致命错误。
 @end quotation
 
 @cindex @command{gawk}, @code{PROCINFO} array in
 @cindex @code{PROCINFO} array, and communications via ptys
-You may also use pseudo-ttys (ptys) for
-two-way communication instead of pipes, if your system supports them.
-This is done on a per-command basis, by setting a special element
-in the @code{PROCINFO} array
-(@pxref{Auto-set}),
-like so:
+如果系统支持，你也可以使用 pseudo-ttys(ptys) 用来代替管道来做双路通信。这是通过基于单命令来完成的，只要设置 @code{PROCINFO} 数组的特殊元素的值来实现（查看 @pxref{Auto-set}），如：
 
 @example
 command = "sort -nr"           # command, save in convenience variable
@@ -21705,30 +21351,23 @@ print @dots{} |& command           # start two-way pipe
 @end example
 
 @noindent
-If your system does not have ptys, or if all the system's ptys are in use,
-@command{gawk} automatically falls back to using regular pipes.
+如果你的系统没有 ptys，或者系统中所有的 ptys 都在使用，@command{gawk} 会自动地返回使用常规的管道。
 
-Using ptys usually avoids the buffer deadlock issues described earlier,
-at some loss in performance. This is because the tty driver buffers
-and sends data line-by-line.  On systems with the @command{stdbuf}
-(part of the @uref{http://www.gnu.org/software/coreutils/coreutils.html,
-GNU Coreutils package}), you can use that program instead of ptys.
+使用 ptys 可以避免缓存死锁的问题，只是损失一些性能。
+这是因为 tty driver 是一行一行缓存数据和发送数据的。在用 @command{stdbuf}（@uref{http://www.gnu.org/software/coreutils/coreutils.html,
+GNU Coreutils package}的一部分）的系统中，你可以使用那个程序来代替 ptys。
 
-Note also that ptys are not fully transparent. Certain binary control
-codes, such @kbd{Ctrl-d} for end-of-file, are interpreted by the tty
-driver and not passed through.
+也要注意 ptys 不是完全透明的。某些二进制控制代码，例如用 @kbd{Ctrl-d} 表示 end-of-file，是由 tty driver 解释的，不能传输。
 
-@quotation CAUTION
-Finally, coprocesses open up the possibility of @dfn{deadlock} between
-@command{gawk} and the program running in the coprocess. This can occur
-if you send ``too much'' data to the coprocess before reading any back;
-each process is blocked writing data with noone available to read what
-they've already written.  There is no workaround for deadlock; careful
-programming and knowledge of the behavior of the coprocess are required.
+@quotation 注意
+最后，并程导致了 @command{gawk} 和并程中运行的程序中间产生死锁的可能性。
+如果你在得到任何返回数据之前发送“太多”数据给并程，这会发送死锁；每个写数据的进程会阻塞，
+没有一个能读他们已经写入的数据。死锁没有什么变通办法；你需要小心地编程，并且了解并程的表现。
 @end quotation
 
+#TODO20171127
 @node TCP/IP Networking
-@section Using @command{gawk} for Network Programming
+@section 利用 @command{gawk} 进行网络通信
 @cindex advanced features, network programming
 @cindex networks, programming
 @cindex TCP/IP
