@@ -21365,7 +21365,6 @@ GNU Coreutils package}的一部分）的系统中，你可以使用那个程序�
 没有一个能读他们已经写入的数据。死锁没有什么变通办法；你需要小心地编程，并且了解并程的表现。
 @end quotation
 
-#TODO20171127
 @node TCP/IP Networking
 @section 利用 @command{gawk} 进行网络通信
 @cindex advanced features, network programming
@@ -21393,70 +21392,44 @@ GNU Coreutils package}的一部分）的系统中，你可以使用那个程序�
 <blockquote>
 <attribution>Mike O'Brien (aka Mr.&nbsp;Protocol)</attribution>
 <literallayout class="normal"><literal>EMRED</literal>:
-&nbsp;&nbsp;&nbsp;&nbsp;<emphasis>A host is a host from coast to coast,</emphasis>
-&nbsp;&nbsp;&nbsp;&nbsp;<emphasis>and no-one can talk to host that's close,</emphasis>
-&nbsp;&nbsp;&nbsp;&nbsp;<emphasis>unless the host that isn't close</emphasis>
-&nbsp;&nbsp;&nbsp;&nbsp;<emphasis>is busy, hung, or dead.</emphasis></literallayout>
+&nbsp;&nbsp;&nbsp;&nbsp;<emphasis>主机从海岸到海岸，</emphasis>
+&nbsp;&nbsp;&nbsp;&nbsp;<emphasis>没人可与已经关闭的主机喃喃私语，</emphasis>
+&nbsp;&nbsp;&nbsp;&nbsp;<emphasis>而没关的主机要么忙得死，</emphasis>
+&nbsp;&nbsp;&nbsp;&nbsp;<emphasis>要么挂起或死亡。</emphasis></literallayout>
 </blockquote>
 @end docbook
 
-In addition to being able to open a two-way pipeline to a coprocess
-on the same system
-(@pxref{Two-way I/O}),
-it is possible to make a two-way connection to
-another process on another system across an IP network connection.
+除了可以在同一个系统中打开一个双路到并程的管线（查看 @pxref{Two-way I/O}），也可以通过 IP 网络连接来与在另一个系统上的另一个进程之间进行双路连接。
 
-You can think of this as just a @emph{very long} two-way pipeline to
-a coprocess.
-The way @command{gawk} decides that you want to use TCP/IP networking is
-by recognizing special @value{FN}s that begin with one of @samp{/inet/},
-@samp{/inet4/}, or @samp{/inet6/}.
+你可以把这个当成是一个@emph{非常长}的到并程的双路管线。@command{gawk} 确定你使用 TCP/IP 网络的方式是通过识别以 @samp{/inet/}，@samp{/inet4/}， 或者 @samp{/inet6/} 开头的特别@value{FN}。
 
-The full syntax of the special @value{FN} is
-@file{/@var{net-type}/@var{protocol}/@var{local-port}/@var{remote-host}/@var{remote-port}}.
-The components are:
+特殊@value{FN}的完整语法为 @file{/@var{net-type}/@var{protocol}/@var{local-port}/@var{remote-host}/@var{remote-port}}。这些组件为：
 
 @table @var
 @item net-type
-Specifies the kind of Internet connection to make.
-Use @samp{/inet4/} to force IPv4, and
-@samp{/inet6/} to force IPv6.
-Plain @samp{/inet/} (which used to be the only option) uses
-the system default, most likely IPv4.
+指定要建立的互联网连接的类型。使用 @samp{/inet4/} 来强制使用 IPv4，@samp{/inet6/} 来强制为 IPv6。普通文本 @samp{/inet/} （过去是唯一的选项）用于系统默认方式，大多数可能是 IPv4。
 
 @item protocol
-The protocol to use over IP.  This must be either @samp{tcp}, or
-@samp{udp}, for a TCP or UDP IP connection,
-respectively.  TCP should be used for most applications.
+在 IP 之上使用的协议。必须是 @samp{tcp}，@samp{udp} 之一，相应对应为 TCP 或者 UDP IP 连接。TCP 用于大多数程序。
 
 @item local-port
 @cindex @code{getaddrinfo()} function (C library)
-The local TCP or UDP port number to use.  Use a port number of @samp{0}
-when you want the system to pick a port. This is what you should do
-when writing a TCP or UDP client.
-You may also use a well-known service name, such as @samp{smtp}
-or @samp{http}, in which case @command{gawk} attempts to determine
-the predefined port number using the C @code{getaddrinfo()} function.
+本地 TCP 或者 UDP 端口。如果你想让系统选择端口，则指定 @samp{0} 为其端口号。如果你在写 TCP 或者 UDP 客户端则你应该这么来处理。你也可以使用知名的服务名，如 @samp{smtp} 或者 @samp{http}，这样 @command{gawk} 在使用 C 的 @code{getaddinfo()} 函数时会尝试确定预定义的端口。
 
 @item remote-host
-The IP address or fully qualified domain name of the Internet
-host to which you want to connect.
+你要连接的主机的 IP 地址，或者是完整的 Internet 域名。
 
 @item remote-port
-The TCP or UDP port number to use on the given @var{remote-host}.
-Again, use @samp{0} if you don't care, or else a well-known
-service name.
+连接远程主机 @var{remote-host} 的 TCP 或者 UDP 端口。再次地，你如果不关心端口可以使用 @samp{0}，或者知名的服务名。
 @end table
 
 @cindex @command{gawk}, @code{ERRNO} variable in
 @cindex @code{ERRNO} variable
-@quotation NOTE
-Failure in opening a two-way socket will result in a nonfatal error
-being returned to the calling code. The value of @code{ERRNO} indicates
-the error (@pxref{Auto-set}).
+@quotation 提示
+无法打开双路的 socket 会导致一个致命错误返回到调用的代码。@code{ERRNO} 的值指示了错误信息（查看 @pxref{Auto-set}）。
 @end quotation
 
-Consider the following very simple example:
+考虑下面非常简单的例子：
 
 @example
 BEGIN @{
@@ -21467,10 +21440,9 @@ BEGIN @{
 @}
 @end example
 
-This program reads the current date and time from the local system's
-TCP @code{daytime} server.
-It then prints the results and closes the connection.
+这个程序从本地系统的 TCP @code{daytime} 服务器中读取当前的日期及时间。然后打印结果后关闭连接。
 
+由于这个主题是扩展内容，用 @command{gawk} 进行 TCP/IP 编程为独立的文档。
 Because this topic is extensive, the use of @command{gawk} for
 TCP/IP programming is documented separately.
 @ifinfo
@@ -21478,50 +21450,36 @@ See
 @inforef{Top, , General Introduction, gawkinet, @value{GAWKINETTITLE}},
 @end ifinfo
 @ifnotinfo
-See
-@uref{http://www.gnu.org/software/gawk/manual/gawkinet/,
-@cite{@value{GAWKINETTITLE}}},
-which comes as part of the @command{gawk} distribution,
+查看 @uref{http://www.gnu.org/software/gawk/manual/gawkinet/,
+@cite{@value{GAWKINETTITLE}}}。它是 @command{gawk} 发布版本的一部分，
 @end ifnotinfo
-for a much more complete introduction and discussion, as well as
-extensive examples.
+其中有完整的介绍与讨论，同时有更多的例子。
 
-@quotation NOTE
-@command{gawk} can only open direct sockets. There is currently
-no way to access services available over Secure Socket Layer
-(SSL); this includes any web service whose URL starts with @samp{https://}.
+@quotation 提示
+@command{gawk} 只能打开直接的 sockets。现在没有办法去获取 SSL 的服务；这包括任何 URL 以 @samp{https://} 开头的网站服务。
 @end quotation
 
 
 @node Profiling
-@section Profiling Your @command{awk} Programs
+@section 测评你的 @command{awk} 程序
 @cindex @command{awk} programs, profiling
 @cindex profiling @command{awk} programs
 @cindex @code{awkprof.out} file
 @cindex files, @code{awkprof.out}
 
-You may produce execution traces of your @command{awk} programs.
-This is done by passing the option @option{--profile} to @command{gawk}.
-When @command{gawk} has finished running, it creates a profile of your program in a file
-named @file{awkprof.out}. Because it is profiling, it also executes up to 45% slower than
-@command{gawk} normally does.
+你可以生成你的 @command{awk} 程序执行的跟踪信息。这只要传递 @option{--profile} 参数到 @command{gawk} 就可以。当 @command{gawk} 完成后，它会创建一个名为 @file{awkprof.out} 的测评文件。由于程序被测评，这样它要比正常的执行慢 45%。
 
 @cindex @option{--profile} option
-As shown in the following example,
-the @option{--profile} option can be used to change the name of the file
-where @command{gawk} will write the profile:
+如下面的例子所示，@option{--profile} 选项可以指定 @command{gawk} 将测评信息写入的文件的名字：
 
 @example
 gawk --profile=myprog.prof -f myprog.awk data1 data2
 @end example
 
 @noindent
-In the preceding example, @command{gawk} places the profile in
-@file{myprog.prof} instead of in @file{awkprof.out}.
+在前面的例子中，@command{gawk} 将测评数据放在 @file{myprog.prof} 文件，而不是 @file{awkprof.out} 文件。
 
-Here is a sample session showing a simple @command{awk} program,
-its input data, and the results from running @command{gawk} with the
-@option{--profile} option.  First, the @command{awk} program:
+这是一个简单的 @command{awk} 程序的执行信息，包含输入数据，以及用 @option{--profile} 执行 @command{gawk} 时的结果。首先，下面是 @command{awk} 程序：
 
 @example
 BEGIN @{ print "First BEGIN rule" @}
@@ -21561,10 +21519,7 @@ foo
 junk
 @end example
 
-Here is the @file{awkprof.out} that results from running the
-@command{gawk} profiler on this program and data (this example also
-illustrates that @command{awk} programmers sometimes get up very early
-in the morning to work):
+下面是使用 @command{gawk} 测评器执行程序与数据时的产生的数据文件 @file{awkprof.out}（这个例子也说明了 @command{awk} 程序员有时很早就起来工作了）：
 
 @cindex @code{BEGIN} pattern, and profiling
 @cindex @code{END} pattern, and profiling
@@ -21617,71 +21572,37 @@ in the morning to work):
     @}
 @end example
 
-This example illustrates many of the basic features of profiling output.
-They are as follows:
+这个例子说明了测评输出的一些基本特性。它们是：
 
 @itemize @value{BULLET}
 @item
-The program is printed in the order @code{BEGIN} rules,
-@code{BEGINFILE} rules,
-pattern--action rules,
-@code{ENDFILE} rules, @code{END} rules, and functions, listed
-alphabetically.
-Multiple @code{BEGIN} and @code{END} rules retain their
-separate identities, as do
-multiple @code{BEGINFILE} and @code{ENDFILE} rules.
+程序以 @code{BEGIN} 规则，模式-动作规则，@code{BEGINFILE} 规则，@code{ENDFILE} 规则，@code{END} 规则这样的顺序来打印输出。并以字母顺序列表。多个 @code{BEGIN} 与 @code{END} 规则会有单独的标识，@code{BEGINFILE} 与 @code{ENDFILE} 也一样。
 
 @cindex patterns, counts, in a profile
 @item
-Pattern--action rules have two counts.
-The first count, to the left of the rule, shows how many times
-the rule's pattern was @emph{tested}.
-The second count, to the right of the rule's opening left brace
-in a comment,
-shows how many times the rule's action was @emph{executed}.
-The difference between the two indicates how many times the rule's
-pattern evaluated to false.
+模式-动作规则有两个统计，第一个是规则的左边，显示的是规则的模式被@emph{测试}的次数。第二个分是规则的右边在开花号中在注释里面，显示的是规则被@emph{执行}的次数。两个数值的差异显示的是规则模式被测试为 false 的次数。
 
 @item
-Similarly,
-the count for an @code{if}-@code{else} statement shows how many times
-the condition was tested.
-To the right of the opening left brace for the @code{if}'s body
-is a count showing how many times the condition was true.
-The count for the @code{else}
-indicates how many times the test failed.
+相似的，对于 @code{if}-@code{else} 语句的统计显示了条件被测试的次数。在开花括号的右边的 @code{if} 的语句体处的统计显示的是条件测试为真的次数。@code{else} 的统计显示的是测试失败的次数。
 
 @cindex loops, count for header, in a profile
 @item
-The count for a loop header (such as @code{for}
-or @code{while}) shows how many times the loop test was executed.
-(Because of this, you can't just look at the count on the first
-statement in a rule to determine how many times the rule was executed.
-If the first statement is a loop, the count is misleading.)
+对于循环头的统计（如 @code{for} 或者 @code{while}）显示的是循环测试执行的次数。（由于这个原因，你不可只看在规则中的第一条语句的统计来确定规则被执行的次数。如果第一条语句是一个循环，则统计会误导你。）
 
 @cindex functions, user-defined, counts, in a profile
 @cindex user-defined, functions, counts, in a profile
 @item
-For user-defined functions, the count next to the @code{function}
-keyword indicates how many times the function was called.
-The counts next to the statements in the body show how many times
-those statements were executed.
+对于用户自定义的函数，在 @code{function} 关键词后面的统计显示的是函数被调用的次数。在函数体语句语句后面的统计，则是语句被执行的次数。
 
 @cindex @code{@{@}} (braces)
 @cindex braces (@code{@{@}})
 @item
-The layout uses ``K&R'' style with TABs.
-Braces are used everywhere, even when
-the body of an @code{if}, @code{else}, or loop is only a single statement.
+输出布局使用的是 “K&R” 带 TABs 的风格。花括号会到处使用，就算是 @code{if}，@code{else}，或者循环体只有一个语句。
 
 @cindex @code{()} (parentheses), in a profile
 @cindex parentheses @code{()}, in a profile
 @item
-Parentheses are used only where needed, as indicated by the structure
-of the program and the precedence rules.
-For example, @samp{(3 + 5) * 4} means add three and five, then multiply
-the total by four.  However, @samp{3 + 5 * 4} has no parentheses, and
-means @samp{3 + (5 * 4)}.
+括号则只在需要的时候使用，它由程序的结构 以及前面规则来提示。例如，@samp{(3 + 5) * 4} 表示 3 加 5，然后乘上 4 的结果。但是 @samp{3 + 5 * 4} 没有括号，则表示 @samp{3 + (5 * 4)}。
 
 @ignore
 @item
@@ -21690,34 +21611,21 @@ All string concatenations are parenthesized too.
 @end ignore
 
 @item
-Parentheses are used around the arguments to @code{print}
-and @code{printf} only when
-the @code{print} or @code{printf} statement is followed by a redirection.
-Similarly, if
-the target of a redirection isn't a scalar, it gets parenthesized.
+括号只用在 @code{print} 与 @code{printf} 参数周围，并且只当 @code{print} 与 @code{printf} 的语句后面跟着重定向符。相似的，如果重定向的目标不是标量，则它会被括起来。
 
 @item
-@command{gawk} supplies leading comments in
-front of the @code{BEGIN} and @code{END} rules,
-the @code{BEGINFILE} and @code{ENDFILE} rules,
-the pattern--action rules, and the functions.
+@command{gawk} 提供 @code{BEGIN} 与 @code{END} 规则，@code{BEGINFILE} 与 @code{ENDFILE} 规则，模式-动作规则与函数的前导注释。
 
 @end itemize
 
-The profiled version of your program may not look exactly like what you
-typed when you wrote it.  This is because @command{gawk} creates the
-profiled version by ``pretty-printing'' its internal representation of
-the program.  The advantage to this is that @command{gawk} can produce
-a standard representation.  The disadvantage is that all source code
-comments are lost.
-Also, things such as:
+你的程序的测评版本可能不会完全像你所写的那样。这是因为 @command{gawk} 用“简洁打印”其程序的内部表示来生成的测评。这么做的好处是 @command{gawk} 可以产生标准的表示。不好的地方是会丢失程序的代码。同时，像这样的代码：
 
 @example
 /foo/
 @end example
 
 @noindent
-come out as:
+会生成：
 
 @example
 /foo/   @{
@@ -21726,17 +21634,12 @@ come out as:
 @end example
 
 @noindent
-which is correct, but possibly unexpected.
+虽然正确，但可能并不是所期望的。
 
 @cindex profiling @command{awk} programs, dynamically
 @cindex @command{gawk} program, dynamic profiling
 @cindex dynamic profiling
-Besides creating profiles when a program has completed,
-@command{gawk} can produce a profile while it is running.
-This is useful if your @command{awk} program goes into an
-infinite loop and you want to see what has been executed.
-To use this feature, run @command{gawk} with the @option{--profile}
-option in the background:
+当程序执行完成后会生成测评外，@command{gawk} 也可以在运行的时候生成。如果你的 @command{awk} 程序会进入一个无限循环，而你又想看执行了什么的时候，这会非常有用。为了使用这个特性，请在后台模式来执行带 @option{--profile} 选项的 @command{gawk} ：
 
 @example
 $ @kbd{gawk --profile -f myprog &}
@@ -21748,21 +21651,16 @@ $ @kbd{gawk --profile -f myprog &}
 @cindex @code{SIGUSR1} signal, for dynamic profiling
 @cindex signals, @code{USR1}/@code{SIGUSR1}, for profiling
 @noindent
-The shell prints a job number and process ID number; in this case, 13992.
-Use the @command{kill} command to send the @code{USR1} signal
-to @command{gawk}:
+shell 会打印一个任务号以及进程 ID 号，在这里是 13992。使用 @command{kill} 命令来发送 @code{USR1} 信号到 @command{gawk} ：
 
 @example
 $ @kbd{kill -USR1 13992}
 @end example
 
 @noindent
-As usual, the profiled version of the program is written to
-@file{awkprof.out}, or to a different file if one was specified with
-the @option{--profile} option.
+如通常情况，测评的程序版本被写入到 @file{awkprof.out} 文件中，或者写入到在 @option{--profile} 选项中指定的文件中。
 
-Along with the regular profile, as shown earlier, the profile file
-includes a trace of any active functions:
+作为常规的测评，如稍早显示的，测评中包含任何活动的函数的跟踪信息：
 
 @example
 # Function Call Stack:
@@ -21773,15 +21671,12 @@ includes a trace of any active functions:
 # -- main --
 @end example
 
-You may send @command{gawk} the @code{USR1} signal as many times as you like.
-Each time, the profile and function call trace are appended to the output
-profile file.
+你可以发送多次 @code{USR1} 信号。每发一次，测评与函数调用路径会被附加到测评文件中。
 
 @cindex @code{HUP} signal, for dynamic profiling
 @cindex @code{SIGHUP} signal, for dynamic profiling
 @cindex signals, @code{HUP}/@code{SIGHUP}, for profiling
-If you use the @code{HUP} signal instead of the @code{USR1} signal,
-@command{gawk} produces the profile and the function call trace and then exits.
+如果你使用的是 @code{HUP} 信号，而不是 @code{USR1} 信号，@command{gawk} 会产生测评与函数调用路径信息后退出。
 
 @cindex @code{INT} signal (MS-Windows)
 @cindex @code{SIGINT} signal (MS-Windows)
@@ -21789,94 +21684,51 @@ If you use the @code{HUP} signal instead of the @code{USR1} signal,
 @cindex @code{QUIT} signal (MS-Windows)
 @cindex @code{SIGQUIT} signal (MS-Windows)
 @cindex signals, @code{QUIT}/@code{SIGQUIT} (MS-Windows)
-When @command{gawk} runs on MS-Windows systems, it uses the
-@code{INT} and @code{QUIT} signals for producing the profile, and in
-the case of the @code{INT} signal, @command{gawk} exits.  This is
-because these systems don't support the @command{kill} command, so the
-only signals you can deliver to a program are those generated by the
-keyboard.  The @code{INT} signal is generated by the
-@kbd{Ctrl-c} or @kbd{Ctrl-BREAK} key, while the
-@code{QUIT} signal is generated by the @kbd{Ctrl-\} key.
+当 @command{gawk} 在 MS-Windows 系统上运行时，它使用 @code{INT} 与 @code{QUIT} 信息来产生测评，在使用 @code{INT} 信号时，@command{gawk} 会退出。这里因为这些系统不支持 @command{kill} 命令，所以只能通过键盘产生的信号来发送给程序。@code{INT} 信号通过 @kbd{Ctrl-c} 或者 @kbd{Ctrl-BREAK} 键来产生，而 @code{QUIT} 信息则由 @kbd{Ctrl-\} 键来产生。
 
-Finally, @command{gawk} also accepts another option, @option{--pretty-print}.
-When called this way, @command{gawk} ``pretty-prints'' the program into
-@file{awkprof.out}, without any execution counts.
+最后，@command{gawk} 也接收其他的选项，@option{--pretty-print}。当这么调用时，@command{gawk} 会“简洁打印”程序到 @file{awkprof.out} 中，不带执行统计的方式。
 
-@quotation NOTE
-The @option{--pretty-print} option still runs your program.
-This will change in the next major release.
+@quotation 提示
+@option{--pretty-print} 会执行你的程序。这会在下一个主要版本中改变。
 @end quotation
 
 @node Advanced Features Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-The @option{--non-decimal-data} option causes @command{gawk} to treat
-octal- and hexadecimal-looking input data as octal and hexadecimal.
-This option should be used with caution or not at all; use of @code{strtonum()}
-is preferable.
-Note that this option may disappear in a future version of @command{gawk}.
+@option{--non-decimal-data} 选项可以使 @command{gawk} 将八进制或者十六进制式的输入数据当成是八进制与十六进制数据对待。这个选项要小心使用，或者不要使用，而是要使用 @code{strtonum()}。也要注意这个选项在未来的 @command{gawk} 版本可能会消失。
 
 @item
-You can take over complete control of sorting in @samp{for (@var{indx} in @var{array})}
-array traversal by setting @code{PROCINFO["sorted_in"]} to the name of a user-defined
-function that does the comparison of array elements based on index and value.
+你可以完全控制在 @samp{for (@var{indx} in @var{array})} 中进行数组遍历的排序方式，这通过将预定义的 @code{PROCINFO["sorted_in"]} 变量设置为用户自定义的函数名，而这个函数则通过对索引与值的比较来进行元素的比较。
 
 @item
-Similarly, you can supply the name of a user-defined comparison function as the
-third argument to either @code{asort()} or @command{asorti()} to control how
-those functions sort arrays. Or you may provide one of the predefined control
-strings that work for @code{PROCINFO["sorted_in"]}.
+类似地，你也可提供一个用户自定义的比较函数的名字来作为 @code{asort()} 或者 @code{asorti()} 函数的第三个参数来控制函数如何来对数组进行排序。或者你也可以提供一个预定义控制字串来设置 @code{PROCINFO["sorted_in"]} 的值。
 
 @item
-You can use the @samp{|&} operator to create a two-way pipe to a coprocess.
-You read from the coprocess with @code{getline} and write to it with @code{print}
-or @code{printf}. Use @code{close()} to close off the coprocess completely, or
-optionally, close off one side of the two-way communications.
+你可以使用 @samp{|&} 操作符来创建一个双路的到并程的管道。你通过 @code{getline} 来从并程中读取，并通过 @code{print} 或者 @code{printf} 来写入。使用 @code{close()} 来完全地关闭并程，或者可选地关闭双路通过中的一端。
 
 @item
-By using special @value{FN}s with the @samp{|&} operator, you can open a
-TCP/IP (or UDP/IP) connection to remote hosts on the Internet. @command{gawk}
-supports both IPv4 and IPv6.
+通过使用特殊@value{FN}以及 @samp{|&} 操作符，你可以使用 TCP/IP（或者 UDP/IP）来与互联网上的主机进行连接。@command{gawk} 支持 IPv4，也支持IPv6。
 
 @item
-You can generate statement count profiles of your program. This can help you
-determine which parts of your program may be taking the most time and let
-you tune them more easily.  Sending the @code{USR1} signal while profiling causes
-@command{gawk} to dump the profile and keep going, including a function call stack.
+你可以生成程序的语句测评统计。这个可以让你来确定你程序的哪部分占用了较多的时间，以让你来方便地对你的程序进行调优。当进行测评进行时，你可以向程序发送 @code{USR1} 信号，这可以使 @command{gawk} 输出测评信息以及函数调用栈。
 
 @item
-You can also just ``pretty-print'' the program. This currently also runs
-the program, but that will change in the next major release.
+你也可以只“简洁打印”（pretty-@code{print}）你的程序。当前，它会运行你的程序，但是在后面的主要发行版本中会改变。
 
 @end itemize
 
 
 @node Internationalization
-@chapter Internationalization with @command{gawk}
+@chapter @command{gawk} 的国际化
 
-Once upon a time, computer makers
-wrote software that worked only in English.
-Eventually, hardware and software vendors noticed that if their
-systems worked in the native languages of non-English-speaking
-countries, they were able to sell more systems.
-As a result, internationalization and localization
-of programs and software systems became a common practice.
+很久前，计算机的制造者们所写的程序只能使用英语。后来，硬件与软件的生产商位注意到，如果他们的系统也可以在非英语国家的语言中工作，则它他就可以卖更多的系统。结果就是，国际化与本地化程序以及软件会成为一个通用的实践。
 
 @cindex internationalization, localization
 @cindex @command{gawk}, internationalization and, See internationalization
 @cindex internationalization, localization, @command{gawk} and
-For many years, the ability to provide internationalization
-was largely restricted to programs written in C and C++.
-This @value{CHAPTER} describes the underlying library @command{gawk}
-uses for internationalization, as well as how
-@command{gawk} makes internationalization
-features available at the @command{awk} program level.
-Having internationalization available at the @command{awk} level
-gives software developers additional flexibility---they are no
-longer forced to write in C or C++ when internationalization is
-a requirement.
+很多年以来，提供国际化与本地化能力的程序失业地限制在用 C 或者 C++ 写的程序中。这一@value{CHAPTER}会描述 @command{gawk} 底层使用的用来进行国际化的库，包含 @command{gawk} 如何来在 @command{awk} 程序代码级上实现国际化特性。在 @command{awk} 代码级实现国际化可以给软件开发者额外的灵活性——它们不再被迫使用 C 或者 C++ 来编写要实现国际化的软件。
 
 @menu
 * I18N and L10N::               Internationalization and Localization.
@@ -21889,137 +21741,85 @@ a requirement.
 @end menu
 
 @node I18N and L10N
-@section Internationalization and Localization
+@section 国际化与本地化
 
 @cindex internationalization
 @cindex localization, See internationalization@comma{} localization
 @cindex localization
-@dfn{Internationalization} means writing (or modifying) a program once,
-in such a way that it can use multiple languages without requiring
-further source code changes.
-@dfn{Localization} means providing the data necessary for an
-internationalized program to work in a particular language.
-Most typically, these terms refer to features such as the language
-used for printing error messages, the language used to read
-responses, and information related to how numerical and
-monetary values are printed and read.
+@dfn{国际化}表示只写（编辑）一次程序，就可以不再需要对代码进行变更就可以在多种语言下使用。@dfn{本地化}则表示给国际化的程序提供相应的数据来在某个特定的语言中工作。最典型的是，这些术语指的是在打印错误信息，在读取反馈时使用的语言的特性，以及数值与倾向值如何来进行读取与打印的方式。
 
 @node Explaining gettext
-@section GNU @command{gettext}
+@section GNU 的 @command{gettext}
 
 @cindex internationalizing a program
 @cindex @command{gettext} library
-@command{gawk} uses GNU @command{gettext} to provide its internationalization
-features.
-The facilities in GNU @command{gettext} focus on messages: strings printed
-by a program, either directly or via formatting with @code{printf} or
-@code{sprintf()}.@footnote{For some operating systems, the @command{gawk}
-port doesn't support GNU @command{gettext}.
-Therefore, these features are not available
-if you are using one of those operating systems. Sorry.}
+@command{gawk} 使用 GNU 的 @command{gettext} 来提供国际化特性。GNU @command{gettext} 工具关注信息：程序中打印的字串，无论是通过 @code{printf} 还是通过 @code{sprintf()}。 
+@footnote{对于某些操作系统，@command{gawk} 的移植不支持 GNU @command{gettext}。因此，如果你在这个系统上使用，这个特性就不可用。非常抱歉！}
 
 @cindex portability, @command{gettext} library and
-When using GNU @command{gettext}, each application has its own
-@dfn{text domain}.  This is a unique name, such as @samp{kpilot} or @samp{gawk},
-that identifies the application.
-A complete application may have multiple components---programs written
-in C or C++, as well as scripts written in @command{sh} or @command{awk}.
-All of the components use the same text domain.
+当使用 GNU @command{gettext} 时，每个程序都有它的@dfn{文本域}。这是一个唯一的名字，如 @samp{kpilot} 或者 @samp{gawk}，用来标识程序。一个完整的程序有多个组件——用 C 或者 C++ 写的程序，以及使用 @command{sh} 或者 @command{awk} 写的脚本。所有的这些组件都使用相同的文本域。
 
-To make the discussion concrete, assume we're writing an application
-named @command{guide}.  Internationalization consists of the
-following steps, in this order:
+为了使讨论更加具体，假设我们写一个程序名为 @command{guide}。按顺序，国际化包含下面的步骤：
 
 @enumerate
 @item
-The programmer reviews the source for all of @command{guide}'s components
-and marks each string that is a candidate for translation.
-For example, @code{"`-F': option required"} is a good candidate for translation.
-A table with strings of option names is not (e.g., @command{gawk}'s
-@option{--profile} option should remain the same, no matter what the local
-language).
+程序员检查所有的 @command{guide} 组件的代码，并且标注出要进行翻译的字串。例如 @code{"`-F': option required"} 是一个很好的要进行翻译的候选者。而选项名的字串表则不是（如，@command{gawk} 的 @option{--profile} 选项要保留原样，而不管是什么样的语言）。
 
 @cindex @code{textdomain()} function (C library)
 @item
-The programmer indicates the application's text domain
-(@command{"guide"}) to the @command{gettext} library,
-by calling the @code{textdomain()} function.
+通过调用 @code{textdomain()} 函数，程序员向 @command{gettext} 库指定（@command{"guide"}）的应用文本域。
 
 @cindex @code{.pot} files
 @cindex files, @code{.pot}
 @cindex portable object template files
 @cindex files, portable object template
 @item
-Messages from the application are extracted from the source code and
-collected into a portable object template file (@file{guide.pot}),
-which lists the strings and their translations.
-The translations are initially empty.
-The original (usually English) messages serve as the key for
-lookup of the translations.
+从源代码中提取的消息放到一个移植的对象模板文件（@file{guide.pot}），在这个文件里列出了所有的字串以及对应的翻译串。翻译开始是空的。原始信息（一般是英语）会作为翻译查找的键。
 
 @cindex @code{.po} files
 @cindex files, @code{.po}
 @cindex portable object files
 @cindex files, portable object
 @item
-For each language with a translator, @file{guide.pot}
-is copied to a portable object file (@code{.po})
-and translations are created and shipped with the application.
-For example, there might be a @file{fr.po} for a French translation.
+对于翻译的每中语言，@file{guide.pot} 都被复制到一个可移植的对象文件（@code{.po}）并建立起翻译然后与程序一起打包。例如，有可能有 @file{fr.po} 用来做为法语翻译。
 
 @cindex @code{.gmo} files
 @cindex files, @code{.gmo}
 @cindex message object files
 @cindex files, message object
 @item
-Each language's @file{.po} file is converted into a binary
-message object (@file{.gmo}) file.
-A message object file contains the original messages and their
-translations in a binary format that allows fast lookup of translations
-at runtime.
+每种语言的 @file{.po} 文件都被转换为二进制消息对象（@file{.gmo}）文件。消息对象文件包含原始消息与它们的翻译的二进制格式，这样可以在运行时快速查找。
 
 @item
-When @command{guide} is built and installed, the binary translation files
-are installed in a standard place.
+当 @command{guide} 被构建并被安装，二进制的翻译文件也被安装到标准位置。
 
 @cindex @code{bindtextdomain()} function (C library)
 @item
-For testing and development, it is possible to tell @command{gettext}
-to use @file{.gmo} files in a different directory than the standard
-one by using the @code{bindtextdomain()} function.
+对于测试与开发，可以告知 @command{gettext} 使用不是标准目录下的 @file{.gmo} 文件，这通过调用 @code{bindtextdomain()} 函数来实现。
 
 @cindex @code{.gmo} files, specifying directory of
 @cindex files, @code{.gmo}, specifying directory of
 @cindex message object files, specifying directory of
 @cindex files, message object, specifying directory of
 @item
-At runtime, @command{guide} looks up each string via a call
-to @code{gettext()}.  The returned string is the translated string
-if available, or the original string if not.
+在运行时，@command{guide} 会通过调用 @code{gettext()} 来查找每一个字串。返回的串为字串的翻译串，如果没可得的话，就是原串。
 
 @item
-If necessary, it is possible to access messages from a different
-text domain than the one belonging to the application, without
-having to switch the application's default text domain back
-and forth.
+如果必要，也可以从另一个不属于这个程序的不同的文本域中来访问消息，而不需要在程序的默认文本域之间来回切换。
 @end enumerate
 
 @cindex @code{gettext()} function (C library)
-In C (or C++), the string marking and dynamic translation lookup
-are accomplished by wrapping each string in a call to @code{gettext()}:
+在 C（或者C++）中，标志动态翻译查找的字串是通过将字串通过 @code{gettext()} 来完成的：
 
 @example
 printf("%s", gettext("Don't Panic!\n"));
 @end example
 
-The tools that extract messages from source code pull out all
-strings enclosed in calls to @code{gettext()}.
+工具可以从源代码中将所有用 @code{gettext()} 包含的字串提取出来。
 
 @cindex @code{_} (underscore), C macro
 @cindex underscore (@code{_}), C macro
-The GNU @command{gettext} developers, recognizing that typing
-@samp{gettext(@dots{})} over and over again is both painful and ugly to look
-at, use the macro @samp{_} (an underscore) to make things easier:
+GNU @command{gettext} 的开发者，意识到一次次地输入 @samp{gettext(@dots{})} 既痛苦，看起来也丑，因此使用宏 @samp{_}（下划线）来使得事情简化：
 
 @example
 /* In the standard header file: */
@@ -22033,30 +21833,23 @@ printf("%s", _("Don't Panic!\n"));
 @cindex @command{gettext} library, locale categories
 @cindex locale categories
 @noindent
-This reduces the typing overhead to just three extra characters per string
-and is considerably easier to read as well.
+这产生的输入负担只是每个字串三个额外的字符 ，而且也更容易阅读。
 
-There are locale @dfn{categories}
-for different types of locale-related information.
-The defined locale categories that @command{gettext} knows about are:
+对于不同本地语言的信息有不同的本地语言@dfn{分类}。@command{gettext} 可识别的定义好的本地语言分类有：
 
 @table @code
 @cindex @code{LC_MESSAGES} locale category
 @item LC_MESSAGES
-Text messages.  This is the default category for @command{gettext}
-operations, but it is possible to supply a different one explicitly,
-if necessary.  (It is almost never necessary to supply a different category.)
+文本消息。这是 @command{gettext} 操作的默认分类，但是如果需要的话，可以显式地指定不同的类型。（几乎没有必要指定不同的分类。）
 
 @cindex sorting characters in different languages
 @cindex @code{LC_COLLATE} locale category
 @item LC_COLLATE
-Text-collation information (i.e., how different characters
-and/or groups of characters sort in a given language).
+文本协同信息（如，不同的字符与/或者字符组在一个给定的语言中如何排序）。
 
 @cindex @code{LC_CTYPE} locale category
 @item LC_CTYPE
-Character-type information (alphabetic, digit, upper- or lowercase, and
-so on) as well as character encoding.
+字符类型信息（字母表，数字，大小写等等）以及字符编码。
 @ignore
 In June 2001 Bruno Haible wrote:
 - Description of LC_CTYPE: It determines both
@@ -22066,121 +21859,83 @@ In June 2001 Bruno Haible wrote:
   is the same - cyrillic letters could as 'alpha' - but the encoding is
   different.)
 @end ignore
-This information is accessed via the
-POSIX character classes in regular expressions,
-such as @code{/[[:alnum:]]/}
-(@pxref{Bracket Expressions}).
+这个信息通过正则表达式的 POSIX 字符类来访问，比如 @code{/[[:alnum:]]/}（查看 @pxref{Bracket Expressions}）。
 
 @cindex monetary information, localization
 @cindex currency symbols, localization
 @cindex @code{LC_MONETARY} locale category
 @item LC_MONETARY
-Monetary information, such as the currency symbol, and whether the
-symbol goes before or after a number.
+货币信息，如货币符号以及符号是在数值前还是在数值后。
 
 @cindex @code{LC_NUMERIC} locale category
 @item LC_NUMERIC
-Numeric information, such as which characters to use for the decimal
-point and the thousands separator.@footnote{Americans
-use a comma every three decimal places and a period for the decimal
-point, while many Europeans do exactly the opposite:
-1,234.56 versus 1.234,56.}
+数值信息。例如用于十进制小数点以及百分位分隔符。 
+@footnote{美国使用每个三个进制数之间放一个逗号，以及用圆点来作为十进制小数点，而很多的欧洲国家则相反：1,234.56 与 1.234，56。}
 
 @cindex time, localization and
 @cindex dates, information related to@comma{} localization
 @cindex @code{LC_TIME} locale category
 @item LC_TIME
-Time- and date-related information, such as 12- or 24-hour clock, month printed
-before or after the day in a date, local month abbreviations, and so on.
+时间与日期相关，如 12 或者 24 小时制，月分在日期中是打印在天的前面还是后面。本地月分的缩写等等。
 
 @cindex @code{LC_ALL} locale category
 @item LC_ALL
-All of the above.  (Not too useful in the context of @command{gettext}.)
+上述所有的。（在 @command{gettext} 的内容中不是特别有用。）
 @end table
 
-@quotation NOTE
+@quotation 提示
 @cindex @env{LANGUAGE} environment variable
-As described in @ref{Locales}, environment variables with the same
-name as the locale categories (@env{LC_CTYPE}, @env{LC_ALL}, etc.)
-influence @command{gawk}'s behavior (and that of other utilities).
+如 @ref{Locales} 所述，和本地语言分类同名的环境变量会影响 @command{gawk} 的行为（和其他工具的行为）。
 
-Normally, these variables also affect how the @code{gettext} library
-finds translations.  However, the @env{LANGUAGE} environment variable
-overrides the @env{LC_@var{xxx}} variables. Many GNU/Linux systems
-may define this variable without your knowledge, causing @command{gawk}
-to not find the correct translations.  If this happens to you,
-look to see if @env{LANGUAGE} is defined, and if so, use the shell's
-@command{unset} command to remove it.
+通常，这些变量也会影响 @code{gettext} 库如何找到翻译。然而，@env{LANGUAGE} 环境变量会使 @env{LC_@var{xxx}} 环境变量无效。许多 GNU/Linux 系统可能在你不知道的情况下定义这个变量，导致 @command{gawk} 不能找到正确的翻译。如果这发生在你身上，检查是否 @env{LANGUAGE} 被定义了。如果是的话，用 shell 的 @command{unset} 命令去删除它。
 @end quotation
 
-For testing translations of @command{gawk} itself, you can set
-the @env{GAWK_LOCALE_DIR} environment variable. See the documentation
-for the C @code{bindtextdomain()} function and also see
-@ref{Other Environment Variables}.
+为了测试 @command{gawk} 本身的翻译，你可以设置 @env{GAWK_LOCALE_DIR} 环境变量。查看 @code{bindtextdomain()} 文档的函数，也可以看 @ref{Other Environment Variables}。
 
 @node Programmer i18n
-@section Internationalizing @command{awk} Programs
+@section @command{awk} 程序的国际化
 @cindex @command{awk} programs, internationalizing
 
-@command{gawk} provides the following variables for
-internationalization:
+@command{gawk} 使用下面的变量来用于国际化：
 
 @table @code
 @cindex @code{TEXTDOMAIN} variable
 @item TEXTDOMAIN
-This variable indicates the application's text domain.
-For compatibility with GNU @command{gettext}, the default
-value is @code{"messages"}.
+这个变量表示应用的文本域。为了与 GNU @command{gettext} 的兼容性。其默认值是 @code{"messages"}。
 
 @cindex internationalization, localization, marked strings
 @cindex strings, for localization
 @item _"your message here"
-String constants marked with a leading underscore
-are candidates for translation at runtime.
-String constants without a leading underscore are not translated.
+用前导的下划线标志的字串常量是在运行时用于翻译的候选串。字串常量前没有下划线的不会被翻译。
 @end table
 
-@command{gawk} provides the following functions for
-internationalization:
+@command{gawk} 提供了下面的函数用来作国际化：
 
 @table @code
 @cindexgawkfunc{dcgettext}
 @item @code{dcgettext(@var{string}} [@code{,} @var{domain} [@code{,} @var{category}]]@code{)}
-Return the translation of @var{string} in
-text domain @var{domain} for locale category @var{category}.
-The default value for @var{domain} is the current value of @code{TEXTDOMAIN}.
-The default value for @var{category} is @code{"LC_MESSAGES"}.
+在本地语言分类 @var{category} 中的 @var{domain} 文本域中返回 @var{string} 串的翻译。默认的@var{domain} 的值是 @code{TEXTDOMAIN} 变量的当前值。默认的 @var{category} 的值必须是已经 @code{"LC_MESSAGES"}。
 
+如果你为 @var{category} 提供了一个值，则它必须是已知的本地语言分类字串名，这个在
 If you supply a value for @var{category}, it must be a string equal to
 one of the known locale categories described in
 @ifnotinfo
-the previous @value{SECTION}.
+前面的@value{SECTION}提过。
 @end ifnotinfo
 @ifinfo
-@ref{Explaining gettext}.
+@ref{Explaining gettext} 有描述。
 @end ifinfo
-You must also supply a text domain.  Use @code{TEXTDOMAIN} if
-you want to use the current domain.
+你必需要提供文本域。如果你使用当前域则使用 @code{TEXTDOMAIN}。
 
-@quotation CAUTION
-The order of arguments to the @command{awk} version
-of the @code{dcgettext()} function is purposely different from the order for
-the C version.  The @command{awk} version's order was
-chosen to be simple and to allow for reasonable @command{awk}-style
-default arguments.
+@quotation 注意
+@command{awk} 版本的 @code{dcgettext()} 函数的参数的顺序有意地与 C 版本的中的顺序不一致。@command{awk} 版本的顺序的选择是为了简化以及允许合理的 @command{awk} 风格默认参数。
 @end quotation
 
 @cindexgawkfunc{dcngettext}
 @item @code{dcngettext(@var{string1}, @var{string2}, @var{number}} [@code{,} @var{domain} [@code{,} @var{category}]]@code{)}
-Return the plural form used for @var{number} of the
-translation of @var{string1} and @var{string2} in text domain
-@var{domain} for locale category @var{category}. @var{string1} is the
-English singular variant of a message, and @var{string2} is the English plural
-variant of the same message.
-The default value for @var{domain} is the current value of @code{TEXTDOMAIN}.
-The default value for @var{category} is @code{"LC_MESSAGES"}.
+返回 @var{string1} 与 @var{string2} 在本地语言分类 @var{category} 中，文本域 @var{domain} 中的翻译的数量 @var{number} 复数形式。@var{string1} 是消息的英语的单数形式变体，@var{string2} 是相同消息的英语复数形式。@var{domain} 的默认值是 @code{TEXTDOMAIN} 的当前值。@var{category} 的默认值是 @code{"LC_MESSAGES"}。
 
-The same remarks about argument order as for the @code{dcgettext()} function apply.
+对于 @code{dcgettext()} 函数的参数的顺序说明，也适应于这个函数。
 
 @cindex @code{.gmo} files, specifying directory of
 @cindex files, @code{.gmo}, specifying directory of
@@ -22188,29 +21943,18 @@ The same remarks about argument order as for the @code{dcgettext()} function app
 @cindex files, message object, specifying directory of
 @cindexgawkfunc{bindtextdomain}
 @item @code{bindtextdomain(@var{directory}} [@code{,} @var{domain} ]@code{)}
-Change the directory in which
-@command{gettext} looks for @file{.gmo} files, in case they
-will not or cannot be placed in the standard locations
-(e.g., during testing).
-Return the directory in which @var{domain} is ``bound.''
+改变 @command{gettext} 查找 @file{.gmo} 文件的目录，以防万一它们不在，或者不能放在标准位置的情况下（如，在测试期间）。返回文本域 @var{domain} 绑定的目录。
 
-The default @var{domain} is the value of @code{TEXTDOMAIN}.
-If @var{directory} is the null string (@code{""}), then
-@code{bindtextdomain()} returns the current binding for the
-given @var{domain}.
+默认的域 @var{domain} 是 @code{TEXTDOMAIN} 的值。如果目录是空串（@code{""}），@code{bindtextdomain()} 则返回给定文件域 @var{domain} 的当前绑定目录。
 @end table
 
-To use these facilities in your @command{awk} program, follow these steps:
+为了在你的 @command{awk} 程序中使用这样的工具，请按照下面的步骤来执行：
 
 @enumerate
 @cindex @code{BEGIN} pattern, @code{TEXTDOMAIN} variable and
 @cindex @code{TEXTDOMAIN} variable, @code{BEGIN} pattern and
 @item
-Set the variable @code{TEXTDOMAIN} to the text domain of
-your program.  This is best done in a @code{BEGIN} rule
-(@pxref{BEGIN/END}),
-or it can also be done via the @option{-v} command-line
-option (@pxref{Options}):
+将 @code{TEXTDOMAIN} 变量设置为程序的文本域。最好是在 @code{BEGIN} 规则中完成（查看 @pxref{BEGIN/END}），或者可以通过命令行选项 @option{-v} 来完成（查看 @ref{Options}）：
 
 @example
 BEGIN @{
@@ -22222,9 +21966,7 @@ BEGIN @{
 @cindex @code{_} (underscore), translatable string
 @cindex underscore (@code{_}), translatable string
 @item
-Mark all translatable strings with a leading underscore (@samp{_})
-character.  It @emph{must} be adjacent to the opening
-quote of the string.  For example:
+将所有有可翻译的字串用前置下划线来进行标识（@samp{_}）。它@emph{必须}与字串的开引号相连。如：
 
 @example
 print _"hello, world"
@@ -22233,10 +21975,8 @@ printf(_"Number of users is %d\n", nusers)
 @end example
 
 @item
-If you are creating strings dynamically, you can
-still translate them, using the @code{dcgettext()}
-built-in function:@footnote{Thanks to Bruno Haible for this
-example.}
+如果你动态地创建字串，你也可以通过 @code{dcgettext()} 内置函数来翻译它们： 
+@footnote{感谢 Bruno Haible 提供这个例子。}
 
 @example
 if (groggy)
@@ -22246,12 +21986,9 @@ else
 printf(message, ncustomers)
 @end example
 
-Here, the call to @code{dcgettext()} supplies a different
-text domain (@code{"adminprog"}) in which to find the
-message, but it uses the default @code{"LC_MESSAGES"} category.
+在这里，调用 @code{dcgettext()} 提供了一个不同的文本域（@code{"adminprog"}），在这里来查找消息，但是使用的是默认的 @code{"LC_MESSAGES"} 分类。
 
-The previous example only works if @code{ncustomers} is greater than one.
-This example would be better done with @code{dcngettext()}:
+前面的例子只在 @code{ncustomers} 大于 1 的情况下会工作。这个例子用 @code{dcngettext()} 可以更好地完成：
 
 @example
 if (groggy)
@@ -22266,9 +22003,7 @@ printf(message, ncustomers)
 
 @cindex @code{LC_MESSAGES} locale category, @code{bindtextdomain()} function (@command{gawk})
 @item
-During development, you might want to put the @file{.gmo}
-file in a private directory for testing.  This is done
-with the @code{bindtextdomain()} built-in function:
+在开发过程中，你可能想将 @file{.gmo} 文件放在一个私有的用于测试的目录。这可以通过 @code{bindtextdomain()} 内置函数来设置：
 
 @example
 BEGIN @{
@@ -22285,27 +22020,18 @@ BEGIN @{
 
 @end enumerate
 
-@xref{I18N Example}
-for an example program showing the steps to create
-and use translations from @command{awk}.
+查看 @xref{I18N Example}，来获取如何来一步步地创建并使用来自 @command{awk} 的翻译字串的例子。
 
 @node Translator i18n
-@section Translating @command{awk} Programs
+@section 翻译 @command{awk} 程序
 
 @cindex @code{.po} files
 @cindex files, @code{.po}
 @cindex portable object files
 @cindex files, portable object
-Once a program's translatable strings have been marked, they must
-be extracted to create the initial @file{.pot} file.
-As part of translation, it is often helpful to rearrange the order
-in which arguments to @code{printf} are output.
+只要程序中的可翻译字串已经被标志，它们就可以被提取用来创建初始的 @file{.pot} 文件。作为翻译的一部分，重排 @code{printf} 要输出的参数通常都很有帮助。
 
-@command{gawk}'s @option{--gen-pot} command-line option extracts
-the messages and is discussed next.
-After that, @code{printf}'s ability to
-rearrange the order for @code{printf} arguments at runtime
-is covered.
+@command{gawk} 的 @option{--gen-pot} 命令行参数提出消息并在后面进行讨论。之后，也会涉及 @code{printf} 在运行时重排 @code{printf} 参数的能力。
 
 @menu
 * String Extraction::           Extracting marked strings.
@@ -22314,7 +22040,7 @@ is covered.
 @end menu
 
 @node String Extraction
-@subsection Extracting Marked Strings
+@subsection 提取已标志字串
 @cindex strings, extracting
 @cindex marked strings@comma{} extracting
 @cindex @option{--gen-pot} option
@@ -22324,72 +22050,45 @@ is covered.
 @cindex extraction, of marked strings (internationalization)
 
 @cindex @option{--gen-pot} option
-Once your @command{awk} program is working, and all the strings have
-been marked and you've set (and perhaps bound) the text domain,
-it is time to produce translations.
-First, use the @option{--gen-pot} command-line option to create
-the initial @file{.pot} file:
+一旦你的 @command{awk} 程序可以工作，而所有的字串都已经被标志，也设置了（可能也绑定了）文本域，就是该生成翻译的时候。首先，使用 @option{--gen-pot} 命令行选项来造成初始的 @file{.pot} 文件：
 
 @example
 gawk --gen-pot -f guide.awk > guide.pot
 @end example
 
 @cindex @code{xgettext} utility
-When run with @option{--gen-pot}, @command{gawk} does not execute your
-program.  Instead, it parses it as usual and prints all marked strings
-to standard output in the format of a GNU @command{gettext} Portable Object
-file.  Also included in the output are any constant strings that
-appear as the first argument to @code{dcgettext()} or as the first and
-second argument to @code{dcngettext()}.@footnote{The
-@command{xgettext} utility that comes with GNU
-@command{gettext} can handle @file{.awk} files.}
-You should distribute the generated @file{.pot} file with
-your @command{awk} program; translators will eventually use it
-to provide you translations that you can also then distribute.
-@xref{I18N Example}
-for the full list of steps to go through to create and test
-translations for @command{guide}.
+当以 @option{--gen-pot} 运行时，@command{gawk} 不会执行你的程序。相反，它会按通常的方式分析它，然后打印所有的已经标志的字串到标准输出上，并且是以 GNU 的 @command{gettext} 的可移植对象文件的格式输出。同时在输出中也包含出现在 @code{dcgettext()} 函数的第一个参数中的字串常量，或者是 @code{dcn@command{gettext}()} 函数中的第一、二个参数。
+@footnote{与 GNU @command{gettext} 一起发布的 @command{xgettext} 工具可以处理 @file{.awk} 文件。}
+你应该你你的 @command{awk} 程序一起发布你的 @file{.pot} 文件，翻译者最终也会使用它来为你提供翻译，你也可以将其发布。查看 @xref{I18N Example}，来获取完整的为 @command{guide} 创建及测试翻译的步骤。
 
 @node Printf Ordering
-@subsection Rearranging @code{printf} Arguments
+@subsection 重排 @code{printf} 参数 
 
 @cindex @code{printf} statement, positional specifiers
 @cindex positional specifiers, @code{printf} statement
-Format strings for @code{printf} and @code{sprintf()}
-(@pxref{Printf})
-present a special problem for translation.
-Consider the following:@footnote{This example is borrowed
-from the GNU @command{gettext} manual.}
+用于 @code{printf} 与 @code{sprintf()} 函数的格式字串（查看 @pxref{Printf}）导致了一种特殊的翻译问题。考虑下面的代码： 
+@footnote{这个例子是从 GNU @command{gettext} 手册上借来的。}
 
 @example
 printf(_"String `%s' has %d characters\n",
           string, length(string)))
 @end example
 
-A possible German translation for this might be:
+可能德语翻译成这样：
 
 @example
 "%d Zeichen lang ist die Zeichenkette `%s'\n"
 @end example
 
-The problem should be obvious: the order of the format
-specifications is different from the original!
-Even though @code{gettext()} can return the translated string
-at runtime,
-it cannot change the argument order in the call to @code{printf}.
+问题应该是很明显的：格式的指定与最初的是不同的！就算 @code{gettext()} 可以在运行时返回翻译后的字串，但是却没有办法改变调用 @code{printf} 参数的顺序。
 
-To solve this problem, @code{printf} format specifiers may have
-an additional optional element, which we call a @dfn{positional specifier}.
-For example:
+为了解决这个问题，@code{printf} 格式指定符可以有另外一个可选的元素，即@dfn{位置指定符}。例如：
 
 @example
 "%2$d Zeichen lang ist die Zeichenkette `%1$s'\n"
 @end example
 
-Here, the positional specifier consists of an integer count, which indicates which
-argument to use, and a @samp{$}. Counts are one-based, and the
-format string itself is @emph{not} included.  Thus, in the following
-example, @samp{string} is the first argument and @samp{length(string)} is the second:
+在这里，位置指定符由一个整数构成，用来表示要使用哪个参数，以及一年 @samp{$} 符号。位置是由 1 开始的，@emph{不}包含格式串自己。所以，在下面的例子中，@samp{string} 是第一个参数，@samp{length(string)} 则是第二个参数：
 
 @example
 $ @kbd{gawk 'BEGIN @{}
@@ -22400,11 +22099,9 @@ $ @kbd{gawk 'BEGIN @{}
 @print{} 11 characters live in "Don't Panic"
 @end example
 
-If present, positional specifiers come first in the format specification,
-before the flags, the field width, and/or the precision.
+如果提供了位置指定符，这在格式规则中要第一个出现，即在标志，域宽以及/或者精度之前。
 
-Positional specifiers can be used with the dynamic field width and
-precision capability:
+位置指定符可以与动态域宽以及精度一起使用：
 
 @example
 $ @kbd{gawk 'BEGIN @{}
@@ -22415,44 +22112,32 @@ $ @kbd{gawk 'BEGIN @{}
 @print{}      hello
 @end example
 
-@quotation NOTE
-When using @samp{*} with a positional specifier, the @samp{*}
-comes first, then the integer position, and then the @samp{$}.
-This is somewhat counterintuitive.
+@quotation 提示
+当与位置指定符一起使用 @samp{*} 时，@samp{*} 要先出现，然后是整数位置，然后才是 @samp{$} 符。这有一点反直觉。
 @end quotation
 
 @cindex @code{printf} statement, positional specifiers, mixing with regular formats
 @cindex positional specifiers, @code{printf} statement, mixing with regular formats
 @cindex format specifiers, mixing regular with positional specifiers
-@command{gawk} does not allow you to mix regular format specifiers
-and those with positional specifiers in the same string:
+@command{gawk} 不允许你在同样的字串中混用常规的格式指定符与位置指定符：
 
 @example
 $ @kbd{gawk 'BEGIN @{ printf "%d %3$s\n", 1, 2, "hi" @}'}
 @error{} gawk: cmd. line:1: fatal: must use `count$' on all formats or none
 @end example
 
-@quotation NOTE
-There are some pathological cases that @command{gawk} may fail to
-diagnose.  In such cases, the output may not be what you expect.
-It's still a bad idea to try mixing them, even if @command{gawk}
-doesn't detect it.
+@quotation 提示
+有一个病态的列子中，@command{gawk} 无法识别。在这样的例子中，输出可能不是你所想要的。既使 @command{gawk} 没有检测到它们， 混用它们依然是个坏主意。
 @end quotation
 
-Although positional specifiers can be used directly in @command{awk} programs,
-their primary purpose is to help in producing correct translations of
-format strings into languages different from the one in which the program
-is first written.
+尽管位置指定符可以直接用在 @command{awk} 程序中，但它们的主要目的是用来帮助产生正确的格式串的翻译，从开始编写的语言到其他不同的语言。
 
 @node I18N Portability
-@subsection @command{awk} Portability Issues
+@subsection @command{awk} 的移植性问题
 
 @cindex portability, internationalization and
 @cindex internationalization, localization, portability and
-@command{gawk}'s internationalization features were purposely chosen to
-have as little impact as possible on the portability of @command{awk}
-programs that use them to other versions of @command{awk}.
-Consider this program:
+@command{gawk} 的国际化特性有意选择对 @command{awk} 的可移植性影响最可能小，使它们可以用于其他的 @command{awk} 版本。考虑下面的程序：
 
 @example
 BEGIN @{
@@ -22464,29 +22149,20 @@ BEGIN @{
 @end example
 
 @noindent
-As written, it won't work on other versions of @command{awk}.
-However, it is actually almost portable, requiring very little
-change:
+如上的代码，在其他的版本的 @command{awk} 中没办法工作。但是，实际它已经差不多可移植了，只需要一点点改动：
 
 @itemize @value{BULLET}
 @cindex @code{TEXTDOMAIN} variable, portability and
 @item
-Assignments to @code{TEXTDOMAIN} won't have any effect,
-because @code{TEXTDOMAIN} is not special in other @command{awk} implementations.
+对 @code{TEXTDOMAIN} 的赋值没有效果，因为 @code{TEXTDOMAIN} 在其他的 @command{awk} 实现中没有特殊含义。
 
 @item
-Non-GNU versions of @command{awk} treat marked strings
-as the concatenation of a variable named @code{_} with the string
-following it.@footnote{This is good fodder for an ``Obfuscated
-@command{awk}'' contest.} Typically, the variable @code{_} has
-the null string (@code{""}) as its value, leaving the original string constant as
-the result.
+非 GNU 版本的 @command{awk} 将已经标志的变量当成是变量名为 @code{_} 与其他的字串的连接。 
+@footnote{这是一个很好的用来存放“令人困惑的 @command{awk}”内容的目录。}
+典型的情况，变量 @code{_} 将空串（@code{""}）当成它的值，这样最初的常量字串不变。
 
 @item
-By defining ``dummy'' functions to replace @code{dcgettext()}, @code{dcngettext()},
-and @code{bindtextdomain()}, the @command{awk} program can be made to run, but
-all the messages are output in the original language.
-For example:
+通过定义“哑”函数来代替 @code{dcgettext()}、@code{dcngettext()} 与 @code{bindtextdomain()}，这样 @command{awk} 程序可以运行起来，但是只输出所有的初始语言的消息。
 
 @cindex @code{bindtextdomain()} function (@command{gawk}), portability and
 @cindex @code{dcgettext()} function (@command{gawk}), portability and
@@ -22511,26 +22187,14 @@ function dcngettext(string1, string2, number, domain, category)
 @end example
 
 @item
-The use of positional specifications in @code{printf} or
-@code{sprintf()} is @emph{not} portable.
-To support @code{gettext()} at the C level, many systems' C versions of
-@code{sprintf()} do support positional specifiers.  But it works only if
-enough arguments are supplied in the function call.  Many versions of
-@command{awk} pass @code{printf} formats and arguments unchanged to the
-underlying C library version of @code{sprintf()}, but only one format and
-argument at a time.  What happens if a positional specification is
-used is anybody's guess.
-However, because the positional specifications are primarily for use in
-@emph{translated} format strings, and because non-GNU @command{awk}s never
-retrieve the translated string, this should not be a problem in practice.
+在 @code{printf} 与 @code{sprintf()} 中的位置指定符是@emph{不可}移植的。为了在 C 层次上支持 @code{gettext()}，很多的系统的 C 版本的 @code{sprintf} 也支持位置指定符。但是只要提供了足够的参数的调用时才会有用。很多的 @command{awk} 版本将 @code{printf} 的格式与参数不变地传递给下层的 C 版本的 @code{sprintf()}，但是一次只传递一个格式与参数。大家可以猜测试如果使用了位置指定符的时候会发生什么。
+但是，由于位置指定符主要是用来做@emph{翻译}格式的字串，而且因为非 GNU 的 @command{awk} 不会返回翻译后的字中，所以这在实践中不会成为一个问题。
 @end itemize
 
 @node I18N Example
-@section A Simple Internationalization Example
+@section 简单的国际化例子
 
-Now let's look at a step-by-step example of how to internationalize and
-localize a simple @command{awk} program, using @file{guide.awk} as our
-original source:
+现在，让我们看看如何一步步地进行国际化与本地化一个例子 @command{awk} 程序，使用 @file{guide.awk} 作为我们的源代码：
 
 @example
 @c file eg/prog/guide.awk
@@ -22545,14 +22209,14 @@ BEGIN @{
 @end example
 
 @noindent
-Run @samp{gawk --gen-pot} to create the @file{.pot} file:
+执行 @samp{gawk --gen-pot} 来创建 @file{.pot} 文件：
 
 @example
 $ @kbd{gawk --gen-pot -f guide.awk > guide.pot}
 @end example
 
 @noindent
-This produces:
+这里会产生：
 
 @example
 @c file eg/data/guide.po
@@ -22567,19 +22231,14 @@ msgstr ""
 @c endfile
 @end example
 
-This original portable object template file is saved and reused for each language
-into which the application is translated.  The @code{msgid}
-is the original string and the @code{msgstr} is the translation.
+这是最初的可移植对象模块文件，会被保存并在每个它要进行翻译的语言中进行重用。@code{msgid} 是最初的字串，而 @code{msgstr} 是翻译。
 
-@quotation NOTE
-Strings not marked with a leading underscore do not
-appear in the @file{guide.pot} file.
+@quotation 提示
+字串没有用下划线进行标志的，不会出现在 @file{guide.pot} 文件中。
 @end quotation
 
-Next, the messages must be translated.
-Here is a translation to a hypothetical dialect of English,
-called ``Mellow'':@footnote{Perhaps it would be better if it were
-called ``Hippy.'' Ah, well.}
+下一步，则要进行消息的翻译。这里的翻译是一个假想的英语方言，称为 “Mellow”： 
+@footnote{也许，我们称之为 “Hippy”可能会更好。}
 
 @example
 @group
@@ -22589,7 +22248,7 @@ $ @kbd{cp guide.pot guide-mellow.po}
 @end example
 
 @noindent
-Following are the translations:
+下面是翻译：
 
 @example
 @c file eg/data/guide-mellow.po
@@ -22606,13 +22265,7 @@ msgstr "Like, the scoop is"
 
 @cindex Linux
 @cindex GNU/Linux
-The next step is to make the directory to hold the binary message object
-file and then to create the @file{guide.mo} file.
-We pretend that our file is to be used in the @code{en_US.UTF-8} locale,
-because we have to use a locale name known to the C @command{gettext} routines.
-The directory layout shown here is standard for GNU @command{gettext} on
-GNU/Linux systems.  Other versions of @command{gettext} may use a different
-layout:
+下一步是创建一个目录来存储二进制消息对象文件，然后创建 @file{guide.mo} 文件。我们假装我们的文件准备在 @code{en_US.UTF-8} 语言设置中使用，因为我们必须使用一个 C 的@command{gettext} 例程知道的语言设置。这里显示的目录布局表示的是 GNU/Linux 系统上的 GNU @command{gettext}。其他版本的 @command{gettext} 可以使用不同的布局：
 
 @example
 $ @kbd{mkdir en_US.UTF-8 en_US.UTF-8/LC_MESSAGES}
@@ -22627,17 +22280,13 @@ $ @kbd{mkdir en_US.UTF-8 en_US.UTF-8/LC_MESSAGES}
 @cindex message object files, converting from portable object files
 @cindex files, message object, converting from portable object files
 @cindex @command{msgfmt} utility
-The @command{msgfmt} utility does the conversion from human-readable
-@file{.po} file to machine-readable @file{.mo} file.
-By default, @command{msgfmt} creates a file named @file{messages}.
-This file must be renamed and placed in the proper directory (using
-the @option{-o} option) so that @command{gawk} can find it:
+@command{msgfmt} 工具将人可读的 @file{.mo} 文件转换成机器可读的 @file{.mo} 文件。默认情况下，@command{msgfmt} 创建一个叫做 @file{messages} 文件。这个文件必须被重新命名，并被放在合适的位置（使用 @option{-o} 选项），因此 @command{gawk} 可以找到它：
 
 @example
 $ @kbd{msgfmt guide-mellow.po -o en_US.UTF-8/LC_MESSAGES/guide.mo}
 @end example
 
-Finally, we run the program to test it:
+最后，我们运行程序来测试：
 
 @example
 $ @kbd{gawk -f guide.awk}
@@ -22646,11 +22295,7 @@ $ @kbd{gawk -f guide.awk}
 @print{} Pardon me, Zaphod who?
 @end example
 
-If the three replacement functions for @code{dcgettext()}, @code{dcngettext()},
-and @code{bindtextdomain()}
-(@pxref{I18N Portability})
-are in a file named @file{libintl.awk},
-then we can run @file{guide.awk} unchanged as follows:
+如果 @code{dcgettext()}，@code{dcngettext()} 与 @code{bindtextdomain()} （查看 @pxref{I18N Portability}）这三个函数在文件 @file{libintl.awk} 文件中，然后我们可以这样的运行 @file{guide.awk}：
 
 @example
 $ @kbd{gawk --posix -f guide.awk -f libintl.awk}
@@ -22660,66 +22305,48 @@ $ @kbd{gawk --posix -f guide.awk -f libintl.awk}
 @end example
 
 @node Gawk I18N
-@section @command{gawk} Can Speak Your Language
+@section @command{gawk} 可以说你的语言
 
-@command{gawk} itself has been internationalized
-using the GNU @command{gettext} package.
-(GNU @command{gettext} is described in
-complete detail in
+@command{gawk} 本身已经使用 GNU @command{gettext} 包来做了国际化。（GNU @command{gettext} 在 
 @ifinfo
-@inforef{Top, , GNU @command{gettext} utilities, gettext, GNU @command{gettext} utilities}.)
+@inforef{Top, , GNU @command{gettext} utilities, gettext, GNU @command{gettext} utilities}
 @end ifinfo
 @ifnotinfo
 @uref{http://www.gnu.org/software/gettext/manual/,
-@cite{GNU @command{gettext} utilities}}.)
+@cite{GNU @command{gettext} 工具}}
 @end ifnotinfo
-As of this writing, the latest version of GNU @command{gettext} is
-@uref{ftp://ftp.gnu.org/gnu/gettext/gettext-0.19.4.tar.gz,
-@value{PVERSION} 0.19.4}.
+里有完整的描述）
+在写这个的时候，GNU @command{gettext} 的最新版本是 @uref{ftp://ftp.gnu.org/gnu/gettext/gettext-0.19.4.tar.gz,
+@value{PVERSION} 0.19.4}。
 
-If a translation of @command{gawk}'s messages exists,
-then @command{gawk} produces usage messages, warnings,
-and fatal errors in the local language.
+如果 @command{gawk} 的消息翻译存在，@command{gawk} 产生的信息，警告，命令错误会使用本地语言。
 
 @node I18N Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-Internationalization means writing a program such that it can use multiple
-languages without requiring source code changes.  Localization means
-providing the data necessary for an internationalized program to work
-in a particular language.
+国际化表示写的程序可以使用多种语言而不需要对源代码进行改变。本地化则表示给已经国际化的语言提供必要的数据来使其他特定的语言中工作。
 
 @item
-@command{gawk} uses GNU @command{gettext} to let you internationalize
-and localize @command{awk} programs.  A program's text domain identifies
-the program for grouping all messages and other data together.
+@command{gawk} 使用 GNU @command{gettext} 来让你对 @command{awk} 程序进行国际化与本地化。一个程序的文本域标识了用于组合消息与其他数据的程序。
 
 @item
-You mark a program's strings for translation by preceding them with
-an underscore. Once that is done, the strings are extracted into a
-@file{.pot} file.  This file is copied for each language into a @file{.po}
-file, and the @file{.po} files are compiled into @file{.gmo} files for
-use at runtime.
+你将程序中的字串用下划线来进行标识以用于翻译。一旦完成了这个，字串会被提取到一个 @file{.pot} 文件中。这个文件为每种语言的复制一个 @file{.po} 文件，然后 @file{.po} 文件会编译成 @file{.gmo} 文件来在运行时使用。
 
 @item
-You can use positional specifications with @code{sprintf()} and
-@code{printf} to rearrange the placement of argument values in formatted
-strings and output. This is useful for the translation of format
-control strings.
+你可以在 @code{sprintf} 与 @code{printf} 中使用位置指定符，使可以在格式化串与输出中输出中重新对参数值进行排序。这对于控制字串的翻译很有用。
 
 @item
-The internationalization features have been designed so that they
-can be easily worked around in a standard @command{awk}.
+国际化特别被设计成在标准的 @command{awk} 中也可以很好处理。
 
 @item
-@command{gawk} itself has been internationalized and ships with
-a number of translations for its messages.
+@command{gawk} 本身已经国际化，并发布了多种语言消息。
 
 @end itemize
 
 
+#TODO20171128
 @node Debugger
 @chapter Debugging @command{awk} Programs
 @cindex debugging @command{awk} programs
