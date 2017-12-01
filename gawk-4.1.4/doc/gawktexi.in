@@ -21575,21 +21575,15 @@ $ @kbd{gawk --posix -f guide.awk -f libintl.awk}
 
 #TODO20171128
 @node Debugger
-@chapter Debugging @command{awk} Programs
+@chapter 调试 @command{awk} 程序
 @cindex debugging @command{awk} programs
 
 @c The original text for this chapter was contributed by Efraim Yawitz.
 @c FIXME: Add more indexing.
 
-It would be nice if computer programs worked perfectly the first time they
-were run, but in real life, this rarely happens for programs of
-any complexity.  Thus, most programming languages have facilities available
-for ``debugging'' programs, and now @command{awk} is no exception.
+如果程序在第一次运动就表现完美那就好了，但是在现实生活中，这对于任意复杂度的程序来说都很少见。所以，大多数的程序语言都有相应的工具用来进行“调试”程序，而 @command{awk} 也不例外。
 
-The @command{gawk} debugger is purposely modeled after
-@uref{http://www.gnu.org/software/gdb/, the GNU Debugger (GDB)}
-command-line debugger.  If you are familiar with GDB, learning
-how to use @command{gawk} for debugging your program is easy.
+@command{gawk} 的调试器有意地参照 @uref{http://www.gnu.org/software/gdb/, GNU 调试器（GDB）} 的命令行调试器。如果你熟悉 GDB，学习如何来使用 @command{gawk} 调试你的程序就很简单。
 
 @menu
 * Debugging::                   Introduction to @command{gawk} debugger.
@@ -21601,10 +21595,9 @@ how to use @command{gawk} for debugging your program is easy.
 @end menu
 
 @node Debugging
-@section Introduction to the @command{gawk} Debugger
+@section @command{gawk} 调试器介绍
 
-This @value{SECTION} introduces debugging in general and begins
-the discussion of debugging in @command{gawk}.
+本@value{SECTION}一般性地介绍一下调试器以及开始讨论 @command{gawk} 的调试。
 
 @menu
 * Debugging Concepts::          Debugging in General.
@@ -21613,126 +21606,65 @@ the discussion of debugging in @command{gawk}.
 @end menu
 
 @node Debugging Concepts
-@subsection Debugging in General
+@subsection 通用的调试技术
 
-(If you have used debuggers in other languages, you may want to skip
-ahead to @ref{Awk Debugging}.)
+（如果你使用过其他语言的调试器，你可以跳过到 @ref{Awk Debugging}。）
 
-Of course, a debugging program cannot remove bugs for you, because it has
-no way of knowing what you or your users consider a ``bug'' versus a
-``feature.''  (Sometimes, we humans have a hard time with this ourselves.)
-In that case, what can you expect from such a tool?  The answer to that
-depends on the language being debugged, but in general, you can expect at
-least the following:
+当然，调试程序没办法帮你移除 Bug，因此它并不知道你或者你的用户如何将其当成是个 Bug，还是一个特性。（有时候，人类自己对于这个问题也挣扎了很久。）在这个情况下，你从这样的工具想得到什么呢？答案依赖于正在被调试的语言，但是一般来说，你至少可以得如下的结果：
 
 @itemize @value{BULLET}
 @item
-The ability to watch a program execute its instructions one by one,
-giving you, the programmer, the opportunity to think about what is happening
-on a time scale of seconds, minutes, or hours, rather than the nanosecond
-time scale at which the code usually runs.
+有能力查看程序指令一条条地执行，这样你这样的程序员就有机会考虑在秒级，分钟级，或者小时级的时间上发生了什么，而不是纳秒级的时间上。在这个时间上代码总会是执行的。
 
 @item
-The opportunity to not only passively observe the operation of your
-program, but to control it and try different paths of execution, without
-having to change your source files.
+有机会不仅是被动地发现你的程序的操作，而且能够控制它，并且尝试不同的执行路径，而不需要改动你的源代码。
 
 @item
-The chance to see the values of data in the program at any point in
-execution, and also to change that data on the fly, to see how that
-affects what happens afterward.  (This often includes the ability
-to look at internal data structures besides the variables you actually
-defined in your code.)
+有机会在任何的执行时间点看到数据的值，并且在执行时候改变它的值，以测试后续其如何来影响程序。（这一般都包括查看内部数据结构的能力，包含你在代码中定义的变量。）
 
 @item
-The ability to obtain additional information about your program's state
-or even its internal structure.
+有能力取得程序状态的额外 信息，甚至是内部结构。
 @end itemize
 
-All of these tools provide a great amount of help in using your own
-skills and understanding of the goals of your program to find where it
-is going wrong (or, for that matter, to better comprehend a perfectly
-functional program that you or someone else wrote).
+所有这样的工作都提供大量的帮助来使用你自己的技能来理解你的程序的目标，以此来发现哪里出了错（或者，通过这样可以更好地理解你或者别人写的功能程序）。
 
 @node Debugging Terms
-@subsection Debugging Concepts
+@subsection 调试概念
 
-Before diving in to the details, we need to introduce several
-important concepts that apply to just about all debuggers.
-The following list defines terms used throughout the rest of
-this @value{CHAPTER}:
+在深入细节之前，我们需要介绍关于调试器的几个重要概念。下面的列表定义了本@value{CHAPTER}中后面使用到术语：
 
 @table @dfn
 @cindex stack frame
 @item Stack frame
-Programs generally call functions during the course of their execution.
-One function can call another, or a function can call itself (recursion).
-You can view the chain of called functions (main program calls A, which
-calls B, which calls C), as a stack of executing functions: the currently
-running function is the topmost one on the stack, and when it finishes
-(returns), the next one down then becomes the active function.
-Such a stack is termed a @dfn{call stack}.
+程序一般在它们的执行过程中调用函数。一个函数调用另一个函数，或者函数调试自己（递归）。你可以查看函数调用的链（主程序调用 A，而 A 调用 B，B 再试用 C），作为执行函数栈：当前运行的函数在栈的最顶端，当它完成时（返回），下一个则成会活动函数。这样的一个栈术语上叫做@dfn{调用栈}。
 
-For each function on the call stack, the system maintains a data area
-that contains the function's parameters, local variables, and return value,
-as well as any other ``bookkeeping'' information needed to manage the
-call stack.  This data area is termed a @dfn{stack frame}.
+在调用栈上的每一个函数，系统都会保留一个数据区来包含函数的参数，本地变量以及返回值，以及其他的“登记”信息，以用来管理调用栈。这个数据区被称为@dfn{栈帧}。
 
-@command{gawk} also follows this model, and gives you
-access to the call stack and to each stack frame. You can see the
-call stack, as well as from where each function on the stack was
-invoked. Commands that print the call stack print information about
-each stack frame (as detailed later on).
+@command{gawk} 也使用这样的模型，可以让你访问到调用栈以及每个栈帧。你可以看到调用栈，以及从栈中的哪个函数调用。用来打印调用栈的命令打印每个栈帖的信息（后面有详细内容）。
 
 @item Breakpoint
 @cindex breakpoint
-During debugging, you often wish to let the program run until it
-reaches a certain point, and then continue execution from there one
-statement (or instruction) at a time.  The way to do this is to set
-a @dfn{breakpoint} within the program.  A breakpoint is where the
-execution of the program should break off (stop), so that you can
-take over control of the program's execution.  You can add and remove
-as many breakpoints as you like.
+在调试期间，你常常希望程序执行到一个特定的点，然后继续从那里一次执行一条语句。要这么做的方式是在程序中设置一个@dfn{断点}。一个断点是程序执行时会暂停（停止）的位置，因此你可以取得程序执行控制权。你可以添加或者移除多个断点。
 
 @item Watchpoint
 @cindex watchpoint
-A watchpoint is similar to a breakpoint.  The difference is that
-breakpoints are oriented around the code: stop when a certain point in the
-code is reached.  A watchpoint, however, specifies that program execution
-should stop when a @emph{data value} is changed.  This is useful, as
-sometimes it happens that a variable receives an erroneous value, and it's
-hard to track down where this happens just by looking at the code.
-By using a watchpoint, you can stop whenever a variable is assigned to,
-and usually find the errant code quite quickly.
+一个查看点与断点类型。不同的是断点是面向代码的，当代码执行到达后，会停止执行。一个查看点，则指定的程序当某个@emph{值}改变时会停止。这会相当有用，因为有时变量接收了一个错误的值，而只查看代码很难跟踪。通过使用查看点，你可以在变量被赋值时而停下来，这样通常可以很快地查找到错误的代码。
 @end table
 
 @node Awk Debugging
-@subsection @command{awk} Debugging
+@subsection @command{awk} 调试
 
-Debugging an @command{awk} program has some specific aspects that are
-not shared with programs written in other languages.
+调试 @command{awk} 程序有一些方面与调试其他语言写成的程序有一些不同。
 
-First of all, the fact that @command{awk} programs usually take input
-line by line from a file or files and operate on those lines using specific
-rules makes it especially useful to organize viewing the execution of
-the program in terms of these rules.  As we will see, each @command{awk}
-rule is treated almost like a function call, with its own specific block
-of instructions.
+首先，@command{awk} 程序通常是从一个或者多个文件中一行行地读取数据，然后使用特定的规则操作这些行，这样，根据这些规则来查看程序的程序的执行是非常有用的。正如我们见到的，每一个 @command{awk} 规则都像一个函数一样，它们有自己特定的指令块。
 
-In addition, because @command{awk} is by design a very concise language,
-it is easy to lose sight of everything that is going on ``inside''
-each line of @command{awk} code.  The debugger provides the opportunity
-to look at the individual primitive instructions carried out
-by the higher-level @command{awk} commands.
+另外，由于 @command{awk} 设计上是一个很简练的语言，这样很容易看走眼，而不知道每一个行的 @command{awk} 程序代码里面到底发生了什么。使用更高层的 @command{awk} 命令，调试器使得我们有机会来查看单个的原始命令。
 
 @node Sample Debugging Session
-@section Sample @command{gawk} Debugging Session
+@section @command{gawk} 调试例子
 @cindex sample debugging session
 
-In order to illustrate the use of @command{gawk} as a debugger, let's look at a sample
-debugging session.  We will use the @command{awk} implementation of the
-POSIX @command{uniq} command described earlier (@pxref{Uniq Program})
-as our example.
+为了解释 @command{gawk} 调用的使用，让我们来看一个例子的调试过程。我们利用早前提到的 POSIX uniq 命令的 @command{awk} 实现（查看 @pxref{Uniq Program}）来作为我们的例子。
 
 @menu
 * Debugger Invocation::         How to Start the Debugger.
@@ -21740,59 +21672,40 @@ as our example.
 @end menu
 
 @node Debugger Invocation
-@subsection How to Start the Debugger
+@subsection 如何开启调试器
 @cindex starting the debugger
 @cindex debugger, how to start
 
-Starting the debugger is almost exactly like running @command{gawk} normally,
-except you have to pass an additional option, @option{--debug}, or the
-corresponding short option, @option{-D}.  The file(s) containing the
-program and any supporting code are given on the command line as arguments
-to one or more @option{-f} options. (@command{gawk} is not designed
-to debug command-line programs, only programs contained in files.)
-In our case, we invoke the debugger like this:
+开始调试器几乎就跟正常运行 @command{gawk} 一样，只是你需要传递一个额外的选项 @option{--debug}，或者其对应的短选项 @option{-D}。包含程序的文件，或者任何受支持的在命令行上的代码，都作为一个或者多个 @option{-f} 选项的参数。（@command{gawk} 没有为命令行程序设计调试，只支持包含在文件的程序）在我们的例子中，我们这样来调用调试器：
 
 @example
 $ @kbd{gawk -D -f getopt.awk -f join.awk -f uniq.awk -1 inputfile}
 @end example
 
 @noindent
-where both @file{getopt.awk} and @file{uniq.awk} are in @env{$AWKPATH}.
-(Experienced users of GDB or similar debuggers should note that
-this syntax is slightly different from what you are used to.
-With the @command{gawk} debugger, you give the arguments for running the program
-in the command line to the debugger rather than as part of the @code{run}
-command at the debugger prompt.)
-The @option{-1} is an option to @file{uniq.awk}.
+@file{getopt.awk} 与 @file{uniq.awk} 两个程序都在 @env{$AWKPATH} 目录中。
+（GDB 或者类似调试器有经验的用户都应该注意到了这个语法与你之前所使用的语法有一些轻微的差异。在 @command{gawk} 调试器里，你将在命令行上传递给运行程序的参数给了调试器，而不是作为在调试指示符下 @code{run} 命令的一部分。@option{-1} 是 @file{uniq.awk} 的选项。
 
-Instead of immediately running the program on @file{inputfile}, as
-@command{gawk} would ordinarily do, the debugger merely loads all
-the program source files, compiles them internally, and then gives
-us a prompt:
+不像 @command{gawk} 通常所做的那样，立即对输入文件 @file{inputfile} 执行程序，调试器仅仅载入所有的程序源代码，在内部编译它们，然后给出提示符：
 
 @example
 gawk>
 @end example
 
 @noindent
-from which we can issue commands to the debugger.  At this point, no
-code has been executed.
+从这里，你们可以发送命令到调试器。在这一点上，还没有代码被执行。
 
 @node Finding The Bug
-@subsection Finding the Bug
+@subsection 查找 Bug
 
-Let's say that we are having a problem using (a faulty version of)
-@file{uniq.awk} in the ``field-skipping'' mode, and it doesn't seem to be
-catching lines which should be identical when skipping the first field,
-such as:
+假充我们在使用（一个有错误的版本）@file{uniq.awk} 中的 “域跨越”模式时有问题，看起来，当要跳过第一个域时，它没有捕获到本来相同的行，如：
 
 @example
 awk is a wonderful program!
 gawk is a wonderful program!
 @end example
 
-This could happen if we were thinking (C-like) of the fields in a record
-as being numbered in a zero-based fashion, so instead of the lines:
+这有可能会发生，如果我们将在记录中的域想成是一个以 0 开始（C 风格）编号的，所以本来应该写成下面的行：
 
 @example
 clast = join(alast, fcount+1, n)
@@ -21800,28 +21713,21 @@ cline = join(aline, fcount+1, m)
 @end example
 
 @noindent
-we wrote:
+我们写成了：
 
 @example
 clast = join(alast, fcount, n)
 cline = join(aline, fcount, m)
 @end example
 
-The first thing we usually want to do when trying to investigate a
-problem like this is to put a breakpoint in the program so that we can
-watch it at work and catch what it is doing wrong.  A reasonable spot for
-a breakpoint in @file{uniq.awk} is at the beginning of the function
-@code{are_equal()}, which compares the current line with the previous one. To set
-the breakpoint, use the @code{b} (breakpoint) command:
+我们第一件要做的事常常是要检查出这样的问题是在程序中设置一个断点，这样我们可以查看它们如何工作，并捕获到发生的错误。在 @file{uniq.awk} 中合理的断点是在函数 @code{are_equal()} 的开始处，在这个函数中，会将当前行与前一个行进行比较。要设置断点，使用 @code{b}（breakpoint）命令：
 
 @example
 gawk> @kbd{b are_equal}
 @print{} Breakpoint 1 set at file `awklib/eg/prog/uniq.awk', line 63
 @end example
 
-The debugger tells us the file and line number where the breakpoint is.
-Now type @samp{r} or @samp{run} and the program runs until it hits
-the breakpoint for the first time:
+调试器告诉我们断点所在的文件以及行号。现在，我们输入 @samp{r} 或者 @samp{run}，然后程序会执行，直到其第一次命令断点：
 
 @example
 gawk> @kbd{r}
@@ -21833,10 +21739,7 @@ gawk> @kbd{r}
 gawk>
 @end example
 
-Now we can look at what's going on inside our program.  First of all,
-let's see how we got to where we are.  At the prompt, we type @samp{bt}
-(short for ``backtrace''), and the debugger responds with a
-listing of the current stack frames:
+现在，我们可以查看程序中哪里出了问题。首先，让我们看一下我们是怎么来到现在的位置。在提示符下，我们输入 @samp{bt}（“backtrace”的缩写），则调试器会返回当前栈帧的列表：
 
 @example
 gawk> @kbd{bt}
@@ -21845,17 +21748,9 @@ gawk> @kbd{bt}
 @print{} #1  in main() at `awklib/eg/prog/uniq.awk':88
 @end example
 
-This tells us that @code{are_equal()} was called by the main program at
-line 88 of @file{uniq.awk}.  (This is not a big surprise, because this
-is the only call to @code{are_equal()} in the program, but in more complex
-programs, knowing who called a function and with what parameters can be
-the key to finding the source of the problem.)
+这告诉我们 @code{are_equal()} 是在主程序 @file{uniq.awk} 第 88 行调用的。（这没什么大惊小怪的，因此这是在程序中唯一调用 @code{are_equal()} 的地方，但是在更复杂的程序中，了解谁调用了函数，以及相应的参数是查找到程序问题的关键。）
 
-Now that we're in @code{are_equal()}, we can start looking at the values
-of some variables.  Let's say we type @samp{p n}
-(@code{p} is short for ``print'').  We would expect to see the value of
-@code{n}, a parameter to @code{are_equal()}.  Actually, the debugger
-gives us:
+现在，我们已经在 @code{are_equal()} 中了，我们开始来查看某些变量的值。假设我们输入 @samp{p n}（p 是 “print”的缩写）。我们期望看到 @code{are_equal()} 参数 @code{n} 的值。实际是，调试器返回：
 
 @example
 gawk> @kbd{p n}
@@ -21863,10 +21758,9 @@ gawk> @kbd{p n}
 @end example
 
 @noindent
-In this case, @code{n} is an uninitialized local variable, because the
-function was called without arguments (@pxref{Function Calls}).
+在这个例子中，@code{n} 是一个未初始化的本地变量，因为函数调用时没有提供绘画它参数（查看 @pxref{Function Calls}）。
 
-A more useful variable to display might be the current record:
+要显示的更有用的变量应该是当前记录：
 
 @example
 gawk> @kbd{p $0}
@@ -21874,8 +21768,7 @@ gawk> @kbd{p $0}
 @end example
 
 @noindent
-This might be a bit puzzling at first, as this is the second line of
-our test input.  Let's look at @code{NR}:
+在一开始，这个可能会有一点疑惑，因为这是我们的测试输入的第二行，我们来看看 @code{NR}：
 
 @example
 gawk> @kbd{p NR}
@@ -21883,9 +21776,7 @@ gawk> @kbd{p NR}
 @end example
 
 @noindent
-So we can see that @code{are_equal()} was only called for the second record
-of the file.  Of course, this is because our program contains a rule for
-@samp{NR == 1}:
+因此，我们看到 @code{are_equal()} 只会从文件的第二个记录开始调用。当然，这是因为我们包含了这样的一个规则 @samp{@code{NR} == 1} ：
 
 @example
 NR == 1 @{
@@ -21894,32 +21785,23 @@ NR == 1 @{
 @}
 @end example
 
-OK, let's just check that that rule worked correctly:
+好了，让我们查看当前正在执行的规则：
 
 @example
 gawk> @kbd{p last}
 @print{} last = "awk is a wonderful program!"
 @end example
 
-Everything we have done so far has verified that the program has worked as
-planned, up to and including the call to @code{are_equal()}, so the problem must
-be inside this function.  To investigate further, we must begin
-``stepping through'' the lines of @code{are_equal()}.  We start by typing
-@samp{n} (for ``next''):
+目前我们所做的一切都只是说明程序正如计划的那样执行，直至 @code{are_equal()} 为止，包含函数调用，因此问题一定出在函数内部。为了进一步调查，我们必须“一步步”地执行 @code{are_equal()} 的代码行。我们敲入 @samp{n}（表示“next”）：
 
 @example
 gawk> @kbd{n}
 @print{} 66          if (fcount > 0) @{
 @end example
 
-This tells us that @command{gawk} is now ready to execute line 66, which
-decides whether to give the lines the special ``field-skipping'' treatment
-indicated by the @option{-1} command-line option.  (Notice that we skipped
-from where we were before, at line 63, to here, because the condition
-in line 63, @samp{if (fcount == 0 && charcount == 0)}, was false.)
+这告诉我们，@command{gawk} 现在已经准备执行第 66 行，确定这是否需要给行特殊的“域跨越”处理，正如命令行选项 @option{-1} 所示的那样。（请注意，我们是从我们之前所在的位置，第 63 行，跳到目前所在的位置，因为在 63 行的条件是 @samp{if (fcount == 0 && charcount == 0)}，而其值为 false。）
 
-Continuing to step, we now get to the splitting of the current and
-last records:
+继续执行一步，我们现在到了将当前与最后记录进行分割的地方：
 
 @example
 gawk> @kbd{n}
@@ -21928,8 +21810,7 @@ gawk> @kbd{n}
 @print{} 68              m = split($0, aline)
 @end example
 
-At this point, we should be curious to see what our records were split
-into, so we try to look:
+在这一点上，我们很好奇地去查看记录被分割成了什么，我们试着去查看：
 
 @example
 gawk> @kbd{p n m alast aline}
@@ -21940,17 +21821,11 @@ gawk> @kbd{p n m alast aline}
 @end example
 
 @noindent
-(The @code{p} command can take more than one argument, similar to
-@command{awk}'s @code{print} statement.)
+（@code{p} 命令可以有多于一个参数，与 @command{awk} 的 @code{printf} 语句类似。）
 
-This is kind of disappointing, though.  All we found out is that there
-are five elements in @code{alast}; @code{m} and @code{aline} don't have
-values because we are at line 68 but haven't executed it yet.
-This information is useful enough (we now know that
-none of the words were accidentally left out), but what if we want to see
-inside the array?
+但是，这里有一点失望。我们找到的是在里面有 5 个元素的 @code{alast}，@code{m} 与 @code{aline} 没有值，因为我们在行 68，但是还没有执行。这个信息已经够用了（我们现在知道没有单词被无意间丢掉了），但是如果我们想知道数组里有什么怎么办？
 
-The first choice would be to use subscripts:
+第一个选择是使用下标：
 
 @example
 gawk> @kbd{p alast[0]}
@@ -21965,9 +21840,7 @@ gawk> @kbd{p alast[1]}
 @print{} alast["1"] = "awk"
 @end example
 
-This would be kind of slow for a 100-member array, though, so
-@command{gawk} provides a shortcut (reminiscent of another language
-not to be mentioned):
+如果有 100 个成员的数组，这就太慢了，所以，@command{gawk} 提供了一个快捷方式（对于其他语言的旧情怀就不提了）：
 
 @example
 gawk> @kbd{p @@alast}
@@ -21978,8 +21851,7 @@ gawk> @kbd{p @@alast}
 @print{} alast["5"] = "program!"
 @end example
 
-It looks like we got this far OK.  Let's take another step
-or two:
+目前看起来，一切 OK，让我们再执行一两步：
 
 @example
 gawk> @kbd{n}
@@ -21988,10 +21860,7 @@ gawk> @kbd{n}
 @print{} 70              cline = join(aline, fcount, m)
 @end example
 
-Well, here we are at our error (sorry to spoil the suspense).  What we
-had in mind was to join the fields starting from the second one to make
-the virtual record to compare, and if the first field were numbered zero,
-this would work.  Let's look at what we've got:
+好了，我们已经到达了错误的地方（抱歉破坏了悬念）。在我们的大脑中是从第二个域开始来生成一个假记录来进行比较。而如果第一个记录编号为 0，这就会工作。让我们看看我们得到什么：
 
 @example
 gawk> @kbd{p cline clast}
@@ -21999,11 +21868,9 @@ gawk> @kbd{p cline clast}
 @print{} clast = "awk is a wonderful program!"
 @end example
 
-Hey, those look pretty familiar!  They're just our original, unaltered
-input records.  A little thinking (the human brain is still the best
-debugging tool), and we realize that we were off by one!
+嘿，看起来是不是很熟悉！他们就是原来的值，没有改变。思考片刻（人的大脑依然是最好的调试工具），我们知道我们少加了 1！
 
-We get out of the debugger:
+我们退出调试器：
 
 @example
 gawk> @kbd{q}
@@ -22011,7 +21878,7 @@ gawk> @kbd{q}
 @end example
 
 @noindent
-Then we get into an editor:
+然后进入编辑器编辑：
 
 @example
 clast = join(alast, fcount+1, n)
@@ -22019,44 +21886,35 @@ cline = join(aline, fcount+1, m)
 @end example
 
 @noindent
-and problem solved!
+然后问题解决！
 
 @node List of Debugger Commands
-@section Main Debugger Commands
+@section 主要的调试器命令
 
-The @command{gawk} debugger command set can be divided into the
-following categories:
+@command{gawk} 调试器命令可以被分为下面的几类：
 
 @itemize @value{BULLET}
 
 @item
-Breakpoint control
+断点控制
 
 @item
-Execution control
+执行控制
 
 @item
-Viewing and changing data
+查看与更改数据
 
 @item
-Working with the stack
+使用栈
 
 @item
-Getting information
+获取信息
 
 @item
-Miscellaneous
+其他
 @end itemize
 
-Each of these are discussed in the following subsections.
-In the following descriptions, commands that may be abbreviated
-show the abbreviation on a second description line.
-A debugger command name may also be truncated if that partial
-name is unambiguous. The debugger has the built-in capability to
-automatically repeat the previous command just by hitting @kbd{Enter}.
-This works for the commands @code{list}, @code{next}, @code{nexti},
-@code{step}, @code{stepi}, and @code{continue} executed without any
-argument.
+每个个类型都在下面的节中进行讨论。在下面的描述中，命令，可能被缩写显示在第二个描述行。调试器命令名如果没有二义，则也可以被丢弃后面一部分。调试器有内置的自动重复前一个命令的能力，只需要输入回车键 @kbd{Enter}。这可用于命令列表，@code{next}，@code{nexti}，@code{step}，@code{stepi}，以及 @code{continue} 等不带参数的命令。
 
 @menu
 * Breakpoint Control::          Control of Breakpoints.
@@ -22069,12 +21927,9 @@ argument.
 @end menu
 
 @node Breakpoint Control
-@subsection Control of Breakpoints
+@subsection 控制断点
 
-As we saw earlier, the first thing you probably want to do in a debugging
-session is to get your breakpoints set up, because your program
-will otherwise just run as if it was not under the debugger.  The commands for
-controlling breakpoints are:
+如早前看见，你要开启一个调试过程时，要考虑的第一件事情是设置好断点，因为程序会像没有调试器一样运行下去。用于控制断点的命令有：
 
 @table @asis
 @cindex debugger commands, @code{b} (@code{break})
@@ -22085,67 +21940,49 @@ controlling breakpoints are:
 @cindex breakpoint, setting
 @item @code{break} [[@var{filename}@code{:}]@var{n} | @var{function}] [@code{"@var{expression}"}]
 @itemx @code{b} [[@var{filename}@code{:}]@var{n} | @var{function}] [@code{"@var{expression}"}]
-Without any argument, set a breakpoint at the next instruction
-to be executed in the selected stack frame.
-Arguments can be one of the following:
+如果不带任何参数，则在所选择的栈中的下一个要执行的指令处设置一个断点。参数可以是如下格式：
 
 @c @asis for docbook
 @c nested table
 @table @asis
 @item @var{n}
-Set a breakpoint at line number @var{n} in the current source file.
+在当前的源文件中的 @var{n} 行设置一个断点。
 
 @item @var{filename}@code{:}@var{n}
-Set a breakpoint at line number @var{n} in source file @var{filename}.
+在源文件 @var{filename} 的 @var{n} 行设置一个断点。
 
 @item @var{function}
-Set a breakpoint at entry to (the first instruction of)
-function @var{function}.
+在函数 @var{function}（第一条指令）入口处设置一个断点。
 @end table
 
-Each breakpoint is assigned a number that can be used to delete it from
-the breakpoint list using the @code{delete} command.
+每一个断点被赋给了一个数值，可以用 @code{delete} 命令来从断点列表中删除。
 
-With a breakpoint, you may also supply a condition.  This is an
-@command{awk} expression (enclosed in double quotes) that the debugger
-evaluates whenever the breakpoint is reached. If the condition is true,
-then the debugger stops execution and prompts for a command. Otherwise,
-it continues executing the program.
+对于断点，你还可以提供一个条件。这是一个 @command{awk} 的表达式（包在双引号中），这样调试器当到到断点时可以对其求值。如果条件为 true，则调试器停止执行，然后提示等待命令输入。否则，它会继续执行程序。
 
 @cindex debugger commands, @code{clear}
 @cindex @code{clear} debugger command
 @cindex delete breakpoint at location
 @cindex breakpoint at location, how to delete
 @item @code{clear} [[@var{filename}@code{:}]@var{n} | @var{function}]
-Without any argument, delete any breakpoint at the next instruction
-to be executed in the selected stack frame. If the program stops at
-a breakpoint, this deletes that breakpoint so that the program
-does not stop at that location again.  Arguments can be one of the following:
+如果没有参数，则在当前的栈中删除下一条要执行命令的所有断点。如果程序在断点上停止了，这会删除那个断点，这样程序在那个位置不会再停下来。参数可以有下面的形式：
 
 @c nested table
 @table @asis
 @item @var{n}
-Delete breakpoint(s) set at line number @var{n} in the current source file.
+在当前源文件中删除在 @var{n} 行上设置的断点。
 
 @item @var{filename}@code{:}@var{n}
-Delete breakpoint(s) set at line number @var{n} in source file @var{filename}.
+删除源文件 @var{filename} 行 @var{n} 中的断点。
 
 @item @var{function}
-Delete breakpoint(s) set at entry to function @var{function}.
+删除源函数 @var{function} 的断点。
 @end table
 
 @cindex debugger commands, @code{condition}
 @cindex @code{condition} debugger command
 @cindex breakpoint condition
 @item @code{condition} @var{n} @code{"@var{expression}"}
-Add a condition to existing breakpoint or watchpoint @var{n}. The
-condition is an @command{awk} expression @emph{enclosed in double quotes}
-that the debugger evaluates
-whenever the breakpoint or watchpoint is reached. If the condition is true, then
-the debugger stops execution and prompts for a command. Otherwise,
-the debugger continues executing the program. If the condition expression is
-not specified, any existing condition is removed (i.e., the breakpoint or
-watchpoint is made unconditional).
+给已经存在的断点或者查看点 @var{n} 加一个额外的条件。条件是一个 @command{awk} 表达式，@emph{用双引号括起来，}当断点或者查看点到达时，会对其进行求值。如果条件为 true，则调试器会停止执行然后提示命令输入。否则，调试器会继续执行程序。如果条件表达式没有被指定，则已经存在的条件会被删除（即，断点或者查看点会被设置成无条件的）。
 
 @cindex debugger commands, @code{d} (@code{delete})
 @cindex debugger commands, @code{delete}
@@ -22155,16 +21992,14 @@ watchpoint is made unconditional).
 @cindex breakpoint, delete by number
 @item @code{delete} [@var{n1 n2} @dots{}] [@var{n}--@var{m}]
 @itemx @code{d} [@var{n1 n2} @dots{}] [@var{n}--@var{m}]
-Delete specified breakpoints or a range of breakpoints. Delete
-all defined breakpoints if no argument is supplied.
+删除指定的断点，或者断点范围。如果没有指定参数，则删除所有的断点。
 
 @cindex debugger commands, @code{disable}
 @cindex @code{disable} debugger command
 @cindex disable breakpoint
 @cindex breakpoint, how to disable or enable
 @item @code{disable} [@var{n1 n2} @dots{} | @var{n}--@var{m}]
-Disable specified breakpoints or a range of breakpoints. Without
-any argument, disable all breakpoints.
+禁用指定的断点或者断点范围。如果没有带参数，则禁用所有的断点。
 
 @cindex debugger commands, @code{e} (@code{enable})
 @cindex debugger commands, @code{enable}
@@ -22173,27 +22008,22 @@ any argument, disable all breakpoints.
 @cindex enable breakpoint
 @item @code{enable} [@code{del} | @code{once}] [@var{n1 n2} @dots{}] [@var{n}--@var{m}]
 @itemx @code{e} [@code{del} | @code{once}] [@var{n1 n2} @dots{}] [@var{n}--@var{m}]
-Enable specified breakpoints or a range of breakpoints. Without
-any argument, enable all breakpoints.
-Optionally, you can specify how to enable the breakpoints:
+启用指定的断点或者范围内的断点。如果没有参数，则启用所有的断点。你也可以选择性地定义如何来恢复断点：
 
 @c nested table
 @table @code
 @item del
-Enable the breakpoints temporarily, then delete each one when
-the program stops at it.
+临时启用断点，然后程序在此停止时删除每个断点。
 
 @item once
-Enable the breakpoints temporarily, then disable each one when
-the program stops at it.
+临时启用断点，然后程序在此停止时禁用每个断点。
 @end table
 
 @cindex debugger commands, @code{ignore}
 @cindex @code{ignore} debugger command
 @cindex ignore breakpoint
 @item @code{ignore} @var{n} @var{count}
-Ignore breakpoint number @var{n} the next @var{count} times it is
-hit.
+忽略断点 @var{n} 后面命中的 @var{count} 次。
 
 @cindex debugger commands, @code{t} (@code{tbreak})
 @cindex debugger commands, @code{tbreak}
@@ -22202,16 +22032,13 @@ hit.
 @cindex temporary breakpoint
 @item @code{tbreak} [[@var{filename}@code{:}]@var{n} | @var{function}]
 @itemx @code{t} [[@var{filename}@code{:}]@var{n} | @var{function}]
-Set a temporary breakpoint (enabled for only one stop).
-The arguments are the same as for @code{break}.
+设置临时断点（只启用一次）。参数与 @code{break} 一样。
 @end table
 
 @node Debugger Execution Control
-@subsection Control of Execution
+@subsection 控制执行
 
-Now that your breakpoints are ready, you can start running the program
-and observing its behavior.  There are more commands for controlling
-execution of the program than we saw in our earlier example:
+现在，你的断点已经准备好了，你可以开始运行程序，然后观察它的行为。有多个命令用来控制程序的执行，之前我们已经看过：
 
 @table @asis
 @cindex debugger commands, @code{commands}
@@ -22226,15 +22053,7 @@ execution of the program than we saw in our earlier example:
 @itemx @code{silent}
 @itemx @dots{}
 @itemx @code{end}
-Set a list of commands to be executed upon stopping at
-a breakpoint or watchpoint. @var{n} is the breakpoint or watchpoint number.
-Without a number, the last one set is used. The actual commands follow,
-starting on the next line, and terminated by the @code{end} command.
-If the command @code{silent} is in the list, the usual messages about
-stopping at a breakpoint and the source line are not printed. Any command
-in the list that resumes execution (e.g., @code{continue}) terminates the list
-(an implicit @code{end}), and subsequent commands are ignored.
-For example:
+设置一个命令列表，当在断点或者查看点处停止时会被执行。@var{n} 是断点或者查看点编号。如果没有编号，则会使用最后一个。后面的命令，从下一行开始，然后在 @code{end} 命令处结束。如果命令 @code{silent} 在列表中，则通常的在断点停止处的消息以及源代码就会被打印。在列表中的所有命令如果继续执行代码（如 @code{continue}）会结束列表（一个隐式的 @code{end}），后面的命令会被忽略掉。如：
 
 @example
 gawk> @kbd{commands}
@@ -22252,15 +22071,12 @@ gawk>
 @cindex continue program, in debugger
 @item @code{continue} [@var{count}]
 @itemx @code{c} [@var{count}]
-Resume program execution. If continued from a breakpoint and @var{count} is
-specified, ignore the breakpoint at that location the next @var{count} times
-before stopping.
+继续执行程序。如果从断点处继续，而指定了 @var{count}，则忽略所在处的断点后面的 @var{count} 次命中。直到所选择的帧结束。并打印返回值。
 
 @cindex debugger commands, @code{finish}
 @cindex @code{finish} debugger command
 @item @code{finish}
-Execute until the selected stack frame returns.
-Print the returned value.
+执行代码直到所选择的帧返回，并打印返回值。
 
 @cindex debugger commands, @code{n} (@code{next})
 @cindex debugger commands, @code{next}
@@ -22269,9 +22085,7 @@ Print the returned value.
 @cindex single-step execution, in the debugger
 @item @code{next} [@var{count}]
 @itemx @code{n} [@var{count}]
-Continue execution to the next source line, stepping over function calls.
-The argument @var{count} controls how many times to repeat the action, as
-in @code{step}.
+继续执行下一行源代码，函数调用一次划过。参数 @var{count} 控制重复多少次，与 @code{step} 一样。
 
 @cindex debugger commands, @code{ni} (@code{nexti})
 @cindex debugger commands, @code{nexti}
@@ -22279,16 +22093,12 @@ in @code{step}.
 @cindex @code{ni} debugger command (alias for @code{nexti})
 @item @code{nexti} [@var{count}]
 @itemx @code{ni} [@var{count}]
-Execute one (or @var{count}) instruction(s), stepping over function calls.
+执行 1 个或者 @var{count} 个指令，并越过函数调用。
 
 @cindex debugger commands, @code{return}
 @cindex @code{return} debugger command
 @item @code{return} [@var{value}]
-Cancel execution of a function call. If @var{value} (either a string or a
-number) is specified, it is used as the function's return value. If used in a
-frame other than the innermost one (the currently executing function; i.e.,
-frame number 0), discard all inner frames in addition to the selected one,
-and the caller of that frame becomes the innermost frame.
+取消函数调用。如果 @var{value}（一个字串或者数值）被指定了，则它会作为函数的返回值。如果是在不是最内层（当前的执行函数，即帧 0 ）的帧中使用，会取消所有最内层的帧，包括所在的帧，该帧的调用者会成为最内层帧。
 
 @cindex debugger commands, @code{r} (@code{run})
 @cindex debugger commands, @code{run}
@@ -22296,9 +22106,7 @@ and the caller of that frame becomes the innermost frame.
 @cindex @code{r} debugger command (alias for @code{run})
 @item @code{run}
 @itemx @code{r}
-Start/restart execution of the program. When restarting, the debugger
-retains the current breakpoints, watchpoints, command history,
-automatic display variables, and debugger options.
+开始/重新开始程序的执行。当重新开始时，调试器会保留当前的断点，查看点以及命令历史，自动显示变量，以及调试器选项。
 
 @cindex debugger commands, @code{s} (@code{step})
 @cindex debugger commands, @code{step}
@@ -22306,10 +22114,7 @@ automatic display variables, and debugger options.
 @cindex @code{s} debugger command (alias for @code{step})
 @item @code{step} [@var{count}]
 @itemx @code{s} [@var{count}]
-Continue execution until control reaches a different source line in the
-current stack frame, stepping inside any function called within
-the line.  If the argument @var{count} is supplied, steps that many times before
-stopping, unless it encounters a breakpoint or watchpoint.
+继续执行直到控制流到到当前帧的源代码行的不同位置，并进入该行调用的函数中。如果参数 @var{count} 被指定了，则表示在停止前单独执行多少次，除非它遇到了断点或者查看点。
 
 @cindex debugger commands, @code{si} (@code{stepi})
 @cindex debugger commands, @code{stepi}
@@ -22317,9 +22122,7 @@ stopping, unless it encounters a breakpoint or watchpoint.
 @cindex @code{si} debugger command (alias for @code{stepi})
 @item @code{stepi} [@var{count}]
 @itemx @code{si} [@var{count}]
-Execute one (or @var{count}) instruction(s), stepping inside function calls.
-(For illustration of what is meant by an ``instruction'' in @command{gawk},
-see the output shown under @code{dump} in @ref{Miscellaneous Debugger Commands}.)
+执行 1 个（或者 @var{count}）个指令，并进入函数调用中。（为了说明“指令”的含义，查看在 @ref{Miscellaneous Debugger Commands} 中 @code{dump} 下的输出。）
 
 @cindex debugger commands, @code{u} (@code{until})
 @cindex debugger commands, @code{until}
@@ -22327,24 +22130,19 @@ see the output shown under @code{dump} in @ref{Miscellaneous Debugger Commands}.
 @cindex @code{u} debugger command (alias for @code{until})
 @item @code{until} [[@var{filename}@code{:}]@var{n} | @var{function}]
 @itemx @code{u} [[@var{filename}@code{:}]@var{n} | @var{function}]
-Without any argument, continue execution until a line past the current
-line in the current stack frame is reached. With an argument,
-continue execution until the specified location is reached, or the current
-stack frame returns.
+如果没有任何参数，执行到当前帧当前行的下一行。如果有参数，则持续执行到指定的位置，或者直到当前帧返回。
 @end table
 
 @node Viewing And Changing Data
-@subsection Viewing and Changing Data
+@subsection 查看与更改数据
 
-The commands for viewing and changing variables inside of @command{gawk} are:
+@command{gawk} 中用于查看及更改变量的命令有：
 
 @table @asis
 @cindex debugger commands, @code{display}
 @cindex @code{display} debugger command
 @item @code{display} [@var{var} | @code{$}@var{n}]
-Add variable @var{var} (or field @code{$@var{n}}) to the display list.
-The value of the variable or field is displayed each time the program stops.
-Each variable added to the list is identified by a unique number:
+将变量 @var{var} 或者域 @code{$@var{n}} 添加到显示列表中。变量的值或者域的值在程序每次停止都会被显示。每个加入到列表中的列表都通过一个唯一的数字来区别：
 
 @example
 gawk> @kbd{display x}
@@ -22352,28 +22150,18 @@ gawk> @kbd{display x}
 @end example
 
 @noindent
-This displays the assigned item number, the variable name, and its current value.
-If the display variable refers to a function parameter, it is silently
-deleted from the list as soon as the execution reaches a context where
-no such variable of the given name exists.
-Without argument, @code{display} displays the current values of
-items on the list.
+这显示了被赋值的项，变量名以及其及当前的值。如果显示变量指向了函数的参数，它会在执行到没有这个变量名的上下文时默默地将它从显示列表中删除。如果没有参数，@code{display} 会显示列表中的项的当前值。
 
 @cindex debugger commands, @code{eval}
 @cindex @code{eval} debugger command
 @cindex evaluate expressions, in debugger
 @item @code{eval "@var{awk statements}"}
-Evaluate @var{awk statements} in the context of the running program.
-You can do anything that an @command{awk} program would do: assign
-values to variables, call functions, and so on.
+对 @var{awk statements} 在执行程序中的上下文中进行求值。你可以做任何的 @command{awk} 程序可以做的事情：赋值绘画变量，调用函数等等。
 
 @item @code{eval} @var{param}, @dots{}
 @itemx @var{awk statements}
 @itemx @code{end}
-This form of @code{eval} is similar, but it allows you to define
-``local variables'' that exist in the context of the
-@var{awk statements}, instead of using variables or function
-parameters defined by the program.
+@code{eval} 这个形式的求值类似，但是可以让你定义存在 @var{awk statements} 上下文中“本地变量”，而不是使用由程序定义的变量或者函数参数。
 
 @cindex debugger commands, @code{p} (@code{print})
 @cindex debugger commands, @code{print}
@@ -22382,45 +22170,34 @@ parameters defined by the program.
 @cindex print variables, in debugger
 @item @code{print} @var{var1}[@code{,} @var{var2} @dots{}]
 @itemx @code{p} @var{var1}[@code{,} @var{var2} @dots{}]
-Print the value of a @command{gawk} variable or field.
-Fields must be referenced by constants:
+打印 @command{gawk} 变量或者域的值。域必须是通过常量来参考：
 
 @example
 gawk> @kbd{print $3}
 @end example
 
 @noindent
-This prints the third field in the input record (if the specified field does not
-exist, it prints @samp{Null field}). A variable can be an array element, with
-the subscripts being constant string values. To print the contents of an array,
-prefix the name of the array with the @samp{@@} symbol:
+这打印输入记录中的第三个域（如果指定的域不存在，它会打印 @samp{Null field}）。变量可以是数组元素，下标是常量字串。为了打印数组内容，在名字的前面加一个 @samp{@@} 符号：
 
 @example
 gawk> @kbd{print @@a}
 @end example
 
 @noindent
-This prints the indices and the corresponding values for all elements in
-the array @code{a}.
+这会打印索引以及所有在数组 @code{a} 中相应元素的值。
 
 @cindex debugger commands, @code{printf}
 @cindex @code{printf} debugger command
 @item @code{printf} @var{format} [@code{,} @var{arg} @dots{}]
-Print formatted text. The @var{format} may include escape sequences,
-such as @samp{\n}
-(@pxref{Escape Sequences}).
-No newline is printed unless one is specified.
+打印格式式的文本。格式 @var{format} 包含转义序列，如 @samp{\n}（查看 @pxref{Escape Sequences}）。如果不指定，不会打印换行符。
 
 @cindex debugger commands, @code{set}
 @cindex @code{set} debugger command
 @cindex assign values to variables, in debugger
 @item @code{set} @var{var}@code{=}@var{value}
-Assign a constant (number or string) value to an @command{awk} variable
-or field.
-String values must be enclosed between double quotes (@code{"}@dots{}@code{"}).
+将一个常量（数值或者字串）值赋值绘画一个 @command{awk} 变量或者域。字串值必须用双引号包起来（@code{"}@dots{}@code{"}）。
 
-You can also set special @command{awk} variables, such as @code{FS},
-@code{NF}, @code{NR}, and so on.
+你也可以设置 @command{awk} 的特殊变量，像 @code{FS}，@code{NF}，@code{NR} 等等。
 
 @cindex debugger commands, @code{w} (@code{watch})
 @cindex debugger commands, @code{watch}
@@ -22429,42 +22206,28 @@ You can also set special @command{awk} variables, such as @code{FS},
 @cindex set watchpoint
 @item @code{watch} @var{var} | @code{$}@var{n} [@code{"@var{expression}"}]
 @itemx @code{w} @var{var} | @code{$}@var{n} [@code{"@var{expression}"}]
-Add variable @var{var} (or field @code{$@var{n}}) to the watch list.
-The debugger then stops whenever
-the value of the variable or field changes. Each watched item is assigned a
-number that can be used to delete it from the watch list using the
-@code{unwatch} command.
+将变量 @var{var} 或者域 @code{$@var{n}} 加到查看列表中。调试器会在变量或者域的值被改变时停下来。每个一个查看列表项都赋予了一个数值，这样可以用中 @code{unwatch} 命令中来它从查看列表中删除。
 
-With a watchpoint, you may also supply a condition.  This is an
-@command{awk} expression (enclosed in double quotes) that the debugger
-evaluates whenever the watchpoint is reached. If the condition is true,
-then the debugger stops execution and prompts for a command. Otherwise,
-@command{gawk} continues executing the program.
+你可以绘画查看点附加一个条件。这是一个 @command{awk} 表达式（包在双引号中），这样当查看点被命中时，调试器会对其进行求值。如果条件为 true，则调试器会停止执行，然后提示命令输入。否则，@command{gawk} 会继续执行命令。
 
 @cindex debugger commands, @code{undisplay}
 @cindex @code{undisplay} debugger command
 @cindex stop automatic display, in debugger
 @item @code{undisplay} [@var{n}]
-Remove item number @var{n} (or all items, if no argument) from the
-automatic display list.
+删除编号为 @var{n} 的自动显示列表项（如果没有提供参数，则删除所有的项）。
 
 @cindex debugger commands, @code{unwatch}
 @cindex @code{unwatch} debugger command
 @cindex delete watchpoint
 @item @code{unwatch} [@var{n}]
-Remove item number @var{n} (or all items, if no argument) from the
-watch list.
+删除编号为 @var{n} 的查看列表中的项（如果没有提供参数，则删除所有的项）。
 
 @end table
 
 @node Execution Stack
-@subsection Working with the Stack
+@subsection 程序栈
 
-Whenever you run a program that contains any function calls,
-@command{gawk} maintains a stack of all of the function calls leading up
-to where the program is right now.  You can see how you got to where you are,
-and also move around in the stack to see what the state of things was in the
-functions that called the one you are in.  The commands for doing this are:
+无论何时你运行一个包含任意函数调用的程序，@command{gawk} 都会保持一个所有函数调用的栈，一直向上到正在执行的程序处。你可以查看你你如何到达目前所在到位置，也可以按照栈的路径来移动以来查看在你所在的被调用的函数中事件的状态。下面的命令来实现这样的功能：
 
 @table @asis
 @cindex debugger commands, @code{bt} (@code{backtrace})
@@ -22479,18 +22242,12 @@ functions that called the one you are in.  The commands for doing this are:
 @item @code{backtrace} [@var{count}]
 @itemx @code{bt} [@var{count}]
 @itemx @code{where} [@var{count}]
-Print a backtrace of all function calls (stack frames), or innermost @var{count}
-frames if @var{count} > 0. Print the outermost @var{count} frames if
-@var{count} < 0.  The backtrace displays the name and arguments to each
-function, the source @value{FN}, and the line number.
-The alias @code{where} for @code{backtrace} is provided for longtime
-GDB users who may be used to that command.
+打印所有函数调用（栈帧）的路径，或者在 @var{count} > 0 时最内层 @var{count} 个栈帧。如果 @var{count} < 0，则打印最外层的 @var{count} 个栈帧。路径显示每一个函数的名字以及参数，还有@value{FN}与行号。@code{backtrace} 别名 @code{where} 用于向长期使用 GDB 的用户提供栈路径，他们可能会使用这个命令。
 
 @cindex debugger commands, @code{down}
 @cindex @code{down} debugger command
 @item @code{down} [@var{count}]
-Move @var{count} (default 1) frames down the stack toward the innermost frame.
-Then select and print the frame.
+向下最内层的帧移动 @var{count}（默认为 1）个帧。然后选择并打印这个帧。
 
 @cindex debugger commands, @code{f} (@code{frame})
 @cindex debugger commands, @code{frame}
@@ -22498,28 +22255,18 @@ Then select and print the frame.
 @cindex @code{f} debugger command (alias for @code{frame})
 @item @code{frame} [@var{n}]
 @itemx @code{f} [@var{n}]
-Select and print stack frame @var{n}.  Frame 0 is the currently executing,
-or @dfn{innermost}, frame (function call); frame 1 is the frame that
-called the innermost one. The highest-numbered frame is the one for the
-main program.  The printed information consists of the frame number,
-function and argument names, source file, and the source line.
+选择并打印栈帧 @var{n}。帧 0 是当前正在被执行的，或者@dfn{最内层}帧（函数调用），帧 1 是调用最内层的帧。最高层的帧是主程序。被打印的信息包括帧号，函数以及参数名，源文件与行号。
 
 @cindex debugger commands, @code{up}
 @cindex @code{up} debugger command
 @item @code{up} [@var{count}]
-Move @var{count} (default 1) frames up the stack toward the outermost frame.
-Then select and print the frame.
+向上最外层移动 @var{count}（默认为 1）帧。然后选择并打印相应的帧。
 @end table
 
 @node Debugger Info
-@subsection Obtaining Information About the Program and the Debugger State
+@subsection 获取程序与调试器状态信息
 
-Besides looking at the values of variables, there is often a need to get
-other sorts of information about the state of your program and of the
-debugging environment itself.  The @command{gawk} debugger has one command that
-provides this information, appropriately called @code{info}.  @code{info}
-is used with one of a number of arguments that tell it exactly what
-you want to know:
+除了查看变量的值外，也常常需要来获取其他关于程序状态的信息，以及调试环境本身的信息。@command{gawk} 调试器有一个命令来提供这样的信息，非常恰当地叫做 @code{info}。@code{info} 与多个参数中的一个使用，可以告诉你想要的准备的信息：
 
 @table @asis
 @cindex debugger commands, @code{i} (@code{info})
@@ -22528,61 +22275,53 @@ you want to know:
 @cindex @code{i} debugger command (alias for @code{info})
 @item @code{info} @var{what}
 @itemx @code{i} @var{what}
-The value for @var{what} should be one of the following:
+@var{what} 应该是下在其中之一的值：
 
 @c nested table
 @table @code
 @item args
 @cindex show function arguments, in debugger
-List arguments of the selected frame.
+列出所选择的帧的参数。
 
 @item break
 @cindex show breakpoints
-List all currently set breakpoints.
+列出当前的所有断点。
 
 @item display
 @cindex automatic displays, in debugger
-List all items in the automatic display list.
+列出自动显示的所有项。
 
 @item frame
 @cindex describe call stack frame, in debugger
-Give a description of the selected stack frame.
+被选择的帧的描述。
 
 @item functions
 @cindex list function definitions, in debugger
-List all function definitions including source @value{FN}s and
-line numbers.
+列出所有的函数定义，包括源@value{FN}以及行号。
 
 @item locals
 @cindex show local variables, in debugger
-List local variables of the selected frame.
+列出被选择帧的本地变量列表。
 
 @item source
 @cindex show name of current source file, in debugger
-Print the name of the current source file. Each time the program stops, the
-current source file is the file containing the current instruction.
-When the debugger first starts, the current source file is the first file
-included via the @option{-f} option. The
-@samp{list @var{filename}:@var{lineno}} command can
-be used at any time to change the current source.
+打印当前源文件的名字。每次程序停止时，当前的源文件是包含当前指令的文件。当调用第一次开始时，当前的源文件是通过 @option{-f} 指定的文件。@samp{list @var{filename}:@var{lineno}} 命令可以在任何时候用来改变当前源文件。
 
 @item sources
 @cindex show all source files, in debugger
-List all program sources.
+列出所有的程序源。
 
 @item variables
 @cindex list all global variables, in debugger
-List all global variables.
+列出所有的全局变量。
 
 @item watch
 @cindex show watchpoints
-List all items in the watch list.
+列出所有的在查看列表中的项。
 @end table
 @end table
 
-Additional commands give you control over the debugger, the ability to
-save the debugger's state, and the ability to run debugger commands
-from a file.  The commands are:
+其他的命令可以让你控制调试器，使其有保存调试器的状态以及从文件中运行调试器的能力，
 
 @table @asis
 @cindex debugger commands, @code{o} (@code{option})
@@ -22593,88 +22332,60 @@ from a file.  The commands are:
 @cindex debugger options
 @item @code{option} [@var{name}[@code{=}@var{value}]]
 @itemx @code{o} [@var{name}[@code{=}@var{value}]]
-Without an argument, display the available debugger options
-and their current values. @samp{option @var{name}} shows the current
-value of the named option. @samp{option @var{name}=@var{value}} assigns
-a new value to the named option.
-The available options are:
+如果没有参数，显示所有可用的调试器选项以及它们的当前值。@samp{option @var{name}} 显示指定名字选项的当前值。@samp{option @var{name}=@var{value}} 将一个新值赋给指定的选项。可用的选项有：
 
 @c nested table
 @c asis for docbook
 @table @asis
 @item @code{history_size}
 @cindex debugger history size
-Set the maximum number of lines to keep in the history file
-@file{./.gawk_history}.  The default is 100.
+设置保存在历史文件 @file{./.gawk_history} 文件中的最大行数。默认值是 100。
 
 @item @code{listsize}
 @cindex debugger default list amount
-Specify the number of lines that @code{list} prints. The default is 15.
+指定列表 @code{list} 打印的行数。默认是 15。
 
 @item @code{outfile}
 @cindex redirect @command{gawk} output, in debugger
-Send @command{gawk} output to a file; debugger output still goes
-to standard output. An empty string (@code{""}) resets output to
-standard output.
+将 @command{gawk} 的输出发送到文件，调试器输出依然发送到标准输出上。空串（@code{""}）会重新将设置输出到标准输出上。
 
 @item @code{prompt}
 @cindex debugger prompt
-Change the debugger prompt. The default is @samp{@w{gawk> }}.
+改变调试器的提示。默认是 @samp{@w{gawk> }}。
 
 @item @code{save_history} [@code{on} | @code{off}]
 @cindex debugger history file
-Save command history to file @file{./.gawk_history}.
-The default is @code{on}.
+保存命令历史到文件 @file{./.gawk_history}。默认是 @code{on}。
 
 @item @code{save_options} [@code{on} | @code{off}]
 @cindex save debugger options
-Save current options to file @file{./.gawkrc} upon exit.
-The default is @code{on}.
-Options are read back into the next session upon startup.
+在退出时，保存当前的选项到文件 @file{./.gawkrc}。默认是 @code{on}。选项会在启动下一个会话过程时读取回来。
 
 @item @code{trace} [@code{on} | @code{off}]
 @cindex instruction tracing, in debugger
-Turn instruction tracing on or off. The default is @code{off}.
+打开或者关闭命令跟踪。默认是 @code{off}。
 @end table
 
 @item @code{save} @var{filename}
-Save the commands from the current session to the given @value{FN},
-so that they can be replayed using the @command{source} command.
+将来自于当前会话的命令保存到所给的@value{FN}中，所以他们可以使用 @command{source} 命令进行重放。
 
 @item @code{source} @var{filename}
 @cindex debugger, read commands from a file
-Run command(s) from a file; an error in any command does not
-terminate execution of subsequent commands. Comments (lines starting
-with @samp{#}) are allowed in a command file.
-Empty lines are ignored; they do @emph{not}
-repeat the last command.
-You can't restart the program by having more than one @code{run}
-command in the file. Also, the list of commands may include additional
-@code{source} commands; however, the @command{gawk} debugger will not source the
-same file more than once in order to avoid infinite recursion.
+从文件中执行命令，任何命令的错误不会导致后续命令的结束。注释（以 @samp{#} 开头的行）可以存在命令文件中。空行会被忽略，它们@emph{不会}重复最后的命令。在文件中，你不可以有多于一个的 @code{run} 命令来重新启动程序。同时，命令列表可以包含其他的源 @code{source} 的命令，但是，@command{gawk} 调试器不会对同一个文件执行多次 source，以避免无限递归。
 
-In addition to, or instead of, the @code{source} command, you can use
-the @option{-D @var{file}} or @option{--debug=@var{file}} command-line
-options to execute commands from a file non-interactively
-(@pxref{Options}).
+为了使用或者代替 @code{source} 命令，你可以使用 @option{-D @var{file}} 或者 @option{--debug=@var{file}} 命令行参数从一个文件中来非交互式地执行命令（查看 @ref{Options}）。
 @end table
 
 @node Miscellaneous Debugger Commands
-@subsection Miscellaneous Commands
+@subsection 其他命令
 
-There are a few more commands that do not fit into the
-previous categories, as follows:
+有一些命令不太好归入到之前的那几种分类，他们是：
 
 @table @asis
 @cindex debugger commands, @code{dump}
 @cindex @code{dump} debugger command
 @item @code{dump} [@var{filename}]
-Dump byte code of the program to standard output or to the file
-named in @var{filename}.  This prints a representation of the internal
-instructions that @command{gawk} executes to implement the @command{awk}
-commands in a program.  This can be very enlightening, as the following
-partial dump of Davide Brini's obfuscated code
-(@pxref{Signature Program}) demonstrates:
+Dump 程序的字节码到标准输出中，或者名字为 @var{filename} 的文件中。这会打印指令的内部表示，@command{gawk} 通过执行这些指令来实现程序中的命令。这会非常有启发性，如下面的 Davide Brini 的含人无法捉摸的代码的部分 dump 内容（查看 @pxref{Signature Program}）：
 
 @c FIXME: This will need updating if num-handler branch is ever merged in.
 @smallexample
@@ -22731,8 +22442,7 @@ gawk>
 @cindex @code{exit} debugger command
 @cindex exit the debugger
 @item @code{exit}
-Exit the debugger.
-See the entry for @samp{quit}, later in this list.
+退出调试器。查看之后列出的 @samp{quit}。
 
 @cindex debugger commands, @code{h} (@code{help})
 @cindex debugger commands, @code{help}
@@ -22740,9 +22450,7 @@ See the entry for @samp{quit}, later in this list.
 @cindex @code{h} debugger command (alias for @code{help})
 @item @code{help}
 @itemx @code{h}
-Print a list of all of the @command{gawk} debugger commands with a short
-summary of their usage.  @samp{help @var{command}} prints the information
-about the command @var{command}.
+打印所有的 @command{gawk} 调试器命令列表，以及它全的简短使用说明。@samp{help @var{command}} 打印命令 @var{command} 的信息。
 
 @cindex debugger commands, @code{l} (@code{list})
 @cindex debugger commands, @code{list}
@@ -22750,10 +22458,9 @@ about the command @var{command}.
 @cindex @code{l} debugger command (alias for @code{list})
 @item @code{list} [@code{-} | @code{+} | @var{n} | @var{filename}@code{:}@var{n} | @var{n}--@var{m} | @var{function}]
 @itemx @code{l} [@code{-} | @code{+} | @var{n} | @var{filename}@code{:}@var{n} | @var{n}--@var{m} | @var{function}]
-Print the specified lines (default 15) from the current source file
-or the file named @var{filename}. The possible arguments to @code{list}
-are as follows:
+打印从当源代码或者名为 @var{filename} 文件的指定行数（默认为 15）。下面是 @code{list} 的可能的参数：
 
+#TODO20171201
 @c nested table
 @table @asis
 @item @code{-} (Minus)
