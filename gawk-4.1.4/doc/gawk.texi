@@ -22346,7 +22346,6 @@ $ @kbd{gawk --posix -f guide.awk -f libintl.awk}
 @end itemize
 
 
-#TODO20171128
 @node Debugger
 @chapter 调试 @command{awk} 程序
 @cindex debugging @command{awk} programs
@@ -23233,29 +23232,25 @@ gawk>
 @itemx @code{l} [@code{-} | @code{+} | @var{n} | @var{filename}@code{:}@var{n} | @var{n}--@var{m} | @var{function}]
 打印从当源代码或者名为 @var{filename} 文件的指定行数（默认为 15）。下面是 @code{list} 的可能的参数：
 
-#TODO20171201
 @c nested table
 @table @asis
 @item @code{-} (Minus)
-Print lines before the lines last printed.
+打印最后打印前的行。
 
 @item @code{+}
-Print lines after the lines last printed.
-@code{list} without any argument does the same thing.
+打印最后打印行的后面的行。@code{list} 如果不带参数则与这个执行结果相同。
 
 @item @var{n}
-Print lines centered around line number @var{n}.
+打印行号 @var{n} 为中心周围的行。
 
 @item  @var{n}--@var{m}
-Print lines from @var{n} to @var{m}.
+打印从 @var{n} 到 @var{m} 的行。
 
 @item @var{filename}@code{:}@var{n}
-Print lines centered around line number @var{n} in
-source file @var{filename}. This command may change the current source file.
+打印在源文件 @var{filename} 行 @var{n} 为中心的行。这个命令会改变当前的源文件。
 
 @item @var{function}
-Print lines centered around the beginning of the
-function @var{function}. This command may change the current source file.
+打印函数 @var{function} 开始行为中心的行。这个命令有可能改变当前的源文件。
 @end table
 
 @cindex debugger commands, @code{q} (@code{quit})
@@ -23265,111 +23260,64 @@ function @var{function}. This command may change the current source file.
 @cindex exit the debugger
 @item @code{quit}
 @itemx @code{q}
-Exit the debugger.  Debugging is great fun, but sometimes we all have
-to tend to other obligations in life, and sometimes we find the bug
-and are free to go on to the next one!  As we saw earlier, if you are
-running a program, the debugger warns you when you type
-@samp{q} or @samp{quit}, to make sure you really want to quit.
+退出调试器。调试程序非常有意思，但是在生活中有时你还有其他的责任要尽，而有时我们找到了 Bug，则会再找下一个。如我们早前看到的，如果你正在执行一个程序，调试器会在你输入 @samp{q} 或者 @samp{quit} 时给你警告，以确信你真的想退出。
 
 @cindex debugger commands, @code{trace}
 @cindex @code{trace} debugger command
 @item @code{trace} [@code{on} | @code{off}]
-Turn on or off continuous printing of the instructions that are about to
-be executed, along with the @command{awk} lines they
-implement.  The default is @code{off}.
+打开或者关闭连续打印将要执行的指令，以及这些指令所实现的 @command{awk} 代码。默认是 @code{off}。
 
-It is to be hoped that most of the ``opcodes'' in these instructions are
-fairly self-explanatory, and using @code{stepi} and @code{nexti} while
-@code{trace} is on will make them into familiar friends.
+在这此指令中的大多数“opcodes”都相当地能够自我说明，使用 @code{stepi} 与 @code{nexti} 的时候，@code{trace} 打开的时候会使得它们变成熟悉的朋友。（译注：就是会在接下来的显示中会显示很多字节码，看久了，就成为熟悉的朋友了。这是作者的幽默。）
 
 @end table
 
 @node Readline Support
-@section Readline Support
+@section 支持
 @cindex command completion, in debugger
 @cindex history expansion, in debugger
 
-If @command{gawk} is compiled with
-@uref{http://cnswww.cns.cwru.edu/php/chet/readline/readline.html,
-the GNU Readline library}, you can take advantage of that library's
-command completion and history expansion features. The following types
-of completion are available:
+如果 @command{gawk} 使用 @uref{http://cnswww.cns.cwru.edu/php/chet/readline/readline.html,
+GNU Readline 库} 来编译的，则你可以使用这个库的命令完成与历史扩展特性这个优点。下面的完成类型可以使用：
 
 @table @asis
 @item Command completion
-Command names.
+命令名字。
 
 @item Source @value{FN} completion
-Source @value{FN}s. Relevant commands are
-@code{break},
-@code{clear},
-@code{list},
-@code{tbreak},
-and
-@code{until}.
+源@value{FN}。相关的命令是 @code{break}，@code{clear}，@code{list}，@code{tbreak} 与 @code{until}。
 
 @item Argument completion
-Non-numeric arguments to a command.
-Relevant commands are @code{enable} and @code{info}.
+命令的非数值参数。相关的命令是 @code{enable} 与 @code{info}。
 
 @item Variable name completion
-Global variable names, and function arguments in the current context
-if the program is running. Relevant commands are
-@code{display},
-@code{print},
-@code{set},
-and
-@code{watch}.
+全局变量句以及正在执行程序的当前上下文的函数参数。相关的命令是 @code{display}，@code{print}，@code{set} 与 @code{watch}。
 
 @end table
 
 @node Limitations
-@section Limitations
+@section 限制
 
-We hope you find the @command{gawk} debugger useful and enjoyable to work with,
-but as with any program, especially in its early releases, it still has
-some limitations.  A few that it's worth being aware of are:
+我们希望你发现 @command{gawk} 的调试器很有用并且享受使用它，但是对于任何的程序，特别是在发布的早期，依然还有有一些限制的。要注意以下几点：
 
 @itemize @value{BULLET}
 @item
-At this point, the debugger does not give a detailed explanation of
-what you did wrong when you type in something it doesn't like. Rather, it just
-responds @samp{syntax error}.  When you do figure out what your mistake was,
-though, you'll feel like a real guru.
+在这个时候，调试器不会在你输入一些它不喜欢的东西之后，不会给你错误给出详细的解释。相反，它只是反馈说 @samp{syntax error}。当你确实找到了你的错误所在，所以你确实感觉自己会是一个真正的大牛。
 
 @item
 @c NOTE: no comma after the ref{} on purpose, due to following
 @c parenthetical remark.
-If you perused the dump of opcodes in @ref{Miscellaneous Debugger Commands}
-(or if you are already familiar with @command{gawk} internals),
-you will realize that much of the internal manipulation of data
-in @command{gawk}, as in many interpreters, is done on a stack.
-@code{Op_push}, @code{Op_pop}, and the like are the ``bread and butter'' of
-most @command{gawk} code.
+如果你一直 dump 出 @ref{Miscellaneous Debugger Commands} 中的 opcodes（或者是你已经熟悉了 @command{gawk} 的内部细节），你会意识到 @command{gawk} 的很多的内部数据操作，与其他的翻译器一样是在栈中完成的。@code{Op_push}，@code{Op_pop} 以及像“bread and butter”占 @command{gawk} 代码中的大多数。
 
-Unfortunately, as of now, the @command{gawk}
-debugger does not allow you to examine the stack's contents.
-That is, the intermediate results of expression evaluation are on the
-stack, but cannot be printed.  Rather, only variables that are defined
-in the program can be printed.  Of course, a workaround for
-this is to use more explicit variables at the debugging stage and then
-change back to obscure, perhaps more optimal code later.
+不幸的是，到现在为止，@command{gawk} 调试器不允许你检查栈的内容。也就是，表达式的中间结果是在栈中进行求值的，但是却不可以打印。而且，只有在程序的程序中定义的变量才可以打印。当然，要解决这个问题就是在调试阶段使用更加显式的变量，然后再转回到更加隐讳，也许是更加优化的代码。
 
 @item
-There is no way to look ``inside'' the process of compiling
-regular expressions to see if you got it right.  As an @command{awk}
-programmer, you are expected to know the meaning of
-@code{/[^[:alnum:][:blank:]]/}.
+没有办法查看编译的正则表达式的内部过程以查看它是否正确。作为 @command{awk} 程序员，你只希望理解 @code{/[^[:alnum:][:blank:]]/} 的意义就可以了。
 
 @item
-The @command{gawk} debugger is designed to be used by running a program (with all its
-parameters) on the command line, as described in @ref{Debugger Invocation}.
-There is no way (as of now) to attach or ``break into'' a running program.
-This seems reasonable for a language that is used mainly for quickly
-executing, short programs.
+@command{gawk} 调试器设计是用在通过命令行运行的程序上的（以及其所有的参数），如 @ref{Debugger Invocation} 中所描述的。没有办法（目前）来附加或者“插入”到一个运行中的程序。这对主要是用于短程序且快速执行的语言上看起来是合理的。
 
 @item
-The @command{gawk} debugger only accepts source code supplied with the @option{-f} option.
+@command{gawk} 调试器只接收通过 @option{-f} 选项提供的源代码。
 @end itemize
 
 @ignore
@@ -23378,59 +23326,37 @@ be added, and of course feel free to try to add them yourself!
 @end ignore
 
 @node Debugging Summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-Programs rarely work correctly the first time.  Finding bugs
-is called debugging, and a program that helps you find bugs is a
-debugger.  @command{gawk} has a built-in debugger that works very
-similarly to the GNU Debugger, GDB.
+程序很少第一次就可以正确工作。查看 Bug 的过程称为调试，帮你找到 Bug 的程序称为调试器。 @command{gawk} 有内置的调试器，并且与 GNU 调试器 GDB 工作起来很类似。
 
 @item
-Debuggers let you step through your program one statement at a time,
-examine and change variable and array values, and do a number of other
-things that let you understand what your program is actually doing (as
-opposed to what it is supposed to do).
+调试器可以让你一次一个语句执行程序，以检查与改变变量与数组的值，以及许多其他的事情来让你理解你的程序实际所做的（相对于它应该所做的）。
 
 @item
-Like most debuggers, the @command{gawk} debugger works in terms of stack
-frames, and lets you set both breakpoints (stop at a point in the code)
-and watchpoints (stop when a data value changes).
+与其他的调试器类似，@command{gawk} 调试器也是按照栈帧的方式工作的，并且可以你让设置断点（在代码中停止的点）与查看点（当值被改变时停止）。
 
 @item
-The debugger command set is fairly complete, providing control over
-breakpoints, execution, viewing and changing data, working with the stack,
-getting information, and other tasks.
+调试器命令相当完备，提供了断点，执行，查看，改变数据等控制命令，还有处理栈，获取信息以及其他任务的命令。
 
 @item
-If the GNU Readline library is available when @command{gawk} is
-compiled, it is used by the debugger to provide command-line history
-and editing.
+如果 GNU Readline 库在 @command{gawk} 编译时是可用的，它可以被调试器用于命令行历史与编辑。
 
 @end itemize
 
 @node Arbitrary Precision Arithmetic
-@chapter Arithmetic and Arbitrary-Precision Arithmetic with @command{gawk}
+@chapter 算术运算与 @command{gawk} 中的任意精度算术运算
 @cindex arbitrary precision
 @cindex multiple precision
 @cindex infinite precision
 @cindex floating-point, numbers@comma{} arbitrary precision
 
-This @value{CHAPTER} introduces some basic concepts relating to
-how computers do arithmetic and defines some important terms.
-It then proceeds to describe floating-point arithmetic,
-which is what @command{awk} uses for all its computations, including a
-discussion of arbitrary-precision floating-point arithmetic, which is
-a feature available only in @command{gawk}. It continues on to present
-arbitrary-precision integers, and concludes with a description of some
-points where @command{gawk} and the POSIX standard are not quite in
-agreement.
+本@value{CHAPTER}介绍一些与计算如何进行算术运行相关的基本概念，并定义一些重要的术语。然后继续描述浮点数算术运算，@command{awk} 正是用其来做其所有的计算。后面还会有任意精度浮点数算术运行的讨论，这是个只在 @command{gawk} 中可用的特性。后续会再讨论任意精度的整数，及对讨论的某些点做一些小结，在这些点上 @command{gawk} 与 POSIX 标准不太一致。
 
-@quotation NOTE
-Most users of @command{gawk} can safely skip this chapter.
-But if you want to do scientific calculations with @command{gawk},
-this is the place to be.
+@quotation 提示
+@command{gawk} 的很多的用户都可以完全地跳过本章。但是如果你想用 @command{gawk} 做一些科学计算，这章就非常合适。
 @end quotation
 
 @menu
@@ -23445,155 +23371,102 @@ this is the place to be.
 @end menu
 
 @node Computer Arithmetic
-@section A General Description of Computer Arithmetic
+@section 计算机算术计算说明
 
-Until now, we have worked with data as either numbers or
-strings.  Ultimately, however, computers represent everything in terms
-of @dfn{binary digits}, or @dfn{bits}.  A decimal digit can take on any
-of 10 values: zero through nine.  A binary digit can take on any of two
-values, zero or one.  Using binary, computers (and computer software)
-can represent and manipulate numerical and character data.  In general,
-the more bits you can use to represent a particular thing, the greater
-the range of possible values it can take on.
+到目前为止，我们已经处理过数字或者字串。但是，最终计算机都是以@dfn{二进制数字}，或者说@dfn{二进制位}表示一切。十进制数可以用 10 个值来表示： 0 到 9。二进制数可以用两个值来表示，0 与 1。通过使用二进制数，计算（以及计算软件）可以表示并操作数值与字符数据。一般来说，更多的位可以用来表示特定的事，以及可以表示的更大的范围的可能数值。
 
-Modern computers support at least two, and often more, ways to do
-arithmetic.  Each kind of arithmetic uses a different representation
-(organization of the bits) for the numbers.  The kinds of arithmetic
-that interest us are:
+现代计算机支持至少两种，通常是更多的方式来进行算术计算。每种算术计算都可以使用不同的表示（位的组织方式）来代表数值。我们感兴趣的算术类型如下：
 
 @table @asis
-@item Decimal arithmetic
-This is the kind of arithmetic you learned in elementary school, using
-paper and pencil (and/or a calculator). In theory, numbers can have an
-arbitrary number of digits on either side (or both sides) of the decimal
-point, and the results of a computation are always exact.
+@item 十进制算术运算
+此类型的算术运行你已经在初级学校中就已经学过了，它们使用笔与纸（或者是计算器）来运算。理论上，在十进制小数点的一边或者两边都可以用任意数值位，而结果总是精确的。
 
-Some modern systems can do decimal arithmetic in hardware, but usually you
-need a special software library to provide access to these instructions.
-There are also libraries that do decimal arithmetic entirely in software.
+一些现代的系统可以用硬件执行十进制算术运算，但是通常需要特殊的软件库来访问这些指令。也有库用完全用软件来执行十进制算术运算。
 
-Despite the fact that some users expect @command{gawk} to be performing
-decimal arithmetic,@footnote{We don't know why they expect this, but
-they do.} it does not do so.
+尽管有一些用户希望 @command{gawk} 可以执行十进制运算， 
+@footnote{我们不知道他们为什么希望有这个能力，从是确实是有这种期望。}
+但是 @command{gawk} 不支持这样的能力。
 
-@item Integer arithmetic
-In school, integer values were referred to as ``whole'' numbers---that
-is, numbers without any fractional part, such as 1, 42, or @minus{}17.
-The advantage to integer numbers is that they represent values exactly.
-The disadvantage is that their range is limited.
+@item 整数算法运算
+在学校里，整数值被指为“全部”是数值——也就是，数值中没有小数部分，如 1，42 或者 @minus{}17。整数的好处是它们完全代表值。缺点就是它们的范围是有限的。
 
 @cindex unsigned integers
 @cindex integers, unsigned
-In computers, integer values come in two flavors: @dfn{signed} and
-@dfn{unsigned}.  Signed values may be negative or positive, whereas
-unsigned values are always greater than or equal
-to zero.
+在计算机中，整数值会分成两类：@dfn{有符号}与@dfn{无符号}的。有符号的值可以为正也可以为负，而无符号数值总是大于等于 0。
 
-In computer systems, integer arithmetic is exact, but the possible
-range of values is limited.  Integer arithmetic is generally faster than
-floating-point arithmetic.
+在计算机系统中，整数算术运算是精确的，但是值的可能范围是有限的。整数算术运算一般要比浮点数算术运算要快。
 
-@item Floating-point arithmetic
-Floating-point numbers represent what were called in school ``real''
-numbers (i.e., those that have a fractional part, such as 3.1415927).
-The advantage to floating-point numbers is that they can represent a
-much larger range of values than can integers.  The disadvantage is that
-there are numbers that they cannot represent exactly.
+@item 浮点数算术运算
+浮点数值的表示，我们在学校中叫做“实”数（即这些值有小数部分，如 3.1415927 ）。浮点数值的优点是它可以表示比整数所能表示的数值大得多的范围。缺陷就是这此数值无法精确表示。
 
-Modern systems support floating-point arithmetic in hardware, with a
-limited range of values.  There are software libraries that allow
-the use of arbitrary-precision floating-point calculations.
+现代系统支持硬件实现的浮点运算，但是值是有限的。也有软件库可以使用任意精度的浮点数计算。
 
-POSIX @command{awk} uses @dfn{double-precision} floating-point numbers, which
-can hold more digits than @dfn{single-precision} floating-point numbers.
-@command{gawk} has facilities for performing arbitrary-precision
-floating-point arithmetic, which we describe in more detail shortly.
+POSIX @command{awk} 使用@dfn{双精度浮点数值}，这比@dfn{单精度浮点数}可以保存更大范围的数值。@command{gawk} 有工具用来执行任意精度的浮点数算术运算，我们后面会进行详细地描述。
 @end table
 
-Computers work with integer and floating-point values of different
-ranges. Integer values are usually either 32 or 64 bits in size.
-Single-precision floating-point values occupy 32 bits, whereas double-precision
-floating-point values occupy 64 bits.  Floating-point values are always
-signed. The possible ranges of values are shown in @ref{table-numeric-ranges}.
+计算机处理整数与浮点数表示的不同范围的数值。整数值通常要么是 32 位的，或者是 64 位的值。单精度浮点数占用 32 位，而双精度浮点数占用 64 位数。浮点值总是有符号的。可能的值范围如 @ref{table-numeric-ranges} 所示：
 
 @float Table,table-numeric-ranges
-@caption{Value ranges for different numeric representations}
+@caption{不同的数值表示的值范围}
 @multitable @columnfractions .34 .33 .33
-@headitem Numeric representation @tab Minimum value @tab Maximum value
-@item 32-bit signed integer @tab @minus{}2,147,483,648 @tab 2,147,483,647
-@item 32-bit unsigned integer @tab 0 @tab 4,294,967,295
-@item 64-bit signed integer @tab @minus{}9,223,372,036,854,775,808 @tab 9,223,372,036,854,775,807
-@item 64-bit unsigned integer @tab 0 @tab 18,446,744,073,709,551,615
+@headitem 数值表示 @tab 最小值 @tab 最大值
+@item 32-bit 有符号整数 @tab @minus{}2,147,483,648 @tab 2,147,483,647
+@item 32-bit 无符号整数 @tab 0 @tab 4,294,967,295
+@item 64-bit 有符号整数 @tab @minus{}9,223,372,036,854,775,808 @tab 9,223,372,036,854,775,807
+@item 64-bit 无符号整数 @tab 0 @tab 18,446,744,073,709,551,615
 @iftex
-@item Single-precision floating point (approximate) @tab @math{1.175494^{-38}} @tab @math{3.402823^{38}}
-@item Double-precision floating point (approximate) @tab @math{2.225074^{-308}} @tab @math{1.797693^{308}}
+@item 单精度浮点数（大约值） @tab @math{1.175494^{-38}} @tab @math{3.402823^{38}}
+@item 双数度浮点数（大约值） @tab @math{2.225074^{-308}} @tab @math{1.797693^{308}}
 @end iftex
 @ifinfo
-@item Single-precision floating point (approximate) @tab 1.175494e-38 @tab 3.402823e38
-@item Double-precision floating point (approximate) @tab 2.225074e-308 @tab 1.797693e308
+@item 单精度浮点数（大约值） @tab 1.175494e-38 @tab 3.402823e38
+@item 双数度浮点数（大约值） @tab 2.225074e-308 @tab 1.797693e308
 @end ifinfo
 @ifnottex
 @ifnotinfo
-@item Single-precision floating point (approximate) @tab 1.175494@sup{-38} @tab 3.402823@sup{38}
-@item Double-precision floating point (approximate) @tab 2.225074@sup{-308} @tab 1.797693@sup{308}
+@item 单精度浮点数（大约值） @tab 1.175494@sup{-38} @tab 3.402823@sup{38}
+@item 双数度浮点数（大约值） @tab 2.225074@sup{-308} @tab 1.797693@sup{308}
 @end ifnotinfo
 @end ifnottex
 @end multitable
 @end float
 
 @node Math Definitions
-@section Other Stuff to Know
+@section 要了解的其他知识
 
-The rest of this @value{CHAPTER} uses a number of terms. Here are some
-informal definitions that should help you work your way through the material
-here:
+这一@value{CHAPTER}的剩下部分使用大量数值术语。下面是一些非正式定义，这样可以通过这些材料了解，有助于你的工作。
 
 @table @dfn
-@item Accuracy
-A floating-point calculation's accuracy is how close it comes
-to the real (paper and pencil) value.
+@item 精确度
+浮点数计算的精确度是指其与真实值（纸笔来表示的）的接近程序。
 
-@item Error
-The difference between what the result of a computation ``should be''
-and what it actually is.  It is best to minimize error as much
-as possible.
+@item 错误
+计算所以“应该是”的结果与实际的结果之间的差异。应该是尽管最小化这样的错误。
 
-@item Exponent
-The order of magnitude of a value;
-some number of bits in a floating-point value store the exponent.
+@item 幂
+值的数量级，在浮点数值的一些数值位是用来存储幂的。
 
-@item Inf
-A special value representing infinity. Operations involving another
-number and infinity produce infinity.
+@item Inf（无穷）
+代表无穷的特殊值。与其他的数或者无穷数之间的操作产生无穷。
 
-@item NaN
-``Not a number.''@footnote{Thanks to Michael Brennan for this description,
-which we have paraphrased, and for the examples.} A special value that
-results from attempting a calculation that has no answer as a real number.
-In such a case, programs can either receive a floating-point exception,
-or get @code{NaN} back as the result. The IEEE 754 standard recommends
-that systems return @code{NaN}. Some examples:
+@item 非数值
+“不是一个数字。”
+@footnote{感谢 Michael Brennan 提供了这个描述（我们改写了原描述）和这些例子。}
+尝试计算时，无法得到实数结果的一个特殊值。在这样的情况下，程序要么会收到一个浮点数异常，或者取得一个 @code{NaN} 的结果。IEEE 754 标准建议系统应该返回 @code{NaN}。有一些例子如下：
 
 @table @code
 @item sqrt(-1)
-This makes sense in the range of complex numbers, but not in the
-range of real numbers, so the result is @code{NaN}.
+这只有在复数的范围内才是有意义的，但是在实数范围内，结果则是 @code{NaN}。
 
 @item log(-8)
-@minus{}8 is out of the domain of @code{log()}, so the result is @code{NaN}.
+@minus{}8 不在 @code{log()} 的域内，所以结果为 @code{NaN}。
 @end table
 
-@item Normalized
-How the significand (see later in this list) is usually stored. The
-value is adjusted so that the first bit is one, and then that leading
-one is assumed instead of physically stored.  This provides one
-extra bit of precision.
+@item 正规化
+系数及其实际存储方式（后面会有说明）。值会被调整使得第一位为 1，因此开始的一位是假想存在，实际并没有存储起来。这可以提供多一位的精度。
 
-@item Precision
-The number of bits used to represent a floating-point number.
-The more bits, the more digits you can represent.
-Binary and decimal precisions are related approximately, according to the
-formula:
+@item 精度
+用于表示浮点数值的位数。位数越多，则可以表示更多的数值。二进制与十进制数度都是大概的，可根据如下的公式：
 
 @display
 @iftex
@@ -23610,66 +23483,45 @@ formula:
 @end display
 
 @noindent
-Here, @emph{prec} denotes the binary precision
-(measured in bits) and @emph{dps} (short for decimal places)
-is the decimal digits.
+在这里，@emph{prec} 表示二进制数度（以位来衡量），@emph{dps}（十进制位的缩写）是十进制位。
 
-@item Rounding mode
-How numbers are rounded up or down when necessary.
-More details are provided later.
+@item 舍入舍出模式
+如果需要，数值是如何来进行舍入舍出的。后面会提供更多的细节。
 
-@item Significand
-A floating-point value consists of the significand multiplied by 10
-to the power of the exponent. For example, in @code{1.2345e67},
-the significand is @code{1.2345}.
+@item 系数
+浮点数由系数与 10 的幂指数相乘组成。比如，在 @code{1.2345e67}，则系数为 @code{1.2345}。
 
 @item Stability
-From @uref{http://en.wikipedia.org/wiki/Numerical_stability,
-the Wikipedia article on numerical stability}:
-``Calculations that can be proven not to magnify approximation errors
-are called @dfn{numerically stable}.''
+@uref{http://en.wikipedia.org/wiki/Numerical_stability,
+关于稳定性的维基百科文档} 中说“一个计算可证地不会扩大近似错误称为在数值上是稳定的。” 
 @end table
 
-See @uref{http://en.wikipedia.org/wiki/Accuracy_and_precision,
-the Wikipedia article on accuracy and precision} for more information
-on some of those terms.
+查看 @uref{http://en.wikipedia.org/wiki/Accuracy_and_precision,
+维基百科关于精确性与精度的文章} 来获取类似术语的更多信息。
 
-On modern systems, floating-point hardware uses the representation and
-operations defined by the IEEE 754 standard.
-Three of the standard IEEE 754 types are 32-bit single precision,
-64-bit double precision, and 128-bit quadruple precision.
-The standard also specifies extended precision formats
-to allow greater precisions and larger exponent ranges.
-(@command{awk} uses only the 64-bit double-precision format.)
+在现代的系统上，浮点数硬件使用 IEEE 754 标准定义的表示以及操作。IEEE 754 的类型的三个标准是 32 位单精度，64 位双精度以及 128 位四精度。这个标准也指定了扩展精度的格式以允许更大精度以及更大的指数范围。（@command{awk} 只使用 64 位双精度格式。）
 
-@ref{table-ieee-formats} lists the precision and exponent
-field values for the basic IEEE 754 binary formats.
+@ref{table-ieee-formats} 列出了基本的 IEEE 754 二进制格式的精度以及指数域值。
 
 @float Table,table-ieee-formats
-@caption{Basic IEEE format values}
+@caption{基本的 IEEE 格式的值}
 @multitable @columnfractions .20 .20 .20 .20 .20
-@headitem Name @tab Total bits @tab Precision @tab Minimum exponent @tab Maximum exponent
-@item Single @tab 32 @tab 24 @tab @minus{}126 @tab +127
-@item Double @tab 64 @tab 53 @tab @minus{}1022 @tab +1023
-@item Quadruple @tab 128 @tab 113 @tab @minus{}16382 @tab +16383
+@headitem 名字 @tab 部位数 @tab 精度 @tab 最小指数 @tab 最大指数
+@item 单精度 @tab 32 @tab 24 @tab @minus{}126 @tab +127
+@item 双精度 @tab 64 @tab 53 @tab @minus{}1022 @tab +1023
+@item 四精度 @tab 128 @tab 113 @tab @minus{}16382 @tab +16383
 @end multitable
 @end float
 
-@quotation NOTE
-The precision numbers include the implied leading one that gives them
-one extra bit of significand.
+@quotation 提示
+精度数值包含了隐含的最开始的一位，因此比所给的系数要多一位。
 @end quotation
 
 @node MPFR features
-@section Arbitrary-Precision Arithmetic Features in @command{gawk}
+@section @command{gawk} 的任意精度计算
 
-By default, @command{gawk} uses the double-precision floating-point values
-supplied by the hardware of the system it runs on.  However, if it was
-compiled to do so, and the @option{-M} command-line option is supplied,
-@command{gawk} uses the @uref{http://www.mpfr.org,
-GNU MPFR} and @uref{http://gmplib.org, GNU MP} (GMP) libraries for
-arbitrary-precision arithmetic on numbers.  You can see if MPFR support
-is available like so:
+默认的情况下，@command{gawk} 使用由其所运行的系统的硬件来提供双精度浮点数值。但是，如果它编译的时候没有指定，并且 @option{-M} 命令行选项被提供了，@command{gawk} 则使用 @uref{http://www.mpfr.org,
+GNU MPFR} 以及 @uref{http://gmplib.org, GNU MP}（GMP）库来执行任意精度的数值算术运算。你可以这样来查看是否支持 MPFR：
 
 @example
 $ @kbd{gawk --version}
@@ -23679,50 +23531,30 @@ $ @kbd{gawk --version}
 @end example
 
 @noindent
-(You may see different version numbers than what's shown here. That's OK;
-what's important is to see that GNU MPFR and GNU MP are listed in
-the output.)
+（你可能看到与这里显示的不同的版本数。也没有问题，重要的是看 GNU MPFR 与 GNU MP 是否显示在输出中。）
 
-Additionally, there are a few elements available in the @code{PROCINFO}
-array to provide information about the MPFR and GMP libraries
-(@pxref{Auto-set}).
+另外，在 @code{PROCINFO} 数组中的一些元素可以来提供 MPFR 与 GMP 库一些信息（查看 @pxref{Auto-set}）。
 
-The MPFR library provides precise control over precisions and rounding
-modes, and gives correctly rounded, reproducible, platform-independent
-results.  With the @option{-M} command-line option,
-all floating-point arithmetic operators and numeric functions
-can yield results to any desired precision level supported by MPFR.
+MPFR 库提供了在精度与舍入舍出模式的精确控制，并给出正确的舍入舍出，可重现的，平台无关的结果。使用 @option{-M} 命令行参数，所有的浮点算术操作符以及数值函数都可以产生任意想要的由 MPFR 所提供的精度。
 
-Two predefined variables, @code{PREC} and @code{ROUNDMODE},
-provide control over the working precision and the rounding mode.
-The precision and the rounding mode are set globally for every operation
-to follow.
-@xref{Setting precision} and @ref{Setting the rounding mode}
-for more information.
+有两个预定义的变量，@code{PREC} 与 @code{ROUNDMODE} 提供了工作精度与舍入舍出模式的控制。精度与舍入舍出模式的设置对于之后的操作是全局的。查看 @xref{Setting precision}，以及 @ref{Setting the rounding mode}，来获取更多的信息。
 
 @node FP Math Caution
-@section Floating-Point Arithmetic: Caveat Emptor!
+@section  浮点算法：买者自慎！
 
 @quotation
-@i{Math class is tough!}
+@i{数学课太难了。}
 @author Teen Talk Barbie, July 1992
 @end quotation
 
-This @value{SECTION} provides a high-level overview of the issues
-involved when doing lots of floating-point arithmetic.@footnote{There
-is a very nice @uref{http://www.validlab.com/goldberg/paper.pdf,
-paper on floating-point arithmetic} by David Goldberg, ``What Every
-Computer Scientist Should Know About Floating-Point Arithmetic,''
-@cite{ACM Computing Surveys} @strong{23}, 1 (1991-03): 5-48.  This is
-worth reading if you are interested in the details, but it does require
-a background in computer science.}
-The discussion applies to both hardware and arbitrary-precision
-floating-point arithmetic.
+这一@value{SECTION}提供了一个更高层上视图，来审视在执行非常多的浮点数计算时所产生问题。 
+@footnote{有一个非常好的 @uref{http://www.validlab.com/goldberg/paper.pdf,
+关于浮点数算术运算的论文}，由 David Goldberg 所写，“What Every Computer Scientist Should Know About Floating-Point Arithmetic”，
+@cite{ACM Computing Surveys} @strong{23}, 1 (1991-03): 5-48. 如果你对于细节非常感兴趣，这个值得一读，但是确实需要一定的计算机科学背景。}
+这些讨论同样也适用于硬件与任意精度浮点数算术运算。
 
-@quotation CAUTION
-The material here is purposely general. If you need to do serious
-computer arithmetic, you should do some research first, and not
-rely just on what we tell you.
+@quotation 注意
+这里的内容有意地写得非常概括。如果你需要做一些严格的计算算术运行，你首先要进行一些研究，而不仅仅依赖我们所告诉你的。
 @end quotation
 
 @menu
@@ -23734,17 +23566,9 @@ rely just on what we tell you.
 @end menu
 
 @node Inexactness of computations
-@subsection Floating-Point Arithmetic Is Not Exact
+@subsection 浮点计算是不精确的
 
-Binary floating-point representations and arithmetic are inexact.
-Simple values like 0.1 cannot be precisely represented using
-binary floating-point numbers, and the limited precision of
-floating-point numbers means that slight changes in
-the order of operations or the precision of intermediate storage
-can change the result. To make matters worse, with arbitrary-precision
-floating-point arithmetic, you can set the precision before starting a
-computation, but then you cannot be sure of the number of significant
-decimal places in the final result.
+二进制浮点数表示以及算术运行是不精确的。像 0.1 这样简单的值没不能精确地由二进制的浮点数来表示，浮点数有有限的精度数表示在计算等级上，或者中间的存储精度的一点点改变都会以改变结果。在任意精度浮点数算术运算时，为了使问题更糟糕， 你可以在开始计算之前设置精度，但是你没有办法保证在最终结果上的十进制的最高有效位的数值。
 
 @menu
 * Inexact representation::      Numbers are not exactly represented.
@@ -23753,26 +23577,16 @@ decimal places in the final result.
 @end menu
 
 @node Inexact representation
-@subsubsection Many Numbers Cannot Be Represented Exactly
+@subsubsection 很多的数不能完全表示
 
-So, before you start to write any code, you should think
-about what you really want and what's really happening. Consider the
-two numbers in the following example:
+所以，在开始写任何代码之间，你要考虑一下你到底想要的是什么，以及到底会发生什么。考虑下面的两个例子中的两个数：
 
 @example
 x = 0.875             # 1/2 + 1/4 + 1/8
 y = 0.425
 @end example
 
-Unlike the number in @code{y}, the number stored in @code{x}
-is exactly representable
-in binary because it can be written as a finite sum of one or
-more fractions whose denominators are all powers of two.
-When @command{gawk} reads a floating-point number from
-program source, it automatically rounds that number to whatever
-precision your machine supports. If you try to print the numeric
-content of a variable using an output format string of @code{"%.17g"},
-it may not produce the same number as you assigned to it:
+不像数字 @code{y}，在 @code{x} 中存储的数字可以精确地用二进制来表示，因为它可以写成有限个分数的和，而它他的分母都是 2 的幂次方。当 @command{gawk} 从程序源代码中读取浮点数时，它会自动地对于字进行舍入舍出，而不管你的机器支持的是什么样的精度。如果你尝试你用输出格式串 @code{"%.17g"} 打印某个变量的内容时，它不会产生与你所赋给它的一样的值：
 
 @example
 $ @kbd{gawk 'BEGIN @{ x = 0.875; y = 0.425}
@@ -23780,28 +23594,20 @@ $ @kbd{gawk 'BEGIN @{ x = 0.875; y = 0.425}
 @print{} 0.875, 0.42499999999999999
 @end example
 
-Often the error is so small you do not even notice it, and if you do,
-you can always specify how much precision you would like in your output.
-Usually this is a format string like @code{"%.15g"}, which, when
-used in the previous example, produces an output identical to the input.
+通常的错误是很小的，你可能都注意不到。如果你确实需要，你可以指定输出中所需要的精度。
+通常像 @code{"%.15g"} 一样的格式。在上一个例子中，这会产生与输入一样的值。
 
 @node Comparing FP Values
-@subsubsection Be Careful Comparing Values
+@subsubsection 值比较时要小心
 
-Because the underlying representation can be a little bit off from the exact value,
-comparing floating-point values to see if they are exactly equal is generally a bad idea.
-Here is an example where it does not work like you would expect:
+由于底层的表示与实际的值有一些偏离，所以比较浮点数来查看两者是否完全相等是一个不好的主意。下面是一个例子，它不会如你所预期的那样执行：
 
 @example
 $ @kbd{gawk 'BEGIN @{ print (0.1 + 12.2 == 12.3) @}'}
 @print{} 0
 @end example
 
-The general wisdom when comparing floating-point values is to see if
-they are within some small range of each other (called a @dfn{delta},
-or @dfn{tolerance}).
-You have to decide how small a delta is important to you. Code to do
-this looks something like the following:
+比较浮点数的值以查看它们是否是在一个很小的范围内的差异才是正确想法（称为 @dfn{delta（差异）} 或者@dfn{容忍度}）。你需要确定差异是多小对你来说是重要的。这样的处理代码如下：
 
 @example
 delta = 0.00001                 # for example
@@ -23813,18 +23619,12 @@ else
 @end example
 
 @noindent
-(We assume that you have a simple absolute value function named
-@code{abs()} defined elsewhere in your program.)
+（我们假设你有一个简单的绝对值函数，名字为 @code{abs()}，定义在你的程序的代码的某处。）
 
 @node Errors accumulate
-@subsubsection Errors Accumulate
+@subsubsection 错误累积
 
-The loss of accuracy during a single computation with floating-point
-numbers usually isn't enough to worry about. However, if you compute a
-value that is the result of a sequence of floating-point operations,
-the error can accumulate and greatly affect the computation itself.
-Here is an attempt to compute the value of @value{PI} using one of its
-many series representations:
+在单个浮点数计算中损失的精度，通常不需要担心。但是，如果你计算的值是一系列的浮点数操作的结果，则错误可以累积并且可以极大地影响计算本身。下面尝试用它一系列的表示来计算 @value{PI} 的值：
 
 @example
 BEGIN @{
@@ -23838,8 +23638,7 @@ BEGIN @{
 @}
 @end example
 
-When run, the early errors propagate through later computations,
-causing the loop to terminate prematurely after attempting to divide by zero:
+当执行的时候，错误会传递到后面的计算中，导致在进行除 0 操作时，循环过早地结束：
 
 @example
 $ @kbd{gawk -f pi.awk}
@@ -23854,8 +23653,7 @@ $ @kbd{gawk -f pi.awk}
 @error{} gawk: pi.awk:6: fatal: division by zero attempted
 @end example
 
-Here is an additional example where the inaccuracies in internal representations
-yield an unexpected result:
+下面是另外一个例子，说明内部表示的不精确导致一个非期望的结果：
 
 @example
 $ @kbd{gawk 'BEGIN @{}
@@ -23867,57 +23665,29 @@ $ @kbd{gawk 'BEGIN @{}
 @end example
 
 @node Getting Accuracy
-@subsection Getting the Accuracy You Need
+@subsection 获取你需要的精度
 
-Can arbitrary-precision arithmetic give exact results? There are
-no easy answers. The standard rules of algebra often do not apply
-when using floating-point arithmetic.
-Among other things, the distributive and associative laws
-do not hold completely, and order of operation may be important
-for your computation. Rounding error, cumulative precision loss,
-and underflow are often troublesome.
+任意精度的算术运算可以得到精确的结果么？这个没有很好的答案。代数的标准规则常常无法用在浮点数的算术运算中。在这些事情中，分配与关联规则都无法完整地应用，操作的等级对于你的计算非常重要。舍入舍出错误，累积精度损失，以及内部运行经常都是麻烦事。
 
-When @command{gawk} tests the expressions @samp{0.1 + 12.2} and
-@samp{12.3} for equality using the machine double-precision arithmetic,
-it decides that they are not equal!  (@xref{Comparing FP Values}.)
-You can get the result you want by increasing the precision; 56 bits in
-this case does the job:
+当 @command{gawk} 使用机器的双精度来测试表达式 @samp{0.1 + 12.2} 与 @samp{12.3} 的相等性时，得到的结果是不相等。（查看 @xref{Comparing FP Values}.。）你可以通过提供精度来得到你想要的结果，在这个例子中则是要提到 56 位：
 
 @example
 $ @kbd{gawk -M -v PREC=56 'BEGIN @{ print (0.1 + 12.2 == 12.3) @}'}
 @print{} 1
 @end example
 
-If adding more bits is good, perhaps adding even more bits of
-precision is better?
-Here is what happens if we use an even larger value of @code{PREC}:
+如果添加多一个位不错，那么添加多一位是不是更好？下面是当你使用更大的 @code{PREC} 时所产生的结果：
 
 @example
 $ @kbd{gawk -M -v PREC=201 'BEGIN @{ print (0.1 + 12.2 == 12.3) @}'}
 @print{} 0
 @end example
 
-This is not a bug in @command{gawk} or in the MPFR library.
-It is easy to forget that the finite number of bits used to store the value
-is often just an approximation after proper rounding.
-The test for equality succeeds if and only if @emph{all} bits in the two operands
-are exactly the same. Because this is not necessarily true after floating-point
-computations with a particular precision and effective rounding mode,
-a straight test for equality may not work. Instead, compare the
-two numbers to see if they are within the desirable delta of each other.
+这既不是 @command{gawk} 的 bug 也不是 MPFR 库的 bug。大家很容易忘记有限的位数用来存储一个值，通常都在进行了相应的舍入舍出后都是一个相似值。对于测试相等性，只有在所两个操作数中@emph{所有}等都相同时才会成功。因为在以特定的精度与有效的舍入舍出模式进行浮点数运行后这并不一定要必须的，直接进行相等性的比较是不会成功的。相反，比较两个数以查看它们是否相互之间是在所希望的差异区间内才是正解。
 
-In applications where 15 or fewer decimal places suffice,
-hardware double-precision arithmetic can be adequate, and is usually much faster.
-But you need to keep in mind that every floating-point operation
-can suffer a new rounding error with catastrophic consequences, as illustrated
-by our earlier attempt to compute the value of @value{PI}.
-Extra precision can greatly enhance the stability and the accuracy
-of your computation in such cases.
+在应用中，15 或者更少的十进制位就够了。硬件的双精度算术运算是合适的，并且也很快速。但是你要记住，每一个浮点数操作都会导致一个新的舍入舍出错误，进而导致悲剧性的结果，这正如早先的尝试计算 @value{PI} 的值所说明的一样。在这个情况里，额外的精度可以极大地提供计算的稳定性与精确度。
 
-Additionally, you should understand that
-repeated addition is not necessarily equivalent to multiplication
-in floating-point arithmetic. In the example in
-@ref{Errors accumulate}:
+另外，你需要了解，在浮点数算术运算中，重复加并不一定等于乘。这个例子在 @ref{Errors accumulate}：
 
 @example
 $ @kbd{gawk 'BEGIN @{}
@@ -23929,27 +23699,19 @@ $ @kbd{gawk 'BEGIN @{}
 @end example
 
 @noindent
-you may or may not succeed in getting the correct result by choosing
-an arbitrarily large value for @code{PREC}. Reformulation of
-the problem at hand is often the correct approach in such situations.
+通过选择任意大数值的 @code{PREC}，你可能会，也可能不会成功地取得正确的结果。在这种情况下，立即重组问题通常才是正确的方法。
 
 @node Try To Round
-@subsection Try a Few Extra Bits of Precision and Rounding
+@subsection 增加几位精度然后再舍入转出
 
-Instead of arbitrary-precision floating-point arithmetic,
-often all you need is an adjustment of your logic
-or a different order for the operations in your calculation.
-The stability and the accuracy of the computation of @value{PI}
-in the earlier example can be enhanced by using the following
-simple algebraic transformation:
+除了任意精度的浮点数算术运算，你所需要的常常是调整你的逻辑，或者是计算的不同等级。早先的例子中，@value{PI} 计算的稳定性与精度可以通过下面的代数变形可以得到提高：
 
 @example
 (sqrt(x * x + 1) - 1) / x @equiv{} x / (sqrt(x * x + 1) + 1)
 @end example
 
 @noindent
-After making this change, the program converges to
-@value{PI} in under 30 iterations:
+通过这样的变化，在 30 个迭代后，程序汇集到 @value{PI} 的结果为：
 
 @example
 $ @kbd{gawk -f pi2.awk}
@@ -23964,31 +23726,23 @@ $ @kbd{gawk -f pi2.awk}
 @end example
 
 @node Setting precision
-@subsection Setting the Precision
+@subsection 设置精度
 
-@command{gawk} uses a global working precision; it does not keep track of
-the precision or accuracy of individual numbers. Performing an arithmetic
-operation or calling a built-in function rounds the result to the current
-working precision. The default working precision is 53 bits, which you can
-modify using the predefined variable @code{PREC}. You can also set the
-value to one of the predefined case-insensitive strings
-shown in @ref{table-predefined-precision-strings},
-to emulate an IEEE 754 binary format.
+@command{gawk} 使用全局性的工作精度 ，它不会为单个的数值跟踪精度与精确度。执行算术运算或者调用内置函数来对结果进行舍入舍出都以当的精度为准。默认的工作精度是 53 位，你可以通过修改变量 @code{PREC} 来改变。你也可以设置为预定义的大小写有关的值串，如 @ref{table-predefined-precision-strings} 所列，这些用来对 IEEE 754 二进制标准进行模拟。
 
 @float Table,table-predefined-precision-strings
-@caption{Predefined precision strings for @code{PREC}}
+@caption{@code{PREC} 的预定义精度串}
 @multitable {@code{"double"}} {12345678901234567890123456789012345}
-@headitem @code{PREC} @tab IEEE 754 binary format
-@item @code{"half"} @tab 16-bit half-precision
-@item @code{"single"} @tab Basic 32-bit single precision
-@item @code{"double"} @tab Basic 64-bit double precision
-@item @code{"quad"} @tab Basic 128-bit quadruple precision
-@item @code{"oct"} @tab 256-bit octuple precision
+@headitem @code{PREC} @tab IEEE 754 二进制格式
+@item @code{"half"} @tab 16 位半精度
+@item @code{"single"} @tab 基本的 32 位单精度
+@item @code{"double"} @tab 基本的 64 位双精度
+@item @code{"quad"} @tab 基本的 128 位四精度
+@item @code{"oct"} @tab 256 位八精度
 @end multitable
 @end float
 
-The following example illustrates the effects of changing precision
-on arithmetic operations:
+下面的例子说明了改变算术操作符的精度的效果：
 
 @example
 $ @kbd{gawk -M -v PREC=100 'BEGIN @{ x = 1.0e-400; print x + 0}
@@ -23997,19 +23751,10 @@ $ @kbd{gawk -M -v PREC=100 'BEGIN @{ x = 1.0e-400; print x + 0}
 @print{} 0
 @end example
 
-@quotation CAUTION
-Be wary of floating-point constants! When reading a floating-point
-constant from program source code, @command{gawk} uses the default
-precision (that of a C @code{double}), unless overridden by an assignment
-to the special variable @code{PREC} on the command line, to store it
-internally as an MPFR number.  Changing the precision using @code{PREC}
-in the program text does @emph{not} change the precision of a constant.
+@quotation 注意
+要小心浮点数常量！当从程序源代码中读取浮点数常量时，@command{gawk} 会使用默认的精度（即 C @code{double}），除非通过命令行赋值来改变 @code{PREC} 的值，将其内部存为 MPFR 数值。在程序源代码通过使用 @code{PREC} 来改变精度@emph{不会}影响常量的精度。
 
-If you need to represent a floating-point constant at a higher precision
-than the default and cannot use a command-line assignment to @code{PREC},
-you should either specify the constant as a string, or as a rational
-number, whenever possible. The following example illustrates the
-differences among various ways to print a floating-point constant:
+如果需要在比默认的精度还要高的精度上表示一个浮点数，但又不能使用命令行对 @code{PREC} 进行赋值，你要么将常数指定会字串，要么只要可能，使其成为有理数， 下面的例子说明了不同的方式下打印浮点数常量时的不同：
 
 @example
 $ @kbd{gawk -M 'BEGIN @{ PREC = 113; printf("%0.25f\n", 0.1) @}'}
@@ -24024,46 +23769,27 @@ $ @kbd{gawk -M 'BEGIN @{ PREC = 113; printf("%0.25f\n", 1/10) @}'}
 @end quotation
 
 @node Setting the rounding mode
-@subsection Setting the Rounding Mode
+@subsection 设置舍入转出模式
 
-The @code{ROUNDMODE} variable provides
-program-level control over the rounding mode.
-The correspondence between @code{ROUNDMODE} and the IEEE
-rounding modes is shown in @ref{table-gawk-rounding-modes}.
+@code{ROUNDMODE} 变量提供了在程序层控制舍入舍出模式的方法。@code{ROUNDMODE} 与 IEEE 的舍入舍出的比较显示在 @ref{table-gawk-rounding-modes} 中。
 
 @float Table,table-gawk-rounding-modes
-@caption{@command{gawk} rounding modes}
+@caption{@command{gawk} 的舍入舍出模式}
 @multitable @columnfractions .45 .30 .25
-@headitem Rounding mode @tab IEEE name @tab @code{ROUNDMODE}
-@item Round to nearest, ties to even @tab @code{roundTiesToEven} @tab @code{"N"} or @code{"n"}
-@item Round toward positive infinity @tab @code{roundTowardPositive} @tab @code{"U"} or @code{"u"}
-@item Round toward negative infinity @tab @code{roundTowardNegative} @tab @code{"D"} or @code{"d"}
-@item Round toward zero @tab @code{roundTowardZero} @tab @code{"Z"} or @code{"z"}
-@item Round to nearest, ties away from zero @tab @code{roundTiesToAway} @tab @code{"A"} or @code{"a"}
+@headitem 舍入舍出模式 @tab IEEE 名 @tab @code{ROUNDMODE}
+@item 向偶数舍入舍出到最近 @tab @code{roundTiesToEven} @tab @code{"N"} or @code{"n"}
+@item 向正无穷舍入舍出 @tab @code{roundTowardPositive} @tab @code{"U"} or @code{"u"}
+@item 向负无穷舍入舍出 @tab @code{roundTowardNegative} @tab @code{"D"} or @code{"d"}
+@item 向零舍入舍出 @tab @code{roundTowardZero} @tab @code{"Z"} or @code{"z"}
+@item 背身零舍入舍出到最近 @tab @code{roundTiesToAway} @tab @code{"A"} or @code{"a"}
 @end multitable
 @end float
 
-@code{ROUNDMODE} has the default value @code{"N"}, which
-selects the IEEE 754 rounding mode @code{roundTiesToEven}.
-In @ref{table-gawk-rounding-modes}, the value @code{"A"} selects
-@code{roundTiesToAway}.  This is only available if your version of the
-MPFR library supports it; otherwise, setting @code{ROUNDMODE} to @code{"A"}
-has no effect.
+@code{ROUNDMODE} 的默认值为 @code{"N"}，这选择的是 IEEE 754 的舍入舍出模式为 roundTiesToEven。在 @ref{table-gawk-rounding-modes} 中，值 @code{"A"} 选择的是 @code{roundTiesToAway}。这只有顺你的 MPFR 库支持时才可用，否则设置 @code{ROUNDMODE} 为 @code{"A"} 是没有效果的。
 
-The default mode @code{roundTiesToEven} is the most preferred,
-but the least intuitive. This method does the obvious thing for most values,
-by rounding them up or down to the nearest digit.
-For example, rounding 1.132 to two digits yields 1.13,
-and rounding 1.157 yields 1.16.
+默认的模式 @code{roundTiesToEven} 是使用得最多的，但是最不直观。这个方法对大多数的值的处理都是很明显的，就是将它们向上或者向下到最近的数。例如，将 1.132 舍入舍出为两位数，会产生 1.13，而对 1.157 舍入舍出产生 1.16。
 
-However, when it comes to rounding a value that is exactly halfway between,
-things do not work the way you probably learned in school.
-In this case, the number is rounded to the nearest even digit.
-So rounding 0.125 to two digits rounds down to 0.12,
-but rounding 0.6875 to three digits rounds up to 0.688.
-You probably have already encountered this rounding mode when
-using @code{printf} to format floating-point numbers.
-For example:
+但是，其值刚好是一半的时候，对其进行舍入舍出时，事情处理方式就不会像你在学校时所学的一样工作。在这种情况下，数字被舍入舍出到最近的偶数位。所以，对 0.125 舍入舍出为两位数，则会产生 0.12，但是对数值 0.6875 舍入舍出到三位则会向上舍入为 0.688。你可能在使用 @code{printf} 来格式化浮点数时已经遇到过这样的舍入舍出模式。例如：
 
 @example
 BEGIN @{
@@ -24076,10 +23802,8 @@ BEGIN @{
 @end example
 
 @noindent
-produces the following output when run on the author's system:@footnote{It
-is possible for the output to be completely different if the
-C library in your system does not use the IEEE 754 even-rounding
-rule to round halfway cases for @code{printf}.}
+在作者的系统上，会产生下面的输出： 
+@footnote{如果在你的系统上的 C 库不支持使用 IEEE 754 的偶数舍入舍出规则来为 @code{printf} 舍入舍出半数的情况，有可能输出完全不同。}
 
 @example
 -3.5 => -4
@@ -24093,54 +23817,30 @@ rule to round halfway cases for @code{printf}.}
  4.5 => 4
 @end example
 
-The theory behind @code{roundTiesToEven} is that it more or less evenly
-distributes upward and downward rounds of exact halves, which might
-cause any accumulating round-off error to cancel itself out. This is the
-default rounding mode for IEEE 754 computing functions and operators.
+@code{roundTiesToEven} 背后的理论是，对确定的半值舍入舍出或多或少向上或者向下是均等地分布的。这样可以使得舍入输出导致的损失可以自己补偿。这对于 IEEE 754 的计算函数与操作符是默认的舍入舍出模式。
 
-The other rounding modes are rarely used.  Rounding toward positive infinity
-(@code{roundTowardPositive}) and toward negative infinity
-(@code{roundTowardNegative}) are often used to implement interval
-arithmetic, where you adjust the rounding mode to calculate upper and
-lower bounds for the range of output. The @code{roundTowardZero} mode can
-be used for converting floating-point numbers to integers.  The rounding
-mode @code{roundTiesToAway} rounds the result to the nearest number and
-selects the number with the larger magnitude if a tie occurs.
+其他的舍入舍出模式很少使用。向正无穷舍入舍出（@code{roundTowardPositive}）以及向负无穷舍入舍出（@code{roundTowardNegative}）常常用于实现间隔算术，在这样的计算中，你调整舍入舍出模式来计算输出范围的上下边沿。@code{roundTowardZero} 模式可用于将浮点数转换了整数。@code{roundTiesToAway} 这个舍入输出模式将结果舍入舍出到最近的数，如果出现的绑定的情况，则选择一个较大幅度的值。
 
-Some numerical analysts will tell you that your choice of rounding
-style has tremendous impact on the final outcome, and advise you to
-wait until final output for any rounding. Instead, you can often avoid
-round-off error problems by setting the precision initially to some
-value sufficiently larger than the final desired precision, so that
-the accumulation of round-off error does not influence the outcome.
-If you suspect that results from your computation are sensitive to
-accumulation of round-off error, look for a significant difference in
-output when you change the rounding mode to be sure.
+有一些数值分析师会告诉你，你的舍入舍出风格的选择会极大地影响最后的输出，并且建议你直到最后输出时才确定舍入舍出模式。相反地，你常常可以避免舍入舍出错误，需要的只是在一开始将初始精度设置比最终所需要的大得多的精度，这样累积的舍入舍出错误不会影响结果。如果你怀疑你计算的结果对于舍入舍出错误是很敏感的，需要你改变舍入舍出模式来看现输出中明显的差异来进行确认。
 
 @node Arbitrary Precision Integers
-@section Arbitrary-Precision Integer Arithmetic with @command{gawk}
+@section @command{gawk} 中的任意精度整数计算
 @cindex integers, arbitrary precision
 @cindex arbitrary precision integers
 
-When given the @option{-M} option,
-@command{gawk} performs all integer arithmetic using GMP arbitrary-precision
-integers.  Any number that looks like an integer in a source
-or @value{DF} is stored as an arbitrary-precision integer.  The size
-of the integer is limited only by the available memory.  For example,
-the following computes
+当指定了 @option{-M} 选项，@command{gawk} 会使用 GMP 任意精度整数的执行所有的整数算术。在源代码中或者@value{DF}中任意的看起来像整数值都存成任意精度的整数。整数的大小只受限于可用的内存。例如，下面会计算
 @iftex
-@math{5^{4^{3^{2}}}},
+@math{5^{4^{3^{2}}}}
 @end iftex
 @ifinfo
-5^4^3^2,
+5^4^3^2
 @end ifinfo
 @ifnottex
 @ifnotinfo
-5@sup{4@sup{3@sup{2}}},
+5@sup{4@sup{3@sup{2}}}
 @end ifnotinfo
 @end ifnottex
-the result of which is beyond the
-limits of ordinary hardware double-precision floating-point values:
+，这个结果已经超过了一般的双精度浮点值的限制：
 
 @example
 $ @kbd{gawk -M 'BEGIN @{}
@@ -24152,33 +23852,31 @@ $ @kbd{gawk -M 'BEGIN @{}
 @print{} 62060698786608744707 ... 92256259918212890625
 @end example
 
+如果你使用任意精度的浮点值来计算相同的值，为了正确的输出所需要的精度（使用公式 
 If instead you were to compute the same value using arbitrary-precision
 floating-point values, the precision needed for correct output (using
 the formula
 @iftex
-@math{prec = 3.322 @cdot dps})
-would be @math{3.322 @cdot 183231},
+@math{prec = 3.322 @cdot dps}）
+则会是 @math{3.322 @cdot 183231}，
 @end iftex
 @ifnottex
 @ifnotdocbook
-@samp{prec = 3.322 * dps})
-would be 3.322 x 183231,
+@samp{prec = 3.322 * dps}）
+则会是 3.322 x 183231，
 @end ifnotdocbook
 @end ifnottex
 @docbook
-<emphasis>prec</emphasis> = 3.322 &sdot; <emphasis>dps</emphasis>)
-would be
-<emphasis>prec</emphasis> = 3.322 &sdot; 183231,
+<emphasis>prec</emphasis> = 3.322 &sdot; <emphasis>dps</emphasis>）
+则会是
+<emphasis>prec</emphasis> = 3.322 &sdot; 183231，
 @end docbook
-or 608693.
+或者说是 608693。
 
-The result from an arithmetic operation with an integer and a floating-point value
-is a floating-point value with a precision equal to the working precision.
-The following program calculates the eighth term in
-Sylvester's sequence@footnote{Weisstein, Eric W.
-@cite{Sylvester's Sequence}. From MathWorld---A Wolfram Web Resource
-@w{(@url{http://mathworld.wolfram.com/SylvestersSequence.html}).}}
-using a recurrence:
+来自于一个整数与一个浮点数值的算术操作的结果，是一个与当前工作数度相同的一个浮点数。下面的程序用迭代来计算 Sylvester 序列
+@footnote{Weisstein, Eric W.
+@cite{Sylvester's Sequence}，来自于 MathWorld——一个Wolfram WEB 资源 @w{(@url{http://mathworld.wolfram.com/SylvestersSequence.html})}。}
+的第八个项：
 
 @example
 $ @kbd{gawk -M 'BEGIN @{}
@@ -24190,94 +23888,57 @@ $ @kbd{gawk -M 'BEGIN @{}
 @print{} 113423713055421845118910464
 @end example
 
-The output differs from the actual number, 113,423,713,055,421,844,361,000,443,
-because the default precision of 53 bits is not enough to represent the
-floating-point results exactly. You can either increase the precision
-(100 bits is enough in this case), or replace the floating-point constant
-@samp{2.0} with an integer, to perform all computations using integer
-arithmetic to get the correct output.
+输出不同于实际的数值，即 113，423，713，055，421，844，361，000，443，这里因为默认的精度为 53 位，不足以精确地表示清点结果。你要么提供高精（在这个例子中，100 位是够了的），或者将浮点数常数 @samp{2.0} 替换为一个整数，以全部使用整数算术运行来计算正确有的输出。
 
-Sometimes @command{gawk} must implicitly convert an arbitrary-precision
-integer into an arbitrary-precision floating-point value.  This is
-primarily because the MPFR library does not always provide the relevant
-interface to process arbitrary-precision integers or mixed-mode numbers
-as needed by an operation or function.  In such a case, the precision is
-set to the minimum value necessary for exact conversion, and the working
-precision is not used for this purpose.  If this is not what you need or
-want, you can employ a subterfuge and convert the integer to floating
-point first, like this:
+有时候，@command{gawk} 必须隐式地将任意精度的整数转换为任意粒度的浮点数。这主要是因为，当一个操作或者函数需要时，MPFR 库并不总是提供相关的接口来处理任意精度的整数，或者混合模式的数字。在这样的例子中，精度会被设置成要精度转换时的最小的值，而工作精度则不用于这个目的。如果这不是你想要的，你可以用个小诡计并将整数先转换为浮点数，如：
 
 @example
 gawk -M 'BEGIN @{ n = 13; print (n + 0.0) % 2.0 @}'
 @end example
 
-You can avoid this issue altogether by specifying the number as a floating-point value
-to begin with:
+你可以通过指定数值为浮点数来避免这样的问题：
 
 @example
 gawk -M 'BEGIN @{ n = 13.0; print n % 2.0 @}'
 @end example
 
-Note that for this particular example, it is likely best
-to just use the following:
+注意，对于这个特殊的例子，最好是使用下面的方式：
 
 @example
 gawk -M 'BEGIN @{ n = 13; print n % 2 @}'
 @end example
 
 @node POSIX Floating Point Problems
-@section Standards Versus Existing Practice
+@section 标准与既存实践
 
-Historically, @command{awk} has converted any nonnumeric-looking string
-to the numeric value zero, when required.  Furthermore, the original
-definition of the language and the original POSIX standards specified that
-@command{awk} only understands decimal numbers (base 10), and not octal
-(base 8) or hexadecimal numbers (base 16).
+历史上，@command{awk} 会在需要的时候，将所有的看起业是非数值的字串转换为数值 0。而且，语言的最开始的定义与最初的 POSIX 标准规定，@command{awk} 只理解十进制（基数为 10），而不是八进制（以 8 为基数）以及十六进制数（以 16 为基数）。
 
-Changes in the language of the
-2001 and 2004 POSIX standards can be interpreted to imply that @command{awk}
-should support additional features.  These features are:
+2001 的语言的变化与 2004 年的 POSIX 标准都可以解释为，@command{awk} 会可支持额外的特性，这些特性是：
 
 @itemize @value{BULLET}
 @item
-Interpretation of floating-point data values specified in hexadecimal
-notation (e.g., @code{0xDEADBEEF}). (Note: data values, @emph{not}
-source code constants.)
+以十六进制形成指定的浮点数的解析（如，@code{0xDEADBEEF}）。（提示：是数据值，而@emph{不是}源代码常量。）
 
 @item
-Support for the special IEEE 754 floating-point values ``not a number''
-(NaN), positive infinity (``inf''), and negative infinity (``@minus{}inf'').
-In particular, the format for these values is as specified by the ISO 1999
-C standard, which ignores case and can allow implementation-dependent additional
-characters after the @samp{nan} and allow either @samp{inf} or @samp{infinity}.
+支持 IEEE 754 特殊的浮点数值“not a number”（NaN），正无穷（“inf”）与负无穷（“@minus{}inf”）。特别是，这些值的格式由 ISO 1999 的 C 标准指定，它们不区别大小写，可允许依赖于实现的在 @samp{nan} 后的额外字符，也允许 @samp{inf} 或者 @samp{infinity}。
 @end itemize
 
-The first problem is that both of these are clear changes to historical
-practice:
+第一个问题是这两个相比于历史实践都有明确的改变：
 
 @itemize @value{BULLET}
 @item
-The @command{gawk} maintainer feels that supporting hexadecimal
-floating-point values, in particular, is ugly, and was never intended by the
-original designers to be part of the language.
+@command{gawk} 的维护者感觉，支持十六进制的浮点数，相当的丑，从来没有被最初的实现者接受为语言的一部分。
 
 @item
-Allowing completely alphabetic strings to have valid numeric
-values is also a very severe departure from historical practice.
+完全允许字母串有一个有效的数值也与历史实践有着严重的分离。
 @end itemize
 
-The second problem is that the @command{gawk} maintainer feels that this
-interpretation of the standard, which required a certain amount of
-``language lawyering'' to arrive at in the first place, was not even
-intended by the standard developers.  In other words, ``We see how you
-got where you are, but we don't think that that's where you want to be.''
+第二个问题是 @command{gawk} 的维护者觉得，对于标准的这种解释，需要大量的“语言立法”来达到第一个目标，这甚至也不被标准的开发者预料到。也就是说，“我们看到了你怎么来的，但是我们不认为那就是你想要去的地方。”
 
-Recognizing these issues, but attempting to provide compatibility
-with the earlier versions of the standard,
-the 2008 POSIX standard added explicit wording to allow, but not require,
-that @command{awk} support hexadecimal floating-point values and
-special values for ``not a number'' and infinity.
+由于发现了这样的问题，作为提供一个与早期标准版本兼容的尝试，在 2008 年的 POSIX 标准添加了一个显式的话来允许，但是不是必须，@command{awk} 支持十六进制的浮点数值以及针对 “not a number”下无穷的特殊值。
 
+#TODO20171205
+尽管 @command{gawk} 的维护者仍然觉得提供这样的特性是不被建议的，但是，在支持 IEEE 浮点数的系统上，提供某些途径来支持 NaN 与无穷值却是合理的。 @command{gawk} 的解决方案如下：
 Although the @command{gawk} maintainer continues to feel that
 providing those features is inadvisable,
 nevertheless, on systems that support IEEE floating point, it seems
