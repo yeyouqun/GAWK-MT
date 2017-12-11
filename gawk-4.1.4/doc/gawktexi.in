@@ -23164,22 +23164,13 @@ gawk -M 'BEGIN @{ n = 13; print n % 2 @}'
 
 由于发现了这样的问题，作为提供一个与早期标准版本兼容的尝试，在 2008 年的 POSIX 标准添加了一个显式的话来允许，但是不是必须，@command{awk} 支持十六进制的浮点数值以及针对 “not a number”下无穷的特殊值。
 
-#TODO20171205
-尽管 @command{gawk} 的维护者仍然觉得提供这样的特性是不被建议的，但是，在支持 IEEE 浮点数的系统上，提供某些途径来支持 NaN 与无穷值却是合理的。 @command{gawk} 的解决方案如下：
-Although the @command{gawk} maintainer continues to feel that
-providing those features is inadvisable,
-nevertheless, on systems that support IEEE floating point, it seems
-reasonable to provide @emph{some} way to support NaN and infinity values.
-The solution implemented in @command{gawk} is as follows:
+尽管 @command{gawk} 的维护者仍然觉得提供这样的特性是不被建议的，但是，在支持 IEEE 浮点数的系统上，提供@emph{某些}途径来支持 NaN 与无穷值却是合理的。@command{gawk} 的解决方案如下：
 
 @itemize @value{BULLET}
 @item
-With the @option{--posix} command-line option, @command{gawk} becomes
-``hands off.'' String values are passed directly to the system library's
-@code{strtod()} function, and if it successfully returns a numeric value,
-that is what's used.@footnote{You asked for it, you got it.}
-By definition, the results are not portable across
-different systems.  They are also a little surprising:
+如果有 @option{--posix} 命令行选项，则 @command{gawk} 会松手不管。字串值会被直接传递绘画系统的库函数 @code{strtod()} 函数，如果成功地返回了数值值，那么它就会被当做数值使用。 
+@footnote{自作自受。}
+根据定义，结果在不同的系统上是不可移植的。而且也有一些小的令人惊奇的行为：
 
 @example
 $ @kbd{echo nanny | gawk --posix '@{ print $1 + 0 @}'}
@@ -23189,17 +23180,7 @@ $ @kbd{echo 0xDeadBeef | gawk --posix '@{ print $1 + 0 @}'}
 @end example
 
 @item
-Without @option{--posix}, @command{gawk} interprets the four string values
-@samp{+inf},
-@samp{-inf},
-@samp{+nan},
-and
-@samp{-nan}
-specially, producing the corresponding special numeric values.
-The leading sign acts a signal to @command{gawk} (and the user)
-that the value is really numeric.  Hexadecimal floating point is
-not supported (unless you also use @option{--non-decimal-data},
-which is @emph{not} recommended). For example:
+如果没有 @option{--posix} 选项，@command{gawk} 会将后面的字串值 @samp{+inf}，@samp{-inf}，@samp{+nan} 与 @samp{-nan} 作特别的解释，并产生相应的特殊的数值。前导的符号会被当成发送绘画 @command{gawk} （以及用户）的信号说，这确实是个数值。十六进制浮点数是不受支持的（除非你也使用了 @option{--non-decimal-data} 选项，但我们@emph{不}建议）。例如：
 
 @example
 $ @kbd{echo nanny | gawk '@{ print $1 + 0 @}'}
@@ -23210,99 +23191,67 @@ $ @kbd{echo 0xDeadBeef | gawk '@{ print $1 + 0 @}'}
 @print{} 0
 @end example
 
-@command{gawk} ignores case in the four special values.
-Thus, @samp{+nan} and @samp{+NaN} are the same.
+@command{gawk} 对这四个值不区分大小写。因此 @samp{+nan} 与 @samp{+NaN} 是一样的。
 @end itemize
 
 @node Floating point summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-Most computer arithmetic is done using either integers or floating-point
-values.  Standard @command{awk} uses double-precision
-floating-point values.
+大多数的计算机算术运算是通过整数或者浮点数来完成的。标准的 @command{awk} 使用双精度浮点数数值。
 
 @item
-In the early 1990s Barbie mistakenly said, ``Math class is tough!''
-Although math isn't tough, floating-point arithmetic isn't the same
-as pencil-and-paper math, and care must be taken:
+在 1990 年代早期，Barbie 不正确地说过，“数学真难！”虽然数学不难，但是浮点数运算并不像“纸笔”数学一样，而必须仔细处理：
 
 @c nested list
 @itemize @value{MINUS}
 @item
-Not all numbers can be represented exactly.
+并不是所有的数都可以被精确表示。
 
 @item
-Comparing values should use a delta, instead of being done directly
-with @samp{==} and @samp{!=}.
+值的比较应该使用差别，而不是直接使用 @samp{==} 与 @samp{!=}。
 
 @item
-Errors accumulate.
+错误会累积。
 
 @item
-Operations are not always truly associative or distributive.
+操作并不总是关联与分布的。
 @end itemize
 
 @item
-Increasing the accuracy can help, but it is not a panacea.
+提供精度有用，但并不总是成能药。
 
 @item
-Often, increasing the accuracy and then rounding to the desired
-number of digits produces reasonable results.
+提升精度然后舍入舍出到一个需要的数值位以产生合理的结果。
 
 @item
-Use @option{-M} (or @option{--bignum}) to enable MPFR
-arithmetic. Use @code{PREC} to set the precision in bits, and
-@code{ROUNDMODE} to set the IEEE 754 rounding mode.
+使用 @option{-M}（或者 @option{--bignum}）来使用 MPFR 算术。使用 @code{PREC} 来设置精度位，以及设置 @code{ROUNDMODE} 来设置 IEEE 754 的舍入舍出模式。
 
 @item
-With @option{-M}, @command{gawk} performs
-arbitrary-precision integer arithmetic using the GMP library.
-This is faster and more space-efficient than using MPFR for
-the same calculations.
+通过 @option{-M}，@command{gawk} 会使用 GMP 库执行任意精度的整数算术运算。这比 MPFR 执行相同的计算会更快，在空间上更高效。
 
 @item
-There are several areas with respect to floating-point
-numbers where @command{gawk} disagrees with the POSIX standard.
-It pays to be aware of them.
+@command{gawk} 在处理浮点数上有几个方面与 POSIX 标准不同。有必要注意。
 
 @item
-Overall, there is no need to be unduly suspicious about the results from
-floating-point arithmetic. The lesson to remember is that floating-point
-arithmetic is always more complex than arithmetic using pencil and
-paper. In order to take advantage of the power of floating-point arithmetic,
-you need to know its limitations and work within them. For most casual
-use of floating-point arithmetic, you will often get the expected result
-if you simply round the display of your final results to the correct number
-of significant decimal digits.
+总体上看，没有必要过度地怀疑浮点数运算的结果。要记住的教训是浮点数运算要比纸笔上进行运算要更复杂。为了充分利用浮点数运算的优势，你需要知道它的限制来使用它们来工作。对于大多数的浮点算术运算，如果你简单地舍入舍出来显示你的结果到正确的十进制有效位，你都可以得到想要的结果。
 
 @item
-As general advice, avoid presenting numerical data in a manner that
-implies better precision than is actually the case.
+作为一般建议，避免以隐式的比实际更高精度来表示一个数据。
 
 @end itemize
 
 @node Dynamic Extensions
-@chapter 扩展 @command{gawk} 
+@chapter 编写 @command{gawk} 扩展
 @cindex dynamically loaded extensions
 
-It is possible to add new functions written in C or C++ to @command{gawk} using
-dynamically loaded libraries. This facility is available on systems
-that support the C @code{dlopen()} and @code{dlsym()}
-functions.  This @value{CHAPTER} describes how to create extensions
-using code written in C or C++.
+使用动态装载的库，可以用 C 或者 C++ 为 @command{gawk} 编写新的功能。这样的工具在支持 C 的 @code{dlopen()} 与 @code{dlsym()} 函数的系统上是可用的。本@value{CHAPTER}会描述如何用 C 与 C++ 的代码来创建扩展。
 
-If you don't know anything about C programming, you can safely skip this
-@value{CHAPTER}, although you may wish to review the documentation on the
-extensions that come with @command{gawk} (@pxref{Extension Samples}),
-and the information on the @code{gawkextlib} project (@pxref{gawkextlib}).
-The sample extensions are automatically built and installed when
-@command{gawk} is.
+如果你不了解 C 编程，你可以跳过这一@value{CHAPTER}，你可以查看随 @command{gawk} 一起发布的扩展文件（查看 @pxref{Extension Samples}），也可了解 @code{gawkextlib} 项目的信息（查看 @pxref{gawkextlib}）。例子扩展会与 @command{gawk} 一起进行构建并安装。
 
-@quotation NOTE
-When @option{--sandbox} is specified, extensions are disabled
-(@pxref{Options}).
+@quotation 提示
+当使用 @option{--sandbox} 选项时，扩展会被禁用（查看 @ref{Options}）。
 @end quotation
 
 @menu
@@ -23320,183 +23269,131 @@ When @option{--sandbox} is specified, extensions are disabled
 @end menu
 
 @node Extension Intro
-@section Introduction
+@section 介绍
 
 @cindex plug-in
-An @dfn{extension} (sometimes called a @dfn{plug-in}) is a piece of
-external compiled code that @command{gawk} can load at runtime to
-provide additional functionality, over and above the built-in capabilities
-described in the rest of this @value{DOCUMENT}.
+@dfn{扩展}（有时也称为@dfn{插件}）是一块外部编译的代码，@command{gawk} 可以在运行时装载来提供额外的功能，它们建立在本@value{DOCUMENT}中所描述的内建能力之上。
 
-Extensions are useful because they allow you (of course) to extend
-@command{gawk}'s functionality. For example, they can provide access to
-system calls (such as @code{chdir()} to change directory) and to other
-C library routines that could be of use.  As with most software,
-``the sky is the limit''; if you can imagine something that you might
-want to do and can write in C or C++, you can write an extension to do it!
+扩展非常有用，因此它们可以让你（这毫无疑问）来扩展 @command{gawk} 的功能。例如，它们可以提供访问系统调用的能力（比如 @code{chdir()} 来更改目录）以及其他的可用的 C 库例程。如大多数的软件“天空才是限制”，如果你想到某些事情，你可以通过 C 或者 C++ 代码来实现，你就可以写一个扩展来实现他。
 
-Extensions are written in C or C++, using the @dfn{application programming
-interface} (API) defined for this purpose by the @command{gawk}
-developers.  The rest of this @value{CHAPTER} explains
-the facilities that the API provides and how to use
-them, and presents a small example extension.  In addition, it documents
-the sample extensions included in the @command{gawk} distribution
-and describes the @code{gawkextlib} project.
+扩展通过 C 或者 C++ 写成，并利用为此目的而向 @command{gawk} 开发者提供的@dfn{应用程序接口}（API）来实现。本@value{CHAPTER}中的其他部分解释 API 工具以及如何来使用它们，并提供了一个小的扩展例子。另外，例子扩展程序也包含在了 @command{gawk} 的发布版本中，并对 @code{gawkextlib} 进行描述。
 @ifclear FOR_PRINT
-@xref{Extension Design}, for a discussion of the extension mechanism
-goals and design.
+查看 @xref{Extension Design}，来获取扩展机制的目标与设计的更多讨论。
 @end ifclear
 @ifset FOR_PRINT
-See @uref{http://www.gnu.org/software/gawk/manual/html_node/Extension-Design.html}
-for a discussion of the extension mechanism
-goals and design.
+查看 @uref{http://www.gnu.org/software/gawk/manual/html_node/Extension-Design.html}，来获取扩展机制的目标与设计的更多讨论。
 @end ifset
 
 @node Plugin License
-@section Extension Licensing
+@section 扩展许可
 
-Every dynamic extension must be distributed under a license that is
-compatible with the GNU GPL (@pxref{Copying}).
+每个动态的扩展必须在与 GNU GPL（查看 @pxref{Copying}）兼容的许可下发布。
 
-In order for the extension to tell @command{gawk} that it is
-properly licensed, the extension must define the global symbol
-@code{plugin_is_GPL_compatible}.  If this symbol does not exist,
-@command{gawk} emits a fatal error and exits when it tries to load
-your extension.
+为了让扩展告知 @command{gawk} 它是有适当的许可的，扩展必须定义一个全局符号 @code{plugin_is_GPL_compatible}。如果这个符号不存在，在扩展被装载时，@command{gawk} 会发送一个致命错误，并退出。
 
-The declared type of the symbol should be @code{int}.  It does not need
-to be in any allocated section, though.  The code merely asserts that
-the symbol exists in the global scope.  Something like this is enough:
+符号的声明类型为 @code{int}。它没有必要一定要在某个段中。代码仅仅是断言符号在全局范围内存在即可。像下面这样就足够了：
 
 @example
 int plugin_is_GPL_compatible;
 @end example
 
 @node Extension Mechanism Outline
-@section How It Works at a High Level
+@section 在高层级中是它是如何工作的
 
-Communication between
-@command{gawk} and an extension is two-way.  First, when an extension
-is loaded, @command{gawk} passes it a pointer to a @code{struct} whose fields are
-function pointers.
+@command{gawk} 与 扩展之间的通信是双向的。首先，当扩展被装载，@command{gawk} 会向它传递一个结构体 @code{struct} 的指针，结构体中都是函数指针。
 @ifnotdocbook
-This is shown in @ref{figure-load-extension}.
+如 @ref{figure-load-extension} 所示：
 @end ifnotdocbook
 @ifdocbook
-This is shown in @inlineraw{docbook, <xref linkend="figure-load-extension"/>}.
+如 @inlineraw{docbook, <xref linkend="figure-load-extension"/>} 所示：
 @end ifdocbook
 
 @ifnotdocbook
 @float Figure,figure-load-extension
-@caption{Loading the extension}
+@caption{装载扩展}
 @center @image{api-figure1, , , Loading the extension}
 @end float
 @end ifnotdocbook
 
 @docbook
 <figure id="figure-load-extension" float="0">
-<title>Loading the extension</title>
+<title>装载扩展</title>
 <mediaobject>
 <imageobject role="web"><imagedata fileref="api-figure1.png" format="PNG"/></imageobject>
 </mediaobject>
 </figure>
 @end docbook
 
-The extension can call functions inside @command{gawk} through these
-function pointers, at runtime, without needing (link-time) access
-to @command{gawk}'s symbols.  One of these function pointers is to a
-function for ``registering'' new functions.
+扩展通过这些指针函数来调用 @command{gawk} 中的函数，并且是在运行时调用，而无须（在连接时）访问 @command{gawk} 的符号。这些函数指针中的一个是用来“注册”新功能的函数。
 @ifnotdocbook
-This is shown in @ref{figure-register-new-function}.
+如 @ref{figure-register-new-function} 所示：
 @end ifnotdocbook
 @ifdocbook
-This is shown in @inlineraw{docbook, <xref linkend="figure-register-new-function"/>}.
+如 @inlineraw{docbook, <xref linkend="figure-register-new-function"/>} 所示：
 @end ifdocbook
 
 @ifnotdocbook
 @float Figure,figure-register-new-function
-@caption{Registering a new function}
+@caption{注册新函数}
 @center @image{api-figure2, , , Registering a new Function}
 @end float
 @end ifnotdocbook
 
 @docbook
 <figure id="figure-register-new-function" float="0">
-<title>Registering a new function</title>
+<title>注册新函数</title>
 <mediaobject>
 <imageobject role="web"><imagedata fileref="api-figure2.png" format="PNG"/></imageobject>
 </mediaobject>
 </figure>
 @end docbook
 
-In the other direction, the extension registers its new functions
-with @command{gawk} by passing function pointers to the functions that
-provide the new feature (@code{do_chdir()}, for example).  @command{gawk}
-associates the function pointer with a name and can then call it, using a
-defined calling convention.
+在另一个方向，扩展注册它的新函数是向 @command{gawk} 传递函数的指针，这个函数提供了新的特性（比如 @code{do_chdir()}）。@command{gawk} 将这个函数指针与一个名字关联，然后使用定义好的调用规范来调用它。
 @ifnotdocbook
-This is shown in @ref{figure-call-new-function}.
+如在 @ref{figure-call-new-function} 所示：
 @end ifnotdocbook
 @ifdocbook
-This is shown in @inlineraw{docbook, <xref linkend="figure-call-new-function"/>}.
+如在 @inlineraw{docbook, <xref linkend="figure-call-new-function"/>} 所示：
 @end ifdocbook
 
 @ifnotdocbook
 @float Figure,figure-call-new-function
-@caption{Calling the new function}
+@caption{调用新函数}
 @center @image{api-figure3, , , Calling the new function}
 @end float
 @end ifnotdocbook
 
 @docbook
 <figure id="figure-call-new-function" float="0">
-<title>Calling the new function</title>
+<title>调用新函数</title>
 <mediaobject>
 <imageobject role="web"><imagedata fileref="api-figure3.png" format="PNG"/></imageobject>
 </mediaobject>
 </figure>
 @end docbook
 
-The @code{do_@var{xxx}()} function, in turn, then uses the function
-pointers in the API @code{struct} to do its work, such as updating
-variables or arrays, printing messages, setting @code{ERRNO}, and so on.
+接下来 @code{do_@var{xxx}()} 函数使用 API 结构体 @code{struct} 中的函数指针来实现它的功能，如更新变量或者数组，打印信息，设置 @code{ERRNO} 等等。
 
-Convenience macros make calling through the function pointers look
-like regular function calls so that extension code is quite readable
-and understandable.
+方便的宏可以使用通过函数指针调用看起来像常规的函数调用一样，这样扩展代码非常好读，也很好理解。
 
-Although all of this sounds somewhat complicated, the result is that
-extension code is quite straightforward to write and to read. You can
-see this in the sample extension @file{filefuncs.c} (@pxref{Extension
-Example}) and also in the @file{testext.c} code for testing the APIs.
+尽管这听起来有一些复杂，而结果是扩展的代码编写与阅读都非常直接。你可以查看样例扩展 @file{filefuncs.c}（查看 @pxref{Extension
+Example}）以及 @file{testext.c} 代码来测试 APIs。
 
-Some other bits and pieces:
+一些其他的杂项：
 
 @itemize @value{BULLET}
 @item
-The API provides access to @command{gawk}'s @code{do_@var{xxx}} values,
-reflecting command-line options, like @code{do_lint}, @code{do_profiling},
-and so on (@pxref{Extension API Variables}).
-These are informational: an extension cannot affect their values
-inside @command{gawk}.  In addition, attempting to assign to them
-produces a compile-time error.
+API 提供了访问 @command{gawk} 的 @code{do_@var{xxx}} 值的方式，以此来反应命令行参数，如 @code{do_lint}，@code{do_profiling} 等等（查看 @pxref{Extension API Variables}）。而下面提供相关信息：扩展不可以改变它们在 @command{gawk} 中的值。另外，尝试绘给它们赋值会产生一个编译时错误。
 
 @item
-The API also provides major and minor version numbers, so that an
-extension can check if the @command{gawk} it is loaded with supports the
-facilities it was compiled with.  (Version mismatches ``shouldn't''
-happen, but we all know how @emph{that} goes.)
-@xref{Extension Versioning} for details.
+API 也提供了主次版本号，这样扩展可以来检查装载扩展的 @command{gawk} 的版本是否支持其被编译时的所需要的功能。（版本不匹配“不应该”发生，但是我们所有人都知道@emph{事情}怎么发生的。）查看 @xref{Extension Versioning}，来获取相关细节。
 @end itemize
 
 @node Extension API Description
-@section API Description
+@section API 描述
 @cindex extension API
 
-C or C++ code for an extension must include the header file
-@file{gawkapi.h}, which declares the functions and defines the data
-types used to communicate with @command{gawk}.
-This (rather large) @value{SECTION} describes the API in detail.
+C 或者 C++ 所写的扩展必须包含头文件 @file{gawkapi.h}，在这个文件中声明函数，并且定义了与 @command{gawk} 进行通信的数组类型。这（相当大的）@value{SECTION}，详细地描述了这些 API。
 
 @menu
 * Extension API Functions Introduction:: Introduction to the API functions.
@@ -23517,85 +23414,78 @@ This (rather large) @value{SECTION} describes the API in detail.
 @end menu
 
 @node Extension API Functions Introduction
-@subsection Introduction
+@subsection 介绍
 
-Access to facilities within @command{gawk} is achieved
-by calling through function pointers passed into your extension.
+访问 @command{gawk} 的工具是通过调用传递到你的扩展的函数指针来完成的。
 
-API function pointers are provided for the following kinds of operations:
+API 函数指针提供了下面类型的操作：
 
 @itemize @value{BULLET}
 @item
-Allocating, reallocating, and releasing memory.
+分配，重新分配以及释放内存。
 
 @item
-Registration functions. You may register:
+注册函数，有如下：
 
 @c nested list
 @itemize @value{MINUS}
 @item
-Extension functions
+扩展函数
 @item
-Exit callbacks
+退出回调函数
 @item
-A version string
+版本字串
 @item
-Input parsers
+输入分析器
 @item
-Output wrappers
+输出包装器
 @item
-Two-way processors
+双路处理器
 @end itemize
 
-All of these are discussed in detail later in this @value{CHAPTER}.
+所有的这些都会在本@value{CHAPTER}中的剩余部进行详细的讨论。
 
 @item
-Printing fatal, warning, and ``lint'' warning messages.
+打印致命错误，告警以及“lint”警告信息。
 
 @item
-Updating @code{ERRNO}, or unsetting it.
+更新 @code{ERRNO}，或者重置它。
 
 @item
-Accessing parameters, including converting an undefined parameter into
-an array.
+访问参数，包括将未定义的参数转换为数组。
 
 @item
-Symbol table access: retrieving a global variable, creating one,
-or changing one.
+符号表访问：返回全局变量，合建或者更改全局变量。
 
 @item
-Creating and releasing cached values; this provides an
-efficient way to use values for multiple variables and
-can be a big performance win.
+创建，释放缓存值，这提供了一种高效访问多个变量的方式，可能极大地提供性能。
 
 @item
-Manipulating arrays:
+数组操作：
 
 @itemize @value{MINUS}
 @item
-Retrieving, adding, deleting, and modifying elements
+检索，添加，删除以及修改元素。
 
 @item
-Getting the count of elements in an array
+获取数组中的元素个数。
 
 @item
-Creating a new array
+创建新数组。
 
 @item
-Clearing an array
+清除数组。
 
 @item
-Flattening an array for easy C-style looping over all its indices and elements
+扁平化数组，使用以使用简单的 C 风格的循环来迭代所有的索引以及元素。
 @end itemize
 @end itemize
 
-Some points about using the API:
+使用 API 的一些点：
 
 @itemize @value{BULLET}
 @item
-The following types, macros, and/or functions are referenced
-in @file{gawkapi.h}.  For correct use, you must therefore include the
-corresponding standard header file @emph{before} including @file{gawkapi.h}:
+下面的类型，宏，以及/或者函数可以在 @file{gawkapi.h} 文件参考。为了正确使用，你必须在包含 @file{gawkapi.h} @emph{前}包含相应的标准头文件。
 
 @c FIXME: Make this is a float at some point.
 @multitable {@code{memset()}, @code{memcpy()}} {@code{<sys/types.h>}}
@@ -23610,121 +23500,78 @@ corresponding standard header file @emph{before} including @file{gawkapi.h}:
 @item @code{struct stat} @tab @code{<sys/stat.h>}
 @end multitable
 
-Due to portability concerns, especially to systems that are not
-fully standards-compliant, it is your responsibility
-to include the correct files in the correct way. This requirement
-is necessary in order to keep @file{gawkapi.h} clean, instead of becoming
-a portability hodge-podge as can be seen in some parts of
-the @command{gawk} source code.
+由于考虑到可移植性，特别是那些没有完全与标准兼容的系统，你需要以正确的方式包含正确的文件。为了保证 @file{gawkapi.h} 的简单清楚，这个要求是很必要的，这样不会成为可移植性的大杂烩，而这会在部分的 @command{gawk} 源代码中看到。
 
 @item
-The @file{gawkapi.h} file may be included more than once without ill effect.
-Doing so, however, is poor coding practice.
+@file{gawkapi.h} 文件可以被包含多次，而不会产生不好的结果。只是这么做是个很不好的编程实践。
 
 @item
-Although the API only uses ISO C 90 features, there is an exception; the
-``constructor'' functions use the @code{inline} keyword. If your compiler
-does not support this keyword, you should either place
-@samp{-Dinline=''} on your command line or use the GNU Autotools and include a
-@file{config.h} file in your extensions.
+尽管 API 只使用 ISO C 90 的特性，但是有一个例外，即“构造”函数使用 @code{inline} 关键词。如果你的编译器不支持这个关键词，你要么在命令行中加入 @samp{-Dinline=''}，或者使用 GNU 的 Autotools 并在你的扩展中包含一个 @file{config.h} 文件。
 
 @item
-All pointers filled in by @command{gawk} point to memory
-managed by @command{gawk} and should be treated by the extension as
-read-only.  Memory for @emph{all} strings passed into @command{gawk}
-from the extension @emph{must} come from calling one of
-@code{gawk_malloc()}, @code{gawk_calloc()}, or @code{gawk_realloc()},
-and is managed by @command{gawk} from then on.
+所有的在 @command{gawk} 填充的指针指向的内存，都由 @command{gawk} 管理，应该被你的扩展看成是只读的。从扩展中传递到 @command{gawk} 中的@emph{所有}字串内存，@emph{必须}使用 @code{gawk_malloc()}，@code{gawk_calloc()} 或者 @code{gawk_realloc()} 调用获取，并从那以后，由 @command{gawk} 进行管理。
 
 @item
-The API defines several simple @code{struct}s that map values as seen
-from @command{awk}.  A value can be a @code{double}, a string, or an
-array (as in multidimensional arrays, or when creating a new array).
-String values maintain both pointer and length, because embedded @sc{nul}
-characters are allowed.
+API 定义了几个简单的结构体 @code{struct} 用来影射 @command{awk} 看到的值。值可以是 @code{double} 类型，或者字串，或者是数组（如多维数组，或者创建新数组时）。字串值通过指针与长度来管理，因此内嵌的 @sc{nul} 字符也可以使用。
 
-@quotation NOTE
-By intent, strings are maintained using the current multibyte encoding (as
-defined by @env{LC_@var{xxx}} environment variables) and not using wide
-characters.  This matches how @command{gawk} stores strings internally
-and also how characters are likely to be input into and output from files.
+@quotation 提示
+从目的上讲，字串使用当前的多字节编码来维护（如 @env{LC_@var{xxx}} 环境变量定义的）而不是使用宽字符。这个与 @command{gawk} 内部存储字串是匹配的，字符也可能是这么从文件读取或者输出到文件的。
 @end quotation
 
 @item
-When retrieving a value (such as a parameter or that of a global variable
-or array element), the extension requests a specific type (number, string,
-scalar, value cookie, array, or ``undefined'').  When the request is
-``undefined,'' the returned value will have the real underlying type.
+当收到一个值（如参数或者全局变量，或者数组元素），扩展需要请示一个特定的类型（数值，字串，标量，值的Cookie，数组，或者“未定义”）。当请求为“未定义”时，返回的值是会有真正的底层类型的。
 
-However, if the request and actual type don't match, the access function
-returns ``false'' and fills in the type of the actual value that is there,
-so that the extension can, e.g., print an error message
-(such as ``scalar passed where array expected'').
+但是，如果请求的类型与实际的类型不匹配，读取函数会返回“false”，并在 type 类型里填上值实际的类型，这样扩展可以打印错误的信息（比如 “scalar passed where array expected”（需要数组时传递的是标量类型））。
 
 @c This is documented in the header file and needs some expanding upon.
 @c The table there should be presented here
 @end itemize
 
-You may call the API functions by using the function pointers
-directly, but the interface is not so pretty. To make extension code look
-more like regular code, the @file{gawkapi.h} header file defines several
-macros that you should use in your code.  This @value{SECTION} presents
-the macros as if they were functions.
+你可以使用函数指针来调用 API 函数，但是接口没有这么简单。为了使扩展代码看起来像常规的代码，@file{gawkapi.h} 头文件中定义了几个宏，你可以在你的代码中使用。这一@value{SECTION}会在你使用函数时来呈现这些宏。
 
 @node General Data Types
-@subsection General-Purpose Data Types
+@subsection 通用目的的数据类型
 
 @cindex Robbins, Arnold
 @cindex Ramey, Chet
 @quotation
-@i{I have a true love/hate relationship with unions.}
+@i{
+我是真的喜欢/讨厌与联合之间的关系。
+}
 @author Arnold Robbins
 @end quotation
 
 @quotation
-@i{That's the thing about unions: the compiler will arrange things so they
-can accommodate both love and hate.}
+@i{
+这是在关于联合的事情：编译器会对事进行周密安排，这样可以协调对它的爱与恨。
+}
 @author Chet Ramey
 @end quotation
 
-The extension API defines a number of simple types and structures for
-general-purpose use. Additional, more specialized, data structures are
-introduced in subsequent @value{SECTION}s, together with the functions
-that use them.
+扩展的 API 定义了很多简单的类型以及结构来用于通用目的。另外，很多特有的数据结构会在后面的@value{SECTION}中进行介绍，包含使用他们的函数。
 
-The general-purpose types and structures are as follows:
+通用目的类型和结构如下：
 
 @table @code
 @item typedef void *awk_ext_id_t;
-A value of this type is received from @command{gawk} when an extension is loaded.
-That value must then be passed back to @command{gawk} as the first parameter of
-each API function.
+这个类型的值是在扩展被载入的时候从 @command{gawk} 中返回的。这个值必须被作为每个 API 的函数的第一个参数回传给 @command{gawk}。
 
 @item #define awk_const @dots{}
-This macro expands to @samp{const} when compiling an extension,
-and to nothing when compiling @command{gawk} itself.  This makes
-certain fields in the API data structures unwritable from extension code,
-while allowing @command{gawk} to use them as it needs to.
+这个宏会在编译扩展时展开成为 @samp{const}，但在编译 @command{gawk} 本身时，则为空。这使得 API 数组结构中的特定域从扩展中是不可写的，而允许 @command{gawk} 在需要的时候使用它们。
 
 @item typedef enum awk_bool @{
 @itemx @ @ @ @ awk_false = 0,
 @itemx @ @ @ @ awk_true
 @itemx @} awk_bool_t;
-A simple Boolean type.
+简单的布尔类型。
 
 @item typedef struct awk_string @{
 @itemx @ @ @ @ char *str;@ @ @ @ @ @ /* data */
 @itemx @ @ @ @ size_t len;@ @ @ @ @ /* length thereof, in chars */
 @itemx @} awk_string_t;
-This represents a mutable string. @command{gawk}
-owns the memory pointed to if it supplied
-the value. Otherwise, it takes ownership of the memory pointed to.
-@emph{Such memory must come from calling one of the
-@code{gawk_malloc()}, @code{gawk_calloc()}, or
-@code{gawk_realloc()} functions!}
+这表示一个可变的字串。如果有值的话，@command{gawk} 持有指向它的内存。否则，它会自己持有其指向的内存。@emph{这些内存必须来自于 @code{gawk_malloc()}，@code{gawk_calloc()}，或者 @code{gawk_realloc()} 函数。}
 
-As mentioned earlier, strings are maintained using the current
-multibyte encoding.
+如早前所提，字串使用当前的多字节编码来保存。
 
 @item typedef enum @{
 @itemx @ @ @ @ AWK_UNDEFINED,
@@ -23734,8 +23581,7 @@ multibyte encoding.
 @itemx @ @ @ @ AWK_SCALAR,@ @ @ @ @ @ @ @ @ /* opaque access to a variable */
 @itemx @ @ @ @ AWK_VALUE_COOKIE@ @ @ @ /* for updating a previously created value */
 @itemx @} awk_valtype_t;
-This @code{enum} indicates the type of a value.
-It is used in the following @code{struct}.
+这个 @code{enum} 指示了数据的类型。它会在后面的结构体 @code{struct} 中使用。
 
 @item typedef struct awk_value @{
 @itemx @ @ @ @ awk_valtype_t   val_type;
@@ -23747,155 +23593,94 @@ It is used in the following @code{struct}.
 @itemx @ @ @ @ @ @ @ @ awk_value_cookie_t@ vc;
 @itemx @ @ @ @ @} u;
 @itemx @} awk_value_t;
-An ``@command{awk} value.''
-The @code{val_type} member indicates what kind of value the
-@code{union} holds, and each member is of the appropriate type.
+一个“@command{awk} 值”。@code{val_type} 成员指示了联合体 @code{union} 存有的值的类型，每个成员都是特定的类型。
 
 @item #define str_value@ @ @ @ @ @ u.s
 @itemx #define num_value@ @ @ @ @ @ u.d
 @itemx #define array_cookie@ @ @ u.a
 @itemx #define scalar_cookie@ @ u.scl
 @itemx #define value_cookie@ @ @ u.vc
-Using these macros makes accessing the fields of the @code{awk_value_t} more
-readable.
+使用这些宏来访问 @code{awk_value_t} 的域会使用代码更阅读。
 
 @item typedef void *awk_scalar_t;
-Scalars can be represented as an opaque type. These values are obtained
-from @command{gawk} and then passed back into it. This is discussed
-in a general fashion in the text following this list, and in more detail in
-@ref{Symbol table by cookie}.
+标量可以被表示成一个透明类型。这些值从 @command{gawk} 中获取，然后再回传给 @command{gawk}。这在本列表下面的会以有更一般的讨论。更多的细节请参考 @ref{Symbol table by cookie}。
 
 @item typedef void *awk_value_cookie_t;
-A ``value cookie'' is an opaque type representing a cached value.
-This is also discussed in a general fashion in the text following this list,
-and in more detail in @ref{Cached values}.
+一个“值 cookie”表示一个缓存值的透明类型。这会下列表的后面进行更一般的讨论，而更多的细节请参考 @ref{Cached values}。
 
 @end table
 
-Scalar values in @command{awk} are either numbers or strings. The
-@code{awk_value_t} struct represents values.  The @code{val_type} member
-indicates what is in the @code{union}.
+在 @command{awk} 中的标量要么是数值，要么是字串。@code{awk_value_t} 结构代表一个值。@code{val_type} 成员指示联合体 @code{union} 中的具体值的类型。
 
-Representing numbers is easy---the API uses a C @code{double}.  Strings
-require more work. Because @command{gawk} allows embedded @sc{nul} bytes
-in string values, a string must be represented as a pair containing a
-data pointer and length. This is the @code{awk_string_t} type.
+表示一个数值很简单——API 使用 C @code{double}。字串则需要一点工作。因此 @command{gawk} 允许内嵌的 @sc{nul} 字节在字串中。一个字串必须使用包含指针与长度一对值来表示。这个类型是 @code{awk_string_t} 类型。
 
-Identifiers (i.e., the names of global variables) can be associated
-with either scalar values or with arrays.  In addition, @command{gawk}
-provides true arrays of arrays, where any given array element can
-itself be an array.  Discussion of arrays is delayed until
-@ref{Array Manipulation}.
+标识符（如全局变量的名字）可以与标题值或者与数组进行关联。另外，@command{gawk} 提供了真正的数组之数类型，这样指定的数组元素也可以是一个数组。对于数组的讨论，详细内容要到 @ref{Array Manipulation}。
 
-The various macros listed earlier make it easier to use the elements
-of the @code{union} as if they were fields in a @code{struct}; this
-is a common coding practice in C.  Such code is easier to write and to
-read, but it remains @emph{your} responsibility to make sure that
-the @code{val_type} member correctly reflects the type of the value in
-the @code{awk_value_t} struct.
+早前所列的宏使得更容易使用联合体 @code{union} 中的元素，就好像它就是结构体 @code{struct} 中的域一样，这在 C 中是一个通用的编程技巧。这些代码也更容易编写与阅读，但是@emph{你}有责任确保 @code{val_type} 成员正确地反映了 @code{awk_value_t} 结构中的值的类型。
 
-Conceptually, the first three members of the @code{union} (number, string,
-and array) are all that is needed for working with @command{awk} values.
-However, because the API provides routines for accessing and changing
-the value of a global scalar variable only by using the variable's name,
-there is a performance penalty: @command{gawk} must find the variable
-each time it is accessed and changed.  This turns out to be a real issue,
-not just a theoretical one.
+从概念上来说，联合体 @code{union} 中的头三个成员（number，string 与 array）是与 @command{awk} 一起使用时所有需要的类型。但是，因为 API 提供的用来访问与更改全局标量值的例程只可以使用变量名，因此会有性能损耗：@command{gawk} 必须在访问或者更改时找到这个变量。这会成为一个真正的问题，而不仅是理论上的。
 
-Thus, if you know that your extension will spend considerable time
-reading and/or changing the value of one or more scalar variables, you
-can obtain a @dfn{scalar cookie}@footnote{See
-@uref{http://catb.org/jargon/html/C/cookie.html, the ``cookie'' entry in the Jargon file} for a
-definition of @dfn{cookie}, and @uref{http://catb.org/jargon/html/M/magic-cookie.html,
-the ``magic cookie'' entry in the Jargon file} for a nice example.
+所以，如果你知道你的扩展会花相当长的时候来读取/或者改变一个或者多个标量的值。你就可以为那个变量获取一个@dfn{标量 cookie}对象，
+@footnote{查看 @uref{http://catb.org/jargon/html/C/cookie.html, the ``cookie'' entry in the Jargon file} 来查看 @dfn{cookie} 的定义，以及 @uref{http://catb.org/jargon/html/M/magic-cookie.html,
+the ``magic cookie'' entry in the Jargon file} 来查看其中的例子。
 @ifclear FOR_PRINT
 See also the entry for ``Cookie'' in the @ref{Glossary}.
+也可看 @ref{Glossary} 中的“Cookie”词条。
 @end ifclear
 }
-object for that variable, and then use
-the cookie for getting the variable's value or for changing the variable's
-value.
-The @code{awk_scalar_t} type holds a scalar cookie, and the
-@code{scalar_cookie} macro provides access to the value of that type
-in the @code{awk_value_t} struct.
-Given a scalar cookie, @command{gawk} can directly retrieve or
-modify the value, as required, without having to find it first.
+然后使用这个 cookie 来获取变量的值，或者改变变量的值。@code{awk_scalar_t} 类型持有一个标量 cookie，而 @code{scalar_cookie} 宏提供了访问在 @code{awk_scalar_t} 结构中那个类型值的方式。假设有一个标量 cookie，@command{gawk} 可以直接返回或者修改其值，而不需要首先查找它。
 
-The @code{awk_value_cookie_t} type and @code{value_cookie} macro are similar.
-If you know that you wish to
-use the same numeric or string @emph{value} for one or more variables,
-you can create the value once, retaining a @dfn{value cookie} for it,
-and then pass in that value cookie whenever you wish to set the value of a
-variable.  This saves storage space within the running @command{gawk}
-process and reduces the time needed to create the value.
+@code{awk_value_cookie_t} 类型与 @code{value_cookie} 宏类似。如果你知道你希望使用相同的数值类型与字串类型的@emph{值}来用于一个或者多个变量，你可以一次创建值，然后为它保留@dfn{值 cookie}，然后在希望在设置变量的任何时候，将这个 cookie 传递过去产。这个可以在运行的 @command{gawk} 中节约存储，并且压缩创建值的时间。
 
 @node Memory Allocation Functions
-@subsection Memory Allocation Functions and Convenience Macros
+@subsection 内存分配函数与相应的简化宏
 @cindex allocating memory for extensions
 @cindex extensions, allocating memory
 
-The API provides a number of @dfn{memory allocation} functions for
-allocating memory that can be passed to @command{gawk}, as well as a number of
-convenience macros.
-This @value{SUBSECTION} presents them all as function prototypes, in
-the way that extension code would use them:
+API 提供了很多的内存分配函数用来进行@dfn{内存分配}，并可将内存传递绘画 @command{gawk}，以及一些用于方便目的的宏。这个@value{SUBSECTION}
+小节将它们的函数原型呈现，扩展可以通过这种方式来使用它们：
 
 @table @code
 @item void *gawk_malloc(size_t size);
-Call the correct version of @code{malloc()} to allocate storage that may
-be passed to @command{gawk}.
+调用正确的 @code{malloc()} 版本来分配存储，并可以传递给 @command{gawk}。
 
 @item void *gawk_calloc(size_t nmemb, size_t size);
-Call the correct version of @code{calloc()} to allocate storage that may
-be passed to @command{gawk}.
+调用正确的 @code{calloc()} 版本来分配内存，并可以传递给 @command{gawk}。
 
 @item void *gawk_realloc(void *ptr, size_t size);
-Call the correct version of @code{realloc()} to allocate storage that may
-be passed to @command{gawk}.
+调用正确的 @code{realloc()} 版本来分配内存，并可以传递给 @command{gawk}。
 
 @item void gawk_free(void *ptr);
-Call the correct version of @code{free()} to release storage that was
-allocated with @code{gawk_malloc()}, @code{gawk_calloc()}, or @code{gawk_realloc()}.
+调用正确的 @code{free()} 版本来释放由 @code{gawk_malloc()}，@code{gawk_calloc()}，或者 @code{gawk_realloc()} 分配的内存。
 @end table
 
-The API has to provide these functions because it is possible
-for an extension to be compiled and linked against a different
-version of the C library than was used for the @command{gawk}
-executable.@footnote{This is more common on MS-Windows systems, but it
-can happen on Unix-like systems as well.} If @command{gawk} were
-to use its version of @code{free()} when the memory came from an
-unrelated version of @code{malloc()}, unexpected behavior would
-likely result.
+API 要提供这些函数，是因为要编译的扩展有可能连接的是不同版本的 C 库，而不是 @command{gawk} 执行体所使用的 C 库。
+@footnote{这在 MS-Windows 系统中更常见，不过也可能发生在 Unix 类似的系统中。}
+如果 @command{gawk} 使用的是它自己版本 @code{free()} 来释放不相同的版本 @code{malloc()} 版本分配的内存时，就可能导致未预期的行为。
 
-Two convenience macros may be used for allocating storage
-from @code{gawk_malloc()} and
-@code{gawk_realloc()}. If the allocation fails, they cause @command{gawk}
-to exit with a fatal error message.  They should be used as if they were
-procedure calls that do not return a value:
+有两个方便的宏可以用来使用 @code{gawk_malloc()} 与 @code{gawk_realloc()} 来进行内存分配。如果分配失败，会导致 @command{gawk} 会以致命错误退出。使用它们就像使用一个不会返回值的过程一样。
 
 @table @code
 @item #define emalloc(pointer, type, size, message) @dots{}
-The arguments to this macro are as follows:
+这个宏的参数如下：
 
 @c nested table
 @table @code
 @item pointer
-The pointer variable to point at the allocated storage.
+变量指向被分配的内存。
 
 @item type
-The type of the pointer variable.  This is used to create a cast for
-the call to @code{gawk_malloc()}.
+变量的类型。这个用来创建一个调用 @code{gawk_malloc()} 的转换。
 
 @item size
-The total number of bytes to be allocated.
+要分配的字节总大小。
 
 @item message
-A message to be prefixed to the fatal error message. Typically this is the name
-of the function using the macro.
+在错误信息前附加的消息。典型的是使用这个宏的函数名。
 @end table
 
 @noindent
-For example, you might allocate a string value like so:
+例如，你可以像这样来分配一个字串值：
 
 @example
 awk_value_t result;
@@ -23908,54 +23693,38 @@ make_malloced_string(message, strlen(message), & result);
 @end example
 
 @item #define erealloc(pointer, type, size, message) @dots{}
-This is like @code{emalloc()}, but it calls @code{gawk_realloc()}
-instead of @code{gawk_malloc()}.
-The arguments are the same as for the @code{emalloc()} macro.
+这个与 @code{emalloc()} 类似，但是调用的是 @code{gawk_realloc()} 而不是 @code{gawk_malloc()}。参数与 @code{emalloc()} 宏一样。
 @end table
 
 @node Constructor Functions
-@subsection Constructor Functions
+@subsection 构造函数
 
-The API provides a number of @dfn{constructor} functions for creating
-string and numeric values, as well as a number of convenience macros.
-This @value{SUBSECTION} presents them all as function prototypes, in
-the way that extension code would use them:
+API 提供了多个@dfn{构造函数}来创建字串或者数值，以及多个相应的宏。这个@value{SUBSECTION}呈现所有函数的原型，扩展代码可以使用这些原型来调用它们：
 
 @table @code
 @item static inline awk_value_t *
 @itemx make_const_string(const char *string, size_t length, awk_value_t *result);
-This function creates a string value in the @code{awk_value_t} variable
-pointed to by @code{result}. It expects @code{string} to be a C string constant
-(or other string data), and automatically creates a @emph{copy} of the data
-for storage in @code{result}. It returns @code{result}.
+这个函数在通过 @code{result} 指向的 @code{awk_value_t} 变量中创建一个字串值。函数需要要的 @code{string} 是一个 C 字串常量（或者其他的字串数据），并自动创建一个在 @code{result} 中的数据@emph{复本}。然后返回 @code{result}。
 
 @item static inline awk_value_t *
 @itemx make_malloced_string(const char *string, size_t length, awk_value_t *result);
-This function creates a string value in the @code{awk_value_t} variable
-pointed to by @code{result}. It expects @code{string} to be a @samp{char *}
-value pointing to data previously obtained from @code{gawk_malloc()}, @code{gawk_calloc()}, or @code{gawk_realloc()}. The idea here
-is that the data is passed directly to @command{gawk}, which assumes
-responsibility for it. It returns @code{result}.
+这个函数在由 @code{result} 指向的 @code{awk_value_t} 变量中创建一个字串类型。函数需要的 @code{string} 是一个 @samp{char *}，指向的之前已经从 @code{gawk_malloc()}，@code{gawk_calloc()} 或者 @code{gawk_realloc()} 中获取的数据。这里的想法是数值会直接传递给 @command{gawk}，将对其负责。函数返回 @code{result}。
 
 @item static inline awk_value_t *
 @itemx make_null_string(awk_value_t *result);
-This specialized function creates a null string (the ``undefined'' value)
-in the @code{awk_value_t} variable pointed to by @code{result}.
-It returns @code{result}.
+这个特别函数，在一个由 @code{result} 指向的 @code{awk_value_t} 变量由中创建一个空串。函数返回 @code{result}。
 
 @item static inline awk_value_t *
 @itemx make_number(double num, awk_value_t *result);
-This function simply creates a numeric value in the @code{awk_value_t} variable
-pointed to by @code{result}.
+这个函数简单地在由 @code{result} 指向的 @code{awk_value_t} 变量中创建一个数值。
 @end table
 
 @node Registration Functions
-@subsection Registration Functions
+@subsection 注册函数
 @cindex register extension
 @cindex extension registration
 
-This @value{SECTION} describes the API functions for
-registering parts of your extension with @command{gawk}.
+本@value{SECTION}描述用于注册部分扩展到 @command{gawk} 中的 API 函数。
 
 @menu
 * Extension Functions::         Registering extension functions.
@@ -23967,9 +23736,9 @@ registering parts of your extension with @command{gawk}.
 @end menu
 
 @node Extension Functions
-@subsubsection Registering An Extension Function
+@subsubsection 注册扩展函数
 
-Extension functions are described by the following record:
+扩展函数是通过下面的记录下进行描述的：
 
 @example
 typedef struct awk_ext_func @{
@@ -23979,139 +23748,85 @@ typedef struct awk_ext_func @{
 @} awk_ext_func_t;
 @end example
 
-The fields are:
+域的含义如下：
 
 @table @code
 @item const char *name;
-The name of the new function.
-@command{awk}-level code calls the function by this name.
-This is a regular C string.
+新函数的名字。@command{awk} 层的代码通过这个名字来调用函数。这是一个常规的 C 字串。
 
-Function names must obey the rules for @command{awk}
-identifiers. That is, they must begin with either an English letter
-or an underscore, which may be followed by any number of
-letters, digits, and underscores.
-Letter case in function names is significant.
+函数名必须符合 @command{awk} 标识符的规则。也就是，它们必须是以英文字母或者下划线开始，后面可以跟任何的字母，数字与下划线。函数名的字母的大小写是有关的。
 
 @item awk_value_t *(*function)(int num_actual_args, awk_value_t *result);
-This is a pointer to the C function that provides the extension's
-functionality.
-The function must fill in @code{*result} with either a number
-or a string. @command{gawk} takes ownership of any string memory.
-As mentioned earlier, string memory @emph{must} come from one of
-@code{gawk_malloc()}, @code{gawk_calloc()}, or @code{gawk_realloc()}.
+这是一个指向提供了扩展功能的 C 函数的指针。函数必须在 @code{*result} 中填入数字或者字串。@command{gawk} 会接管任意字串内存的所有权。如早先所提，字串内存@emph{必须}来自于 @code{gawk_malloc()}，@code{gawk_calloc()} 或 @code{gawk_realloc()} 等函数之一。
 
-The @code{num_actual_args} argument tells the C function how many
-actual parameters were passed from the calling @command{awk} code.
+@code{num_actual_args} 参数告知 C 函数，会有多少个实际的函数从调用的 @command{awk} 代码中传入。
 
-The function must return the value of @code{result}.
-This is for the convenience of the calling code inside @command{gawk}.
+函数必须返回 @code{result} 的值。这主要是为了 @command{gawk} 中调用代码使用上的方便。
 
 @item size_t num_expected_args;
-This is the number of arguments the function expects to receive.
-Each extension function may decide what to do if the number of
-arguments isn't what it expected.  As with real @command{awk} functions, it
-is likely OK to ignore extra arguments.
+这个是函数希望接受参数的个数。每一个扩展函数都可以决定如果参数不是它所希望的个数时所要做的事情。对于真正的 @command{awk} 函数，忽略额外的参数也是可以的。
 @end table
 
-Once you have a record representing your extension function, you register
-it with @command{gawk} using this API function:
+一旦你有了一个表示你的扩展的函数，你就可以使用下面的 API 函数来注册：
 
 @table @code
 @item awk_bool_t add_ext_func(const char *namespace, const awk_ext_func_t *func);
-This function returns true upon success, false otherwise.
-The @code{namespace} parameter is currently not used; you should pass in an
-empty string (@code{""}).  The @code{func} pointer is the address of a
-@code{struct} representing your function, as just described.
+这个函数在成功时返回为 true，否则返回 false。@code{namespace} 参数当前没有使用，你可以传递一个空串（@code{""}）过去。@code{func} 指针是代表你的函数的结构体 @code{struct} 指针，其结构如上所述。
 @end table
 
 @node Exit Callback Functions
-@subsubsection Registering An Exit Callback Function
+@subsubsection 注册退出函数
 
-An @dfn{exit callback} function is a function that
-@command{gawk} calls before it exits.
-Such functions are useful if you have general ``cleanup'' tasks
-that should be performed in your extension (such as closing database
-connections or other resource deallocations).
-You can register such
-a function with @command{gawk} using the following function:
+一个@dfn{退出回调}函数是在 @command{gawk} 退出时要调用的函数。这样的函数会在你的扩展中有一些清理工作要做时非常有用（如关闭数据库连接以及释放其他资源）。你可以使用下面的函数来注册这样的一个函数到 @command{gawk} 中：
 
 @table @code
 @item void awk_atexit(void (*funcp)(void *data, int exit_status),
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ void *arg0);
-The parameters are:
+参数的含义为：
 
 @c nested table
 @table @code
 @item funcp
-A pointer to the function to be called before @command{gawk} exits. The @code{data}
-parameter will be the original value of @code{arg0}.
-The @code{exit_status} parameter is the exit status value that
-@command{gawk} intends to pass to the @code{exit()} system call.
+一个在 @command{gawk} 退出之前要调用的函数的指针。@code{data} 参数就是 @code{arg0} 的初始值。@code{exit_status} 参数是 @command{gawk} 想传递给 @code{exit()} 系统调用的状态值。
 
 @item arg0
-A pointer to private data that @command{gawk} saves in order to pass to
-the function pointed to by @code{funcp}.
+一个私有数据的指针，@command{gawk} 会保存它，并在调用 @code{funcp} 指向的函数时传递给它。 
 @end table
 @end table
 
-Exit callback functions are called in last-in, first-out (LIFO)
-order---that is, in the reverse order in which they are registered with
-@command{gawk}.
+退出回调函数会先进先出（LIFO）的顺序调用，也就是以它们注册到 @command{gawk} 中的顺序相反的顺序来调用。
 
 @node Extension Version String
-@subsubsection Registering An Extension Version String
+@subsubsection 注册扩展版本字串
 
-You can register a version string that indicates the name and
-version of your extension with @command{gawk}, as follows:
+你可以注意一个版本字串来表示你的扩展在 @command{gawk} 中的版本与名字，如下：
 
 @table @code
 @item void register_ext_version(const char *version);
-Register the string pointed to by @code{version} with @command{gawk}.
-Note that @command{gawk} does @emph{not} copy the @code{version} string, so
-it should not be changed.
+将由 @code{version} 指向的版本注册到 @command{gawk} 中。要注意 @command{gawk} @emph{不会}拷贝 version 字串，因此它不可以被改变。
 @end table
 
-@command{gawk} prints all registered extension version strings when it
-is invoked with the @option{--version} option.
+@command{gawk} 当以 @option{--version} 选项调用时，会打印所有的已经注册了扩展的版本字串。
 
 @node Input Parsers
-@subsubsection Customized Input Parsers
+@subsubsection 定制输入分析器
 @cindex customized input parser
 
-By default, @command{gawk} reads text files as its input. It uses the value
-of @code{RS} to find the end of the record, and then uses @code{FS}
-(or @code{FIELDWIDTHS} or @code{FPAT}) to split it into fields (@pxref{Reading Files}).
-Additionally, it sets the value of @code{RT} (@pxref{Built-in Variables}).
+默认的情况下，@command{gawk} 从输入中读取文本。它使用 @code{RS} 的值来查看记录的结束，并且使用 @code{FS}（或者 @code{FIELDWIDTHS} 或者 @code{FPAT}）来将其分割成域（查看 @pxref{Reading Files}）。另外，@command{gawk} 还会设置 @code{RT} 的值（查看 @pxref{Built-in Variables}）。
 
-If you want, you can provide your own custom input parser.  An input
-parser's job is to return a record to the @command{gawk} record-processing
-code, along with indicators for the value and length of the data to be
-used for @code{RT}, if any.
+如果你想，你可以提供自己的定制的输入分析器。一个输入分析器的工作就是给 @command{gawk} 的记录处理代码返回一条记录，以及用于 @code{RT} 的数据的值与长度的指示符，如果有的话。
 
-To provide an input parser, you must first provide two functions
-(where @var{XXX} is a prefix name for your extension):
+为了提供输入分析器，你必须首先提供两个函数（在这里 @var{XXX} 是你的扩展的前缀）：
 
 @table @code
 @item awk_bool_t @var{XXX}_can_take_file(const awk_input_buf_t *iobuf);
-This function examines the information available in @code{iobuf}
-(which we discuss shortly).  Based on the information there, it
-decides if the input parser should be used for this file.
-If so, it should return true. Otherwise, it should return false.
-It should not change any state (variable values, etc.) within @command{gawk}.
+这个函数检查在 @code{iobuf} 中的信息（我们后面会讨论）。基于里面的信息，可以确定输入分析器是否用于这个文件。如果可以，则返回 true。否则返回 false。这个函数不应该改变 @command{gawk} 中的任何状态（比如变量的值等）。
 
 @item awk_bool_t @var{XXX}_take_control_of(awk_input_buf_t *iobuf);
-When @command{gawk} decides to hand control of the file over to the
-input parser, it calls this function.  This function in turn must fill
-in certain fields in the @code{awk_input_buf_t} structure and ensure
-that certain conditions are true.  It should then return true. If an
-error of some kind occurs, it should not fill in any fields and should
-return false; then @command{gawk} will not use the input parser.
-The details are presented shortly.
+当 @command{gawk} 决定从输入分析器中接手文件的控制权的时候，它会调用这个函数。这个函数接着必须将特定的域填充到 @code{awk_input_buf_t} 结构中，并保证特定的条件为 true。函数应当返回 true。如果出现了某种错误，函数不可以再填充任何域，并且返回 false，之后，@command{gawk} 不会使用这个输入分析器。细节将在后面呈现。
 @end table
 
-Your extension should package these functions inside an
-@code{awk_input_parser_t}, which looks like this:
+你的扩展应该要将这些函数包到 @code{awk_input_parser_t} 中，这个结构如下：
 
 @example
 typedef struct awk_input_parser @{
@@ -24122,38 +23837,33 @@ typedef struct awk_input_parser @{
 @} awk_input_parser_t;
 @end example
 
-The fields are:
+这些域为：
 
 @table @code
 @item const char *name;
-The name of the input parser. This is a regular C string.
+输入分析器的名字。这是一个常规的 C 字串。
 
 @item awk_bool_t (*can_take_file)(const awk_input_buf_t *iobuf);
-A pointer to your @code{@var{XXX}_can_take_file()} function.
+指向 @code{@var{XXX}_can_take_file()} 函数的指针。
 
 @item awk_bool_t (*take_control_of)(awk_input_buf_t *iobuf);
-A pointer to your @code{@var{XXX}_take_control_of()} function.
+@code{@var{XXX}_take_control_of()} 函数的指针。
 
 @item awk_const struct input_parser *awk_const next;
-This is for use by @command{gawk};
-therefore it is marked @code{awk_const} so that the extension cannot
-modify it.
+这个由 @command{gawk} 来使用，因此它被标志为 @code{awk_const}，这样扩展就不能够修改它。
 @end table
 
-The steps are as follows:
+实现步骤：
 
 @enumerate
 @item
-Create a @code{static awk_input_parser_t} variable and initialize it
-appropriately.
+创建一个静态的 @code{awk_input_parser_t} 变量，并且正确地初始化它。
 
 @item
-When your extension is loaded, register your input parser with
-@command{gawk} using the @code{register_input_parser()} API function
-(described next).
+当你的扩展被载入时，使用 @code{register_input_parser()} API 函数注册你的输入分析器到 @command{gawk} 中（接下来描述）。
 @end enumerate
 
-An @code{awk_input_buf_t} looks like this:
+@code{awk_input_buf_t} 结构如下：
 
 @example
 typedef struct awk_input @{
@@ -24169,171 +23879,97 @@ typedef struct awk_input @{
 @} awk_input_buf_t;
 @end example
 
-The fields can be divided into two categories: those for use (initially,
-at least) by @code{@var{XXX}_can_take_file()}, and those for use by
-@code{@var{XXX}_take_control_of()}.  The first group of fields and their uses
-are as follows:
+这些域可以分成两类：一类是 @code{@var{XXX}_can_take_file()} 函数使用（最起码是），以及被 @code{@var{XXX}_take_control_of()} 使用，它们使用的第一组域如下：
 
 @table @code
 @item const char *name;
-The name of the file.
+文件的名字。
 
 @item int fd;
-A file descriptor for the file.  If @command{gawk} was able to
-open the file, then @code{fd} will @emph{not} be equal to
-@code{INVALID_HANDLE}. Otherwise, it will.
+文件的描述符。如果 @command{gawk} 能打开文件，@code{fd} 则@emph{不会}等于 @code{INVALID_HANDLE}，否则等于。
 
 @item struct stat sbuf;
-If the file descriptor is valid, then @command{gawk} will have filled
-in this structure via a call to the @code{fstat()} system call.
+如果文件描述符是有效的，@command{gawk} 会将这个结构通过 @code{fstat()} 系统调用来进行填充。
 @end table
 
-The @code{@var{XXX}_can_take_file()} function should examine these
-fields and decide if the input parser should be used for the file.
-The decision can be made based upon @command{gawk} state (the value
-of a variable defined previously by the extension and set by
-@command{awk} code), the name of the
-file, whether or not the file descriptor is valid, the information
-in the @code{struct stat}, or any combination of these factors.
+@code{@var{XXX}_can_take_file()} 函数应该检查这些域，并决定输入分析器是否可用于这个文件。决定依赖于 @command{gawk} 的状态（通过扩展以及由 @command{awk} 代码之前设置的变量的值），文件的名字，文件的描述符是否有效，在 @code{struct stat} 中的信息，以及所有这些因素的组合。
 
-Once @code{@var{XXX}_can_take_file()} has returned true, and
-@command{gawk} has decided to use your input parser, it calls
-@code{@var{XXX}_take_control_of()}.  That function then fills
-either the @code{get_record} field or the @code{read_func} field in
-the @code{awk_input_buf_t}.  It must also ensure that @code{fd} is @emph{not}
-set to @code{INVALID_HANDLE}.  The following list describes the fields that
-may be filled by @code{@var{XXX}_take_control_of()}:
+只要 @code{@var{XXX}_can_take_file()} 函数返回 true，@command{gawk} 就决定使用你的输入分析器，然后调用 @code{@var{XXX}_take_control_of()}。
+这个函数会填充在 @code{awk_input_buf_t} 结构中的 @code{get_recordfield} 或者 @code{read_func} 域。同时也要保证 @code{fd} @emph{不会}被设置为 @code{INVALID_HANDLE}。下面的列表描述了可能会被 @code{@var{XXX}_take_control_of()} 函数使用的域：
 
 @table @code
 @item void *opaque;
-This is used to hold any state information needed by the input parser
-for this file.  It is ``opaque'' to @command{gawk}.  The input parser
-is not required to use this pointer.
+这被用来存储任何的输入分析器针对这个文件所需要的状态信息。它对 @command{gawk} 是“透明”的。输入分析器并不一定要使用这个指针。
 
 @item int@ (*get_record)(char@ **out,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ struct@ awk_input *iobuf,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ int *errcode,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ char **rt_start,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ size_t *rt_len);
-This function pointer should point to a function that creates the input
-records.  Said function is the core of the input parser.  Its behavior
-is described in the text following this list.
+这个函数指针指向一个创建输入记录的函数。所述的函数也是输入分析器的核心。它的行为由本列表下面的文本说明。
 
 @item ssize_t (*read_func)();
-This function pointer should point to a function that has the
-same behavior as the standard POSIX @code{read()} system call.
-It is an alternative to the @code{get_record} pointer.  Its behavior
-is also described in the text following this list.
+这个函数指针应该指向与标准的 POSIX 函数 @code{read()} 系统调用行为相同的函数。它是 @code{get_record} 函数指针的替代。它的行为也在本列表后面的文本中描述。
 
 @item void (*close_func)(struct awk_input *iobuf);
-This function pointer should point to a function that does
-the ``teardown.'' It should release any resources allocated by
-@code{@var{XXX}_take_control_of()}.  It may also close the file. If it
-does so, it should set the @code{fd} field to @code{INVALID_HANDLE}.
+这个函数指针指向一个“tear down”（结束）的函数。它应该释放所有由 @code{@var{XXX}_take_control_of()} 分配的资源。它也可以关闭文件。如果它这么做了，它应将 @code{fd} 域设置成 @code{INVALID_HANDLE}。
 
-If @code{fd} is still not @code{INVALID_HANDLE} after the call to this
-function, @command{gawk} calls the regular @code{close()} system call.
+如果 @code{fd} 在这个函数调用后还不是 @code{INVALID_HANDLE}，@command{gawk} 会调用常规的 @code{close()} 系统调用。
 
-Having a ``teardown'' function is optional. If your input parser does
-not need it, do not set this field.  Then, @command{gawk} calls the
-regular @code{close()} system call on the file descriptor, so it should
-be valid.
+是否有“teardown”函数是可选的。如果你的输入分析器不需要它，就不要设置这个域。这样，@command{gawk} 会在文件描述上调用常规的 @code{close()} 系统调用，因此这个域需要是有效的。
 @end table
 
-The @code{@var{XXX}_get_record()} function does the work of creating
-input records.  The parameters are as follows:
+@code{@var{XXX}_get_record()} 函数执行创建记录的工作。参数如下：
 
 @table @code
 @item char **out
-This is a pointer to a @code{char *} variable that is set to point
-to the record.  @command{gawk} makes its own copy of the data, so
-the extension must manage this storage.
+这个是一个指向 @code{char *} 变量的指针，这个指针指向记录。@command{gawk} 会复制自己的数据，所以扩展需要自己管理这个存储。
 
 @item struct awk_input *iobuf
-This is the @code{awk_input_buf_t} for the file.  The fields should be
-used for reading data (@code{fd}) and for managing private state
-(@code{opaque}), if any.
+这个是用于文件的 @code{awk_input_buf_t}，里面的域应当用于读取数据（@code{fd}）以及如果有的话，管理私有状态（@code{opaque}）。
 
 @item int *errcode
-If an error occurs, @code{*errcode} should be set to an appropriate
-code from @code{<errno.h>}.
+如果出现了错误。@code{*errcode} 应该被设置成 @code{<errno.h>} 文件中的相应代码。
 
 @item char **rt_start
 @itemx size_t *rt_len
-If the concept of a ``record terminator'' makes sense, then
-@code{*rt_start} should be set to point to the data to be used for
-@code{RT}, and @code{*rt_len} should be set to the length of the
-data. Otherwise, @code{*rt_len} should be set to zero.
-@command{gawk} makes its own copy of this data, so the
-extension must manage this storage.
+如果“record terminator”有意义的话，则 @code{*rt_start} 应该被设置成指向用于 @code{RT} 的数据。而 @code{*rt_len} 应该被设置成数据的长度。否则，@code{*rt_len} 应该被设置为 0。@command{gawk} 会生成自己的数据复本，所以扩展需要自己管理它们的存储。
 @end table
 
-The return value is the length of the buffer pointed to by
-@code{*out}, or @code{EOF} if end-of-file was reached or an
-error occurred.
+返回值是由 @code{*out} 指向的缓存的长度，或者在文件结束时返回 @code{EOF}，以及错误时返回错误。
 
-It is guaranteed that @code{errcode} is a valid pointer, so there is no
-need to test for a @code{NULL} value.  @command{gawk} sets @code{*errcode}
-to zero, so there is no need to set it unless an error occurs.
+必须保证 @code{errcode} 是一个有效的指针，因此就没有必要去测试它是否为 @code{NULL} 值。@command{gawk} 设置 @code{*errcode} 为 0，所以如果没有错误的时候，也没有必要设置它。
 
-If an error does occur, the function should return @code{EOF} and set
-@code{*errcode} to a value greater than zero.  In that case, if @code{*errcode}
-does not equal zero, @command{gawk} automatically updates
-the @code{ERRNO} variable based on the value of @code{*errcode}.
-(In general, setting @samp{*errcode = errno} should do the right thing.)
+如果出现的错误，函数返回 @code{EOF}，并且设置 @code{*errcode} 为一个大于 0 的值。在这种情况下，如果 @code{*errcode} 不等于 0，@command{gawk} 会根据 @code{*errcode} 的值自动更新 @code{ERRNO} 变量。（一般说来，设置 @samp{*errcode = errno} 就可以了。）
 
-As an alternative to supplying a function that returns an input record,
-you may instead supply a function that simply reads bytes, and let
-@command{gawk} parse the data into records.  If you do so, the data
-should be returned in the multibyte encoding of the current locale.
-Such a function should follow the same behavior as the @code{read()}
-system call, and you fill in the @code{read_func} pointer with its
-address in the @code{awk_input_buf_t} structure.
+作为替代，提供一个返回输入记录的函数，你提供一个简单地读取字节的函数，@command{gawk} 会将它他分析并组合成记录。如果你这么做，数据应该以当前本地语言设置的多字节编码返回。这样的函数的行为应该与 @code{read()} 系统调用的一致，你将 @code{awk_input_buf_t} 结构中的 @code{read_func} 指针填为这个函数指针。
 
-By default, @command{gawk} sets the @code{read_func} pointer to
-point to the @code{read()} system call. So your extension need not
-set this field explicitly.
+默认情况下，@command{gawk} 会设置 @code{read_func} 指向 @code{read()} 系统调用的指针。所以你的扩展不需要显式地这么去做。
 
-@quotation NOTE
-You must choose one method or the other: either a function that
-returns a record, or one that returns raw data.  In particular,
-if you supply a function to get a record, @command{gawk} will
-call it, and will never call the raw read function.
+@quotation 提示
+你必须选择一个或者另外一个方法：要么是一个返回记录的函数，或者一个返回原始数据的函数。特别是，如果你提供了一个函数来获取一个记录，@command{gawk} 会调用它，而绝不会调用原生的 read 函数。
 @end quotation
 
-@command{gawk} ships with a sample extension that reads directories,
-returning records for each entry in a directory (@pxref{Extension
-Sample Readdir}).  You may wish to use that code as a guide for writing
-your own input parser.
+@command{gawk} 发布了一个能读取目录的例子扩展，返回某个目录下的每一个记录（查看 @pxref{Extension
+Sample Readdir}）。你可以使用这个代码来作为指导来写你自己的输入分析器。
 
-When writing an input parser, you should think about (and document)
-how it is expected to interact with @command{awk} code.  You may want
-it to always be called, and to take effect as appropriate (as the
-@code{readdir} extension does).  Or you may want it to take effect
-based upon the value of an @command{awk} variable, as the XML extension
-from the @code{gawkextlib} project does (@pxref{gawkextlib}).
-In the latter case, code in a @code{BEGINFILE} rule
-can look at @code{FILENAME} and @code{ERRNO} to decide whether or
-not to activate an input parser (@pxref{BEGINFILE/ENDFILE}).
+当写一个输入分析器时，你应该要考虑（并且用文件记录下来）它如何来与 @command{awk} 代码进行交互。你可能想它总是被调用，并且能够正确处理（如 @code{readdir} 扩展代码一样）。又或者你想它根据 @command{awk} 变量的值来确定是否被调用，如来自 @code{gawkextlib} 项目（查看 @pxref{gawkextlib}）中的 XML 扩展一样。在后面的例子中，在 @code{BEGINFILE} 段中的代码可以查看 @code{FILENAME} 与 @code{ERRNO} 的值来决定是否激活输入分析器（查看 @pxref{BEGINFILE/ENDFILE}）。
 
-You register your input parser with the following function:
+你通过下面的函数来注册输入分析器：
 
 @table @code
 @item void register_input_parser(awk_input_parser_t *input_parser);
-Register the input parser pointed to by @code{input_parser} with
-@command{gawk}.
+注册通过 @code{input_parser} 指向的输入分析器到 @command{gawk} 中。
 @end table
 
 @node Output Wrappers
-@subsubsection Customized Output Wrappers
+@subsubsection 定制输出包装器
 @cindex customized output wrapper
 
 @cindex output wrapper
-An @dfn{output wrapper} is the mirror image of an input parser.
-It allows an extension to take over the output to a file opened
-with the @samp{>} or @samp{>>} I/O redirection operators (@pxref{Redirection}).
+@dfn{输出包装器}是输入分析器的另一面。它可以使得扩展能够掌握通过 @samp{>} 或者 @samp{>>} 重定向I/O操作符打开文件（查看 @pxref{Redirection}）。
 
-The output wrapper is very similar to the input parser structure:
+输出包装器的结构与输入分析器的结构非常相似：
 
 @example
 typedef struct awk_output_wrapper @{
@@ -24344,32 +23980,23 @@ typedef struct awk_output_wrapper @{
 @} awk_output_wrapper_t;
 @end example
 
-The members are as follows:
+成员如下：
 
 @table @code
 @item const char *name;
-This is the name of the output wrapper.
+这里输出包装器的名字。
 
 @item awk_bool_t (*can_take_file)(const awk_output_buf_t *outbuf);
-This points to a function that examines the information in
-the @code{awk_output_buf_t} structure pointed to by @code{outbuf}.
-It should return true if the output wrapper wants to take over the
-file, and false otherwise.  It should not change any state (variable
-values, etc.) within @command{gawk}.
+这个指向一个函数，该函数检测由 @code{outbuf} 指向 @code{awk_output_buf_t} 结构的信息。如果输出包装器想掌控输出文件，则应该返回 true，否则返回 false。它不应该改变任何 @command{gawk} 的状态（比如变量等）。
 
 @item awk_bool_t (*take_control_of)(awk_output_buf_t *outbuf);
-The function pointed to by this field is called when @command{gawk}
-decides to let the output wrapper take control of the file. It should
-fill in appropriate members of the @code{awk_output_buf_t} structure,
-as described next, and return true if successful, false otherwise.
+由这个域所指向的函数在 @command{gawk} 决定使输出包装器控制文件的时候调用。它应该将 @code{awk_output_buf_t} 结构中的成员适应地填充，如果成功则返回 true，否则返回 false。相关的说明在下面描述。
 
 @item awk_const struct output_wrapper *awk_const next;
-This is for use by @command{gawk};
-therefore it is marked @code{awk_const} so that the extension cannot
-modify it.
+这个由 @command{gawk} 使用，因此它被标志为 @code{awk_const}，这样扩展就不能够修改它。
 @end table
 
-The @code{awk_output_buf_t} structure looks like this:
+@code{awk_output_buf_t} 的结构如下：
 
 @example
 typedef struct awk_output_buf @{
@@ -24386,70 +24013,50 @@ typedef struct awk_output_buf @{
 @} awk_output_buf_t;
 @end example
 
-Here too, your extension will define @code{@var{XXX}_can_take_file()}
-and @code{@var{XXX}_take_control_of()} functions that examine and update
-data members in the @code{awk_output_buf_t}.
-The data members are as follows:
+这里也一样，你的施展要定义 @code{@var{XXX}_can_take_file()} 与 @code{@var{XXX}_take_control_of()} 这些函数，用以检测并更新 @code{awk_output_buf_t} 中的成员。数据成员的说明如下：
 
 @table @code
 @item const char *name;
-The name of the output file.
+输出文件的名字。
 
 @item const char *mode;
-The mode string (as would be used in the second argument to @code{fopen()})
-with which the file was opened.
+模式字串（正如 @code{fopen()} 第二个参数一样使用），通过使用这些模式来打开文件。
 
 @item FILE *fp;
-The @code{FILE} pointer from @code{<stdio.h>}. @command{gawk} opens the file
-before attempting to find an output wrapper.
+来自由 @code{<stdio.h>} 的 @code{FILE} 指针。@command{gawk} 会在查找输出包装器前试着打开文件。
 
 @item awk_bool_t redirected;
-This field must be set to true by the @code{@var{XXX}_take_control_of()} function.
+这个域必须被 @code{@var{XXX}_take_control_of()} 设置为 true。
 
 @item void *opaque;
-This pointer is opaque to @command{gawk}. The extension should use it to store
-a pointer to any private data associated with the file.
+这个指针对于 @command{gawk} 是透明的。扩展可以使用它来存储与文件有关的私有数据的指针。
 
 @item size_t (*gawk_fwrite)(const void *buf, size_t size, size_t count,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ FILE *fp, void *opaque);
 @itemx int (*gawk_fflush)(FILE *fp, void *opaque);
 @itemx int (*gawk_ferror)(FILE *fp, void *opaque);
 @itemx int (*gawk_fclose)(FILE *fp, void *opaque);
-These pointers should be set to point to functions that perform
-the equivalent function as the @code{<stdio.h>} functions do, if appropriate.
-@command{gawk} uses these function pointers for all output.
-@command{gawk} initializes the pointers to point to internal ``pass-through''
-functions that just call the regular @code{<stdio.h>} functions, so an
-extension only needs to redefine those functions that are appropriate for
-what it does.
+这些指针应该被设置为指向与 @code{<stdio.h>} 中相应函数执行相同操作的函数。@command{gawk} 使用这些函数来处理所有输出。@command{gawk} 会将这些指针初始化指向内部的“过路”函数，这些函数中是调用常规的 @code{<stdio.h>} 函数，所以扩展要根据所要做的事情定义合适函数。
 @end table
 
-The @code{@var{XXX}_can_take_file()} function should make a decision based
-upon the @code{name} and @code{mode} fields, and any additional state
-(such as @command{awk} variable values) that is appropriate.
+@code{@var{XXX}_can_take_file()} 函数可以根据 @code{name}，@code{mode} 域以及其他的状态（如 @command{awk} 变量的值）来做出相应的决定。
 
-When @command{gawk} calls @code{@var{XXX}_take_control_of()}, that function should fill
-in the other fields as appropriate, except for @code{fp}, which it should just
-use normally.
+当 @command{gawk} 调用 @code{@var{XXX}_take_control_of()} 函数时，这个函数应该对其他的域进行适当的填充，不包括 @code{fp}，@code{fp} 参数只是会进行常规使用。
 
-You register your output wrapper with the following function:
+你通过下面的函数来注册你的输出包装器：
 
 @table @code
 @item void register_output_wrapper(awk_output_wrapper_t *output_wrapper);
-Register the output wrapper pointed to by @code{output_wrapper} with
-@command{gawk}.
+将由 @code{output_wrapper} 指向的输出包装器注册到 @command{gawk} 中。
 @end table
 
 @node Two-way processors
-@subsubsection Customized Two-way Processors
+@subsubsection 定制双路处理器
 @cindex customized two-way processor
 
-A @dfn{two-way processor} combines an input parser and an output wrapper for
-two-way I/O with the @samp{|&} operator (@pxref{Redirection}).  It makes identical
-use of the @code{awk_input_parser_t} and @code{awk_output_buf_t} structures
-as described earlier.
+一个@dfn{双路器}将输入分析器与输出包装器来处理由 @samp{|&} 打开的双路 I/O（查看 @pxref{Redirection}）。它的使用与之前描述过的 @code{awk_input_parser_t} 与 @code{awk_output_buf_t} 相同。
 
-A two-way processor is represented by the following structure:
+两路处理器由下面的结构表示：
 
 @example
 typedef struct awk_two_way_processor @{
@@ -24462,108 +24069,77 @@ typedef struct awk_two_way_processor @{
 @} awk_two_way_processor_t;
 @end example
 
-The fields are as follows:
+域如下：
 
 @table @code
 @item const char *name;
-The name of the two-way processor.
+双路处理器的名字。
 
 @item awk_bool_t (*can_take_two_way)(const char *name);
-The function pointed to by this field should return true if it wants to take over two-way I/O for this @value{FN}.
-It should not change any state (variable
-values, etc.) within @command{gawk}.
+如果由这个域指向的函数想控制@value{FN}的双路 I/O，它应该返回 true。它不应该改变 @command{gawk} 中的任何状态（比如变量值）。
 
 @item awk_bool_t (*take_control_of)(const char *name,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_input_buf_t *inbuf,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_output_buf_t *outbuf);
-The function pointed to by this field should fill in the @code{awk_input_buf_t} and
-@code{awk_output_buf_t} structures pointed to by @code{inbuf} and
-@code{outbuf}, respectively.  These structures were described earlier.
+由这个域指向的函数应该适当地填充由 @code{inbuf} 与 @code{outbuf} 所指向中的 @code{awk_input_buf_t} 与 @code{awk_output_buf_t} 的结构。这两个结构之前所描述。
 
 @item awk_const struct two_way_processor *awk_const next;
-This is for use by @command{gawk};
-therefore it is marked @code{awk_const} so that the extension cannot
-modify it.
+这个由 @command{gawk} 来使用，所以它被标志成 @code{awk_const}，这样扩展就不可以修改它。
 @end table
 
-As with the input parser and output processor, you provide
-``yes I can take this'' and ``take over for this'' functions,
-@code{@var{XXX}_can_take_two_way()} and @code{@var{XXX}_take_control_of()}.
+对于输入处理器与输出处理器器，你需要提供“yes I can take this”（是的，我可以处理这个） 与“take over for this”（我已经控制这个）类的函数，即 @code{@var{XXX}_can_take_two_way()} 与 @code{@var{XXX}_take_control_of()}。
 
-You register your two-way processor with the following function:
+你使用下面的函数来注册你的双路处理器：
 
 @table @code
 @item void register_two_way_processor(awk_two_way_processor_t *two_way_processor);
-Register the two-way processor pointed to by @code{two_way_processor} with
-@command{gawk}.
+将由 @code{two_way_processor} 指向的双路处理器注册到 @command{gawk} 中。
 @end table
 
 @node Printing Messages
-@subsection Printing Messages
+@subsection 打印信息
 @cindex printing messages from extensions
 @cindex messages from extensions
 
-You can print different kinds of warning messages from your
-extension, as described here.  Note that for these functions,
-you must pass in the extension ID received from @command{gawk}
-when the extension was loaded:@footnote{Because the API uses only ISO C 90
-features, it cannot make use of the ISO C 99 variadic macro feature to hide
-that parameter. More's the pity.}
+你可以在你的扩展中打印如本节中所描述的不同的各类的告警信息。要注意对于这些函数，你必须提供一个扩展 ID，这个扩展 ID 是在扩展被载入时由 @command{gawk} 提供：
+@footnote{由于 API 只使用 ISO C 90 的特性，因此不能使用 ISO C 99 的可能参数宏特性来隐藏参数。多少有点遗憾。}
 
 @table @code
 @item void fatal(awk_ext_id_t id, const char *format, ...);
-Print a message and then cause @command{gawk} to exit immediately.
+打印一个消息，并使 @command{gawk} 立即退出。
 
 @item void warning(awk_ext_id_t id, const char *format, ...);
-Print a warning message.
+打印告警信息。
 
 @item void lintwarn(awk_ext_id_t id, const char *format, ...);
-Print a ``lint warning.''  Normally this is the same as printing a
-warning message, but if @command{gawk} was invoked with @samp{--lint=fatal},
-then lint warnings become fatal error messages.
+打印一个“lint 告警”。正常情况下，这与打印一个告警信息一样，但是如果 @command{gawk} 使用了 @samp{--lint=fatal} 选项，则 lint 告警会成为致命错误消息。
 @end table
 
-All of these functions are otherwise like the C @code{printf()}
-family of functions, where the @code{format} parameter is a string
-with literal characters and formatting codes intermixed.
+所有的这些函数像 C 的 @code{printf()} 家庭的函数一样，在这些函数中，@code{format} 参数是一个字串，串中为字面字符以及格式代码。
 
 @node Updating @code{ERRNO}
-@subsection Updating @code{ERRNO}
+@subsection 更新 @code{ERRNO}
 
-The following functions allow you to update the @code{ERRNO}
-variable:
+下面的函数可以让你更新 @code{ERRNO} 变量：
 
 @table @code
 @item void update_ERRNO_int(int errno_val);
-Set @code{ERRNO} to the string equivalent of the error code
-in @code{errno_val}. The value should be one of the defined
-error codes in @code{<errno.h>}, and @command{gawk} turns it
-into a (possibly translated) string using the C @code{strerror()} function.
+将 @code{ERRNO} 设置为与 @code{errno_val} 对应的错误字串。值应该定义在 @code{<errno.h>} 中。@command{gawk} 会使用 C 的 @code{strerror()} 函数将它转换为（如果可以转换）字串。
 
 @item void update_ERRNO_string(const char *string);
-Set @code{ERRNO} directly to the string value of @code{ERRNO}.
-@command{gawk} makes a copy of the value of @code{string}.
+直接使用 @code{ERRNO} 的字符串值来设置 @code{ERRNO}。@command{gawk} 会对这个值复制一个复本。
 
 @item void unset_ERRNO(void);
-Unset @code{ERRNO}.
+重置 @code{ERRNO}。
 @end table
 
 @node Requesting Values
-@subsection Requesting Values
+@subsection 请求值
 
-All of the functions that return values from @command{gawk}
-work in the same way. You pass in an @code{awk_valtype_t} value
-to indicate what kind of value you expect.  If the actual value
-matches what you requested, the function returns true and fills
-in the @code{awk_value_t} result.
-Otherwise, the function returns false, and the @code{val_type}
-member indicates the type of the actual value.  You may then
-print an error message or reissue the request for the actual
-value type, as appropriate.  This behavior is summarized in
-@ref{table-value-types-returned}.
+所有的这些函数都以相同的方式从 @command{gawk} 中返回值。你可以传递一个 @code{awk_valtype_t} 的值来指示你希望什么的样值。如果实际的值与你的请求的匹配，函数返回为 true。并且在 @code{awk_value_t} 中填上结果。否则函数返回 false。而 @code{val_type} 成员会指示实际的值类型。你然后可以打印一个错误信息或者重新发起针对实际值类型的请求。这结行为在 @ref{table-value-types-returned} 进行了归纳：
 
 @float Table,table-value-types-returned
-@caption{API value types returned}
+@caption{返回的 API 值类型}
 @docbook
 <informaltable>
 <tgroup cols="6">
@@ -24686,6 +24262,7 @@ value type, as appropriate.  This behavior is summarized in
 @end ifplaintext
 @end float
 
+#TODO20171211
 @node Accessing Parameters
 @subsection Accessing and Updating Parameters
 

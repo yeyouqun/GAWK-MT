@@ -7,7 +7,7 @@
 6. two-way I/0 这个术语在全篇中的翻译不统一。
 7. normalize 原文翻译为“正规化”，也许改为“正则化”更合适。未改动原文。
 8. significand 原文翻译不统一（“实有效位”，“系数”），统一改成了“系数”。
-
+9. struct 原文翻译为“结构”，修改为“结构体”。
 
 ## 第三章前言
 1. 
@@ -365,3 +365,58 @@
 改动
 > cut 通常的使用方式可能是从命令 who 的输出结果中仅仅抽出已登录用户的登录名。
 > 例如，下面的管线会产生有序的，唯一的登录到系统中的用户列表：
+
+## 16.3 
+英文原文
+> Registering a new function
+
+译文原文
+> 注册新功能
+
+改动
+> 注册新函数
+*之后对应的“功能”也改为“函数”。*
+
+## 16.4.1
+英文原文
+> Retrieving
+
+译文原文
+> 返回
+
+改动
+> 检索
+
+## 16.4.5. 
+英文原文
+> gawk ships with a sample extension that reads directories
+
+译文原文
+> gawk 在 read 目录下发布了一个例子扩展
+
+改动
+> gawk 发布了一个能读取目录的例子扩展
+
+
+## 16.4.5. 
+英文原文
+> The function pointed to by this field should return true if it wants to take over two-way I/O for this @value{FN}
+
+译文原文
+> 由这个域指向的函数应该在控制指针文件的双路 I/O 时返回 true。
+
+改动
+> 如果由这个域指向的函数想控制文件的双路 I/O，它应该返回 true。
+
+
+## 16.4.5. 
+英文原文
+> Set @code{ERRNO} directly to the string value of @code{ERRNO}.
+
+译文原文
+> 直接使用 string 的值来设置 @code{ERRNO}。
+
+改动
+> 直接使用 @code{ERRNO} 的字符串值来设置 @code{ERRNO}。
+
+ 
