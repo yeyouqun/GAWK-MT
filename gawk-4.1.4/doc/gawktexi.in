@@ -24264,36 +24264,25 @@ typedef struct awk_two_way_processor @{
 
 #TODO20171211
 @node Accessing Parameters
-@subsection Accessing and Updating Parameters
+@subsection 访问与更新参数
 
-Two functions give you access to the arguments (parameters)
-passed to your extension function. They are:
+有两个函数可以让你访问传递给你的扩展函数的参数。它们是：
 
 @table @code
 @item awk_bool_t get_argument(size_t count,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_valtype_t wanted,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_value_t *result);
-Fill in the @code{awk_value_t} structure pointed to by @code{result}
-with the @code{count}th argument.  Return true if the actual
-type matches @code{wanted}, and false otherwise.  In the latter
-case, @code{result@w{->}val_type} indicates the actual type
-(@pxref{table-value-types-returned}).  Counts are zero-based---the first
-argument is numbered zero, the second one, and so on. @code{wanted}
-indicates the type of value expected.
+用第 @code{count} 个参数来填充由 @code{result} 指向的 @code{awk_value_t} 结构。如果实际的类型与 @code{wanted} 是匹配的，则返回 true，否则返回 false。在后面的情况下，@code{result@w{->}val_type} 指示了实际的类型（查看 @pxref{table-value-types-returned}）。计数是从 0 开始的——第一个参数编号为 0，第二个为 1，等等。@code{wanted} 指示了所期望的值类型。
 
 @item awk_bool_t set_argument(size_t count, awk_array_t array);
-Convert a parameter that was undefined into an array; this provides
-call by reference for arrays.  Return false if @code{count} is too big,
-or if the argument's type is not undefined.  @xref{Array Manipulation}
-for more information on creating arrays.
+将未定义的参数转换为一个数组，这提供了通过数组引用来调用的方式。如果 @code{count} 太大，或者如果参数类型是未定义的，则返回 false。查看 @xref{Array Manipulation}，来查看创建数组的更多信息。
 @end table
 
 @node Symbol Table Access
-@subsection Symbol Table Access
+@subsection 符号表访问
 @cindex accessing global variables from extensions
 
-Two sets of routines provide access to global variables, and one set
-allows you to create and release cached values.
+有两个集合的例程提供了访问全局变量的能力，以及一个集合的例程可以让你创建并释放缓存值。
 
 @menu
 * Symbol table by name::        Accessing variables by name.
@@ -24302,79 +24291,46 @@ allows you to create and release cached values.
 @end menu
 
 @node Symbol table by name
-@subsubsection Variable Access and Update by Name
+@subsubsection 通过名字访问与更新变量
 
-The following routines provide the ability to access and update
-global @command{awk}-level variables by name.  In compiler terminology,
-identifiers of different kinds are termed @dfn{symbols}, thus the ``sym''
-in the routines' names.  The data structure that stores information
-about symbols is termed a @dfn{symbol table}.
-The functions are as follows:
+下面的例程提供了通过名字来访问、更新全局的 @command{awk} 层变量的能力。以编译器的术语来看，不同各类的标识符都称为@dfn{符号}，这是例程中的“sym”名字的来由。存储符号信息的数组结构称为@dfn{符号表}。这些函数如下：
 
 @table @code
 @item awk_bool_t sym_lookup(const char *name,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_valtype_t wanted,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_value_t *result);
-Fill in the @code{awk_value_t} structure pointed to by @code{result}
-with the value of the variable named by the string @code{name}, which is
-a regular C string.  @code{wanted} indicates the type of value expected.
-Return true if the actual type matches @code{wanted}, and false otherwise.
-In the latter case, @code{result->val_type} indicates the actual type
-(@pxref{table-value-types-returned}).
+用由字串 @code{name} 命令的变量的值来填充由 @code{result} 指向听 @code{awk_value_t} 的结构，名字为 C 字串。@code{wanted} 指示了期望的值的类型。如果实际的类型与其匹配，则返回 true，否则返回 false。在后面的情况下，@code{result->val_type} 指示了实际的类型（查看 @pxref{table-value-types-returned}）。
 
 @item awk_bool_t sym_update(const char *name, awk_value_t *value);
-Update the variable named by the string @code{name}, which is a regular
-C string.  The variable is added to @command{gawk}'s symbol table
-if it is not there.  Return true if everything worked, and false otherwise.
+更新由字串 @code{name} 命名的变量，这个名字为 C 字串。如果变量不存在 @command{gawk} 的符号表中，则会新增它。如果一切 OK，则返回 true，否则返回 false。
 
-Changing types (scalar to array or vice versa) of an existing variable
-is @emph{not} allowed, nor may this routine be used to update an array.
-This routine cannot be used to update any of the predefined
-variables (such as @code{ARGC} or @code{NF}).
+改变已经存在的变量的类型（从标量到数组，或者相反）是@emph{不}允许的，这个例程也不能用于数组的更新。这个例程不可以用于更新任何的预定义变量的值（如 @code{ARGC} 或者 @code{NF}）。
 @end table
 
-An extension can look up the value of @command{gawk}'s special variables.
-However, with the exception of the @code{PROCINFO} array, an extension
-cannot change any of those variables.
+扩展可以查找 @command{gawk} 的特定变量。但是，@code{PROCINFO} 数组是个例外，扩展不可以改变这些变量的值。
 
-@quotation CAUTION
-It is possible for the lookup of @code{PROCINFO} to fail. This happens if
-the @command{awk} program being run does not reference @code{PROCINFO};
-in this case, @command{gawk} doesn't bother to create the array and
-populate it.
+@quotation 注意
+有可能查找 @code{PROCINFO} 失败。如果 @command{awk} 程序在运行时没有使用 @code{PROCINFO} 时会引起失败，在这个情况下，@command{gawk} 不会创建这个数组并传播它。
 @end quotation
 
 @node Symbol table by cookie
-@subsubsection Variable Access and Update by Cookie
+@subsubsection 通过 Cookie 访问与更新变量
 
-A @dfn{scalar cookie} is an opaque handle that provides access
-to a global variable or array. It is an optimization that
-avoids looking up variables in @command{gawk}'s symbol table every time
-access is needed. This was discussed earlier, in @ref{General Data Types}.
+@dfn{标量 cookie} 是一个透明的句柄，可以用来访问全局变量以及数组。它是一种优化手段，以免在使用变量时去在 @command{gawk} 的符号表中去查找变量，这个早前在 @ref{General Data Types}，已经讨论过。
 
-The following functions let you work with scalar cookies:
+下面的函数用来过处理标量 cookies：
 
 @table @code
 @item awk_bool_t sym_lookup_scalar(awk_scalar_t cookie,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_valtype_t wanted,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_value_t *result);
-Retrieve the current value of a scalar cookie.
-Once you have obtained a scalar cookie using @code{sym_lookup()}, you can
-use this function to get its value more efficiently.
-Return false if the value cannot be retrieved.
+返回标量 cookie 的当前值，一旦你通过 @code{sym_lookup()} 获取了一个标量的 cookie 后，你就可以使用这个函数来高效地获取它的值。如果值没有取到，则返回 false。
 
 @item awk_bool_t sym_update_scalar(awk_scalar_t cookie, awk_value_t *value);
-Update the value associated with a scalar cookie.  Return false if
-the new value is not of type @code{AWK_STRING} or @code{AWK_NUMBER}.
-Here too, the predefined variables may not be updated.
+更新与标量 cookie 关联的值。如果新值即不是 @code{AWK_STRING}，也不是 @code{AWK_NUMBER}，则返回 false。在这里也是一样，预定的义的变量不能被更新的。
 @end table
 
-It is not obvious at first glance how to work with scalar cookies or
-what their @i{raison d'@^etre} really is.  In theory, the @code{sym_lookup()}
-and @code{sym_update()} routines are all you really need to work with
-variables.  For example, you might have code that looks up the value of
-a variable, evaluates a condition, and then possibly changes the value
-of the variable based on the result of that evaluation, like so:
+一开始这如何来使用标量 Cookie 并不是很明显，也不知道它们的 @i{raison d'@^etre} 到底是什么。理论上，@code{sym_lookup()} 以及 @code{sym_update()} 例程就是你来处理变量时所要的所有例程。例如，你有代码要查找变量的值，对条件进行求值，然后就可以通过求值的结果变更变量的值，如：
 
 @example
 /*  do_magic --- do something really great */
@@ -24395,23 +24351,14 @@ do_magic(int nargs, awk_value_t *result)
 @end example
 
 @noindent
-This code looks (and is) simple and straightforward. So what's the problem?
+这个代码看起来（实际）很简单而直接，但是问题是什么呢？
 
-Well, consider what happens if @command{awk}-level code associated
-with your extension calls the @code{magic()} function (implemented in
-C by @code{do_magic()}), once per record, while processing hundreds
-of thousands or millions of records.  The @code{MAGIC_VAR} variable is
-looked up in the symbol table once or twice per function call!
+考虑一下，如果 @command{awk} 层的代码通过调用 @code{magic()} 函数（通过 C 的 @code{do_magic()} 来实现）来与你的扩展进行关联，一次一条记录来处理数以百万计的记录。变量 @code{MAGIC_VAR} 会在每个函数的调用中都在符号表中进行查找！
 
-The symbol table lookup is really pure overhead; it is considerably
-more efficient to get a cookie that represents the variable, and use
-that to get the variable's value and update it as needed.@footnote{The
-difference is measurable and quite real. Trust us.}
+符号表的查找真的是个纯的负担，如果得到一个表示这个变量的 cookie 要更高效，并使用它在必要的时候获取与更新它的值。 
+@footnote{相信我们，差异是可测量并且真实的。}
 
-Thus, the way to use cookies is as follows.  First, install
-your extension's variable in @command{gawk}'s symbol table using
-@code{sym_update()}, as usual. Then get a scalar cookie for the variable
-using @code{sym_lookup()}:
+所以，使用 cookie 的方式如下。首先，将你的变量通过 @code{sym_update()} 来安装到 @command{gawk} 的符号表中，然后通过 @code{sym_lookup()} 获取一个该变量的 Cookie：
 
 @example
 static awk_scalar_t magic_var_cookie;    /* cookie for MAGIC_VAR */
@@ -24433,9 +24380,7 @@ my_extension_init()
 @}
 @end example
 
-Next, use the routines in this @value{SECTION} for retrieving and updating
-the value through the cookie.  Thus, @code{do_magic()} now becomes
-something like this:
+下一步，使用这@value{SECTION}中的函数来并通过 Cookie 来返回与更新变量的值。所以，@code{do_magic()} 现在变成如下：
 
 @example
 /*  do_magic --- do something really great */
@@ -24456,48 +24401,28 @@ do_magic(int nargs, awk_value_t *result)
 @}
 @end example
 
-@quotation NOTE
-The previous code omitted error checking for
-presentation purposes.  Your extension code should be more robust
-and carefully check the return values from the API functions.
+@quotation 提示
+前面的代码省略了错误检查，为了是表现主题。你的扩展代码应该要更加健壮，并且仔细地检查从 API 函数中返回的值。
 @end quotation
 
 @node Cached values
-@subsubsection Creating and Using Cached Values
+@subsubsection 创建并使用缓存值
 
-The routines in this @value{SECTION} allow you to create and release
-cached values.  Like scalar cookies, in theory, cached values
-are not necessary. You can create numbers and strings using
-the functions in @ref{Constructor Functions}. You can then
-assign those values to variables using @code{sym_update()}
-or @code{sym_update_scalar()}, as you like.
+本@value{SECTION}中的全程可以让你创建与释放缓存值。像标量 cookie 一样，理论上讲，缓存值是不需要的。你可以使用 @ref{Constructor Functions} 中的函数创建数值与字串。你然后可以将这些值赋给使用 @code{sym_update()} 或者 @code{sym_update_scalar()} 的变量。
 
-However, you can understand the point of cached values if you remember that
-@emph{every} string value's storage @emph{must} come from @code{gawk_malloc()},
-@code{gawk_calloc()}, or @code{gawk_realloc()}.
-If you have 20 variables, all of which have the same string value, you
-must create 20 identical copies of the string.@footnote{Numeric values
-are clearly less problematic, requiring only a C @code{double} to store.}
+但是，如果你记得@emph{所有}的字串值的存储@emph{必须}来自于 @code{gawk_malloc()}，@code{gawk_calloc()} 或者 @code{gawk_realloc()} 这些函数这一点，你就能够理解缓存值的出发点。如果你有 20 个变量，它们都有相同的值，你必须创建 20 个相同的字串复本。 @footnote{数值值问题就少得多，因为只需要存储一个 C 的 @code{double} 类型。}
 
-It is clearly more efficient, if possible, to create a value once, and
-then tell @command{gawk} to reuse the value for multiple variables. That
-is what the routines in this @value{SECTION} let you do.  The functions are as follows:
+当然，如果可能，一旦创建一个值，就可以告诉 @command{gawk} 可以为多个变量重用这个值。这正是本@value{SECTION}中的例程所要做的事情。函数如下：
 
 @table @code
 @item awk_bool_t create_value(awk_value_t *value, awk_value_cookie_t *result);
-Create a cached string or numeric value from @code{value} for
-efficient later assignment.  Only values of type @code{AWK_NUMBER}
-and @code{AWK_STRING} are allowed.  Any other type is rejected.
-@code{AWK_UNDEFINED} could be allowed, but doing so would result in
-inferior performance.
+创建一个缓存的字串或者数值，用于后面的高效赋值。仅支持 @code{AWK_NUMBER} 与 @code{AWK_STRING} 类型的值。其他的类型会被拒绝。@code{AWK_UNDEFINED} 类型也可以使用，但是这么做会导致较差的性能。
 
 @item awk_bool_t release_value(awk_value_cookie_t vc);
-Release the memory associated with a value cookie obtained
-from @code{create_value()}.
+释放与一个通过 @code{create_value()} 获取的值 cookie 关联的内存。
 @end table
 
-You use value cookies in a fashion similar to the way you use scalar cookies.
-In the extension initialization routine, you create the value cookie:
+使用值 cookie 的方式与使用标量 cookie 的方式是一样的。在扩展初始化例程中，你这样来创建值 cookie：
 
 @example
 static awk_value_cookie_t answer_cookie;  /* static value cookie */
@@ -24518,8 +24443,7 @@ my_extension_init()
 @}
 @end example
 
-Once the value is created, you can use it as the value of any number
-of variables:
+值一旦创建，你就可以用它作为任意变量的值：
 
 @example
 static awk_value_t *
@@ -24540,38 +24464,20 @@ do_magic(int nargs, awk_value_t *result)
 @end example
 
 @noindent
-Using value cookies in this way saves considerable storage, as all of
-@code{VAR1} through @code{VAR100} share the same value.
+通过这样的值 cookies 可以节约大量的存储，从 @code{VAR1} 到 @code{VAR100} 都共享一样的值。
 
-You might be wondering, ``Is this sharing problematic?
-What happens if @command{awk} code assigns a new value to @code{VAR1};
-are all the others changed too?''
+你可能会奇怪，“这样的共享不会有问题么？如果 @command{awk} 代码给 @code{VAR1} 赋了一个新值，是不是所有的其他变量都会改变？”
 
-That's a great question. The answer is that no, it's not a problem.
-Internally, @command{gawk} uses @dfn{reference-counted strings}. This means
-that many variables can share the same string value, and @command{gawk}
-keeps track of the usage.  When a variable's value changes, @command{gawk}
-simply decrements the reference count on the old value and updates
-the variable to use the new value.
+这是一个很好的问题。答案是不会，这不会是个问题。在内部，@command{gawk} 使用@dfn{参考计数的字串}。这就是说，许多的变量都可以使用共享的字串值，@command{gawk} 会跟踪它的使用。当变量值改变时，@command{gawk} 仅是简单地递减旧值的参考计数，然后更新变量让其使用新的值。
 
-Finally, as part of your cleanup action (@pxref{Exit Callback Functions})
-you should release any cached values that you created, using
-@code{release_value()}.
+最后，作为清除操作的一部分（查看 @pxref{Exit Callback Functions}），你应该通过 @code{release_value()} 来释放你创建的缓存值。
 
 @node Array Manipulation
-@subsection Array Manipulation
+@subsection 数组操作
 @cindex array manipulation in extensions
 
-The primary data structure@footnote{OK, the only data structure.} in @command{awk}
-is the associative array (@pxref{Arrays}).
-Extensions need to be able to manipulate @command{awk} arrays.
-The API provides a number of data structures for working with arrays,
-functions for working with individual elements, and functions for
-working with arrays as a whole. This includes the ability to
-``flatten'' an array so that it is easy for C code to traverse
-every element in an array.  The array data structures integrate
-nicely with the data structures for values to make it easy to
-both work with and create true arrays of arrays (@pxref{General Data Types}).
+在 @command{awk} 中，最重要的数据结构@footnote{好吧，也是唯一的数据结构。}
+与数组（查看 @pxref{Arrays}）相关。扩展需要有能力操作 @command{awk} 中的数组。API 中提供了很多的数据结构来处理数组，也提供了处理单个元素的函数，以及处理整个数组的函数。这包含了扁平化数组的能力，这样就很容易使用 C 代码来遍历数组中的每一个元素。数组数据结构很好地与值的数据结构进行了整合，使得很容易来创建真正的多维数组（查看 @pxref{General Data Types}）。
 
 @menu
 * Array Data Types::            Data types for working with arrays.
@@ -24581,19 +24487,16 @@ both work with and create true arrays of arrays (@pxref{General Data Types}).
 @end menu
 
 @node Array Data Types
-@subsubsection Array Data Types
+@subsubsection 数组数据类型
 
-The data types associated with arrays are as follows:
+与数组相关的数据类型有：
 
 @table @code
 @item typedef void *awk_array_t;
-If you request the value of an array variable, you get back an
-@code{awk_array_t} value. This value is opaque@footnote{It is also
-a ``cookie,'' but the @command{gawk} developers did not wish to overuse this
-term.} to the extension; it uniquely identifies the array but can
-only be used by passing it into API functions or receiving it from API
-functions. This is very similar to way @samp{FILE *} values are used
-with the @code{<stdio.h>} library routines.
+如果你请求一个数组变量的值，你可以取得一个 @code{awk_array_t} 的值。这个值
+@footnote{它也是一个“cookie”，但是 @command{gawk} 开发得不想过多地使用这个术语。}
+对于扩展来说是透明的。
+这唯一地标识数组，但是只可以将其传递给 API 函数来使用，或者从 API 函数中返回。这个方式与 @code{<stdio.h>} 中函数使用 @samp{FILE *} 值类似。
 
 @item typedef struct awk_element @{
 @itemx @ @ @ @ /* convenience linked list pointer, not used by gawk */
@@ -24605,30 +24508,19 @@ with the @code{<stdio.h>} library routines.
 @itemx @ @ @ @ awk_value_t    index;
 @itemx @ @ @ @ awk_value_t    value;
 @itemx @} awk_element_t;
-The @code{awk_element_t} is a ``flattened''
-array element. @command{awk} produces an array of these
-inside the @code{awk_flat_array_t} (see the next item).
-Individual elements may be marked for deletion. New elements must be added
-individually, one at a time, using the separate API for that purpose.
-The fields are as follows:
+@code{awk_element_t} 是一个平的数组元素。@command{awk} 会在 @code{awk_flat_array_t} 类型中生成一个此类型的数组（查看下一项的说明）。单个的元素可以被标志成删除。新的元素必须一个个地添加，一次一个。为了完成这个添加，要使用另外的 API。数据结构中的域为：
 
 @c nested table
 @table @code
 @item struct awk_element *next;
-This pointer is for the convenience of extension writers.  It allows
-an extension to create a linked list of new elements that can then be
-added to an array in a loop that traverses the list.
+这是为了方便扩展的编写者的一个指针。它允许扩展创建一个新元素的链表，这样可以在遍历列表时来加入到数组中。
 
 @item enum @{ @dots{} @} flags;
-A set of flag values that convey information between the extension
-and @command{gawk}.  Currently there is only one: @code{AWK_ELEMENT_DELETE}.
-Setting it causes @command{gawk} to delete the
-element from the original array upon release of the flattened array.
+在扩展与 @command{gawk} 之间传递信息的标志值。当前只有一个 @code{AWK_ELEMENT_DELETE}，如果设置这个标志，会使得 @command{gawk} 释放扁平的数组时，从原始的数组中删除这个元素。
 
 @item index
 @itemx value
-The index and value of the element, respectively.
-@emph{All} memory pointed to by @code{index} and @code{value} belongs to @command{gawk}.
+元素的索引与值。@emph{所有}被 @code{index} 与 @code{value} 指向的内存都属于 @command{gawk}。
 @end table
 
 @item typedef struct awk_flat_array @{
@@ -24637,114 +24529,72 @@ The index and value of the element, respectively.
 @itemx @ @ @ @ awk_const size_t count;@ @ @ @ @ /* how many elements */
 @itemx @ @ @ @ awk_element_t elements[1];@ @ /* will be extended */
 @itemx @} awk_flat_array_t;
-This is a flattened array. When an extension gets one of these
-from @command{gawk}, the @code{elements} array is of actual
-size @code{count}.
-The @code{opaque1} and @code{opaque2} pointers are for use by @command{gawk};
-therefore they are marked @code{awk_const} so that the extension cannot
-modify them.
+这是一个平面数组。当扩展从 @command{gawk} 中取得其中之一时，元素数组 @code{elements} 的实际大小就是 @code{count}。@code{opaque1} 与 @code{opaque2} 指针由 @command{gawk} 使用，所以，它们被标志成 @code{awk_const}，这样扩展就不可以修改它们。
 @end table
 
 @node Array Functions
-@subsubsection Array Functions
+@subsubsection 数组函数
 
-The following functions relate to individual array elements:
+下面的函数与单个的元素相关：
 
 @table @code
 @item awk_bool_t get_element_count(awk_array_t a_cookie, size_t *count);
-For the array represented by @code{a_cookie}, place in @code{*count}
-the number of elements it contains. A subarray counts as a single element.
-Return false if there is an error.
+为由 @code{a_cookie} 表示的数组，放入其包含的 @code{*count} 个元素。子数组由一个单独的元素表示。如果有错误时，返回 false。
 
 @item awk_bool_t get_array_element(awk_array_t a_cookie,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ const awk_value_t *const index,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_valtype_t wanted,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_value_t *result);
-For the array represented by @code{a_cookie}, return in @code{*result}
-the value of the element whose index is @code{index}.
-@code{wanted} specifies the type of value you wish to retrieve.
-Return false if @code{wanted} does not match the actual type or if
-@code{index} is not in the array (@pxref{table-value-types-returned}).
+从 @code{a_cookie} 表示的数组中，返回元素下标 @code{index} 的值到 @code{*result} 中。@code{wanted} 指定了你希望返回的值类型。如果 @code{wanted} 不与实际的类型匹配，或者 @code{index} 没有在数组中，则返回 false。（查看 @pxref{table-value-types-returned}）
 
-The value for @code{index} can be numeric, in which case @command{gawk}
-converts it to a string. Using nonintegral values is possible, but
-requires that you understand how such values are converted to strings
-(@pxref{Conversion}); thus, using integral values is safest.
+@code{index} 的值可以是数值，这种情况下，@command{gawk} 会将其转换为字串。不使用整数值也是可以的，但是需要你了解这样的值如何转换为字串（查看 @pxref{Conversion}），所以，使用整数值是最安全的。
 
-As with @emph{all} strings passed into @command{gawk} from an extension,
-the string value of @code{index} must come from @code{gawk_malloc()},
-@code{gawk_calloc()}, or @code{gawk_realloc()}, and
-@command{gawk} releases the storage.
+与从扩展中传递到 @command{gawk} 中的@emph{所有}的字串一样，@code{index} 的字串值必须来自于 @code{gawk_malloc()}，@code{gawk_calloc()} 或者 @code{gawk_realloc()}，并由 @command{gawk} 来释放内存。
 
 @item awk_bool_t set_array_element(awk_array_t a_cookie,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ const@ awk_value_t *const index,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ const@ awk_value_t *const value);
-In the array represented by @code{a_cookie}, create or modify
-the element whose index is given by @code{index}.
-The @code{ARGV} and @code{ENVIRON} arrays may not be changed,
-although the @code{PROCINFO} array can be.
+在由 @code{a_cookie} 表示的数组中，创建或者修改一个元素，这个元素的索引由 @code{index} 给出。@code{ARGV} 与 @code{ENVIRON} 数组不可以被改变，但是 @code{PROCINFO} 数组则可以。
 
 @item awk_bool_t set_array_element_by_elem(awk_array_t a_cookie,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_element_t element);
-Like @code{set_array_element()}, but take the @code{index} and @code{value}
-from @code{element}. This is a convenience macro.
+与 @code{set_array_element()} 相似，但是是从元素 @code{element} 中取得索引 @code{index} 与值 @code{value}。这是一个便利宏。
 
 @item awk_bool_t del_array_element(awk_array_t a_cookie,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ const awk_value_t* const index);
-Remove the element with the given index from the array
-represented by @code{a_cookie}.
-Return true if the element was removed, or false if the element did
-not exist in the array.
+删除由 @code{a_cookie} 表示的数组中指定索引的元素。如果元素被删除，则返回 true。否则，如果元素不存在数组中，则返回 false。
 @end table
 
-The following functions relate to arrays as a whole:
+下面的函数与整个数组有关：
 
 @table @code
 @item awk_array_t create_array(void);
-Create a new array to which elements may be added.
-@xref{Creating Arrays} for a discussion of how to
-create a new array and add elements to it.
+创建一个可以添加元素的数组。查看 @xref{Creating Arrays}，中对于创建数组并添加元素的讨论。
 
 @item awk_bool_t clear_array(awk_array_t a_cookie);
-Clear the array represented by @code{a_cookie}.
-Return false if there was some kind of problem, true otherwise.
-The array remains an array, but after calling this function, it
-has no elements. This is equivalent to using the @code{delete}
-statement (@pxref{Delete}).
+清除由 @code{a_cookie} 表示的数组。如果有问题返回 false，否则返回 true。数组还是数组，但是调用这个函数后，它就没有元素了。这个与 @code{delete} 语句等同（查看 @pxref{Delete}）。
 
 @item awk_bool_t flatten_array(awk_array_t a_cookie, awk_flat_array_t **data);
-For the array represented by @code{a_cookie}, create an @code{awk_flat_array_t}
-structure and fill it in. Set the pointer whose address is passed as @code{data}
-to point to this structure.
-Return true upon success, or false otherwise.
+为由 @code{a_cookie} 表示的数组，创建一个 @code{awk_flat_array_t} 的结构并进行填充。将通过 @code{data} 传递的指针的值设置为这个结构的地址。如果成功则返回 true，否则返回 false。
 @ifset FOR_PRINT
-See the next @value{SECTION}
+下一个@value{SECTION}
 @end ifset
 @ifclear FOR_PRINT
-@xref{Flattening Arrays},
+查看 @xref{Flattening Arrays}，
 @end ifclear
-for a discussion of how to
-flatten an array and work with it.
+讨论如何来扁平化数组并处理它。
 
 @item awk_bool_t release_flattened_array(awk_array_t a_cookie,
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ awk_flat_array_t *data);
-When done with a flattened array, release the storage using this function.
-You must pass in both the original array cookie and the address of
-the created @code{awk_flat_array_t} structure.
-The function returns true upon success, false otherwise.
+当完成了数组的扁平化，释放使用这个函数的存储。你必须将最初的数组 cookie 与创建的 @code{awk_flat_array_t} 数组结构的地址都传递进去。如果成功返回 true，否则返回 false。
 @end table
 
 @node Flattening Arrays
-@subsubsection Working With All The Elements of an Array
+@subsubsection 遍历数组的所有元素
 
-To @dfn{flatten} an array is to create a structure that
-represents the full array in a fashion that makes it easy
-for C code to traverse the entire array.  Some of the code
-in @file{extension/testext.c} does this, and also serves
-as a nice example showing how to use the APIs.
+@dfn{扁平化}数组就是创建一个数据结构来表示整个数组，其风格使得很容易使用 C 代码来遍历整个数组。在 @file{extension/testext.c} 中的一些代码就是来做这些事情，也是一个很好的例子来说明如何来使用 API。
 
-We walk through that part of the code one step at a time.
-First, the @command{gawk} script that drives the test extension:
+我们一步步地来过这里面的代码。首先 @command{gawk} 脚本来驱动测试扩展：
 
 @example
 @@load "testext"
@@ -24762,18 +24612,9 @@ BEGIN @{
 @end example
 
 @noindent
-This code creates an array with @code{split()} (@pxref{String Functions})
-and then calls @code{dump_array_and_delete()}. That function looks up
-the array whose name is passed as the first argument, and
-deletes the element at the index passed in the second argument.
-The @command{awk} code then prints the return value and checks if the element
-was indeed deleted.  Here is the C code that implements
-@code{dump_array_and_delete()}. It has been edited slightly for
-presentation.
+这个代码使用 @code{split()} 函数创建了一个数组（查看 @ref{String Functions}）然后调用 @code{dump_array_and_delete()}。这个函数用于查找数组，其第一个参数是数组名，而删除的元素的索引通过第二个参数来传递。@command{awk} 代码然后打印返回的值并检查元素是否真的被删除了。下面是 @code{dump_array_and_delete()} 函数的C 代码实现。为了表现上的原因做了一些修改。
 
-The first part declares variables, sets up the default
-return value in @code{result}, and checks that the function
-was called with the correct number of arguments:
+第一部分是声明变量，设置默认的返回值到 @code{result} 中，并检查函数的调用是通过正确的参数个来调用的：
 
 @example
 static awk_value_t *
@@ -24795,10 +24636,7 @@ dump_array_and_delete(int nargs, awk_value_t *result)
     @}
 @end example
 
-The function then proceeds in steps, as follows. First, retrieve
-the name of the array, passed as the first argument, followed by
-the array itself. If either operation fails, print an
-error message and return:
+函数然后一步步地执行，如下。首先返回数组的名字，其作为函数的第一个参数初传递。然后是数组本身。如果有一个操作失败，则打印错误信息并返回：
 
 @example
     /* get argument named array as flat array and print it */
@@ -24818,10 +24656,7 @@ error message and return:
     @}
 @end example
 
-For testing purposes and to make sure that the C code sees
-the same number of elements as the @command{awk} code,
-the second step is to get the count of elements in the array
-and print it:
+为了测试并确保 C 代码看代的元素个数与 @command{awk} 代码看到的元素个数是一样的，第二步是来获取数组元素的个数然后打印它：
 
 @example
     if (! get_element_count(value2.array_cookie, & count)) @{
@@ -24833,9 +24668,7 @@ and print it:
            (unsigned long) count);
 @end example
 
-The third step is to actually flatten the array, and then
-to double-check that the count in the @code{awk_flat_array_t}
-is the same as the count just retrieved:
+第三步是执行实际的数组扁平化，然后再次检查 @code{awk_flat_array_t} 中的数量是与刚才返回的数量是一样的：
 
 @example
     if (! flatten_array(value2.array_cookie, & flat_array)) @{
@@ -24852,10 +24685,7 @@ is the same as the count just retrieved:
     @}
 @end example
 
-The fourth step is to retrieve the index of the element
-to be deleted, which was passed as the second argument.
-Remember that argument counts passed to @code{get_argument()}
-are zero-based, and thus the second argument is numbered one:
+第四步是返回要被删除的元素的索引，这个索引是通过第二个参数来传递的。要记住传递到 @code{get_argument()} 函数中的参数编号是从 0 开始的，因此第二个参数被编号为 1 ：
 
 @example
     if (! get_argument(1, AWK_STRING, & value3)) @{
@@ -24864,14 +24694,7 @@ are zero-based, and thus the second argument is numbered one:
     @}
 @end example
 
-The fifth step is where the ``real work'' is done. The function
-loops over every element in the array, printing the index and
-element values. In addition, upon finding the element with the
-index that is supposed to be deleted, the function sets the
-@code{AWK_ELEMENT_DELETE} bit in the @code{flags} field
-of the element.  When the array is released, @command{gawk}
-traverses the flattened array, and deletes any elements that
-have this flag bit set:
+第五步是执行“真正的”操作。函数循环数组中的每一个元素，打印其索引与其元素值。另外，当找到要删除元素的索引时，函数设置 @code{AWK_ELEMENT_DELETE} 位到元素的 @code{flags} 域中。当数组被释放时，@command{gawk} 会遍历扁平化后的数组，然后删除那些被设置了该位的元素：
 
 @example
     for (i = 0; i < flat_array->count; i++) @{
@@ -24891,12 +24714,7 @@ have this flag bit set:
     @}
 @end example
 
-The sixth step is to release the flattened array. This tells
-@command{gawk} that the extension is no longer using the array,
-and that it should delete any elements marked for deletion.
-@command{gawk} also frees any storage that was allocated,
-so you should not use the pointer (@code{flat_array} in this
-code) once you have called @code{release_flattened_array()}:
+第六步是释放扁平化后的数组。这会告诉 @command{gawk} 扩展已经不再使用数组，它可以删除所有已经被标志的元素。@command{gawk} 也会释放被分配的存储，因此，在调用 @code{release_flattened_array()} 函数后，你不要再使用里面的指针（在这个代码中为 @code{flat_array}）：
 
 @example
     if (! release_flattened_array(value2.array_cookie, flat_array)) @{
@@ -24905,8 +24723,7 @@ code) once you have called @code{release_flattened_array()}:
     @}
 @end example
 
-Finally, because everything was successful, the function sets the
-return value to success, and returns:
+最后，由于一切事情都执行良好，函数将返回值设置为成功，然后返回：
 
 @example
     make_number(1.0, result);
@@ -24915,7 +24732,7 @@ out:
 @}
 @end example
 
-Here is the output from running this part of the test:
+这里是运行测试部分的输出：
 
 @example
 pets has 5 elements
@@ -24932,19 +24749,15 @@ dump_array_and_delete() did remove index "3"!
 @end example
 
 @node Creating Arrays
-@subsubsection How To Create and Populate Arrays
+@subsubsection 如何生成与发布数组
 
-Besides working with arrays created by @command{awk} code, you can
-create arrays and populate them as you see fit, and then @command{awk}
-code can access them and manipulate them.
+除了通过 @command{awk} 代码来处理数组外，你也可以创建数组然后发布它们，然后 @command{awk} 代码也可以访问并处理它们。
 
-There are two important points about creating arrays from extension code:
+从扩展中创建数组有两个重点：
 
 @itemize @value{BULLET}
 @item
-You must install a new array into @command{gawk}'s symbol
-table immediately upon creating it.  Once you have done so,
-you can then populate the array.
+你必须将新的数组创建后立即安装到 @command{gawk} 的符号表中。这么做了后，就可以发布你的数组。
 
 @ignore
 Strictly speaking, this is required only
@@ -24953,18 +24766,12 @@ a good idea to always do this.  This restriction may be relaxed
 in a subsequent revision of the API.
 @end ignore
 
-Similarly, if installing a new array as a subarray of an existing array,
-you must add the new array to its parent before adding any elements to it.
+相似的，如果将某个数组安装成已经存在的数组的子数组，你必须在向它添加任何元素之前将其加到父数组中。
 
-Thus, the correct way to build an array is to work ``top down.''  Create
-the array, and immediately install it in @command{gawk}'s symbol table
-using @code{sym_update()}, or install it as an element in a previously
-existing array using @code{set_array_element()}.  We show example code shortly.
+因此，创建数组的正确方式是“自上而下”。创建一个数组，然后立即使用 @code{sym_update()} 将回添加到符号表中，或者使用 @code{set_array_element()} 将其添加为一个已经存在的数组的一个元素。我们后面会有例子说明。
 
 @item
-Due to @command{gawk} internals, after using @code{sym_update()} to install an array
-into @command{gawk}, you have to retrieve the array cookie from the value
-passed in to @command{sym_update()} before doing anything else with it, like so:
+由于 @command{gawk} 的内部实现，在使用了 @code{sym_update()} 安装了一个数组到 @command{gawk} 中后，在使用它做任何事情之前，你必须使用传给 @code{sym_update()} 接口中的值来获取一个数组的 cookie：
 
 @example
 awk_value_t val;
@@ -24980,17 +24787,10 @@ sym_update("array", & val);
 new_array = val.array_cookie;    /* YOU MUST DO THIS */
 @end example
 
-If installing an array as a subarray, you must also retrieve the value
-of the array cookie after the call to @code{set_element()}.
+如果安装的是一个子数组，你必须在调用 @code{set_element()} 之后使用数组的值返回一个数组 cookie。
 @end itemize
 
-The following C code is a simple test extension to create an array
-with two regular elements and with a subarray. The leading @code{#include}
-directives and boilerplate variable declarations
-(@pxref{Extension API Boilerplate})
-are omitted for brevity.
-The first step is to create a new array and then install it
-in the symbol table:
+下面的 C 代码是一个简单测试扩展，用两个常规的元素来创建一个数组，并带有一个子数组。开始的 @code{#include} 指示符以及样板式的变量声明（查看 @pxref{Extension API Boilerplate}）为了简化而省略了。第一步是创建一个新的数组，然后将其安装到符号表中：
 
 @example
 @ignore
@@ -25036,10 +24836,9 @@ create_new_array()
 @end example
 
 @noindent
-Note how @code{a_cookie} is reset from the @code{array_cookie} field in
-the @code{value} structure.
+注意 @code{a_cookies} 是如何使用 @code{value} 结构体中的 @code{array_cookie} 的域来进行重置的。
 
-The second step is to install two regular values into @code{new_array}:
+第二步是安装一个常规的到 @code{new_array} 中：
 
 @example
     (void) make_const_string("hello", 5, & index);
@@ -25057,7 +24856,7 @@ The second step is to install two regular values into @code{new_array}:
     @}
 @end example
 
-The third step is to create the subarray and install it:
+第三步是创建了一子数组，然后安装它：
 
 @example
     (void) make_const_string("subarray", 8, & index);
@@ -25071,7 +24870,7 @@ The third step is to create the subarray and install it:
     subarray = value.array_cookie;
 @end example
 
-The final step is to populate the subarray with its own element:
+最后一步是发布子数组以及它的元素：
 
 @example
     (void) make_const_string("foo", 3, & index);
@@ -25101,8 +24900,7 @@ dl_load_func(func_table, testarray, "")
 @end ignore
 @end example
 
-Here is a sample script that loads the extension
-and then dumps the array:
+这个一个装载扩展的脚本，然后 dump 数组：
 
 @example
 @@load "subarray"
@@ -25121,7 +24919,7 @@ BEGIN @{
 @}
 @end example
 
-Here is the result of running the script:
+下面是运行脚本的结果：
 
 @example
 $ @kbd{AWKLIBPATH=$PWD ./gawk -f subarray.awk}
@@ -25131,16 +24929,12 @@ $ @kbd{AWKLIBPATH=$PWD ./gawk -f subarray.awk}
 @end example
 
 @noindent
-(@xref{Finding Extensions} for more information on the
-@env{AWKLIBPATH} environment variable.)
+（查看 @xref{Finding Extensions}，来获取更多的关于变量 @env{AWKLIBPATH} 的信息）。
 
 @node Extension API Variables
-@subsection API Variables
+@subsection API 变量
 
-The API provides two sets of variables.  The first provides information
-about the version of the API (both with which the extension was compiled,
-and with which @command{gawk} was compiled).  The second provides
-information about how @command{gawk} was invoked.
+API 提供了两种类型的变量。第一种提供 API 版本信息（包括扩展是如何进行编译以及 @command{gawk} 如何进行编译的）。第二种是提供 @command{gawk} 如何被调用的信息。
 
 @menu
 * Extension Versioning::        API Version information.
@@ -25153,43 +24947,32 @@ information about how @command{gawk} was invoked.
 @cindex API version
 @cindex extension API version
 
-The API provides both a ``major'' and a ``minor'' version number.
-The API versions are available at compile time as C preprocessor defines
-to support conditional compilation, and as enum constants to facilitate
-debugging:
+API 提供了“主”与“次”版本值。API 版本可以在编译时刻获得。它在 C 语言预处理中定义以支持条件编译，以及作为枚举型常量用于 debug：
 
 @float Table,gawk-api-version
-@caption{gawk API version constants}
+@caption{gawk API 版本号常量}
 @multitable @columnfractions .33 .33 .33
-@headitem API Version @tab C preprocessor define @tab enum constant
+@headitem API 版本 @tab C 语言预处理器中的定义 @tab 枚举型常量
 @item Major @tab gawk_api_major_version @tab GAWK_API_MAJOR_VERSION
 @item Minor @tab gawk_api_minor_version @tab GAWK_API_MINOR_VERSION
 @end multitable
 @end float
 
-The minor version increases when new functions are added to the API. Such
-new functions are always added to the end of the API @code{struct}.
+次版本号会在向 API 添加新函数的时候进行递增。这些新函数总是添加在 API 结构体 @code{struct} 的尾部。
 
-The major version increases (and the minor version is reset to zero) if any
-of the data types change size or member order, or if any of the existing
-functions change signature.
+如果数组类型改变了大小，或者成员顺序有变化，或者现有的函数改变了签名，会对主版本号递增（次版本号则重设为 0）。
 
-It could happen that an extension may be compiled against one version
-of the API but loaded by a version of @command{gawk} using a different
-version. For this reason, the major and minor API versions of the
-running @command{gawk} are included in the API @code{struct} as read-only
-constant integers:
+有可能扩展是以某个版本的 API 进行编译的，而被另一个版本的 @command{gawk} 版本进行装载。由于这个原因，执行 @command{gawk} API 的主次版本号会包含在 API 结构体 @code{struct} 中，并且是只读的：
 
 @table @code
 @item api->major_version
-The major version of the running @command{gawk}
+执行 @command{gawk} 的主版本号。
 
 @item api->minor_version
-The minor version of the running @command{gawk}
+执行 @command{gawk} 的次版本号。
 @end table
 
-It is up to the extension to decide if there are API incompatibilities.
-Typically, a check like this is enough:
+扩展可以决定 API 是否是兼容的。典型的情况下，像下面这样的检查就可以了：
 
 @example
 if (api->major_version != GAWK_API_MAJOR_VERSION
@@ -25202,52 +24985,41 @@ if (api->major_version != GAWK_API_MAJOR_VERSION
 @}
 @end example
 
-Such code is included in the boilerplate @code{dl_load_func()} macro
-provided in @file{gawkapi.h} (discussed in
-@ref{Extension API Boilerplate}).
+这样的代码被包含在模板 @code{dl_load_func()} 宏中，并由 @file{gawkapi.h} 文件中（在 @ref{Extension API Boilerplate} 中进行讨论）。
 
 @node Extension API Informational Variables
-@subsubsection Informational Variables
+@subsubsection 信息变量
 @cindex API informational variables
 @cindex extension API informational variables
 
-The API provides access to several variables that describe
-whether the corresponding command-line options were enabled when
-@command{gawk} was invoked.  The variables are:
+API 提供了多个变量的访问，这些变量描述了 @command{gawk} 被调用时，相应的命令行选项是否启用。这些变量是：
 
 @table @code
 @item do_debug
-This variable is true if @command{gawk} was invoked with @option{--debug} option.
+这个变量当使用了 @option{--debug} 选项来调用 @command{gawk} 时会为 true。
 
 @item do_lint
-This variable is true if @command{gawk} was invoked with @option{--lint} option.
+这个变量当使用了 @option{--lint} 选项来调用 @command{gawk} 时会为 true。
 
 @item do_mpfr
-This variable is true if @command{gawk} was invoked with @option{--bignum} option.
+这个变量当使用了 @option{--bignum} 选项来调用 @command{gawk} 时会为 true。
 
 @item do_profile
-This variable is true if @command{gawk} was invoked with @option{--profile} option.
+这个变量当使用了 @option{--profile} 选项来调用 @command{gawk} 时会为 true。
 
 @item do_sandbox
-This variable is true if @command{gawk} was invoked with @option{--sandbox} option.
+这个变量当使用了 @option{--sandbox} 选项来调用 @command{gawk} 时会为 true。
 
 @item do_traditional
-This variable is true if @command{gawk} was invoked with @option{--traditional} option.
+这个变量当使用了 @option{--traditional} 选项来调用 @command{gawk} 时会为 true。
 @end table
 
-The value of @code{do_lint} can change if @command{awk} code
-modifies the @code{LINT} predefined variable (@pxref{Built-in Variables}).
-The others should not change during execution.
+@code{do_lint} 的值如果 @command{awk} 代码修改了 @code{LINT} 预定义变量（查看 @pxref{Built-in Variables}）可能会改变。其他的在执行过程中都不会改变。
 
 @node Extension API Boilerplate
-@subsection Boilerplate Code
+@subsection 样板代码
 
-As mentioned earlier (@pxref{Extension Mechanism Outline}), the function
-definitions as presented are really macros. To use these macros, your
-extension must provide a small amount of boilerplate code (variables and
-functions) toward the top of your source file, using predefined names
-as described here.  The boilerplate needed is also provided in comments
-in the @file{gawkapi.h} header file:
+如之前所提（查看 @pxref{Extension Mechanism Outline}），函数定义的呈现实际上是一个宏。为了使用这些宏，你的扩展必须使用下面的预定义的名字，提供少量的样板代码（变量以及函数）放在你的源代码的头部。所需要的样板代码也提供在 @file{gawkapi.h} 头文件的注释中：
 
 @example
 /* Boilerplate code: */
@@ -25279,114 +25051,80 @@ static awk_bool_t (*init_func)(void) = init_my_extension;
 dl_load_func(func_table, some_name, "name_space_in_quotes")
 @end example
 
-These variables and functions are as follows:
+这些变量与函数如下：
 
 @table @code
 @item int plugin_is_GPL_compatible;
+这个用来声明扩展是与 GNU GPL 兼容的
 This asserts that the extension is compatible with
 @ifclear FOR_PRINT
-the GNU GPL (@pxref{Copying}).
+（查看 @pxref{Copying}）。
 @end ifclear
-@ifset FOR_PRINT
-the GNU GPL.
-@end ifset
-If your extension does not have this, @command{gawk}
-will not load it (@pxref{Plugin License}).
+如果你的扩展没有这个变量，@command{gawk} 不会装载它（查看 @pxref{Plugin License}）。
 
 @item static gawk_api_t *const api;
-This global @code{static} variable should be set to point to
-the @code{gawk_api_t} pointer that @command{gawk} passes to your
-@code{dl_load()} function.  This variable is used by all of the macros.
+这个全局的 @code{static} 变量应该被设定指向 @code{gawk_api_t} 指针，@command{gawk} 会在 @code{dl_load()} 函数中传递过来。这个变量被所有的宏使用。
 
 @item static awk_ext_id_t ext_id;
-This global static variable should be set to the @code{awk_ext_id_t}
-value that @command{gawk} passes to your @code{dl_load()} function.
-This variable is used by all of the macros.
+这个全局静态变量应该设置为 @code{awk_ext_id_t} 的值，这个值会通过你自己的 @code{dl_load()} 函数传递绘画你。这个变量被所有的宏使用。
 
 @item static const char *ext_version = NULL; /* or @dots{} = "some string" */
-This global @code{static} variable should be set either
-to @code{NULL}, or to point to a string giving the name and version of
-your extension.
+这个全局 @code{static} 变量要么被设置为 @code{NULL}，或者是一个字串的指针，这个字串绘画了了扩展的名字与版本。
 
 @item static awk_ext_func_t func_table[] = @{ @dots{} @};
-This is an array of one or more @code{awk_ext_func_t} structures,
-as described earlier (@pxref{Extension Functions}).
-It can then be looped over for multiple calls to
-@code{add_ext_func()}.
+这个一个或者多个 @code{awk_ext_func_t} 结构的数组，如之所描述的（查看 @pxref{Extension Functions}）。它之后可以通过循环来多次调用 @code{add_ext_func()}。
 
 @c Use @var{OR} for docbook
 @item static awk_bool_t (*init_func)(void) = NULL;
 @itemx @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @ @var{OR}
 @itemx static awk_bool_t init_my_extension(void) @{ @dots{} @}
 @itemx static awk_bool_t (*init_func)(void) = init_my_extension;
-If you need to do some initialization work, you should define a
-function that does it (creates variables, opens files, etc.)
-and then define the @code{init_func} pointer to point to your
-function.
-The function should return @code{awk_false} upon failure, or @code{awk_true}
-if everything goes well.
+如果你需要做一些初始化的工作，你应该定义这样的函数（创建变量，打开文件等）然后定义 @code{init_func} 指针指向你的函数。函数应该在失败时返回 @code{awk_false} ，或者成功时返回 @code{awk_true}。
 
-If you don't need to do any initialization, define the pointer and
-initialize it to @code{NULL}.
+如果你不需要初始化，定义这个指针，并将其设置为 @code{NULL}。
 
 @item dl_load_func(func_table, some_name, "name_space_in_quotes")
-This macro expands to a @code{dl_load()} function that performs
-all the necessary initializations.
+这个宏会扩展为 @code{dl_load()} 函数，该函数执行所有必要的初始化。
 @end table
 
-The point of all the variables and arrays is to let the
-@code{dl_load()} function (from the @code{dl_load_func()}
-macro) do all the standard work. It does the following:
+所有变量与数组的目的是使 @code{dl_load()} 函数（来自于 @code{dl_load_func()} 宏中）处理所有的标准工作。它执行下面的工作：
 
 @enumerate 1
 @item
-Check the API versions. If the extension major version does not match
-@command{gawk}'s, or if the extension minor version is greater than
-@command{gawk}'s, it prints a fatal error message and exits.
+检查 API 版本。如果扩展的主版本与 @command{gawk} 的主版本不匹配，或者扩展的次版本大于 @command{gawk} 的次版本号，它会打印错误信息后退出。
 
 @item
-Load the functions defined in @code{func_table}.
-If any of them fails to load, it prints a warning message but
-continues on.
+装入定义在 @code{func_table} 中的函数。如果它们中的任何一个失败，它会打印警告信息，但是继续执行。
 
 @item
-If the @code{init_func} pointer is not @code{NULL}, call the
-function it points to. If it returns @code{awk_false}, print a
-warning message.
+如果 @code{init_func} 指针不为 @code{NULL}，则调用它指向的函数。如果它返回 @code{awk_false}，打印一个警告信息。
 
 @item
-If @code{ext_version} is not @code{NULL}, register
-the version string with @command{gawk}.
+如果 @code{ext_version} 不为 @code{NULL}，注册版本字串到 @command{gawk} 中。
 @end enumerate
 
 @node Finding Extensions
-@section How @command{gawk} Finds Extensions
+@section @command{gawk} 如何找到扩展
 @cindex extension search path
 @cindex finding extensions
 
-Compiled extensions have to be installed in a directory where
-@command{gawk} can find them.  If @command{gawk} is configured and
-built in the default fashion, the directory in which to find
-extensions is @file{/usr/local/lib/gawk}.  You can also specify a search
-path with a list of directories to search for compiled extensions.
-@xref{AWKLIBPATH Variable} for more information.
+编译好的扩展必须安装在 @command{gawk} 可以找到它们的路径下。如果 @command{gawk} 被配置并以默认的方式进行构建，来搜索扩展的目录为 @file{/usr/local/lib/gawk}。
+你也可以指定一个目录列表来搜索编译好的扩展。查看 @xref{AWKLIBPATH Variable}，来获取其他信息。
 
 @node Extension Example
-@section Example: Some File Functions
+@section 例子：一些文件函数
 @cindex extension example
 
 @quotation
-@i{No matter where you go, there you are.}
+@i{
+你可以到达任何你想去的地方。
+}
 @author Buckaroo Banzai
 @end quotation
 
 @c It's enough to show chdir and stat, no need for fts
 
-Two useful functions that are not in @command{awk} are @code{chdir()} (so
-that an @command{awk} program can change its directory) and @code{stat()}
-(so that an @command{awk} program can gather information about a file).
-In order to illustrate the API in action, this @value{SECTION} implements
-these functions for @command{gawk} in an extension.
+有两个非常有用的函数不在 @command{awk} 中，他们是 @code{chdir()}（这样 @command{awk} 程序可以改变它的目录）与 @code{stat()}（这样 @command{awk} 程序可以收集文件的信息）。为了用实际的例子说明 API，这一@value{SECTION}会将其实现为 @command{gawk} 的扩展。
 
 @menu
 * Internal File Description::   What the new functions will do.
@@ -25395,12 +25133,9 @@ these functions for @command{gawk} in an extension.
 @end menu
 
 @node Internal File Description
-@subsection Using @code{chdir()} and @code{stat()}
+@subsection  使用 @code{chdir()} 与 @code{stat()}
 
-This @value{SECTION} shows how to use the new functions at
-the @command{awk} level once they've been integrated into the
-running @command{gawk} interpreter.  Using @code{chdir()} is very
-straightforward. It takes one argument, the new directory to change to:
+这一@value{SECTION}展示如何来在 @command{awk} 层上如何来使用新函数，只要他们已经整合到了 @command{gawk} 中的解释器中。使用 @code{chdir()} 非常直接。它只有一个参数，即要更改的新目录：
 
 @example
 @@load "filefuncs"
@@ -25414,14 +25149,9 @@ if (ret < 0) @{
 @dots{}
 @end example
 
-The return value is negative if the @code{chdir()} failed, and
-@code{ERRNO} (@pxref{Built-in Variables}) is set to a string indicating
-the error.
+如果 @code{chdir()} 失败了会返回一个负值，@code{ERRNO}（查看 @pxref{Built-in Variables}） 的值会被设置为指示错误的字串。
 
-Using @code{stat()} is a bit more complicated.  The C @code{stat()}
-function fills in a structure that has a fair amount of information.
-The right way to model this in @command{awk} is to fill in an associative
-array with the appropriate information:
+使用 @code{stat()} 就有一点复杂。C 的 @code{stat()} 函数会填充一个有大量信息的结构。在 @command{awk} 中对其进行建模的正确方法是使用关联数组来表示对应的信息：
 
 @c broke printf for page breaking
 @example
@@ -25435,56 +25165,47 @@ if (ret < 0) @{
 printf("size of %s is %d bytes\n", file, fdata["size"])
 @end example
 
-The @code{stat()} function always clears the data array, even if
-the @code{stat()} fails.  It fills in the following elements:
+@code{stat()} 函数总会清除数据数组，就算 @code{stat()} 失败情况下也如此。它会以填充下面的元素：
 
 @table @code
 @item "name"
-The name of the file that was @code{stat()}ed.
+要进行 @code{stat()} 操作的文件的名字。
 
 @item "dev"
 @itemx "ino"
-The file's device and inode numbers, respectively.
+文件的设备与 inode 号。
 
 @item "mode"
-The file's mode, as a numeric value. This includes both the file's
-type and its permissions.
+文件的访问权限，为数值。这包含文件的类型以及权限。
 
 @item "nlink"
-The number of hard links (directory entries) the file has.
+硬连接的个数。
 
 @item "uid"
 @itemx "gid"
-The numeric user and group ID numbers of the file's owner.
+文件所有者的用户 ID 与组 ID。
 
 @item "size"
-The size in bytes of the file.
+文件的字节大小。
 
 @item "blocks"
-The number of disk blocks the file actually occupies. This may not
-be a function of the file's size if the file has holes.
+文件实际占有块的个数。如果文件有洞，则这个数组不会是其大小的函数。
 
 @item "atime"
 @itemx "mtime"
 @itemx "ctime"
-The file's last access, modification, and inode update times,
-respectively.  These are numeric timestamps, suitable for formatting
-with @code{strftime()}
-(@pxref{Time Functions}).
+文件的最后访问，修改及 inode 更新时间。它们都是数值的时间戳，适合用于 @code{strftime()}（查看 @ref{Time Functions}）。
 
 @item "pmode"
-The file's ``printable mode.''  This is a string representation of
-the file's type and permissions, such as is produced by
-@samp{ls -l}---for example, @code{"drwxr-xr-x"}.
+文件的“printable mode"。这个是一个文件类型与权限的字串表示，如 @samp{ls -l} 输出。如，@code{"drwxr-xr-x"}。
 
 @item "type"
-A printable string representation of the file's type.  The value
-is one of the following:
+文件类型的可打印字串，值可能是下面之一：
 
 @table @code
 @item "blockdev"
 @itemx "chardev"
-The file is a block or character device (``special file'').
+文件是一个块或者字符设备（“特殊文件”）。
 
 @ignore
 @item "door"
@@ -25493,66 +25214,48 @@ interprocess communications).
 @end ignore
 
 @item "directory"
-The file is a directory.
+文件是目录。
 
 @item "fifo"
-The file is a named pipe (also known as a FIFO).
+文件是一个命名管道（也称为 FIFO）。
 
 @item "file"
-The file is just a regular file.
+文件是一个常规文件。
 
 @item "socket"
-The file is an @code{AF_UNIX} (``Unix domain'') socket in the
-filesystem.
+文件是文件系统中的一个 @code{AF_UNIX}（“Unix domain”）socket。
 
 @item "symlink"
-The file is a symbolic link.
+文件是一个符号连接。
 @end table
 
 @c 5/2013: Thanks to Corinna Vinschen for this information.
 @item "devbsize"
-The size of a block for the element indexed by @code{"blocks"}.
-This information is derived from either the @code{DEV_BSIZE}
-constant defined in @code{<sys/param.h>} on most systems,
-or the @code{S_BLKSIZE} constant in @code{<sys/stat.h>} on BSD systems.
-For some other systems, @dfn{a priori} knowledge is used to provide
-a value. Where no value can be determined, it defaults to 512.
+文件的通过 @code{"blocks"} 进行索引的基本块大小。大多数系统中，这个信息是从 @code{<sys/param.h>} 文件中的 @code{DEV_BSIZE} 或者是 BSD 系统中 @code{<sys/stat.h>} 文件中的 @code{S_BLKSIZE} 继承下来的。对于其他的系统，@dfn{预先}的知识为其提供值。当没法确定值的时候，默认为 512。
 @end table
 
-Several additional elements may be present, depending upon the operating
-system and the type of the file.  You can test for them in your @command{awk}
-program by using the @code{in} operator
-(@pxref{Reference to Elements}):
+还可能有几个额外的元素，其依赖于操作系统以及文件的类型。你可以在 @command{awk} 程序中使用 @code{in} 操作符来对它们进行测试（查看 @ref{Reference to Elements}）：
 
 @table @code
 @item "blksize"
-The preferred block size for I/O to the file. This field is not
-present on all POSIX-like systems in the C @code{stat} structure.
+用于文件 I/O 优先块大小。这个域在所有类 POSIX系统中的 C @code{stat} 结构中不存在。
 
 @item "linkval"
-If the file is a symbolic link, this element is the name of the
-file the link points to (i.e., the value of the link).
+如果文件是一个连接，这个元素就是连接文件所指向的文件名（即连接的值）。
 
 @item "rdev"
 @itemx "major"
 @itemx "minor"
-If the file is a block or character device file, then these values
-represent the numeric device number and the major and minor components
-of that number, respectively.
+如果文件是一个块设备或者是一个字符设备文件，则这个值代表了设备号的数值，以及设备号中的主次设备号。
 @end table
 
 @node Internal File Ops
-@subsection C Code for @code{chdir()} and @code{stat()}
+@subsection  @code{chdir()} 与 @code{stat()} 的C 代码
 
-Here is the C code for these extensions.@footnote{This version is
-edited slightly for presentation.  See @file{extension/filefuncs.c}
-in the @command{gawk} distribution for the complete version.}
+下面是这些扩展的 C 代码。 
+@footnote{为了表现，这个版本有一些小改动。到 @command{gawk} 发布版 @file{extension/filefuncs.c} 中查看完整的版本。}
 
-The file includes a number of standard header files, and then includes
-the @file{gawkapi.h} header file, which provides the API definitions.
-Those are followed by the necessary variable declarations
-to make use of the API macros and boilerplate code
-(@pxref{Extension API Boilerplate}):
+这个文件中包含很多的标准头文件，然后再包含 @file{gawkapi.h} 头文件，这个文件文件中包了 API 的定义。后再是跟着一些必要变量声明，以使用 API 中的宏与模板代码（查看 @pxref{Extension API Boilerplate}）：
 
 @example
 #ifdef HAVE_CONFIG_H
@@ -25588,12 +25291,7 @@ int plugin_is_GPL_compatible;
 @end example
 
 @cindex programming conventions, @command{gawk} extensions
-By convention, for an @command{awk} function @code{foo()}, the C function
-that implements it is called @code{do_foo()}.  The function should have
-two arguments. The first is an @code{int}, usually called @code{nargs},
-that represents the number of actual arguments for the function.
-The second is a pointer to an @code{awk_value_t} structure, usually named
-@code{result}:
+习惯上，对于 @command{awk} 函数 @code{foo()}，实现它的函数称为 @code{do_foo()}。这些函数应该有两个参数。第一个是 @code{int}，通常称为 @code{nargs}，表示的是函数中实际参数的个数。第二个是 @code{awk_value_t} 结构的指针，一般命名为 @code{result}：
 
 @example
 /*  do_chdir --- provide dynamically loaded chdir() function for gawk */
@@ -25612,14 +25310,9 @@ do_chdir(int nargs, awk_value_t *result)
                    "expecting 1"));
 @end example
 
-The @code{newdir}
-variable represents the new directory to change to, which is retrieved
-with @code{get_argument()}.  Note that the first argument is
-numbered zero.
+@code{newdir} 变量表示要改变的新目录，这个是通过 @code{get_argument()} 来获取的。注意第一个参数的编号为 0。
 
-If the argument is retrieved successfully, the function calls the
-@code{chdir()} system call. If the @code{chdir()} fails, @code{ERRNO}
-is updated:
+如果参数被成功返回，则函数调用 @code{chdir()} 系统调用。如果 @code{chdir()} 失败，则 @code{ERRNO} 的值会被更改：
 
 @example
     if (get_argument(0, AWK_STRING, & newdir)) @{
@@ -25629,16 +25322,14 @@ is updated:
     @}
 @end example
 
-Finally, the function returns the return value to the @command{awk} level:
+最后，函数返回要返回的值到 @command{awk} 层：
 
 @example
     return make_number(ret, result);
 @}
 @end example
 
-The @code{stat()} extension is more involved.  First comes a function
-that turns a numeric mode into a printable representation
-(e.g., octal @code{0644} becomes @samp{-rw-r--r--}). This is omitted here for brevity:
+@code{stat()} 扩展涉及的东西更多一些。首先是一个将数值模式转换为可打印表示的函数（比如 @code{0644} 转换为 @samp{-rw-r--r--}）。简单起见，这里省略了：
 
 @example
 /* format_mode --- turn a stat mode field into something readable */
@@ -25650,8 +25341,7 @@ format_mode(unsigned long fmode)
 @}
 @end example
 
-Next comes a function for reading symbolic links, which is also
-omitted here for brevity:
+下一个函数用来读取软链接，也为了简化，在这里省略了：
 
 @example
 /* read_symlink --- read a symbolic link into an allocated buffer.
@@ -25664,8 +25354,7 @@ read_symlink(const char *fname, size_t bufsize, ssize_t *linksize)
 @}
 @end example
 
-Two helper functions simplify entering values in the
-array that will contain the result of the @code{stat()}:
+有两个辅助函数会简化将值输入到数组的过程，这个数组将包含 @code{stat()} 的结果：
 
 @example
 /* array_set --- set an array element */
@@ -25692,16 +25381,9 @@ array_set_numeric(awk_array_t array, const char *sub, double num)
 @}
 @end example
 
-The following function does most of the work to fill in
-the @code{awk_array_t} result array with values obtained
-from a valid @code{struct stat}. This work is done in a separate function
-to support the @code{stat()} function for @command{gawk} and also
-to support the @code{fts()} extension, which is included in
-the same file but whose code is not shown here
-(@pxref{Extension Sample File Functions}).
+下面的函数处理大部份的工作，即将从一个有效的 @code{struct stat} 中取值，然后将这些值填充到 @code{awk_array_t} 类型的结果数组中。这个工作由一个单独的函数来完成，为 @command{gawk} 提供 @code{stat()} 函数支持，也支持 @code{fts()} 扩展。 这个扩展也包含在同一个文件中，但是它的代码没有在这时显示（查看 @pxref{Extension Sample File Functions}）。
 
-The first part of the function is variable declarations,
-including a table to map file types to strings:
+这个函数的第一部分是变量声明，包含将文件类型影射到字串的表：
 
 @example
 /* fill_stat_array --- do the work to fill an array with stat info */
@@ -25736,8 +25418,7 @@ fill_stat_array(const char *name, awk_array_t array, struct stat *sbuf)
     int j, k;
 @end example
 
-The destination array is cleared, and then code fills in
-various elements based on values in the @code{struct stat}:
+然后目标数组也被声明了，后面的代码根据 @code{struct stat} 中的值来填充不同的元素：
 
 @example
     /* empty out the array */
@@ -25768,10 +25449,7 @@ various elements based on values in the @code{struct stat}:
 @end example
 
 @noindent
-The latter part of the function makes selective additions
-to the destination array, depending upon the availability of
-certain members and/or the type of the file. It then returns zero,
-for success:
+函数的后面的部分用于向目标数组中选择性地添加一些元素，这个要依赖于文件的特定成员以及/或者文件类型。如果成功，则返回 0 ：
 
 @example
 #ifdef HAVE_STRUCT_STAT_ST_BLKSIZE
@@ -25811,17 +25489,10 @@ for success:
 @}
 @end example
 
-The third argument to @code{stat()} was not discussed previously. This
-argument is optional. If present, it causes @code{do_stat()} to use
-the @code{stat()} system call instead of the @code{lstat()} system
-call.  This is done by using a function pointer: @code{statfunc}.
-@code{statfunc} is initialized to point to @code{lstat()} (instead
-of @code{stat()}) to get the file information, in case the file is a
-symbolic link. However, if the third argument is included, @code{statfunc}
-is set to point to @code{stat()}, instead.
+@code{stat()} 函数的第三个参数之前没有讨论到。这个参数是可选的。如果存在，则会导致 @code{do_stat()} 使用 @code{stat()} 调用而不是 @code{lstat()} 系统调用。这是通过这个函数指针来完成的：@code{statfunc}。@code{statfunc} 会被初始化为 @code{lstat()}（而不是 @code{stat()}），以此来获取文件信息，以防止文件是一个软链接。
+但是，如果包含了第三个参数，@code{statfunc} 为设置为 @code{stat()} 函数的指针。
 
-Here is the @code{do_stat()} function, which starts with
-variable declarations and argument checking:
+下面是 @code{do_stat()} 函数，它的开始也是一些变量声明以及参数检查：
 
 @ignore
 Changed message for page breaking. Used to be:
@@ -25851,10 +25522,7 @@ do_stat(int nargs, awk_value_t *result)
     @}
 @end example
 
-Then comes the actual work. First, the function gets the arguments.
-Next, it gets the information for the file.  If the called function
-(@code{lstat()} or @code{stat()}) returns an error, the code sets
-@code{ERRNO} and returns:
+后面接着的是实际的工作。函数先取得参数，接下来，它会取得文件的信息。如果调用的函数（@code{lstat()} 或者 @code{stat()}）返回一个错误，则代码设置 @code{ERRNO} 的值然后返回：
 
 @example
     /* file is first arg, array to hold results is second */
@@ -25882,8 +25550,7 @@ Next, it gets the information for the file.  If the called function
     @}
 @end example
 
-The tedious work is done by @code{fill_stat_array()}, shown
-earlier.  When done, the function returns the result from @code{fill_stat_array()}:
+其他的冗长的工作由 @code{fill_stat_array()} 来完成，这个已经在前面出现过。当完成时，函数返回从 @code{fill_stat_array()} 函数中返回的值：
 
 @example
     ret = fill_stat_array(name, array, & sbuf);
@@ -25892,14 +25559,9 @@ earlier.  When done, the function returns the result from @code{fill_stat_array(
 @}
 @end example
 
-Finally, it's necessary to provide the ``glue'' that loads the
-new function(s) into @command{gawk}.
+最后，有必须提供一些“胶水”来将新的函数装入 @command{gawk}。
 
-The @code{filefuncs} extension also provides an @code{fts()}
-function, which we omit here
-(@pxref{Extension Sample File Functions}).
-For its sake, there is an initialization
-function:
+@code{filefuncs} 扩展也提供了一个 @code{fts()} 函数，这个函数在这里进行了省略（查看 @pxref{Extension Sample File Functions}）。由于这个原因，有一个初始化函数：
 
 @example
 /* init_filefuncs --- initialization routine */
@@ -25911,8 +25573,7 @@ init_filefuncs(void)
 @}
 @end example
 
-We are almost done. We need an array of @code{awk_ext_func_t}
-structures for loading each function into @command{gawk}:
+到目前为止，就差不多完成了。我们需要一个 @code{awk_ext_func_t} 结构的数组用来装载每个一个函数到 @command{gawk} 中：
 
 @example
 static awk_ext_func_t func_table[] = @{
@@ -25924,9 +25585,7 @@ static awk_ext_func_t func_table[] = @{
 @};
 @end example
 
-Each extension must have a routine named @code{dl_load()} to load
-everything that needs to be loaded.  It is simplest to use the
-@code{dl_load_func()} macro in @code{gawkapi.h}:
+每个指针都必须有一个例程名为 @code{dl_load()} 来载入所有要被载入的东西。最简单的方法是使用 @file{gawkapi.h} 中的 @code{dl_load_func()} 宏：
 
 @example
 /* define the dl_load() function using the boilerplate macro */
@@ -25934,29 +25593,21 @@ everything that needs to be loaded.  It is simplest to use the
 dl_load_func(func_table, filefuncs, "")
 @end example
 
-And that's it!
+以上即是所有代码！ 
 
 @node Using Internal File Ops
-@subsection Integrating the Extensions
+@subsection 整合扩展
 
 @cindex @command{gawk}, interpreter@comma{} adding code to
-Now that the code is written, it must be possible to add it at
-runtime to the running @command{gawk} interpreter.  First, the
-code must be compiled.  Assuming that the functions are in
-a file named @file{filefuncs.c}, and @var{idir} is the location
-of the @file{gawkapi.h} header file,
-the following steps@footnote{In practice, you would probably want to
-use the GNU Autotools (Automake, Autoconf, Libtool, and @command{gettext}) to
-configure and build your libraries. Instructions for doing so are beyond
-the scope of this @value{DOCUMENT}. @xref{gawkextlib} for Internet links to
-the tools.} create a GNU/Linux shared library:
+现在代码已经写在，但是需要能够在 @command{gawk} 解释器运行的时候，将其载入。首先，代码是需要编译的。假充函数在一个名为 @file{filefuncs.c} 的文件中，而 @var{idir} 是 @file{gawkapi.h} 头文件所在的位置。下面的步骤 用来创建一个 GNU/Linux 共享库：
+@footnote{在实践中，你可能想使用 GNU Autotools（Automake，Autoconf，Libtool，以及 @command{gettext}）来配置及构建你的库。如何来做超出了本@value{DOCUMENT}的范围。查看 @xref{gawkextlib}，来获取这些工具的地址。}
 
 @example
 $ @kbd{gcc -fPIC -shared -DHAVE_CONFIG_H -c -O -g -I@var{idir} filefuncs.c}
 $ @kbd{gcc -o filefuncs.so -shared filefuncs.o}
 @end example
 
-Once the library exists, it is loaded by using the @code{@@load} keyword:
+库一旦生成，就可以通过 @code{@@load} 关键字来进行载入：
 
 @example
 # file testff.awk
@@ -25987,9 +25638,7 @@ BEGIN @{
 @}
 @end example
 
-The @env{AWKLIBPATH} environment variable tells
-@command{gawk} where to find extensions (@pxref{Finding Extensions}).
-We set it to the current directory and run the program:
+@env{AWKLIBPATH} 环境变量用来告知 @command{gawk} 到哪里去查看扩展（查看 @pxref{Finding Extensions}）。我们将其设置为当前目录并执行程序：
 
 @example
 $ @kbd{AWKLIBPATH=$PWD gawk -f testff.awk}
@@ -26020,14 +25669,10 @@ $ @kbd{AWKLIBPATH=$PWD gawk -f testff.awk}
 @end example
 
 @node Extension Samples
-@section The Sample Extensions in the @command{gawk} Distribution
+@section @command{gawk} 发行版本中的例子扩展
 @cindex extensions distributed with @command{gawk}
 
-This @value{SECTION} provides a brief overview of the sample extensions
-that come in the @command{gawk} distribution. Some of them are intended
-for production use (e.g., the @code{filefuncs}, @code{readdir}, and
-@code{inplace} extensions).  Others mainly provide example code that
-shows how to use the extension API.
+这一@value{SECTION}提供了一个简单的例子扩展的概况，例子与 @command{gawk} 版本一起发布。它们中的一些就是用于生产目的的（如 @code{filefuncs}，@code{readdir}，以及 @code{inplace} 扩展）。其他的主要是一些例子代码，以示范如何来使用扩展 API。
 
 @menu
 * Extension Sample File Functions::   The file functions sample.
@@ -26048,22 +25693,19 @@ shows how to use the extension API.
 @end menu
 
 @node Extension Sample File Functions
-@subsection File-Related Functions
+@subsection 与文件相关的函数
 
-The @code{filefuncs} extension provides three different functions, as follows.
-The usage is:
+@code{filefuncs} 扩展提供了不同的函数，其使用方法如下：
 
 @table @asis
 @item @code{@@load "filefuncs"}
-This is how you load the extension.
+如何来装载扩展。
 
 @cindex @code{chdir()} extension function
 @item @code{result = chdir("/some/directory")}
-The @code{chdir()} function is a direct hook to the @code{chdir()}
-system call to change the current directory.  It returns zero
-upon success or a value less than zero upon error.
-In the latter case, it updates @code{ERRNO}.
+@code{chdir()} 函数直接是 @code{chdir()} 系统调用的钩子函数，用来更改当前目录。如果成功则返回 0，如果错误则返回负值。在后面的情况还会更新 @code{ERRNO} 的值。
 
+#TODO20171212
 @cindex @code{stat()} extension function
 @item @code{result = stat("/some/path", statdata} [@code{, follow}]@code{)}
 The @code{stat()} function provides a hook into the

@@ -419,4 +419,25 @@
 改动
 > 直接使用 @code{ERRNO} 的字符串值来设置 @code{ERRNO}。
 
- 
+## 16.4.11.2  
+英文原文
+> Remove the element with the given index from the array
+> represented by @code{a_cookie}.
+
+译文原文
+> 删除由 @code{a_cookie} 表示的数组中，由 @code{index} 给出的元素。
+
+改动
+> 删除由 @code{a_cookie} 表示的数组中指定索引的元素。
+
+## 16.4.12
+英文原文
+> The API versions are available at compile time as C preprocessor defines
+> to support conditional compilation, and as enum constants to facilitate
+> debugging:
+
+译文原文
+> API 版本可以在编译的时候通过常数来得到：
+
+改动
+> API 版本可以在编译时刻获得。它在 C 语言预处理中定义以支持条件编译，以及作为枚举型常量用于 debug：
