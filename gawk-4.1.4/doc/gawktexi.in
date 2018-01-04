@@ -25951,64 +25951,50 @@ END @{
 @c endfile
 @end example
 
-For each regular file that is processed, the extension redirects
-standard output to a temporary file configured to have the same owner
-and permissions as the original.  After the file has been processed,
-the extension restores standard output to its original destination.
-If @code{INPLACE_SUFFIX} is not an empty string, the original file is
-linked to a backup @value{FN} created by appending that suffix.  Finally,
-the temporary file is renamed to the original @value{FN}.
+对于要处理的每一个常规文件，扩展重定向输出到一个临时文件中，其与原始的文件具有相同所有权以及访问权限。在处理了相应的文件后，扩展会恢复标准输出到原来的目标。如果 @code{INPLACE_SUFFIX} 不为空串，则初始文件将后缀联合创建一个备份文件。最后，临时文件被重新命名为初始文件。
 
-Note that the use of this feature can be controlled by placing @samp{inplace=0}
-on the command-line prior to listing files that should not be processed this
-way.  You can reenable inplace editing by adding an @samp{inplace=1} argument
-prior to files that should be subject to inplace editing.
+注意，在使用这个特性的时候，可以通过在命令行中把 @samp{inplace=0} 放在不需要这样处理的文件列表之前，来控制这个特性。你可以通过在需要这么处理的文件列表前加上 @samp{inplace=1} 参数来重新启用这个特性。
 
-The @code{_inplace_filename} variable serves to keep track of the
-current filename so as to not invoke @code{inplace_end()} before
-processing the first file.
+@code{_inplace_filename} 变量用来跟踪当前的文件名，这样不用在处理第一个文件时调用 @code{inplace_end()}。
 
-If any error occurs, the extension issues a fatal error to terminate
-processing immediately without damaging the original file.
+如果出现的错误，扩展会生成一个致命错误，以立即结束处理，不会对原始文件造成破坏。
 
-Here are some simple examples:
+这是一些简单的例子：
 
 @example
 $ @kbd{gawk -i inplace '@{ gsub(/foo/, "bar") @}; @{ print @}' file1 file2 file3}
 @end example
 
-To keep a backup copy of the original files, try this:
+为了保存原文件的一个备份复本，可以这么执行：
 
 @example
 $ @kbd{gawk -i inplace -v INPLACE_SUFFIX=.bak '@{ gsub(/foo/, "bar") @}}
 > @kbd{@{ print @}' file1 file2 file3}
 @end example
 
-Please note that, while the extension does attempt to preserve ownership and permissions, it makes no attempt to copy the ACLs from the original file.
+请注意，尽管这个扩展试图保存原始文件的所有权和许可，但是它不会试图拷贝原始文件的 ACL。
 
-If the program dies prematurely, as might happen if an unhandled signal is received, a temporary file may be left behind.
+如果程序过早地终止了，比如可能收到了未处理的信号，可能会留下一个临时文件。
 
 @node Extension Sample Ord
-@subsection Character and Numeric values: @code{ord()} and @code{chr()}
+@subsection  字符与数值：@code{ord()} 与 @code{chr()}
 
-The @code{ordchr} extension adds two functions, named
-@code{ord()} and @code{chr()}, as follows:
+@code{ordchr} 扩展添加了两个函数，名字为 @code{ord()} 与 @code{chr()}，如下：
 
 @table @code
 @item @@load "ordchr"
-This is how you load the extension.
+这里用来进行扩展装载。
 
 @cindex @code{ord()} extension function
 @item number = ord(string)
-Return the numeric value of the first character in @code{string}.
+返回 @code{string} 中第一个字符的数值值。
 
 @cindex @code{chr()} extension function
 @item char = chr(number)
-Return a string whose first character is that represented by @code{number}.
+返回第一个字母是由数值（@code{number}）表示的字串。
 @end table
 
-These functions are inspired by the Pascal language functions
-of the same name.  Here is an example:
+这些函数由 Pascal 语言的同名函数借用而来。下面是例子：
 
 @example
 @@load "ordchr"
@@ -26018,53 +26004,41 @@ printf("The string value of 65 is %s\n", chr(65))
 @end example
 
 @node Extension Sample Readdir
-@subsection Reading Directories
+@subsection  读取目录
 
-The @code{readdir} extension adds an input parser for directories.
-The usage is as follows:
+@code{readdir} 扩展添加了一个目录的输入分析器，其使用如下：
 
 @cindex @code{readdir} extension
 @example
 @@load "readdir"
 @end example
 
-When this extension is in use, instead of skipping directories named
-on the command line (or with @code{getline}),
-they are read, with each entry returned as a record.
+当使用这个扩展时，它不会跳过在命令行中的目录（或者也不会在 @code{getline} 中跳过），相反它们会被读取，每一个项作为一个记录。
 
-The record consists of three fields. The first two are the inode number and the
-@value{FN}, separated by a forward slash character.
-On systems where the directory entry contains the file type, the record
-has a third field (also separated by a slash), which is a single letter
-indicating the type of the file. The letters and their corresponding file
-types are shown in @ref{table-readdir-file-types}.
+记录包含三域。头两个域是 @code{inode} 号与@value{FN}，由斜杠（/）进行分隔。在目录项中包含文件类型的系统中，记录会有第三个域（这个域也由斜杠（/）进行分隔，这是一个由单个字母表示的文件的类型。这些字母以及文件的相应的类型，在 @ref{table-readdir-file-types} 中。
 
 @float Table,table-readdir-file-types
-@caption{File types returned by the @code{readdir} extension}
+@caption{由 @code{readdir} 扩展返回的文件类型}
 @multitable @columnfractions .1 .9
-@headitem Letter @tab File type
-@item @code{b} @tab Block device
-@item @code{c} @tab Character device
-@item @code{d} @tab Directory
-@item @code{f} @tab Regular file
-@item @code{l} @tab Symbolic link
-@item @code{p} @tab Named pipe (FIFO)
-@item @code{s} @tab Socket
-@item @code{u} @tab Anything else (unknown)
+@headitem 字母 @tab 文件类型
+@item @code{b} @tab 块设备
+@item @code{c} @tab 字符设备
+@item @code{d} @tab 目录
+@item @code{f} @tab 常规文件
+@item @code{l} @tab 符号连接
+@item @code{p} @tab 命令管道（FIFO）
+@item @code{s} @tab @code{Socket}
+@item @code{u} @tab 其他（未知）
 @end multitable
 @end float
 
-On systems without the file type information, the third field is always
-@samp{u}.
+在没有文件系统的系统中，第三个域总是 @samp{u}。
 
-@quotation NOTE
-On GNU/Linux systems, there are filesystems that don't support the
-@code{d_type} entry (see the @i{readdir}(3) manual page), and so the file
-type is always @samp{u}.  You can use the @code{filefuncs} extension to call
-@code{stat()} in order to get correct type information.
+@quotation 提示
+在 GNU/Linux 系统中，有一些文件系统不支持 @code{d_type} 项（查看 @code{readdir}(3) 手册页），因此文件类型也总是 @samp{u}。你可以使用 @code{filefuncs} 扩展来调用 @code{stat()} 来取得正确的类型信息。
 @end quotation
 
-Here is an example:
+下面是例子：
 
 @example
 @@load "readdir"
@@ -26074,12 +26048,9 @@ BEGIN @{ FS = "/" @}
 @end example
 
 @node Extension Sample Revout
-@subsection Reversing Output
+@subsection 倒转输出
 
-The @code{revoutput} extension adds a simple output wrapper that reverses
-the characters in each output line.  Its main purpose is to show how to
-write an output wrapper, although it may be mildly amusing for the unwary.
-Here is an example:
+@code{revoutput} 扩展添加了一个简单的输出包装器，包含器会将每个输出行的字符进行倒转。这个扩展的主要目的是来演示如何写一个输出包装器，尽管它可能有点无厘头。下面是例子：
 
 @cindex @code{revoutput} extension
 @example
@@ -26091,16 +26062,12 @@ BEGIN @{
 @}
 @end example
 
-The output from this program is @samp{cinap t'nod}.
+这个例子中的输出为 @samp{cinap t'nod}。
 
 @node Extension Sample Rev2way
-@subsection Two-Way I/O Example
+@subsection 双路 I/O 例子 
 
-The @code{revtwoway} extension adds a simple two-way processor that
-reverses the characters in each line sent to it for reading back by
-the @command{awk} program.  Its main purpose is to show how to write
-a two-way processor, although it may also be mildly amusing.
-The following example shows how to use it:
+@code{revtwoway} 扩展添加了一个简单的双路处理器，用来将初 @command{awk} 程序读取回来的每一行的字母进行倒转。它的目录是演示如何来写一个双路处理串，这也许也很无厘头。下面的例子示范如何来使用：
 
 @cindex @code{revtwoway} extension
 @example
@@ -26115,56 +26082,38 @@ BEGIN @{
 @}
 @end example
 
-The output from this program
+这个程序的输出
 @ifnotinfo
-also is:
+也是：
 @end ifnotinfo
 @ifinfo
-is:
+是：
 @end ifinfo
-@samp{cinap t'nod}.
+@samp{cinap t'nod}。
 
 @node Extension Sample Read write array
-@subsection Dumping and Restoring an Array
+@subsection 输出与恢复数组
 
-The @code{rwarray} extension adds two functions,
-named @code{writea()} and @code{reada()}, as follows:
+@code{rwarray} 扩展添加了两个函数，名字为 @code{writea()} 与 @code{reada()}，如下：
 
 @table @code
 @item @@load "rwarray"
-This is how you load the extension.
+如何来装载扩展。
 
 @cindex @code{writea()} extension function
 @item ret = writea(file, array)
-This function takes a string argument, which is the name of the file
-to which to dump the array, and the array itself as the second argument.
-@code{writea()} understands arrays of arrays.  It returns one on
-success, or zero upon failure.
+这个函数有一个字串参数，这个参数是要 dump 数组到文件的名字，而数组则为第二个参数。@code{writea()} 可以处理数组之数组。如果成功则返回 1，否则返回 0。
 
 @cindex @code{reada()} extension function
 @item ret = reada(file, array)
-@code{reada()} is the inverse of @code{writea()};
-it reads the file named as its first argument, filling in
-the array named as the second argument. It clears the array first.
-Here too, the return value is one on success, or zero upon failure.
+@code{reada()} 是 @code{writea()} 的相反的版本，它从由第一个参数命令的文件中读取，并将其填充到作为第二个参数的数组。它首先会将数组清空。在这里也是成功时返回 1，否则返回 0。
 @end table
 
-The array created by @code{reada()} is identical to that written by
-@code{writea()} in the sense that the contents are the same. However,
-due to implementation issues, the array traversal order of the re-created
-array is likely to be different from that of the original array.  As array
-traversal order in @command{awk} is by default undefined, this is (technically)
-not a problem.  If you need to guarantee a particular traversal
-order, use the array sorting features in @command{gawk} to do so
-(@pxref{Array Sorting}).
+由 @code{reada()} 创建的数组与 @code{writea()} 所写的数组在数据相同的情况下是相同的。但是，由于实现的问题，重建的数组的遍历顺序有可能不同于最开始的数组。在 @command{awk} 中数组的遍历顺序默认是未定义的，这在技术上来讲并不是什么问题。如果你要保证一个特定的遍历顺序，使用 @command{gawk} 中的数组排序特定来处理（查看 @pxref{Array Sorting}）。
 
-The file contains binary data.  All integral values are written in network
-byte order.  However, double-precision floating-point values are written
-as native binary data.  Thus, arrays containing only string data can
-theoretically be dumped on systems with one byte order and restored on
-systems with a different one, but this has not been tried.
+文件中包含的是二进制数据。所有的整数值都以网络字节序写入的。但是，双精度的浮点数是使用的本地进制数据。所以，只包含字串数据的数组理论上在系统上是以字节序的方式进行输出的，但是在另一个系统上可能是不一样的，但是也没有试过。
 
-Here is an example:
+下面是例子：
 
 @example
 @@load "rwarray"
@@ -26175,29 +26124,23 @@ ret = reada("arraydump.bin", array)
 @end example
 
 @node Extension Sample Readfile
-@subsection Reading an Entire File
+@subsection 读取整个文件
 
-The @code{readfile} extension adds a single function
-named @code{readfile()}, and an input parser:
+@code{readfile} 扩展添加了一个函数，名字为 @code{readfile()}，以及一个输入分析器：
 
 @table @code
 @item @@load "readfile"
-This is how you load the extension.
+如何来使用扩展。
 
 @cindex @code{readfile()} extension function
 @item result = readfile("/some/path")
-The argument is the name of the file to read.  The return value is a
-string containing the entire contents of the requested file.  Upon error,
-the function returns the empty string and sets @code{ERRNO}.
+参数是要读取的文件的名字。返回值是一个字串，其中包含所请求文件的所有内容。如果错误，函数返回空串，并设置 @code{ERRNO} 的值。
 
 @item BEGIN @{ PROCINFO["readfile"] = 1 @}
-In addition, the extension adds an input parser that is activated if
-@code{PROCINFO["readfile"]} exists.
-When activated, each input file is returned in its entirety as @code{$0}.
-@code{RT} is set to the null string.
+另外，扩展添加了一个输入分析器，如果 @code{PROCINFO["readfile"]} 存在时则会被激活。当被激活时，每个文件都以整个的内容返回为 @code{$0}，@code{RT} 被设置为空串。
 @end table
 
-Here is an example:
+下面的例子：
 
 @example
 @@load "readfile"
@@ -26210,107 +26153,76 @@ if (contents == "" && ERRNO != "") @{
 @end example
 
 @node Extension Sample Time
-@subsection Extension Time Functions
+@subsection 扩展的时间函数
 
-The @code{time} extension adds two functions, named @code{gettimeofday()}
-and @code{sleep()}, as follows:
+@code{time} 扩展添加了两个函数，名字为 @code{gettimeofday()} 以及 @code{sleep}，如下：
 
 @table @code
 @item @@load "time"
-This is how you load the extension.
+如何来使用扩展。
 
 @cindex @code{gettimeofday()} extension function
 @item the_time = gettimeofday()
-Return the time in seconds that has elapsed since 1970-01-01 UTC as a
-floating-point value.  If the time is unavailable on this platform, return
-@minus{}1 and set @code{ERRNO}.  The returned time should have sub-second
-precision, but the actual precision may vary based on the platform.
-If the standard C @code{gettimeofday()} system call is available on this
-platform, then it simply returns the value.  Otherwise, if on MS-Windows,
-it tries to use @code{GetSystemTimeAsFileTime()}.
+返回从 1970-01-01 UTC 以来的消逝的秒数，类型为浮点数。如果时间在平台上不可得，则返回 @minus{}1 并设置 @code{ERRNO}。返回的时间应该有次秒的精度，但是实际的精度在不同的平台上是不同的。如果标准的  C @code{gettimeofday()} 系统调用在平台上是可用的，则它只是简单地返回这个函数的值。否则，如果在 MS-Windows 平台上，它返回 @code{GetSystemTimeAsFileTime()} 函数返回的值。
 
 @cindex @code{sleep()} extension function
 @item result = sleep(@var{seconds})
-Attempt to sleep for @var{seconds} seconds.  If @var{seconds} is negative,
-or the attempt to sleep fails, return @minus{}1 and set @code{ERRNO}.
-Otherwise, return zero after sleeping for the indicated amount of time.
-Note that @var{seconds} may be a floating-point (nonintegral) value.
-Implementation details: depending on platform availability, this function
-tries to use @code{nanosleep()} or @code{select()} to implement the delay.
+尝试休眠 @var{seconds} 秒。如果 @var{{seconds} 为负数，或者尝试休眠失败，则返回 @minus{}1 并且设置 @code{ERRNO}。否则在休眠了指定的时间后返回 0。注意，@var{seconds} 可以是一个浮点数（非整数）。实现细节是：依赖于平台的可获得性，这个函数会尝试使用 @code{nanosleep()} 或者 @code{select} 来实现延迟。
 @end table
 
 @node Extension Sample API Tests
-@subsection API Tests
+@subsection @code{API} 测试
 @cindex @code{testext} extension
 
-The @code{testext} extension exercises parts of the extension API that
-are not tested by the other samples.  The @file{extension/testext.c}
-file contains both the C code for the extension and @command{awk}
-test code inside C comments that run the tests. The testing framework
-extracts the @command{awk} code and runs the tests.  See the source file
-for more information.
+@code{testext} 扩展执行扩展 @code{API} 中没有在被其他例子测试到的部分。@file{extension/testext.c} 文件包含扩展的 @code{C} 代码以及 @command{awk} 测试代码，这些代码注释在执行测试的 C 注释中。测试框架提取 @command{awk} 代码来执行测试。查看源代码来获取更多的信息。
 
 @node gawkextlib
-@section The @code{gawkextlib} Project
+@section @code{gawkextlib} 项目
 @cindex @code{gawkextlib}
 @cindex extensions, where to find
 
 @cindex @code{gawkextlib} project
-The @uref{http://sourceforge.net/projects/gawkextlib/, @code{gawkextlib}}
-project provides a number of @command{gawk} extensions, including one for
-processing XML files.  This is the evolution of the original @command{xgawk}
-(XML @command{gawk}) project.
+@uref{http://sourceforge.net/projects/gawkextlib/, @code{gawkextlib}} 项目提供了很多的 @command{gawk} 扩展，包含用于处理 XML 文件的扩展，这是由最开始的 @command{xgawk}（XML @command{gawk}）项目演化过来的。
 
-As of this writing, there are seven extensions:
+在写本书的时候，一共有七个扩展：
 
 @itemize @value{BULLET}
 @item
-@code{errno} extension
+@code{errno} 扩展
 
 @item
-GD graphics library extension
+GD graphics 库扩展
 
 @item
-PDF extension
+PDF 扩展
 
 @item
-PostgreSQL extension
+PostgreSQL 扩展
 
 @item
-MPFR library extension
-(this provides access to a number of MPFR functions that @command{gawk}'s
-native MPFR support does not)
+MPFR 库扩展
+（这提供了访问很多的 MPFR 函数，这些函数在 @command{gawk} 的本地 MPFR 是不被支持的）
 
 @item
-Redis extension
+Redis 扩展
 
 @item
-XML parser extension, using the @uref{http://expat.sourceforge.net, Expat}
-XML parsing library
+XML 分析器扩展，这个扩展使用 @uref{http://expat.sourceforge.net, Expat} XML 分析库
 @end itemize
 
 @cindex @command{git} utility
-You can check out the code for the @code{gawkextlib} project
-using the @uref{http://git-scm.com, Git} distributed source
-code control system.  The command is as follows:
+你可以查看 @code{gawkextlib} 项目的代码，这些代码可以通过 @uref{http://git-scm.com, Git} 分布式源代码扩展系统获取。相应的命令为：
 
 @example
 git clone git://git.code.sf.net/p/gawkextlib/code gawkextlib-code
 @end example
 
 @cindex Expat XML parser library
-You will need to have the @uref{http://expat.sourceforge.net, Expat}
-XML parser library installed in order to build and use the XML extension.
+为了构建 XML 扩展 ，你需要在你的系统已经安装好了 @uref{http://expat.sourceforge.net, Expat} XML 分析库。
 
-In addition, you must have the GNU Autotools installed
-(@uref{http://www.gnu.org/software/autoconf, Autoconf},
-@uref{http://www.gnu.org/software/automake, Automake},
-@uref{http://www.gnu.org/software/libtool, Libtool},
-and
-@uref{http://www.gnu.org/software/gettext, GNU @command{gettext}}).
+另外，你必须还要有 GNU Autotools 安装在系统上（@uref{http://www.gnu.org/software/autoconf，Autoconf}，@uref{http://www.gnu.org/software/automake，Automake}，@uref{http://www.gnu.org/software/libtool，Libtool}，和 @uref{http://www.gnu.org/software/gettext，GNU @command{gettext}}）。
 
-The simple recipe for building and testing @code{gawkextlib} is as follows.
-First, build and install @command{gawk}:
+一个简单的构建与测试 @code{gawkextlib} 的过程如下。首先是构建与安装  @command{gawk}：
 
 @example
 cd .../path/to/gawk/code
@@ -26319,34 +26231,21 @@ make && make check                    @ii{Build and check that all is OK}
 make install                          @ii{Install gawk}
 @end example
 
-Next, go to @url{http://sourceforge.net/projects/gawkextlib/files} to
-download @code{gawkextlib} and any extensions that you would like to build.
-The @file{README} file at that site explains how to build the code.  If you
-installed @command{gawk} in a non-standard location, you will need to
-specify @code{./configure --with-gawk=@var{/path/to/gawk}} to find it.
-You may need to use the @command{sudo} utility
-to install both @command{gawk} and @code{gawkextlib}, depending upon
-how your system works.
+接下来，到 @url{http://sourceforge.net/projects/gawkextlib/files} 中下载 @code{gawkextlib} 以及任意的你想要构建的扩展。站点中的 @file{README} 文件说明了如何来构建代码。如果你将 @command{gawk} 安装在一个非标准的位置，你还要指定 @code{./configure --with-gawk=@var{/path/to/gawk}} 来指定它。你可能需要使用 @command{sudo} 工具来安装 @command{gawk} 与 @code{gawkextlib}，这视你所在的系统的工作方式。
 
-If you write an extension that you wish to share with other
-@command{gawk} users, consider doing so through the
-@code{gawkextlib} project.
-See the project's website for more information.
+如果你写了一个扩展，而希望与其他的 @command{gawk} 用户一起分离，可以考虑通过 @code{gawkextlib} 项目来进行分发。查看这个项目的网站来获取更多的信息。
 
 @node Extension summary
-@section Summary
+@section 总结
 
 @itemize @value{BULLET}
 @item
-You can write extensions (sometimes called plug-ins) for @command{gawk}
-in C or C++ using the application programming interface (API) defined
-by the @command{gawk} developers.
+你可以为 @command{gawk} 用 C 或者 C++ ，并利用由 @command{gawk} 开发者所定义的应用程序接口（API）来写扩展（有时也叫插件）。
 
 @item
-Extensions must have a license compatible with the GNU General Public
-License (GPL), and they must assert that fact by declaring a variable
-named @code{plugin_is_GPL_compatible}.
+扩展必须有一个与 GNU 通用许可证协议（GPL）兼容的许可证，而它们必须通过声明一个名为 @code{plugin_is_GPL_compatible} 的变量来进行断言。
 
+#TODO
 @item
 Communication between @command{gawk} and an extension is two-way.
 @command{gawk} passes a @code{struct} to the extension that contains
