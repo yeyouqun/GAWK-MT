@@ -24262,7 +24262,6 @@ typedef struct awk_two_way_processor @{
 @end ifplaintext
 @end float
 
-#TODO20171211
 @node Accessing Parameters
 @subsection 访问与更新参数
 
@@ -25705,23 +25704,16 @@ $ @kbd{AWKLIBPATH=$PWD gawk -f testff.awk}
 @item @code{result = chdir("/some/directory")}
 @code{chdir()} 函数直接是 @code{chdir()} 系统调用的钩子函数，用来更改当前目录。如果成功则返回 0，如果错误则返回负值。在后面的情况还会更新 @code{ERRNO} 的值。
 
-#TODO20171212
 @cindex @code{stat()} extension function
 @item @code{result = stat("/some/path", statdata} [@code{, follow}]@code{)}
-The @code{stat()} function provides a hook into the
-@code{stat()} system call.
-It returns zero upon success or a value less than zero upon error.
-In the latter case, it updates @code{ERRNO}.
+@code{stat()} 函数提供了 @code{stat()} 系统调用的钩子。如果成功，则返回 0，如果失败则返回负值。后后还会更新 @code{ERRNO}。
 
-By default, it uses the @code{lstat()} system call.  However, if passed
-a third argument, it uses @code{stat()} instead.
+默认的情况下，它使用的是 @code{lstat()} 的系统调用。但是，如果传递了第三个参数，则会使用 @code{stat()}。
 
-In all cases, it clears the @code{statdata} array.
-When the call is successful, @code{stat()} fills the @code{statdata}
-array with information retrieved from the filesystem, as follows:
+所有的情况下，它都会清除 @code{statdata} 数组。当调用成功时，@code{stat()} 会在 @code{statdata} 数组中填充从文件系统中返回的值。如下：
 
 @multitable @columnfractions .15 .50 .20
-@headitem Subscript @tab Field in @code{struct stat} @tab File type
+@headitem 下标 @tab Stat 中的域 @code{struct stat} @tab 文件类型
 @item @code{"name"} @tab The @value{FN} @tab All
 @item @code{"dev"} @tab @code{st_dev} @tab All
 @item @code{"ino"} @tab @code{st_ino} @tab All
@@ -25737,10 +25729,9 @@ array with information retrieved from the filesystem, as follows:
 @item @code{"major"} @tab @code{st_major} @tab Device files
 @item @code{"minor"} @tab @code{st_minor} @tab Device files
 @item @code{"blksize"} @tab @code{st_blksize} @tab All
-@item @code{"pmode"} @tab A human-readable version of the mode value, like that printed by
-@command{ls} (for example, @code{"-rwxr-xr-x"}) @tab All
-@item @code{"linkval"} @tab The value of the symbolic link @tab Symbolic links
-@item @code{"type"} @tab The type of the file as a string---one of
+@item @code{"pmode"} @tab 人可读的模式值字串，如 ls 打印的情况（如 @code{"-rwxr-xr-x"}） @tab All
+@item @code{"linkval"} @tab 软链接的值。 @tab Symbolic links
+@item @code{"type"} @tab 文件类型字串表示——
 @code{"file"},
 @code{"blockdev"},
 @code{"chardev"},
@@ -25749,170 +25740,118 @@ array with information retrieved from the filesystem, as follows:
 @code{"fifo"},
 @code{"symlink"},
 @code{"door"},
-or
+或者
 @code{"unknown"}
-(not all systems support all file types) @tab All
+其中之一
+（并不是所有的系统都支持这些类型） @tab All
 @end multitable
 
 @cindex @code{fts()} extension function
 @item @code{flags = or(FTS_PHYSICAL, ...)}
 @itemx @code{result = fts(pathlist, flags, filedata)}
-Walk the file trees provided in @code{pathlist} and fill in the
-@code{filedata} array, as described next.  @code{flags} is the bitwise
-OR of several predefined values, also described in a moment.
-Return zero if there were no errors, otherwise return @minus{}1.
+遍历由 @code{pathlist} 提供的文件树，并填充 @code{filedata} 数组，如后所述。@code{flags} 是几个预定义值的或，也如后所述。如果没有错误，则返回 0，错误则返回 @minus{}1。
 @end table
 
-The @code{fts()} function provides a hook to the C library @code{fts()}
-routines for traversing file hierarchies.  Instead of returning data
-about one file at a time in a stream, it fills in a multidimensional
-array with data about each file and directory encountered in the requested
-hierarchies.
+@code{fts()} 函数提供了 @code{C} 库中的 @code{fts()} 例程的钩子，用来目录结构进行遍历。它不会在流中一次返回一个文件的数据，而是将其信息填充到一个多维数组中。这个数组中包括在遍历目录结构时遇到的每个文件与目录的的数据。
 
-The arguments are as follows:
+参数如下：
 
 @table @code
 @item pathlist
-An array of @value{FN}s.  The element values are used; the index values are ignored.
+@value{FN}数组。使用的是元素的值，而不使用值索引。
 
 @item flags
-This should be the bitwise OR of one or more of the following
-predefined constant flag values.  At least one of
-@code{FTS_LOGICAL} or @code{FTS_PHYSICAL} must be provided; otherwise
-@code{fts()} returns an error value and sets @code{ERRNO}.
-The flags are:
+这些是下面预定的一个或者多个常量的按位或。@code{FTS_LOGICAL} 中 @code{FTS_PHYSICAL} 必须要提供一个，否则 @code{fts()} 会返回一个错误，并设置 @code{ERRNO}。这些标志为：
 
 @c nested table
 @table @code
 @item FTS_LOGICAL
-Do a ``logical'' file traversal, where the information returned for
-a symbolic link refers to the linked-to file, and not to the symbolic
-link itself.  This flag is mutually exclusive with @code{FTS_PHYSICAL}.
+执行的是“逻辑”上的文件遍历，在这个情况下针对链接文件返回的信息是被指向文件的信息，而不是链接文件本身。这个标志与 @code{FTS_PHYSICAL} 是互斥的。
 
 @item FTS_PHYSICAL
-Do a ``physical'' file traversal, where the information returned for a
-symbolic link refers to the symbolic link itself.  This flag is mutually
-exclusive with @code{FTS_LOGICAL}.
+执行一个“物理”的遍历，其中对于软连接文件的信息是软链接文件本身的信息。这个标志与 @code{FTS_LOGICAL} 是互斥的。
 
 @item FTS_NOCHDIR
-As a performance optimization, the C library @code{fts()} routines
-change directory as they traverse a file hierarchy.  This flag disables
-that optimization.
+作为性能上的优化，@code{C} 库中的 @code{fts()} 例程会改变在目录结构中遍历文件时的目录，这个标志会禁用这个优化。
 
 @item FTS_COMFOLLOW
-Immediately follow a symbolic link named in @code{pathlist},
-whether or not @code{FTS_LOGICAL} is set.
+直接跟跟随 @code{pathlist} 中命名的软连接，不管是否设置了 @code{FTS_LOGICAL} 标志。
 
 @item FTS_SEEDOT
-By default, the C library @code{fts()} routines do not return entries for
-@file{.} (dot) and @file{..} (dot-dot).  This option causes entries for
-dot-dot to also be included.  (The extension always includes an entry
-for dot; more on this in a moment.)
+默认的情况下，@code{C} 库中的 @code{fts()} 例程不会返回 @file{.}（dot）以及 @file{..}（dot-dot）目录项。这个选项会使得 dot-dot 项会被包含进来。（扩展总是会包含 dot 的项，后面会有更多的说明。）
 
 @item FTS_XDEV
-During a traversal, do not cross onto a different mounted filesystem.
+在遍历过程中，不跨越不同的的挂载的文件系统。
 @end table
 
 @item filedata
-The @code{filedata} array holds the results.
-@code{fts()} first clears it.  Then it creates
-an element in @code{filedata} for every element in @code{pathlist}.
-The index is the name of the directory or file given in @code{pathlist}.
-The element for this index is itself an array.  There are two cases:
+@code{filedata} 数组存储结果。@code{fts()} 首先会将其清除。然后会在 @code{filedata} 中为会在 @code{pathlist} 中的每个元素创建一个元素。索引即是 @code{pathlist} 中所给的目录或者文件的名字。这个索引下的元素本身是一个数组。存在两种情况：
 
 @c nested table
 @table @emph
-@item The path is a file
-In this case, the array contains two or three elements:
+@item 路径是一个文件
+在这种情况下，数组包含两个或者三个元素：
 
 @c doubly nested table
 @table @code
 @item "path"
-The full path to this file, starting from the ``root'' that was given
-in the @code{pathlist} array.
+这个文件的全路径，在 @code{pathlist} 数组中是从“根”开始。
 
 @item "stat"
-This element is itself an array, containing the same information as provided
-by the @code{stat()} function described earlier for its
-@code{statdata} argument.  The element may not be present if
-the @code{stat()} system call for the file failed.
+这个元素自己是一个数组，包含与早前讨论的 @code{stat()} 函数在自己的 @code{statdata} 参数中填充的一样的信息。如果针对文件的系统调用 @code{stat()} 函数失败，则可能不存在这个元素。
 
 @item "error"
-If some kind of error was encountered, the array will also
-contain an element named @code{"error"}, which is a string describing the error.
+如果发什么了某种错误，数组也包含一个名为 “@code{error}”的元素，这个元素是描述错误的字串。
 @end table
 
-@item The path is a directory
-In this case, the array contains one element for each entry in the
-directory.  If an entry is a file, that element is the same as for files, just
-described.  If the entry is a directory, that element is (recursively)
-an array describing the subdirectory.  If @code{FTS_SEEDOT} was provided
-in the flags, then there will also be an element named @code{".."}.  This
-element will be an array containing the data as provided by @code{stat()}.
+@item 路径是一个目录
+在这种情况下，数组为每个目录生成一个元素。如果相应的项是文件，则元素与刚才描述的文件类型的项一样。如果项是目录，则元素是一个（递归地）描述子目录的元素。如果 @code{FTS_SEEDOT} 在标志中进行了设置，则也会成在名字为 @code{".."} 的元素。这个元素也会是一个数组，包含了从 @code{stat()} 调用中提供的信息。
 
-In addition, there will be an element whose index is @code{"."}.
-This element is an array containing the same two or three elements as
-for a file: @code{"path"}, @code{"stat"}, and @code{"error"}.
+另外，也有一个元素，其索引为 @code{"."}。这个元素是一个包含为文件提供的两个或者三个元素的数组。它们是，@code{"path"}，@code{"stat"}，@code{"error"}。
 @end table
 @end table
 
-The @code{fts()} function returns zero if there were no errors.
-Otherwise, it returns @minus{}1.
+如果没有出错，@code{fts()} 函数返回 0，否则返回 @minus{}1。
 
-@quotation NOTE
-The @code{fts()} extension does not exactly mimic the
-interface of the C library @code{fts()} routines, choosing instead to
-provide an interface that is based on associative arrays, which is
-more comfortable to use from an @command{awk} program.  This includes the
-lack of a comparison function, because @command{gawk} already provides
-powerful array sorting facilities.  Although an @code{fts_read()}-like
-interface could have been provided, this felt less natural than simply
-creating a multidimensional array to represent the file hierarchy and
-its information.
+@quotation 提示
+@code{fts()} 扩展并不是 @code{C} 库中的函数 @code{fts()} 完全的模拟，选择提供基于关联数组的接口，是在于在 @command{awk} 中使用起来更方便。这里缺少比较函数，因为 @command{gawk} 已经提供了非常强大的数组排序功能。尽管像 @code{fts_read()} 这样的接口本来应该提供，但是比起创建一个多维数组来表示文件的目录结构以及其信息来，它没有这么自然。
 @end quotation
 
-See @file{test/fts.awk} in the @command{gawk} distribution for an example
-use of the @code{fts()} extension function.
+查看 @command{gawk} 发面版本中的 @file{test/fts.awk} 文件来获取使用 @code{fts()} 扩展函数的例子。
 
 @node Extension Sample Fnmatch
-@subsection Interface to @code{fnmatch()}
+@subsection 针对 @code{fnmatch()}　的接口
 
-This extension provides an interface to the C library
-@code{fnmatch()} function.  The usage is:
+这个扩展提供了 @code{C} 库接口 @code{fnmatch()} 函数，使用方法为：
 
 @table @code
 @item @@load "fnmatch"
-This is how you load the extension.
+如何来装载这个扩展。
 
 @cindex @code{fnmatch()} extension function
 @item result = fnmatch(pattern, string, flags)
-The return value is zero on success, @code{FNM_NOMATCH}
-if the string did not match the pattern, or
-a different nonzero value if an error occurred.
+成功时，返回值为 0，如果字串不匹配这个模式则返回 @code{FNM_NOMATCH}，如果出错，则返回不同的非零值。
 @end table
 
-In addition to the @code{fnmatch()} function, the @code{fnmatch} extension
-adds one constant (@code{FNM_NOMATCH}), and an array of flag values
-named @code{FNM}.
+关于 @code{fnmatch()} 函数的一些其他信息，@code{fnmatch} 扩展则添加了一个常数（@code{FNM_NOMATCH}），以及一个名为 @code{FNM} 的数组标志值。
 
-The arguments to @code{fnmatch()} are:
+@code{fnmatch()} 的参数有：
 
 @table @code
 @item pattern
-The @value{FN} wildcard to match
+要匹配的@value{FN}的通配符。
 
 @item string
-The @value{FN} string
+@value{FN}串。
 
 @item flag
-Either zero, or the bitwise OR of one or more of the
-flags in the @code{FNM} array
+要么 0，要么是 @code{FNM} 数组中多个值的相或。
 @end table
 
-The flags are as follows:
+标志如下：
 
 @multitable @columnfractions .25 .75
-@headitem Array element @tab Corresponding flag defined by @code{fnmatch()}
+@headitem 数组元素 @tab @code{fnmatch()} 所定义的对应标志
 @item @code{FNM["CASEFOLD"]} @tab @code{FNM_CASEFOLD}
 @item @code{FNM["FILE_NAME"]} @tab @code{FNM_FILE_NAME}
 @item @code{FNM["LEADING_DIR"]} @tab @code{FNM_LEADING_DIR}
@@ -25921,7 +25860,7 @@ The flags are as follows:
 @item @code{FNM["PERIOD"]} @tab @code{FNM_PERIOD}
 @end multitable
 
-Here is an example:
+例子如下：
 
 @example
 @@load "fnmatch"
@@ -25932,38 +25871,30 @@ if (fnmatch("*.a", "foo.c", flags) == FNM_NOMATCH)
 @end example
 
 @node Extension Sample Fork
-@subsection Interface to @code{fork()}, @code{wait()}, and @code{waitpid()}
+@subsection 针对 @code{fork()}，@code{wait()}，与 @code{waitpid()} 的接口
 
-The @code{fork} extension adds three functions, as follows:
+@code{fork} 扩展添加了三个函数，如下：
 
 @table @code
 @item @@load "fork"
-This is how you load the extension.
+如何来装入扩展。
 
 @cindex @code{fork()} extension function
 @item pid = fork()
-This function creates a new process. The return value is zero in the
-child and the process ID number of the child in the parent, or @minus{}1
-upon error. In the latter case, @code{ERRNO} indicates the problem.
-In the child, @code{PROCINFO["pid"]} and @code{PROCINFO["ppid"]} are
-updated to reflect the correct values.
+这个函数创建一个新的进程。返回值在子进程中返回为 0，在父进程中返回的是子进程的进程 @code{ID}，或者出错的情况下为 @minus{}1。在后面的情况，@code{ERRNO} 用来指示出错的原因。在子进程中，@code{PROCINFO["pid"]} 以及 @code{PROCINFO["ppid"]} 会被更新用以反映正确的值。
 
 @cindex @code{waitpid()} extension function
 @item ret = waitpid(pid)
-This function takes a numeric argument, which is the process ID to
-wait for. The return value is that of the
-@code{waitpid()} system call.
+这个函数取数值参数，即要等待的进程的 @code{ID}。返回值是 @code{waitpid()} 系统调用的值。
 
 @cindex @code{wait()} extension function
 @item ret = wait()
-This function waits for the first child to die.
-The return value is that of the
-@code{wait()} system call.
+这个函数等待第一个子进程死亡。返回值是 @code{wait()} 系统调用的返回值。
 @end table
 
-There is no corresponding @code{exec()} function.
+没有相应的 @code{exec()} 函数。
 
-Here is an example:
+下面是例子：
 
 @example
 @@load "fork"
@@ -25975,13 +25906,10 @@ else
 @end example
 
 @node Extension Sample Inplace
-@subsection Enabling In-Place File Editing
+@subsection 启用文件就地编辑
 
 @cindex @code{inplace} extension
-The @code{inplace} extension emulates GNU @command{sed}'s @option{-i} option,
-which performs ``in-place'' editing of each input file.
-It uses the bundled @file{inplace.awk} include file to invoke the extension
-properly:
+@code{inplace} 扩展模拟 GNU @command{sed} 的 @option{-i} 选项，这个选项表示对每个输入文件进行“就地”编辑。它使用打包文件 @file{inplace.awk}，其中包含了要调用的扩展的适当文件：
 
 @example
 @c file eg/lib/inplace.awk
