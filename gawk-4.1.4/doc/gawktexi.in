@@ -26977,349 +26977,248 @@ Within each category, be alphabetical.
 
 @item
 新的命令行选项：
-#TODO
 
 @itemize @value{MINUS}
 @item
-The @option{--lint-old} option to
-warn about constructs that are not available in
-the original Version 7 Unix version of @command{awk}
-(@pxref{V7/SVR3.1}).
+@option{--lint-old} 选项来警告在初始的 Version 7 Unix 版本中的 @command{awk} 中不支持的结构（查看 @pxref{V7/SVR3.1}）。
 
 @item
-The @option{-m} option from BWK @command{awk}.  (Brian was
-still at Bell Laboratories at the time.)  This was later removed from
-both his @command{awk} and from @command{gawk}.
+来自于 BWK @command{awk} 的 @option{-m} 选项。（Brian 那个时候还是在 Bell Laboratories）之后从他的 @command{awk} 与 @command{gawk} 中都移除了。
 
 @item
-The @option{--re-interval} option to provide interval expressions in regexps
-(@pxref{Regexp Operators}).
+@option{--re-interval} 选项用来提供在正则表达式中提供区间表达式（查看 @pxref{Regexp Operators}）。
 
 @item
-The @option{--traditional} option was added as a better name for
-@option{--compat} (@pxref{Options}).
+@option{--traditional} 选项添加成为 @option{--compat} 更好的名字（查看 @pxref{Options}）。
 @end itemize
 
 @item
-The use of GNU Autoconf to control the configuration process
-(@pxref{Quick Installation}).
+使用 GNU Autoconf 来控制配置过程（查看 @pxref{Quick Installation}）。
 
 @item
-Amiga support.
-This has since been removed.
+支持 Amiga。这已经被移除了。
 
 @end itemize
 
-Version 3.1 of @command{gawk} introduced the following features:
+3.1 版本的 @command{gawk} 引入了下面的特性：
 
 @itemize @value{BULLET}
 @item
-New variables
-(@pxref{Built-in Variables}):
+新的变量（查看 @pxref{Built-in Variables}）：
 
 @itemize @value{MINUS}
 @item
-@code{BINMODE}, for non-POSIX systems,
-which allows binary I/O for input and/or output files
-(@pxref{PC Using}).
+@code{BINMODE} ，来自于非 POSIX 系统，可以用于二进制 I/O 输入输出文件（查看 @pxref{PC Using}）。
 
 @item
-@code{LINT}, which dynamically controls lint warnings.
+@code{LINT} 用来动态地控制 lint 告警。
 
 @item
-@code{PROCINFO}, an array for providing process-related information.
+@code{PROCINFO} 是提供了进程相关信息的数组。
 
 @item
-@code{TEXTDOMAIN}, for setting an application's internationalization text domain
-(@pxref{Internationalization}).
+@code{TEXTDOMAIN} 用来设置程序的国际化文件域（查看 @pxref{Internationalization}）。
 @end itemize
 
 @item
-The ability to use octal and hexadecimal constants in @command{awk}
-program source code
-(@pxref{Nondecimal-numbers}).
+可以在 @command{awk} 程序源代码中使用八进制与十六进制（查看 @pxref{Nondecimal-numbers}）。
 
 @item
-The @samp{|&} operator for two-way I/O to a coprocess
-(@pxref{Two-way I/O}).
+使用 @samp{|&} 来与并程进行双路 I/O（查看 @pxref{Two-way I/O}）。
 
 @item
-The @file{/inet} special files for TCP/IP networking using @samp{|&}
-(@pxref{TCP/IP Networking}).
+使用 @file{/inet} 以及 @samp{|&} 特殊文件来进行 TCP/IP 网络通信（查看 @pxref{TCP/IP Networking}）。
 
 @item
-The optional second argument to @code{close()} that allows closing one end
-of a two-way pipe to a coprocess
-(@pxref{Two-way I/O}).
+@code{close()} 第二个可选参数可以用于关闭到并程的双向管道的一端（查看 @pxref{Two-way I/O}）。
 
 @item
-The optional third argument to the @code{match()} function
-for capturing text-matching subexpressions within a regexp
-(@pxref{String Functions}).
+@code{match()} 函数的第三个可选参数用于捕获正则表达式中的文本匹配子表达式（查看 @pxref{String Functions}）。
 
 @item
-Positional specifiers in @code{printf} formats for
-making translations easier
-(@pxref{Printf Ordering}).
+@code{printf} 格式中的位置指定符用于使国际化更为简单（查看 @pxref{Printf Ordering}）。
 
 @item
-A number of new built-in functions:
+多个新的内置函数：
 
 @itemize @value{MINUS}
 @item
-The @code{asort()} and @code{asorti()} functions for sorting arrays
-(@pxref{Array Sorting}).
+@code{asort()} 与 @code{asorti()} 函数用于排序数组（查看 @pxref{Array Sorting}）。
 
 @item
-The @code{bindtextdomain()}, @code{dcgettext()} and @code{dcngettext()} functions
-for internationalization
-(@pxref{Programmer i18n}).
+@code{bindtextdomain()}，@code{dcgettext()} 与 @code{dcngettext()} 函数用于国际化（查看 @pxref{Programmer i18n}）。
 
 @item
-The @code{extension()} function and the ability to add
-new built-in functions dynamically
-(@pxref{Dynamic Extensions}).
+@code{extension()} 函数以及动态添加新的内置函数（查看 @pxref{Dynamic Extensions}）。
 
 @item
-The @code{mktime()} function for creating timestamps
-(@pxref{Time Functions}).
+@code{mktime()} 函数用于创建时间戳（查看 @pxref{Time Functions}）。
 
 @item
-The @code{and()}, @code{or()}, @code{xor()}, @code{compl()},
-@code{lshift()}, @code{rshift()}, and @code{strtonum()} functions
-(@pxref{Bitwise Functions}).
+@code{and()}，@code{or()}，@code{xor()}，@code{compl()}，@code{lshift()}，@code{rshift()} 与 @code{strtonum()} 函数（查看 @pxref{Bitwise Functions}）。
 @end itemize
 
 @item
 @cindex @code{next file} statement
-The support for @samp{next file} as two words was removed completely
-(@pxref{Nextfile Statement}).
+支持 @samp{next file} 为两个单词的语句已经完全移除（查看 @pxref{Nextfile Statement}）。
 
 @item
-Additional command-line options
-(@pxref{Options}):
+额外的命令行选项（查看 @pxref{Options}）：
 
 @itemize @value{MINUS}
 @item
-The @option{--dump-variables} option to print a list of all global variables.
+@option{--dump-variables} 选项用于打印所有的全局变量的列表。
 
 @item
-The @option{--exec} option, for use in CGI scripts.
+@option{--exec} 选项用于 CGI 脚本。
 
 @item
-The @option{--gen-po} command-line option and the use of a leading
-underscore to mark strings that should be translated
-(@pxref{String Extraction}).
+@option{--gen-po} 命令选项以及前置下划线的使用来标志要被翻译的字串（查看 @pxref{String Extraction}）。
 
 @item
-The @option{--non-decimal-data} option to allow non-decimal
-input data
-(@pxref{Nondecimal Data}).
+@option{--non-decimal-data} 选项可以输入非十进制数（查看 @pxref{Nondecimal Data}）。
 
 @item
-The @option{--profile} option and @command{pgawk}, the
-profiling version of @command{gawk}, for producing execution
-profiles of @command{awk} programs
-(@pxref{Profiling}).
+@option{--profile} 选项以及 @code{pgawk}（@command{gawk} 的 profiling 版本）用于产生 @command{awk} 程序的执行统计（查看 @pxref{Profiling}）。
 
 @item
-The @option{--use-lc-numeric} option to force @command{gawk}
-to use the locale's decimal point for parsing input data
-(@pxref{Conversion}).
+@option{--use-lc-numeric} 选项强制 @command{gawk} 使用本地语言的十进制数小数点来分析输入数据（查看 @pxref{Conversion}）。
 @end itemize
 
 @item
-The use of GNU Automake to help in standardizing the configuration process
-(@pxref{Quick Installation}).
+使用 GNU Automake 来辅助配置过程的标准化（查看 @pxref{Quick Installation}）。
 
 @item
-The use of GNU @command{gettext} for @command{gawk}'s own message output
-(@pxref{Gawk I18N}).
+使用 GNU 的 @command{gettext} 来作为 @command{gawk} 自己的消息输出（查看 @pxref{Gawk I18N}）。
 
 @item
-BeOS support. This was later removed.
+BeOS 支持。后面被移除了。
 
 @item
-Tandem support. This was later removed.
+Tandem 支持。后面被移除了。
 
 @item
-The Atari port became officially unsupported and was
-later removed entirely.
+Atari 移植版本不被官方支持后面整个地移除了。
 
 @item
-The source code changed to use ISO C standard-style function definitions.
+源代码改成使用 ISO C 标准风格的函数定义。
 
 @item
-POSIX compliance for @code{sub()} and @code{gsub()}
-(@pxref{Gory Details}).
+POSIX 兼容 @code{sub()} 与 @code{gsub()}（查看 @pxref{Gory Details}）。
 
 @item
-The @code{length()} function was extended to accept an array argument
-and return the number of elements in the array
-(@pxref{String Functions}).
+@code{length()} 函数被扩展为接受数组参数，并返回数组中元素的个数（查看 @pxref{String Functions}）。
 
 @item
-The @code{strftime()} function acquired a third argument to
-enable printing times as UTC
-(@pxref{Time Functions}).
+@code{strftime()} 函数需要第三个参数来启用打印 UTC 时间（查看 @pxref{Time Functions}）。
 @end itemize
 
-Version 4.0 of @command{gawk} introduced the following features:
+@command{gawk} 4.0 版本引入了下面的特性：
 
 @itemize @value{BULLET}
 
 @item
-Variable additions:
+添加的变量：
 
 @itemize @value{MINUS}
 @item
-@code{FPAT}, which allows you to specify a regexp that matches
-the fields, instead of matching the field separator
-(@pxref{Splitting By Content}).
+@code{FPAT} 可以让你指定一个正则表达式来匹配域，而不是匹配域分隔符（查看 @pxref{Splitting By Content}）。
 
 @item
-If @code{PROCINFO["sorted_in"]} exists, @samp{for(iggy in foo)} loops sort the
-indices before looping over them.  The value of this element
-provides control over how the indices are sorted before the loop
-traversal starts
-(@pxref{Controlling Scanning}).
+如果存在 @code{PROCINFO["sorted_in"]}，则 @samp{for(iggy in foo)} 循环会在循环开始之前对索引排序。这个元素的值提供在循环遍历开始之前控制如何来对索引来进行排序（查看 @pxref{Controlling Scanning}）。
 
 @item
-@code{PROCINFO["strftime"]}, which holds
-the default format for @code{strftime()}
-(@pxref{Time Functions}).
+@code{PROCINFO["strftime"]} 用于保存 @code{strftime()} 的默认格式（查看 @pxref{Time Functions}）。
 @end itemize
 
 @item
-The special files @file{/dev/pid}, @file{/dev/ppid}, @file{/dev/pgrpid}
-and @file{/dev/user} were removed.
+移除特殊文件 @file{/dev/pid}，@file{/dev/ppid}，@file{/dev/pgrpid} 与 @file{/dev/user}。
 
 @item
-Support for IPv6 was added via the @file{/inet6} special file.
-@file{/inet4} forces IPv4 and @file{/inet} chooses the system
-default, which is probably IPv4
-(@pxref{TCP/IP Networking}).
+通过 @file{/inet6} 特殊文件来支持 IPv6。@file{/inet4} 强制使用 IPv4，而 @file{/inet} 则使用系统默认的协议，一般是 IPv4（查看 @pxref{TCP/IP Networking}）。
 
 @item
-The use of @samp{\s} and @samp{\S} escape sequences in regular expressions
-(@pxref{GNU Regexp Operators}).
+在正则表达式中使用 @samp{\s} 与 @samp{\S} 转换序列（查看 @pxref{GNU Regexp Operators}）。
 
 @item
-Interval expressions became part of default regular expressions
-(@pxref{Regexp Operators}).
+区间表达式成为默认正则表达式的一部份（查看 @pxref{Regexp Operators}）。
 
 @item
-POSIX character classes work even with @option{--traditional}
-(@pxref{Regexp Operators}).
+即使使用 @option{--traditional} 情况下，也可以使用 POSIX 字符类型（查看 @pxref{Regexp Operators}）。
 
 @item
-@code{break} and @code{continue} became invalid outside a loop,
-even with @option{--traditional}
-(@pxref{Break Statement}, and also see
-@ref{Continue Statement}).
+@code{break} 与 @code{continue} 在循环外不再有效，即使使用 @option{--traditional} 选项（查看 @pxref{Break Statement}，以及 @ref{Continue Statement}）。
 
 @item
-@code{fflush()}, @code{nextfile}, and @samp{delete @var{array}}
-are allowed if @option{--posix} or @option{--traditional}, since they
-are all now part of POSIX.
+@code{fflush()}，@code{nextfile}，与 @samp{delete @var{array}} 在使用 @option{--posix} 或者 @option{--traditional} 选项下也是允许的，因此它们已经是 POSIX 标准的一部分。
 
 @item
-An optional third argument to
-@code{asort()} and @code{asorti()}, specifying how to sort
-(@pxref{String Functions}).
+@code{asort()} 与 @code{asorti()} 函数有可选的第三个参数，用于指定如何来排序（查看 @pxref{String Functions}）。
 
 @item
-The behavior of @code{fflush()} changed to match BWK @command{awk}
-and for POSIX; now both @samp{fflush()} and @samp{fflush("")}
-flush all open output redirections
-(@pxref{I/O Functions}).
+@code{fflush()} 的行为已经改成与 BWK @command{awk} 以及 POSIX 匹配，现在 @samp{fflush()} 与 @samp{fflush("")} 会刷出所有的重定向输出（查看 @pxref{I/O Functions}）。
 
 @item
-The @code{isarray()}
-function which distinguishes if an item is an array
-or not, to make it possible to traverse arrays of arrays
-(@pxref{Type Functions}).
+@code{isarray()} 函数可以用于识别某个项是否为数组，这样可以来用于进行数组之数组的遍历（查看 @pxref{Type Functions}）。
 
 @item
-The @code{patsplit()}
-function which gives the same capability as @code{FPAT}, for splitting
-(@pxref{String Functions}).
+@code{patsplit()} 函数可以有与 @code{FPAT} 一样的分割能力（查看 @pxref{String Functions}）。
 
 @item
-An optional fourth argument to the @code{split()} function,
-which is an array to hold the values of the separators
-(@pxref{String Functions}).
+@code{split()} 函数的第四个可选参数是用于存放分割符的数组（查看 @pxref{String Functions}）。
 
 @item
-Arrays of arrays
-(@pxref{Arrays of Arrays}).
+数组之数组（查看 @pxref{Arrays of Arrays}）。
 
 @item
-The @code{BEGINFILE} and @code{ENDFILE} special patterns
-(@pxref{BEGINFILE/ENDFILE}).
+@code{BEGINFILE} 与 @code{ENDFILE} 特定规则（查看 @pxref{BEGINFILE/ENDFILE}）。
 
 @item
-Indirect function calls
-(@pxref{Indirect Calls}).
+间接函数调用（查看 @pxref{Indirect Calls}）。
 
 @item
-@code{switch} / @code{case} are enabled by default
-(@pxref{Switch Statement}).
+@code{switch} / @code{case} 默认情况下是启用的（查看 @pxref{Switch Statement}）。
 
 @item
-Command-line option changes
-(@pxref{Options}):
+改变的命令行选项（查看 @pxref{Options}）：
 
 @itemize @value{MINUS}
 @item
-The @option{-b} and @option{--characters-as-bytes} options
-which prevent @command{gawk} from treating input as a multibyte string.
+@option{-b} 与 @option{--characters-as-bytes} 选项用来防止 @command{gawk} 将输入当成多字节字串来处理。
 
 @item
-The redundant @option{--compat}, @option{--copyleft}, and @option{--usage}
-long options were removed.
+多余的 @option{--compat}，@option{--copyleft} 与 @option{--usage} 长选项已经被移除。
 
 @item
-The @option{--gen-po} option was finally renamed to the correct @option{--gen-pot}.
+@option{--gen-po} 选项最后被改名为 @option{--gen-pot}。
 
 @item
-The @option{--sandbox} option which disables certain features.
+@option{--sandbox} 选项可以禁用特定的特性。
 
 @item
-All long options acquired corresponding short options, for use in @samp{#!} scripts.
+所有的长选项都需要有相应的短选项，以用于 @samp{#!} 脚本。
 @end itemize
 
 @item
-Directories named on the command line now produce a warning, not a fatal
-error, unless @option{--posix} or @option{--traditional} are used
-(@pxref{Command-line directories}).
+在命令行上输入了目录名现在会产生告警，而不是致命错误。除非使用了 @option{--posix} 或者 @option{--traditional} 选项（查看 @pxref{Command-line directories}）。
 
 @item
-The @command{gawk} internals were rewritten, bringing the @command{dgawk}
-debugger and possibly improved performance
-(@pxref{Debugger}).
+重写了 @command{gawk} 区间表达式，引入了 @code{dgawk} 的调试器，并增强了一些性能（查看 @pxref{Debugger}）。
 
 @item
-Per the GNU Coding Standards, dynamic extensions must now define
-a global symbol indicating that they are GPL-compatible
-(@pxref{Plugin License}).
+根据 GNU 编码标准，动态扩展必须要定义一个全局符号来指示它们是使用 GPL 兼容的协议（查看 @pxref{Plugin License}）。
 
 @item
-In POSIX mode, string comparisons use @code{strcoll()} / @code{wcscoll()}
-(@pxref{POSIX String Comparison}).
+在 POSIX 模式下，使用 @code{strcoll()} / @code{wcscoll()} 来进行字串比较（查看 @pxref{POSIX String Comparison}）。
 
 @item
-The option for raw sockets was removed, since it was never implemented
-(@pxref{TCP/IP Networking}).
+用于进行原生 Socket 通信的选项被移除了，因为它从来没有被实现（查看 @pxref{TCP/IP Networking}）。
 
 @item
-Ranges of the form @samp{[d-h]} are treated as if they were in the
-C locale, no matter what kind of regexp is being used, and even if
-@option{--posix}
-(@pxref{Ranges and Locales}).
+@samp{[d-h]} 形式的范围会被当成在 C 语言设置中一样对待，不管使用的是什么样的正则表达式，即使使用了 @option{--posix}（查看 @pxref{Ranges and Locales}）。
 
 @item
-Support was removed for the following systems:
+对下面系统的支持被移除了：
 
 @itemize @value{MINUS}
 @item
@@ -27357,72 +27256,59 @@ Prestandard VAX C compiler for VAX/VMS
 @end itemize
 @end itemize
 
-Version 4.1 of @command{gawk} introduced the following features:
+4.1 版本的 @command{gawk} 引入了下面的特性：
 
 @itemize @value{BULLET}
 
 @item
-Three new arrays:
-@code{SYMTAB}, @code{FUNCTAB}, and @code{PROCINFO["identifiers"]}
-(@pxref{Auto-set}).
+新加了三个变量：@code{SYMTAB}，@code{FUNCTAB}，以及 @code{PROCINFO["identifiers"]}（查看 @pxref{Auto-set}）。
 
 @item
-The three executables @command{gawk}, @command{pgawk}, and @command{dgawk}, were merged into
-one, named just @command{gawk}.  As a result the command-line options changed.
+@command{gawk}，@code{pgawk} 与 @code{dgawk} 被整合为一，并命名为 @command{gawk}。因为仅是命令行选项有变化。
 
 @item
-Command-line option changes
-(@pxref{Options}):
+改变的命令行（查看 @pxref{Options}）：
 
 @itemize @value{MINUS}
 @item
-The @option{-D} option invokes the debugger.
+@option{-D} 选项用来调用调试器。
 
 @item
-The @option{-i} and @option{--include} options
-load @command{awk} library files.
+@option{-i} 与 @option{--include} 选项用于载入 @command{awk} 库文件。
 
 @item
-The @option{-l} and @option{--load} options load compiled dynamic extensions.
+@option{-l} 与 @option{--load} 选项用于载入编译好的动态扩展。
 
 @item
-The @option{-M} and @option{--bignum} options enable MPFR.
+@option{-M} 与 @option{--bignum} 选项用于启用 @code{MPFR}。
 
 @item
-The @option{-o} option only does pretty-printing.
+@option{-o} 选项用于简洁打印。
 
 @item
-The @option{-p} option is used for profiling.
+@option{-p} 选项用于性能统计。
 
 @item
-The @option{-R} option was removed.
+移除了 @option{-R} 选项。
 @end itemize
 
 @item
-Support for high precision arithmetic with MPFR
-(@pxref{Arbitrary Precision Arithmetic}).
+支持 @code{MPFR} 来支持高精度算术计算。（查看 @pxref{Arbitrary Precision Arithmetic}）。
 
 @item
-The @code{and()}, @code{or()} and @code{xor()} functions
-changed to allow any number of arguments,
-with a minimum of two
-(@pxref{Bitwise Functions}).
+@code{and()}，@code{or()} 与 @code{xor()} 函数更改成可以接受任意数量的参数，最小为两个（查看 @pxref{Bitwise Functions}）。
 
 @item
-The dynamic extension interface was completely redone
-(@pxref{Dynamic Extensions}).
+动态扩展接口完全全进行了重构（查看 @pxref{Dynamic Extensions}）。
 
 @item
-Redirected @code{getline} became allowed inside
-@code{BEGINFILE} and @code{ENDFILE}
-(@pxref{BEGINFILE/ENDFILE}).
+在 @code{BEGINFILE} 与 @code{ENDFILE} 规则中也允许重定向的 @code{getline}（查看 @pxref{BEGINFILE/ENDFILE}）。
 
 @item
-The @code{where} command was added to the debugger
-(@pxref{Execution Stack}).
+@code{where} 命令被添加到了调试器中（查看 @pxref{Execution Stack}）。
 
 @item
-Support for Ultrix was removed.
+移除了 Ultrix。
 
 @end itemize
 
@@ -27430,50 +27316,39 @@ Support for Ultrix was removed.
 @end ifclear
 
 @node Common Extensions
-@appendixsec Common Extensions Summary
+@appendixsec 通用扩展汇总
 
 @cindex extensions, Brian Kernighan's @command{awk}
 @cindex extensions, @command{mawk}
-The following table summarizes the common extensions supported
-by @command{gawk}, Brian Kernighan's @command{awk}, and @command{mawk},
-the three most widely used freely available versions of @command{awk}
-(@pxref{Other Versions}).
+下面的表中归纳了由 @command{gawk}，Brian Kernighan @command{awk} 与 @command{mawk} 所支持的通用扩展。这是三个用得最多，并且可以自由获取的 @command{awk} 版本（查看 @pxref{Other Versions}）。
 
-@multitable {@file{/dev/stderr} special file} {BWK @command{awk}} {@command{mawk}} {@command{gawk}} {Now standard}
-@headitem Feature @tab BWK @command{awk} @tab @command{mawk} @tab @command{gawk} @tab Now standard
-@item @samp{\x} escape sequence @tab X @tab X @tab X @tab
-@item @code{FS} as null string @tab X @tab X @tab X @tab
-@item @file{/dev/stdin} special file @tab X @tab X @tab X @tab
-@item @file{/dev/stdout} special file @tab X @tab X @tab X @tab
-@item @file{/dev/stderr} special file @tab X @tab X @tab X @tab
-@item @code{delete} without subscript @tab X @tab X @tab X @tab X
-@item @code{fflush()} function @tab X @tab X @tab X @tab X
-@item @code{length()} of an array @tab X @tab X @tab X @tab
-@item @code{nextfile} statement @tab X @tab X @tab X @tab X
-@item @code{**} and @code{**=} operators @tab X @tab @tab X @tab
-@item @code{func} keyword @tab X @tab @tab X @tab
-@item @code{BINMODE} variable @tab @tab X @tab X @tab
-@item @code{RS} as regexp @tab @tab X @tab X @tab
-@item Time-related functions @tab @tab X @tab X @tab
-@end multitable
+@multitable {@file{/dev/stderr} 特殊文件} {BWK @command{awk}} {@command{mawk}} {@command{gawk}} {目前标准}
+@headitem Feature @tab BWK @command{awk} @tab @command{mawk} @tab @command{gawk} @tab 目前标准
+@item @samp{\x} 转义序列 @tab X @tab X @tab X @tab
+@item @code{FS} 为空串 @tab X @tab X @tab X @tab
+@item @file{/dev/stdin} 特殊文件 @tab X @tab X @tab X @tab
+@item @file{/dev/stdout} 特殊文件 @tab X @tab X @tab X @tab
+@item @file{/dev/stderr} 特殊文件 @tab X @tab X @tab X @tab
+@item @code{delete} 不需要下标的数组 @tab X @tab X @tab X @tab X
+@item @code{fflush()} 函数 @tab X @tab X @tab X @tab X
+@item @code{length()} 的数组版本 @tab X @tab X @tab X @tab
+@item @code{nextfile} 语句 @tab X @tab X @tab X @tab X
+@item @code{**} 和 @code{**=} 操作符 @tab X @tab @tab X @tab
+@item @code{func} 关键字 @tab X @tab @tab X @tab
+@item @code{BINMODE} 变量 @tab @tab X @tab X @tab
+@item @code{RS} 可为正则表达式 @tab @tab X @tab X @tab
+@item 时间相关函数 @tab @tab X @tab X @tab
+@end multitabl
 
 @node Ranges and Locales
-@appendixsec Regexp Ranges and Locales: A Long Sad Story
+@appendixsec 正则表达式范围与本地语言设置：又臭又长陈年旧事
 
-This @value{SECTION} describes the confusing history of ranges within
-regular expressions and their interactions with locales, and how this
-affected different versions of @command{gawk}.
+这一@value{SECTION}描述的是正则表达式与本地语言设置之间的混乱的历史时期，以及其如何影响不同版本的 @command{gawk}。
 
-The original Unix tools that worked with regular expressions defined
-character ranges (such as @samp{[a-z]}) to match any character between
-the first character in the range and the last character in the range,
-inclusive.  Ordering was based on the numeric value of each character
-in the machine's native character set.  Thus, on ASCII-based systems,
-@samp{[a-z]} matched all the lowercase letters, and only the lowercase
-letters, as the numeric values for the letters from @samp{a} through
-@samp{z} were contiguous.  (On an EBCDIC system, the range @samp{[a-z]}
-includes additional nonalphabetic characters as well.)
+最初的 Unix 的正则表达式工具所定义的字符范围（如 @samp{[a-z]}）用于匹配第一个字符到最后一个字符之间的字符（含）。其顺序基于每个字符在机器的本地字符集的数值值。所以，在基于 ASCII 的系统上，@samp{[a-z]} 匹配所有的小字字母，因为这些从 @samp{a} 到 @samp{z} 之间数值值是连续的。（在 EBCDIC 系统上，@samp{[a-z]} 这个范围也包含其他的非字母字符。）
 
+#TODO
+几乎所有的 Unix 基础讲义都说此类型的范围表达式都是可工作的，还特别教人们说，@samp{[a-z]} 是用来匹配小写字母的“正确”方式，而 @samp{[A-Z]} 则是匹配大写字母的“正确”方式。而实际上，这也是真的。 @footnote{}
 Almost all introductory Unix literature explained range expressions
 as working in this fashion, and in particular, would teach that the
 ``correct'' way to match lowercase letters was with @samp{[a-z]}, and
