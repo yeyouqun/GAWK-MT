@@ -27348,41 +27348,17 @@ Prestandard VAX C compiler for VAX/VMS
 最初的 Unix 的正则表达式工具所定义的字符范围（如 @samp{[a-z]}）用于匹配第一个字符到最后一个字符之间的字符（含）。其顺序基于每个字符在机器的本地字符集的数值值。所以，在基于 ASCII 的系统上，@samp{[a-z]} 匹配所有的小字字母，因为这些从 @samp{a} 到 @samp{z} 之间数值值是连续的。（在 EBCDIC 系统上，@samp{[a-z]} 这个范围也包含其他的非字母字符。）
 
 #TODO
-几乎所有的 Unix 基础讲义都说此类型的范围表达式都是可工作的，还特别教人们说，@samp{[a-z]} 是用来匹配小写字母的“正确”方式，而 @samp{[A-Z]} 则是匹配大写字母的“正确”方式。而实际上，这也是真的。 @footnote{}
-Almost all introductory Unix literature explained range expressions
-as working in this fashion, and in particular, would teach that the
-``correct'' way to match lowercase letters was with @samp{[a-z]}, and
-that @samp{[A-Z]} was the ``correct'' way to match uppercase letters.
-And indeed, this was true.@footnote{And Life was good.}
+几乎所有的 Unix 基础讲义都说此类型的范围表达式都是可工作的，还特别教人们说，@samp{[a-z]} 是用来匹配小写字母的“正确”方式，而 @samp{[A-Z]} 则是匹配大写字母的“正确”方式。而实际上，这也是真的。 @footnote{那么生活就美妙了。}
 
-The 1992 POSIX standard introduced the idea of locales (@pxref{Locales}).
-Because many locales include other letters besides the plain 26
-letters of the English alphabet, the POSIX standard added
-character classes (@pxref{Bracket Expressions}) as a way to match
-different kinds of characters besides the traditional ones in the ASCII
-character set.
+1992 年 POSIX 标准引入了本地语言设置这样的点子（查看 @pxref{Locales}）。很多的本地语言除了包含英语表中的 26 个字母外，还包含其他的字母，POSIX 标准则添加了字符类（查看 @pxref{Bracket Expressions}）来匹配除了 ASCII 字符集中的传统字母之外的字符。
 
-However, the standard @emph{changed} the interpretation of range expressions.
-In the @code{"C"} and @code{"POSIX"} locales, a range expression like
-@samp{[a-dx-z]} is still equivalent to @samp{[abcdxyz]}, as in ASCII.
-But outside those locales, the ordering was defined to be based on
-@dfn{collation order}.
+但是，标准对于范围的解释也发生了@emph{变化}。在 @code{"C"} 以及 @code{"POSIX"} 语言配置中，范围表达式如 @samp{[a-dx-z]} 与 @samp{[abcdxyz]} 是一样的，如在 @code{ASCII} 中的一样。但是在其他的语言设置中，顺序是按照@dfn{协同顺序}来进行定义的。
 
-What does that mean?
-In many locales, @samp{A} and @samp{a} are both less than @samp{B}.
-In other words, these locales sort characters in dictionary order,
-and @samp{[a-dx-z]} is typically not equivalent to @samp{[abcdxyz]};
-instead, it might be equivalent to @samp{[ABCXYabcdxyz]}, for example.
+这是什么意思呢？在很多的语言设置中，@samp{A} 与 @samp{a} 两者都小于 @samp{B}。也就是说，这些语言设置会将用字典顺序来对字符进行排序，那么 @samp{[a-dx-z]} 不再与 @samp{[abcdxyz]} 等同了。相反，他有可能与 @samp{[ABCXYabcdxyz]} 等同。
 
-This point needs to be emphasized: much literature teaches that you should
-use @samp{[a-z]} to match a lowercase character.  But on systems with
-non-ASCII locales, this also matches all of the uppercase characters
-except @samp{A} or @samp{Z}!  This was a continuous cause of confusion, even well
-into the twenty-first century.
+还需要强调的是：很多的老师都教授用 @samp{[a-z]} 来匹配小写字母。但是在非 ASCII 语言设置的系统上，这也会匹配所有的大写字母，不包括 @samp{A} 或者 @samp{Z}！这导致了持续的困惑，即使到了 21 世纪的今天。
 
-To demonstrate these issues, the following example uses the @code{sub()}
-function, which does text replacement (@pxref{String Functions}).  Here,
-the intent is to remove trailing uppercase characters:
+为了说明这个问题，下面的例子使用 @code{sub()} 函数来执行文件匹配（查看 @pxref{String Functions}）。这里，我们的目的是移除后面的大写字母：
 
 @example
 $ @kbd{echo something1234abc | gawk-3.1.8 '@{ sub("[A-Z]*$", ""); print @}'}
@@ -27390,364 +27366,272 @@ $ @kbd{echo something1234abc | gawk-3.1.8 '@{ sub("[A-Z]*$", ""); print @}'}
 @end example
 
 @noindent
-This output is unexpected, as the @samp{bc} at the end of
-@samp{something1234abc} should not normally match @samp{[A-Z]*}.
-This result is due to the locale setting (and thus you may not see
-it on your system).
+这个输出并不是所期望的，因为 @samp{bc} 是 @samp{something1234abc} 的结束串，不应该匹配 @samp{[A-Z]*}。是本地语言设置导致了这样的结果（因此你可能在你的系统上看不这样的输出）。
 
 @cindex Unicode
-Similar considerations apply to other ranges.  For example, @samp{["-/]}
-is perfectly valid in ASCII, but is not valid in many Unicode locales,
-such as @code{en_US.UTF-8}.
+其他范围也有类似的问题。如 @samp{["-/]} 在 ASCII 中绝对有效，但是在很多的 Unicode 语言设置中，如 @code{en_US.UTF-8} 中就不是这样。
 
-Early versions of @command{gawk} used regexp matching code that was not
-locale-aware, so ranges had their traditional interpretation.
+@command{gawk} 早期的版本使用的正则表达式代码对于语言设置是不敏感的，所以对于范围的解释是之前的做法。
 
-When @command{gawk} switched to using locale-aware regexp matchers,
-the problems began; especially as both GNU/Linux and commercial Unix
-vendors started implementing non-ASCII locales, @emph{and making them
-the default}.  Perhaps the most frequently asked question became something
-like, ``Why does @samp{[A-Z]} match lowercase letters?!?''
+当 @command{gawk} 切换到使用语言设置敏感的正则表达式匹配器，问题就出现了。特别是在 GNU/Linux 与商业 Unix 的厂商开始实现非 @code{ASCII} 语言之后，@emph{并使这些语言成为默认选项}。
+也许 FAQ（frequently asked question）的问题已经变成这样，“为什么 @samp{[A-Z]} 会匹配小写字母？！？”
 
 @cindex Berry, Karl
-This situation existed for close to 10 years, if not more, and
-the @command{gawk} maintainer grew weary of trying to explain that
-@command{gawk} was being nicely standards-compliant, and that the issue
-was in the user's locale.  During the development of @value{PVERSION} 4.0,
-he modified @command{gawk} to always treat ranges in the original,
-pre-POSIX fashion, unless @option{--posix} was used (@pxref{Options}).@footnote{And
-thus was born the Campaign for Rational Range Interpretation (or
-RRI). A number of GNU tools have already implemented this change,
-or will soon.  Thanks to Karl Berry for coining the phrase ``Rational
-Range Interpretation.''}
+这样的问题已经存在了近 10 年，如果不是更多的话。@command{gawk} 已经很好地支持标准，并处理好了用户本地语言的问题，@command{gawk} 的维护者对于解释这些问题都已经非常厌倦了。在开发 4.0 版本的过程中，他们修改了 @command{gawk}，使其总是按原来的方式对待范围，即在标准前的方式。除非吏用了 @option{--posix} 选项（查看 @pxref{Options}）。 
+@footnote{也因此产生了“合理范围解释报怨”（或者 RRI）。很多的 GNU 工具已经实现了这样的变化，或者不久将实现。非常感谢 Karl Berry 发明了“合理范围解释”这个词。}
 
-Fortunately, shortly before the final release of @command{gawk} 4.0,
-the maintainer learned that the 2008 standard had changed the
-definition of ranges, such that outside the @code{"C"} and @code{"POSIX"}
-locales, the meaning of range expressions was @emph{undefined}.@footnote{See
-@uref{http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap09.html#tag_09_03_05, the standard}
-and
-@uref{http://pubs.opengroup.org/onlinepubs/9699919799/xrat/V4_xbd_chap09.html#tag_21_09_03_05, its rationale}.}
+幸运的是，最 @command{gawk} 4.0 发布不久，维护者了解到 2008 的标准已经更改了范围的定义，这样 @code{"C"} 与 @code{"POSIX"} 之外的语言设置，范围表达式的含义是@emph{未定义}的。 
+@footnote{查看 @uref{http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap09.html#tag_09_03_05, 标准}和@uref{http://pubs.opengroup.org/onlinepubs/9699919799/xrat/V4_xbd_chap09.html#tag_21_09_03_05, 它的解释}}
 
-By using this lovely technical term, the standard gives license
-to implementors to implement ranges in whatever way they choose.
-The @command{gawk} maintainer chose to apply the pre-POSIX meaning
-both with the default regexp matching and when @option{--traditional} or
-@option{--posix} are used.
-In all cases @command{gawk} remains POSIX-compliant.
+由于使用了这么一个可爱的技术术语，标准给了实现者相应许可来自己选择实现范围的方式。@command{gawk} 维护者选择了使用 POSIX 标准之前的含义，而不论是默认的正则表达式匹配还是使用了 @option{--traditional} 或者 @option{--posix} 选项。在所有的情况下，@command{gawk} 都与 POSIX 标准是符合的。
 
 @node Contributors
 @appendixsec @command{gawk} 的主要贡献者
 @cindex @command{gawk}, list of contributors to
 @quotation
-@i{Always give credit where credit is due.}
+@i{
+如果感谢是应该的就得感谢。
+}
 @author Anonymous
 @end quotation
 
-This @value{SECTION} names the major contributors to @command{gawk}
-and/or this @value{DOCUMENT}, in approximate chronological order:
+这一@value{SECTION}列出了 @command{gawk} 以及/或者本@value{DOCUMENT}的主要贡献者，以大概年代前后顺序列出：
 
 @itemize @value{BULLET}
 @item
 @cindex Aho, Alfred
 @cindex Weinberger, Peter
 @cindex Kernighan, Brian
-Dr.@: Alfred V.@: Aho,
-Dr.@: Peter J.@: Weinberger, and
-Dr.@: Brian W.@: Kernighan, all of Bell Laboratories,
-designed and implemented Unix @command{awk},
-from which @command{gawk} gets the majority of its feature set.
-
+Dr.@: Alfred V.@: Aho，Dr.@: Peter J.@: Weinberger，and Dr.@: Brian W.@: Kernighan，以及贝尔实验室中所有的设计与实现了 Unix @command{awk} 的人，从这些人中形成了 @command{awk} 的主要特性集合。
+#TODO
 @item
 @cindex Rubin, Paul
 Paul Rubin
-did the initial design and implementation in 1986, and wrote
-the first draft (around 40 pages) of this @value{DOCUMENT}.
+在 1986 年完成了最初的设计与实现，并写了本@value{DOCUMENT}的第一稿（大概 40 页）。
 
 @item
 @cindex Fenlason, Jay
 Jay Fenlason
-finished the initial implementation.
+完成了最初的实现。
 
 @item
 @cindex Close, Diane
 Diane Close
-revised the first draft of this @value{DOCUMENT}, bringing it
-to around 90 pages.
+修订了本@value{DOCUMENT}的第一稿，达到了 90 多页。
 
 @item
 @cindex Stallman, Richard
 Richard Stallman
-helped finish the implementation and the initial draft of this
-@value{DOCUMENT}.
-He is also the founder of the FSF and the GNU Project.
+帮助完成了最开始的实现，以及本@value{DOCUMENT}初稿。他同时也是 FSF 与 GNU 项目的创建者。
 
 @item
 @cindex Woods, John
 John Woods
-contributed parts of the code (mostly fixes) in
-the initial version of @command{gawk}.
+贡献了 @command{gawk} 初始版本的部分代码（大部份是修复）。
 
 @item
 @cindex Trueman, David
-In 1988,
-David Trueman
-took over primary maintenance of @command{gawk},
-making it compatible with ``new'' @command{awk}, and
-greatly improving its performance.
+1988 年，David Trueman
+成为 @command{gawk} 的主要维护者，并使其与“新”的 @command{awk} 兼容，并极大地提高了性能。
 
 @item
 @cindex Kwok, Conrad
 @cindex Garfinkle, Scott
 @cindex Williams, Kent
-Conrad Kwok,
-Scott Garfinkle,
-and
-Kent Williams
-did the initial ports to MS-DOS with various versions of MSC.
+Conrad Kwok，Scott Garfinkle，与 Kent Williams
+使用不同版本的 MSC 完成了最初的向 MS-DOS 的移植。
 
 @item
 @cindex Rankin, Pat
 Pat Rankin
-provided the VMS port and its documentation.
+提供了 VMS 的移植及其文档。
 
 @item
 @cindex Peterson, Hal
 Hal Peterson
-provided help in porting @command{gawk} to Cray systems.
-(This is no longer supported.)
+提供了移植 @command{gawk} 到 Cray Systems 的帮助。（当前已不再支持。）
 
 @item
 @cindex Rommel, Kai Uwe
 Kai Uwe Rommel
-provided the initial port to OS/2 and its documentation.
+提供了 OS/2 的最初的移植版本及其文档。
 
 @item
 @cindex Jaegermann, Michal
 Michal Jaegermann
-provided the port to Atari systems and its documentation.
-(This port is no longer supported.)
-He continues to provide portability checking,
-and has done a lot of work to make sure @command{gawk}
-works on non-32-bit systems.
+提供了 Atari 系统的移植及其文档。（这个移植不再支持。）他持续提供了可移植性检查，并完成了相当多的工作，以确定 @command{gawk} 可以工作在非 32 位系统上。
 
 @item
 @cindex Fish, Fred
 Fred Fish
-provided the port to Amiga systems and its documentation.
-(With Fred's sad passing, this is no longer supported.)
+提供了 Amiga 系统的移植及其文档。（随着 Fred 的去世，这也不再支持了。）
 
 @item
 @cindex Deifik, Scott
 Scott Deifik
-maintained the MS-DOS port using DJGPP.
+当前使用 @code{DJGPP} 维护 @code{MS}@option{-DOS} 的移植版。
 
 @item
 @cindex Zaretskii, Eli
 Eli Zaretskii
-currently maintains the MS-Windows port using MinGW.
+当前使用 MinGW 维护 MS-Windows 的移植版。
 
 @item
 @cindex Grigera, Juan
 Juan Grigera
-provided a port to Windows32 systems.
-(This is no longer supported.)
+提供了 Window32 系统的移植。（这已经不再支持。）
 
 @item
 @cindex Hankerson, Darrel
-For many years,
+很多年以后，
 Dr.@: Darrel Hankerson
-acted as coordinator for the various ports to different PC platforms
-and created binary distributions for various PC operating systems.
-He was also instrumental in keeping the documentation up to date for
-the various PC platforms.
+作为不同 PC 平台的移植版本的协调者，并构建了不同 PC 操作系统上的二进制发布版本。它也维护不同 PC 平台上的文档，以保持文档的及时更新。
 
 @item
 @cindex Zoulas, Christos
 Christos Zoulas
-provided the @code{extension()}
-built-in function for dynamically adding new functions.
-(This was obsoleted at @command{gawk} 4.1.)
+提供 @code{extension()} 内置函数用于动态添加新功能（这在 @command{gawk} 4.1 版本已经取消。）
 
 @item
 @cindex Kahrs, J@"urgen
 J@"urgen Kahrs
-contributed the initial version of the TCP/IP networking
-code and documentation, and motivated the inclusion of the @samp{|&} operator.
+贡献了最初的 TCP/IP 网络代码版本及其文档，并导致了 @samp{|&} 操作符的加入。
 
 @item
 @cindex Davies, Stephen
 Stephen Davies
-provided the initial port to Tandem systems and its documentation.
-(However, this is no longer supported.)
-He was also instrumental in the initial work to integrate the
-byte-code internals into the @command{gawk} code base.
+提供了 Tandem 系统的最初移植版本及其文档。（但是，这也不再支持。）它也提交了最初的整合字节码实现到 @command{gawk} 代码库中的工作。
 
 @item
 @cindex Woehlke, Matthew
 Matthew Woehlke
-provided improvements for Tandem's POSIX-compliant systems.
+提供了 Tandem POSIX 兼容系统的增强。
 
 @item
 @cindex Brown, Martin
 Martin Brown
-provided the port to BeOS and its documentation.
-(This is no longer supported.)
+提供了 @code{BeOS} 的移植版本及其文档。（已不再支持。）
 
 @item
 @cindex Peters, Arno
 Arno Peters
-did the initial work to convert @command{gawk} to use
-GNU Automake and GNU @command{gettext}.
+做了初始工作来将 @command{gawk} 切换到 GNU Automake 以及 GNU @command{gettext}。
 
 @item
 @cindex Broder, Alan J.@:
 Alan J.@: Broder
-provided the initial version of the @code{asort()} function
-as well as the code for the optional third argument to the
-@code{match()} function.
+提供了最初的 @code{asort()} 函数的版本，以及 @code{match()} 函数的第三个可选参数的代码。
 
 @item
 @cindex Buening, Andreas
 Andreas Buening
-updated the @command{gawk} port for OS/2.
+更新了 @command{gawk} 的 OS/2 的移植版本。
 
 @item
 @cindex Hasegawa, Isamu
 Isamu Hasegawa,
-of IBM in Japan, contributed support for multibyte characters.
+IBM 日本的 Isamu Hasegawa（长谷川勇）贡献了对多字节字符的支持。
 
 @item
 @cindex Benzinger, Michael
-Michael Benzinger contributed the initial code for @code{switch} statements.
+Michael Benzinger 贡献了 @code{switch} 语句的最初代码。
 
 @item
 @cindex McPhee, Patrick
-Patrick T.J.@: McPhee contributed the code for dynamic loading in Windows32
-environments.
-(This is no longer supported.)
+Patrick T.J.@: McPhee 贡献了在 Windows32 环境下动态装载的代码。（不再支持。）
 
 @item
 @cindex Wallin, Anders
-Anders Wallin helped keep the VMS port going for several years.
+帮助维护了 VMS 移植版本多年。
 
 @item
 @cindex Gordon, Assaf
-Assaf Gordon contributed the code to implement the
-@option{--sandbox} option.
+Assaf Gordon 
+贡献了实现 @option{--sandbox} 选项的实现代码。
 
 @item
 @cindex Haque, John
-John Haque made the following contributions:
+John Haque 作了如下贡献:
 
 @itemize @value{MINUS}
 @item
-The modifications to convert @command{gawk}
-into a byte-code interpreter, including the debugger
+修改 @command{gawk}，将其切换为一个字节码解释器，及其调试器
 
 @item
-The addition of true arrays of arrays
+添加了真正的数组之数组
 
 @item
-The additional modifications for support of arbitrary-precision arithmetic
+其他修改以支持任意精度的算术运算
 
 @item
-The initial text of
-@ref{Arbitrary Precision Arithmetic}
+@ref{Arbitrary Precision Arithmetic} 的初始文本
 
 @item
-The work to merge the three versions of @command{gawk}
-into one, for the 4.1 release
+将三个版本的 @command{gawk} 合并为一的工作，以配合 4.1 的发布
 
 @item
-Improved array internals for arrays indexed by integers
+增强了由整数进索引的数组的内部实现。
 
 @item
-The improved array sorting features were also driven by John, together
-with Pat Rankin
+增强了由 John 与 Pat Rankin 驱动的数组排序特性
 @end itemize
 
 @cindex Papadopoulos, Panos
 @item
-Panos Papadopoulos contributed the original text for @ref{Include Files}.
+Panos Papadopoulos 
+贡献了 @ref{Include Files} 的初始文本。
 
 @item
 @cindex Yawitz, Efraim
-Efraim Yawitz contributed the original text for @ref{Debugger}.
+Efraim Yawitz 贡献了 @ref{Debugger} 的初始文本。
 
 @item
 @cindex Schorr, Andrew
-The development of the extension API first released with
-@command{gawk} 4.1 was driven primarily by
-Arnold Robbins and Andrew Schorr, with notable contributions from
-the rest of the development team.
+在 @command{gawk} 4.1 版本的扩展 @code{API} 的开发主要由 Arnold Robbins 与 Andrew Schorr 驱动，并在后面的开发团队中做了巨大的贡献。
 
 @cindex Malmberg, John E.
 @item
-John Malmberg contributed significant improvements to the
-OpenVMS port and the related documentation.
+John Malmberg 对于 OpenVMS 移植版及其文档做了巨大的贡献与增强。
 
 @item
 @cindex Colombo, Antonio
-Antonio Giovanni Colombo rewrote a number of examples in the early
-chapters that were severely dated, for which I am incredibly grateful.
+Antonio Giovanni Colombo 重写了之前章节中的很多例子，因为那些例子很多已经严重过时，我对其感谢不尽。
 
 @item
 @cindex Robbins, Arnold
 Arnold Robbins
-has been working on @command{gawk} since 1988, at first
-helping David Trueman, and as the primary maintainer since around 1994.
+从 1988 年以来一直工作在 @command{gawk} 上，第一个协助 David Trueman，也是 1994 年以来的最主要的维护者。
 @end itemize
 
 @node History summary
-@appendixsec Summary
+@appendixsec 总结
 
 @itemize @value{BULLET}
 @item
-The @command{awk} language has evolved over time. The first release
-was with V7 Unix, circa 1978.  In 1987, for System V Release 3.1,
-major additions, including user-defined functions, were made to the language.
-Additional changes were made for System V Release 4, in 1989.
-Since then, further minor changes have happened under the auspices of the
-POSIX standard.
+@command{awk} 语言已经发展了很久。第一个发布版本大约在 1978 年的 V7 Unix 系统上。在 System V Release 3.1 的 1987 年的时候，一些主要的新增功能，包含用户自定义函数已经加入到语言中。其他的改变在 1989 年的 System V Release 4 加入。从此之后，其他的次要的变量都在 POSIX 标准的框架下进行。
 
 @item
-Brian Kernighan's @command{awk} provides a small number of extensions
-that are implemented in common with other versions of @command{awk}.
+Brian Kernighan 的 @command{awk} 提供了一些扩展，并被实现为其他 @command{awk} 版本的通用扩展。
 
 @item
-@command{gawk} provides a large number of extensions over POSIX @command{awk}.
-They can be disabled with either the @option{--traditional} or @option{--posix}
-options.
+@command{gawk} 提供了大量的 POSIX @command{awk} 所没有的扩展。它们可以使用 @option{--traditional} 或者 @option{--posix} 选项来禁用。
 
 @item
-The interaction of POSIX locales and regexp matching in @command{gawk} has been confusing over
-the years. Today, @command{gawk} implements Rational Range Interpretation, where
-ranges of the form @samp{[a-z]} match @emph{only} the characters numerically between
-@samp{a} through @samp{z} in the machine's native character set.  Usually this is ASCII,
-but it can be EBCDIC on IBM S/390 systems.
+@command{gawk} 中的 POSIX 本地语言设置与正则表达式匹配之间的纠葛一直让人困惑了好多年。现在，@command{gawk} 实现了“合理范围解释”，如此，@samp{[a-z]} 这样的范围形式@emph{只}匹配所在机器的本地字符集中的，数值在 @samp{a} 到 @samp{z} 之间的字符。字符集通常是 ASCII，但是在 IBM S/390 上可能是 EBCDIC。
 
 @item
-Many people have contributed to @command{gawk} development over the years.
-We hope that the list provided in this @value{CHAPTER} is complete and gives
-the appropriate credit where credit is due.
+很多人多来来对 @command{gawk} 的开发做出了贡献。 我们希望本@value{CHAPTER}中所提供的列表是完整的，并在值得感谢的地方给予了相应的感谢。
 
 @end itemize
 
 @node Installation
-@appendix Installing @command{gawk}
+@appendix 安装 @command{gawk}
 
 @c last two commas are part of see also
 @cindex operating systems, See Also GNU/Linux@comma{} PC operating systems@comma{} Unix
 @cindex @command{gawk}, installing
 @cindex installing @command{gawk}
-This appendix provides instructions for installing @command{gawk} on the
-various platforms that are supported by the developers.  The primary
-developer supports GNU/Linux (and Unix), whereas the other ports are
-contributed.
-@xref{Bugs}
-for the email addresses of the people who maintain
-the respective ports.
+本附录提供了用于安装 @command{gawk} 到由开发者所支持的不同平台上的指导。主要的开发者支持 GNU/Linux（以及 Unix）平台，其他则由贡献决定。查看 @xref{Bugs}，来获取维护相应移植版本的维护者的邮件。
 
 @menu
 * Gawk Distribution::           What is in the @command{gawk} distribution.
@@ -27761,12 +27645,10 @@ the respective ports.
 @end menu
 
 @node Gawk Distribution
-@appendixsec The @command{gawk} Distribution
+@appendixsec @command{gawk} 发布版
 @cindex source code, @command{gawk}
 
-This @value{SECTION} describes how to get the @command{gawk}
-distribution, how to extract it, and then what is in the various files and
-subdirectories.
+这一@value{SECTION} 描述如何来获取 @command{gawk} 发布版本，如何解释，并列出不同的文件以及子目录。
 
 @menu
 * Getting::                     How to get the distribution.
@@ -27775,141 +27657,99 @@ subdirectories.
 @end menu
 
 @node Getting
-@appendixsubsec Getting the @command{gawk} Distribution
+@appendixsubsec 取得 @command{gawk} 发布版 
 @cindex @command{gawk}, source code@comma{} obtaining
-There are two ways to get GNU software:
+有两个方式来获取 GNU 软件：
 
 @itemize @value{BULLET}
 @item
-Copy it from someone else who already has it.
+从某人那里直接复制。
 
 @cindex FSF (Free Software Foundation)
 @cindex Free Software Foundation (FSF)
 @item
-Retrieve @command{gawk}
-from the Internet host
-@code{ftp.gnu.org}, in the directory @file{/gnu/gawk}.
-Both anonymous @command{ftp} and @code{http} access are supported.
-If you have the @command{wget} program, you can use a command like
-the following:
+从 Internet 主机 @code{ftp.gnu.org} 中的目录 @file{/gnu/gawk} 中来取得 @command{gawk}。匿名的 @command{ftp} 与 @code{http} 访问都是受支持的。如果你有 @command{wget} 程序，你可以如下来使用命令：
 
 @example
 wget http://ftp.gnu.org/gnu/gawk/gawk-@value{VERSION}.@value{PATCHLEVEL}.tar.gz
 @end example
 @end itemize
 
-The GNU software archive is mirrored around the world.
-The up-to-date list of mirror sites is available from
-@uref{http://www.gnu.org/order/ftp.html, the main FSF website}.
-Try to use one of the mirrors; they
-will be less busy, and you can usually find one closer to your site.
+GNU 软件文档在全世界都有镜像。同步更新的镜像站点可以从 @uref{http://www.gnu.org/order/ftp.html, 主 FSF 网站}上获取 。尝试其中一个镜像站点，如果不太忙，你可以使用一个离你近一点的站点。
 
-You may also retrieve the @command{gawk} source code from the official
-Git repository; for more information see @ref{Accessing The Source}.
+你也可以从官方 Git 仓库获取 @command{gawk} 的源代码；更多信息请看 @ref{Accessing The Source}。
 
 @node Extracting
-@appendixsubsec Extracting the Distribution
-@command{gawk} is distributed as several @code{tar} files compressed with
-different compression programs: @command{gzip}, @command{bzip2},
-and @command{xz}. For simplicity, the rest of these instructions assume
-you are using the one compressed with the GNU Gzip program (@command{gzip}).
+@appendixsubsec 提取发布版
+@command{gawk} 的发布版本有内个 @code{tar} 文件并用不同的压缩程序进行压缩：@command{gzip}，@command{bzip2} 以及 @command{xz}。为简单起见，后面的说明假设你使用 GNU Gzip 程序进行压缩的（@command{gzip}）。
 
-Once you have the distribution (e.g.,
-@file{gawk-@value{VERSION}.@value{PATCHLEVEL}.tar.gz}),
-use @code{gzip} to expand the
-file and then use @code{tar} to extract it.  You can use the following
-pipeline to produce the @command{gawk} distribution:
+只要有了发布片（如 @file{gawk-@value{VERSION}.@value{PATCHLEVEL}.tar.gz}），则可以使用 @code{gzip} 来解压文件然后使用 @code{tar} 来提取。你可以使用下面的管线来生成 @command{gawk} 的发布文件：
 
 @example
 gzip -d -c gawk-@value{VERSION}.@value{PATCHLEVEL}.tar.gz | tar -xvpf -
 @end example
 
-On a system with GNU @command{tar}, you can let @command{tar}
-do the decompression for you:
+在使用 GNU @command{tar} 的系统上，你可以让 @command{tar} 来帮你进行解压：
 
 @example
 tar -xvpzf gawk-@value{VERSION}.@value{PATCHLEVEL}.tar.gz
 @end example
 
 @noindent
-Extracting the archive
-creates a directory named @file{gawk-@value{VERSION}.@value{PATCHLEVEL}}
-in the current directory.
+解压后的文件会在当前目录下创建一个名字为 @file{gawk-@value{VERSION}.@value{PATCHLEVEL}} 的目录。
 
-The distribution @value{FN} is of the form
-@file{gawk-@var{V}.@var{R}.@var{P}.tar.gz}.
-The @var{V} represents the major version of @command{gawk},
-the @var{R} represents the current release of version @var{V}, and
-the @var{P} represents a @dfn{patch level}, meaning that minor bugs have
-been fixed in the release.  The current patch level is @value{PATCHLEVEL},
-but when retrieving distributions, you should get the version with the highest
-version, release, and patch level.  (Note, however, that patch levels greater than
-or equal to 70 denote ``beta'' or nonproduction software; you might not want
-to retrieve such a version unless you don't mind experimenting.)
-If you are not on a Unix or GNU/Linux system, you need to make other arrangements
-for getting and extracting the @command{gawk} distribution.  You should consult
-a local expert.
+发布@value{FN}是 @file{gawk-@var{V}.@var{R}.@var{P}.tar.gz} 形式的名字。@var{V} 代表了 @command{gawk} 的主要版本，@var{R} 表示了当前 @var{V} 版本的发布版本，@var{P} 代表了@dfn{补丁等级}，表示在这个发布中修复了一些将要的 Bug。当补丁等级是 @value{PATCHLEVEL}，但是当返回发布时，你会取得最高版本号，发布版以及补丁等级。
+（提示，补丁等级大于等于 70，表示是“beta”或者是非生产用软件，除非你不介意实验，否则你不要使用这样的版本。）如果你不在 Unix 或者 GNU/Linux 系统上，你需要对获取了解压 @command{gawk} 发布版另做打算。你可以咨询一下身边的专家。
 
 @node Distribution contents
-@appendixsubsec Contents of the @command{gawk} Distribution
+@appendixsubsec @command{gawk} 发布版的内容
 @cindex @command{gawk}, distribution
 
-The @command{gawk} distribution has a number of C source files,
-documentation files,
-subdirectories, and files related to the configuration process
-(@pxref{Unix Installation}),
-as well as several subdirectories related to different non-Unix
-operating systems:
+@command{gawk} 发布版有很多的 C 源文件，文档文件，子目录以及与配置过程相关的文件（查看 @pxref{Unix Installation}），还有几个子目录与不同的非 Unix 操作系统相关：
 
 @table @asis
-@item Various @samp{.c}, @samp{.y}, and @samp{.h} files
-These files contain the actual @command{gawk} source code.
+@item 各种 @samp{.c}，@samp{.y} 与 @samp{.h} 文件
+这些文件包含实现的 @command{gawk} 源代码。
 @end table
 
 @table @file
 @item ABOUT-NLS
-A file containing information about GNU @command{gettext} and translations.
+文件中包含关于 GNU @command{gettext} 与翻译的相关信息。
 
 @item AUTHORS
-A file with some information about the authorship of @command{gawk}.
-It exists only to satisfy the pedants at the Free Software Foundation.
+一些关于 @command{gawk} 的作者信息。它的存在只是为了符合自由软件基金会的规范。
 
 @item README
 @itemx README_d/README.*
-Descriptive files: @file{README} for @command{gawk} under Unix and the
-rest for the various hardware and software combinations.
+描述性文件：@file{README} 用于 Unix 下的 @command{gawk}，以及其他不同的软硬件组合。
 
 @item INSTALL
-A file providing an overview of the configuration and installation process.
+提供了配置与安装过程的基本过程的文件。
 
 @item ChangeLog
-A detailed list of source code changes as bugs are fixed or improvements made.
+@code{bugs} 修复或者增强的源代码详细列表。
 
 @item ChangeLog.0
-An older list of source code changes.
+源代码更改的旧列表。
 
 @item NEWS
-A list of changes to @command{gawk} since the last release or patch.
+最后一个版本以来 @command{gawk} 的更改列表。
 
 @item NEWS.0
-An older list of changes to @command{gawk}.
+@command{gawk} 的旧的更改列表。
 
 @item COPYING
-The GNU General Public License.
+GNU 通用许可证文本。
 
 @item POSIX.STD
-A description of behaviors in the POSIX standard for @command{awk} that
-are left undefined, or where @command{gawk} may not comply fully, as well
-as a list of things that the POSIX standard should describe but does not.
+@command{awk} 的 POSIX 标准中定义为未定义的行为描述，或者 @command{gawk} 中那结不完全符合，或者 POSIX 本身应该描述，但是没有描述的那些事性。
 
 @cindex artificial intelligence@comma{} @command{gawk} and
 @item doc/awkforai.txt
-Pointers to the original draft of
-a short article describing why @command{gawk} is a good language for
-artificial intelligence (AI) programming.
+指向初始文稿，该文稿简单地描述了为什么 @command{gawk} 是一个用于人工智能（AI）的好的编程语言的原因。
 
 @item doc/bc_notes
-A brief description of @command{gawk}'s ``byte code'' internals.
+@command{gawk} 的内部“字节码”的简单描述。
 
 @item doc/README.card
 @itemx doc/ad.block
@@ -27919,15 +27759,12 @@ A brief description of @command{gawk}'s ``byte code'' internals.
 @itemx doc/macros
 @itemx doc/no.colors
 @itemx doc/setter.outline
-The @command{troff} source for a five-color @command{awk} reference card.
-A modern version of @command{troff} such as GNU @command{troff} (@command{groff}) is
-needed to produce the color version. See the file @file{README.card}
-for instructions if you have an older @command{troff}.
+五色 @command{awk} 参考卡的 @command{troff} 源代码。像 GNU @command{troff}（@command{groff}）这样的现代版本的 @command{troff} 用于产生彩色的版本。查看 @file{README.card} 文件。如果你有旧的 @command{troff}，卡是说明文档。
 
 @item doc/gawk.1
-The @command{troff} source for a manual page describing @command{gawk}.
-This is distributed for the convenience of Unix users.
+用于描述  @command{gawk} 手册的 @command{troff} 的源代码。这个文件是为了方便 Unix 用户。
 
+#TODO
 @cindex Texinfo
 @item doc/gawktexi.in
 @itemx doc/sidebar.awk
