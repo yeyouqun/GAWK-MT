@@ -27764,56 +27764,40 @@ GNU 通用许可证文本。
 @item doc/gawk.1
 用于描述  @command{gawk} 手册的 @command{troff} 的源代码。这个文件是为了方便 Unix 用户。
 
-#TODO
 @cindex Texinfo
 @item doc/gawktexi.in
 @itemx doc/sidebar.awk
-The Texinfo source file for this @value{DOCUMENT}.
-It should be processed by @file{doc/sidebar.awk}
-before processing with @command{texi2dvi} or @command{texi2pdf}
-to produce a printed document, and
-with @command{makeinfo} to produce an Info or HTML file.
-The @file{Makefile} takes care of this processing and produces
-printable output via @command{texi2dvi} or @command{texi2pdf}.
+本@value{DOCUMENT}的 Texinfo 源代码文件。它应该由 @file{doc/sidebar.awk} 文件进行处理，并在使用 @command{texi2dvi} 或者 @command{texi2pdf} 产生可打印的文档之前进行，使用 @command{makeinfo} 来产生 Info 或者 HTML 文件。
+@file{Makefile} 会处理这些处理过程，并产生使用 @command{texi2dvi} 或者 @command{texi2pdf} 来产生可打印的输出。
 
 @item doc/gawk.texi
-The file produced after processing @file{gawktexi.in}
-with @file{sidebar.awk}.
+使用 @file{gawktexi.in} 处理 @file{sidebar.awk} 文件之后产生的文件。
 
 @item doc/gawk.info
-The generated Info file for this @value{DOCUMENT}.
+为本@value{DOCUMENT}产生 Info 文件。
 
 @item doc/gawkinet.texi
-The Texinfo source file for
 @ifinfo
 @inforef{Top, , General Introduction, gawkinet, @value{GAWKINETTITLE}}.
 @end ifinfo
 @ifnotinfo
 @cite{@value{GAWKINETTITLE}}.
 @end ifnotinfo
-It should be processed with @TeX{}
-(via @command{texi2dvi} or @command{texi2pdf})
-to produce a printed document and
-with @command{makeinfo} to produce an Info or HTML file.
+的 Texinfo 源文件。
+它应该由 @TeX{} 处理（通过 @command{texi2dvi} 或者 @command{texi2pdf}）来产生可打印的文档以及用 @command{makeinfo} 来产生 Info 或者 HTML 文件。
 
 @item doc/gawkinet.info
-The generated Info file for
-@cite{@value{GAWKINETTITLE}}.
+@cite{@value{GAWKINETTITLE}} 生成的 Info 文件。
 
 @item doc/igawk.1
-The @command{troff} source for a manual page describing the @command{igawk}
-program presented in
-@ref{Igawk Program}.
+在 @ref{Igawk Program} 中描述的 @command{igawk} 程序手册的 @command{troff} 源代码。
 
 @item doc/Makefile.in
-The input file used during the configuration process to generate the
-actual @file{Makefile} for creating the documentation.
+在配置过程中使用的输入文件，用于产生实际的生成文档的 @file{Makefile}。
 
 @item Makefile.am
 @itemx */Makefile.am
-Files used by the GNU Automake software for generating
-the @file{Makefile.in} files used by Autoconf and
-@command{configure}.
+被 GNU Automake 软件使用的文件，以生成由 Autoconf 与 @command{configure}使用的 @file{Makefile.in} 文件。
 
 @item Makefile.in
 @itemx aclocal.m4
@@ -27828,38 +27812,21 @@ the @file{Makefile.in} files used by Autoconf and
 @itemx missing_d/*
 @itemx mkinstalldirs
 @itemx m4/*
-These files and subdirectories are used when configuring and compiling
-@command{gawk} for various Unix systems.  Most of them are explained
-in @ref{Unix Installation}. The rest are there to support the main
-infrastructure.
+这些文件与子目录在在不同的 Unix 系统中配置及编译 @command{gawk} 时使用。它们大多数在 @ref{Unix Installation}，中进行的解释，共余的则作为主框架的支持文件。
 
 @item po/*
-The @file{po} library contains message translations.
+包含信息翻译的 @file{po} 库。
 
 @item awklib/extract.awk
 @itemx awklib/Makefile.am
 @itemx awklib/Makefile.in
 @itemx awklib/eg/*
-The @file{awklib} directory contains a copy of @file{extract.awk}
-(@pxref{Extract Program}),
-which can be used to extract the sample programs from the Texinfo
-source file for this @value{DOCUMENT}. It also contains a @file{Makefile.in} file, which
-@command{configure} uses to generate a @file{Makefile}.
-@file{Makefile.am} is used by GNU Automake to create @file{Makefile.in}.
-The library functions from
-@ref{Library Functions},
-and the @command{igawk} program from
-@ref{Igawk Program}
-are included as ready-to-use files in the @command{gawk} distribution.
-They are installed as part of the installation process.
-The rest of the programs in this @value{DOCUMENT} are available in appropriate
-subdirectories of @file{awklib/eg}.
+@file{awklib} 目录包含了 @file{extract.awk} 的复本（查看 @pxref{Extract Program}），这个文件用于从本@value{DOCUMENT}的 Texinfo 源文件中提供例子程序。同时也包含了 @file{Makefile.in} 文件，@command{configure} 使用其来生成 @file{Makefile} 文件。@file{Makefile.am} 文件被 GNU Automake 用来创建 @file{Makefile.in} 文件。来自于 @ref{Library Functions} 的库函数，以及来自于 @ref{Igawk Program} 的 @command{igawk} 程序，已经含在发布版本中，并且开箱即用。在安装过程中作为一部分进行安装。本@value{DOCUMENT}的其他程序在 @file{awklib/eg} 等子目录中都可以获取 。
 
 @item extension/*
-The source code, manual pages, and infrastructure files for
-the sample extensions included with @command{gawk}.
-@xref{Dynamic Extensions}, for more information.
+被 @command{gawk} 包含的例子扩展的源代码，手册，以及基础文件。查看 @xref{Dynamic Extensions}，来获取更多信息。
 
+#TODO
 @item posix/*
 Files needed for building @command{gawk} on POSIX-compliant systems.
 

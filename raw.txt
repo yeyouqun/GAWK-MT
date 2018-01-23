@@ -10110,7 +10110,6 @@ POSIX.@code{STD}
 用于描述  @command{gawk} 手册的 @code{troff} 的源代码。这个文件是为了方便 Unix 用户。
 @code{doc}/@code{gawktexi}.@code{in}
 @code{doc}/@code{sidebar}.@command{awk}
-#TODO
 本书的 @code{Texinfo} 源代码文件。它应该由 @code{doc}/@code{sidebar}.@command{awk} 文件进行处理，并在使用 texi2dvi 或者 texi2pdf 产生可打印的文档之前进行，使用 @code{makinfo} 来产生 @code{Info} 或者 @code{HTML} 文件。@code{Makefile} 会处理这些处理过程，并产生使用 viatexi2dvi 或者 texi2pdf 来产生可打印的输出。
 @code{doc}/@command{gawk}.@code{texi}
 使用 @code{sidebar}.@command{awk} 处理 @code{gawktexi}.@code{in} 文件之后产生的文件。
@@ -10148,6 +10147,7 @@ m4/*    这些文件与子目录在在不同的 Unix 系统中配置及编译 @c
 @code{awklib} 目录包含了 @code{extract}.@command{awk} 的复本（查看 11.3.7 从 @code{Texinfo} 源文件中提取程序， 在第 281 页），这个文件用于从本书的 @code{Texinfo} 源文件中提供例子程序。同时也包含了 @code{Makefile}.@code{in} 文件， @code{configure} 使用其来生成 @code{Makefile} 文件。@code{Makefile}.@code{am} 文件被  GNU @code{Automake} 用来创建 @code{Makefile}.@code{in} 文件。来自于 第十章 @command{awk} 函数库，在第 221 页，的库函数，以及来自于 11.3.9 使用库函数的简单方式，在第 286 页，的 @code{igawk} 程序，已经含在发布版本中，并且开箱即用。在安装过程中作为一部分进行安装。本书的其他程序在 @code{awklib} 等子目录中都可以获取 。
 @code{extension}/*
 被  @command{gawk} 包含的例子扩展的源代码，手册，以及基础文件。查看 第十六章 编写 @command{gawk} 扩展，在第 349 页，来获取更多信息。
+#TODO
 @code{posix}/*     用于在 POSIX 兼容的系统上构建 @command{gawk} 所需要的文件。
 @code{pc}/*    用于在 @code{MS}@option{-Windows} 与 @code{OS}/2 系统上构建 @command{gawk} 所需要的文件（查看 @code{B}.3.1@code{}安装到 @code{PC} 操作系统，在第 425 页，获取相关信息）。
 @code{vms}/*   用于在 @code{Vax}/@code{VMS} 与 @code{OpenVMS} 系统上构建 @command{gawk} 所需要的文件（查看 @code{B}.3.2@code{}在 @code{Vax}/@code{VMS} 以及 @code{OpenVMS} 系统上编译安装 @command{gawk} ，在第 430 页，获取相关信息）。
