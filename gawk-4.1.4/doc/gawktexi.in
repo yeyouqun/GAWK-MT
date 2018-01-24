@@ -27826,35 +27826,28 @@ GNU 通用许可证文本。
 @item extension/*
 被 @command{gawk} 包含的例子扩展的源代码，手册，以及基础文件。查看 @xref{Dynamic Extensions}，来获取更多信息。
 
-#TODO
 @item posix/*
-Files needed for building @command{gawk} on POSIX-compliant systems.
+用于在 POSIX 兼容的系统上构建 @command{gawk} 所需要的文件。
 
 @item pc/*
+用于在 MS-Windows
 Files needed for building @command{gawk} under MS-Windows
 @ifclear FOR_PRINT
-and OS/2
+与 OS/2 
 @end ifclear
-(@pxref{PC Installation} for details).
+系统上构建 @command{gawk} 所需要的文件（查看 @pxref{PC Installation}，获取相关信息）。
 
 @item vms/*
-Files needed for building @command{gawk} under Vax/VMS and OpenVMS
-(@pxref{VMS Installation} for details).
+用于在 Vax/VMS 与 OpenVMS 系统上构建 @command{gawk} 所需要的文件（查看 @pxref{VMS Installation}，获取相关信息）。
 
 @item test/*
-A test suite for
-@command{gawk}.  You can use @samp{make check} from the top-level @command{gawk}
-directory to run your version of @command{gawk} against the test suite.
-If @command{gawk} successfully passes @samp{make check}, then you can
-be confident of a successful port.
+@command{gawk} 的测试包。你可以在 @command{gawk} 的顶层目录中使用 @samp{make check} 来执行 @command{gawk} 的测试包。如果 @command{gawk} 测试成功，则你可以认为移植是成功的。
 @end table
 
 @node Unix Installation
-@appendixsec Compiling and Installing @command{gawk} on Unix-Like Systems
+@appendixsec 在 Unix-like 的系统上编译与安装 @command{gawk}
 
-Usually, you can compile and install @command{gawk} by typing only two
-commands.  However, if you use an unusual system, you may need
-to configure @command{gawk} for your system yourself.
+一般情况下，你只需要两个命令来编译与安装 @command{gawk}。但是，如果你使用的是不常用的系统，你可能需要自己来为你的系统来配置 @command{gawk}。
 
 @menu
 * Quick Installation::               Compiling @command{gawk} under Unix.
@@ -27863,193 +27856,107 @@ to configure @command{gawk} for your system yourself.
 @end menu
 
 @node Quick Installation
-@appendixsubsec Compiling @command{gawk} for Unix-Like Systems
+@appendixsubsec 为 Unix-like 的系统编译 @command{gawk}
 
-The normal installation steps should work on all modern commercial
-Unix-derived systems, GNU/Linux, BSD-based systems, and the Cygwin
-environment for MS-Windows.
+在所有的现代由 Unix 派生出来的系统中，都可以使用上面的常规步骤，如 GNU/Linux，BSD 派生的系统，以及 MS-Windows 中的 Cygwin 环境。
 
-After you have extracted the @command{gawk} distribution, @command{cd}
-to @file{gawk-@value{VERSION}.@value{PATCHLEVEL}}.  As with most GNU
-software, you configure @command{gawk} for your system by running the
-@command{configure} program.  This program is a Bourne shell script that
-is generated automatically using GNU Autoconf.
+在解压了 @command{gawk} 发布文件后，@command{cd} 到 @file{gawk-@value{VERSION}.@value{PATCHLEVEL}} 目录。与大多的 GNU 软件类似，你通过执行 @command{configure} 文件来在系统上对 @command{gawk} 进行配置。这个程序是一个 Bourne Shell 脚本，由 GNU 的 Autoconf 自动产生。
 @ifnotinfo
-(The Autoconf software is
-described fully in
-@cite{Autoconf---Generating Automatic Configuration Scripts},
-which can be found online at
-@uref{http://www.gnu.org/software/autoconf/manual/index.html,
-the Free Software Foundation's website}.)
+（Autoconf 软件在 @cite{Autoconf——配置脚本自动力生成}，中有全面的描述，这个可以在 @uref{http://www.gnu.org/software/autoconf/manual/index.html,自由软件基金会的网站} 上找到。）
 @end ifnotinfo
 @ifinfo
-(The Autoconf software is described fully starting with
-@inforef{Top, , Autoconf, autoconf,Autoconf---Generating Automatic Configuration Scripts}.)
+（Autoconf 软件在 @inforef{Top, , Autoconf, autoconf,Autoconf---Generating Automatic Configuration Scripts}，中有全面的描述。）
 @end ifinfo
 
-To configure @command{gawk}, simply run @command{configure}:
+简单地运行 @command{configure} 命令来配置 @command{gawk}：
 
 @example
 sh ./configure
 @end example
 
-This produces a @file{Makefile} and @file{config.h} tailored to your system.
-The @file{config.h} file describes various facts about your system.
-You might want to edit the @file{Makefile} to
-change the @code{CFLAGS} variable, which controls
-the command-line options that are passed to the C compiler (such as
-optimization levels or compiling for debugging).
+这会产生 @file{Makefile} 与你的系统匹配 @file{config.h} 文件描述了你的系统的各种特性。你可以编辑 @file{Makefile} 来改变 @code{CFLAGS} 变量，用以控制传递到 C 编译的命令行选项（如优化等级或者调试编译选项）。
 
-Alternatively, you can add your own values for most @command{make}
-variables on the command line, such as @code{CC} and @code{CFLAGS}, when
-running @command{configure}:
+还有一种方法，在运行 @command{configure} 的时候，你可以添加你自己的 @command{make} 变量到命令行中，像 @code{CC} 以及 @code{CFLAGS} 等，如下：
 
 @example
 CC=cc CFLAGS=-g sh ./configure
 @end example
 
 @noindent
-See the file @file{INSTALL} in the @command{gawk} distribution for
-all the details.
+查看 @command{gawk} 发行中的文件 @file{INSTALL} 来获取详细内容。
 
-After you have run @command{configure} and possibly edited the @file{Makefile},
-type:
+完成了 @command{configure}，并对 @file{Makefile} 做了相应修改，输入：
 
 @example
 make
 @end example
 
 @noindent
-Shortly thereafter, you should have an executable version of @command{gawk}.
-That's all there is to it!
-To verify that @command{gawk} is working properly,
-run @samp{make check}.  All of the tests should succeed.
-If these steps do not work, or if any of the tests fail,
-check the files in the @file{README_d} directory to see if you've
-found a known problem.  If the failure is not described there,
-send in a bug report (@pxref{Bugs}).
+不久后，你就可以有一个可以运行的 @command{gawk} 版本。所有的就是这些了。为了确认@command{gawk} 是可以工作正常的，执行 @samp{make check}。
+所有的测试都应该是成功的。如果这些步骤没有成功，或者测试失败，检查 @file{README_d} 目录来查看是否找到已知的问题。如果在那里并没有相关的失败的描述内容，则发送一个 Bug 报告（查看 @pxref{Bugs}）。
 
-Of course, once you've built @command{gawk}, it is likely that you will
-wish to install it.  To do so, you need to run the command @samp{make
-install}, as a user with the appropriate permissions.  How to do this
-varies by system, but on many systems you can use the @command{sudo}
-command to do so.  The command then becomes @samp{sudo make install}. It
-is likely that you will be asked for your password, and you will have
-to have been set up previously as a user who is allowed to run the
-@command{sudo} command.
+当然，一旦完成了构建 @command{gawk}，你可以安装它。为了安装 @command{gawk}，你还需要执行 @samp{make
+install}，所执行的用户需要有一定的权限。如何来完成安装，不同的系统是不同的，但是在多数的系统中，你可以通过 @command{sudo} 来完成。则命令会变成 @samp{sudo make install}。有可能有密码输入请求，在这之前，你应该有配置好哪些用户可以执行 @command{sudo} 命令。
 
 @node Additional Configuration Options
-@appendixsubsec Additional Configuration Options
+@appendixsubsec 其他配置选项
 @cindex @command{gawk}, configuring, options
 @cindex configuration options@comma{} @command{gawk}
 
-There are several additional options you may use on the @command{configure}
-command line when compiling @command{gawk} from scratch, including:
+当从头编译 @command{gawk} 时，还有几个额外的选项可以用在 @command{configure} 命令行上，它们是：
 
 @table @code
 
 @cindex @option{--disable-extensions} configuration option
 @cindex configuration option, @code{--disable-extensions}
 @item --disable-extensions
-Disable configuring and building the sample extensions in the
-@file{extension} directory. This is useful for cross-compiling.
-The default action is to dynamically check if the extensions
-can be configured and compiled.
+禁用配置与构建 @file{extension} 目录下的例子扩展。在交叉编译的时候，这个很有用。默认的行为是动态地检查扩展是否可以配置与编译。
 
 @cindex @option{--disable-lint} configuration option
 @cindex configuration option, @code{--disable-lint}
 @item --disable-lint
-Disable all lint checking within @command{gawk}.  The
-@option{--lint} and @option{--lint-old} options
-(@pxref{Options})
-are accepted, but silently do nothing.
-Similarly, setting the @code{LINT} variable
-(@pxref{User-modified})
-has no effect on the running @command{awk} program.
+禁用所有的 @command{gawk} 的 @option{--lint} 检查。@option{--lint} 与 @option{--lint-old} 选项（查看 @pxref{Options}）可以被接受，但是什么也不做。类似地，设置 @code{LINT} 变量（查看 @pxref{User-modified}）在运行的 @command{awk} 程序中也没有任务效果。
 
-When used with the GNU Compiler Collection's (GCC's)
-automatic dead-code-elimination, this option
-cuts almost 23K bytes off the size of the @command{gawk}
-executable on GNU/Linux x86_64 systems.  Results on other systems and
-with other compilers are likely to vary.
-Using this option may bring you some slight performance improvement.
+当使用 GCC 的自动力的死代码清除功能时，这个选项可以使 @command{gawk} 的可选择体在 GNU/Linux x86-64 系统上小 23KB。在其他系统与编译器上的结果有差异。使用这个选项，可以给你带来一点性能上的提升。
 
-@quotation CAUTION
-Using this option will cause some of the tests in the test suite
-to fail.  This option may be removed at a later date.
+@quotation 注意
+使用这个选项可能导致测试包中的一些测试无法通过。这个选项可能在后面会被移除。
 @end quotation
 
 @cindex @option{--disable-nls} configuration option
 @cindex configuration option, @code{--disable-nls}
 @item --disable-nls
-Disable all message-translation facilities.
-This is usually not desirable, but it may bring you some slight performance
-improvement.
+禁用所有的消息翻译功能。一般来说这并不是所期望的，但是可以给你带来一点性能提升。
 
 @cindex @option{--with-whiny-user-strftime} configuration option
 @cindex configuration option, @code{--with-whiny-user-strftime}
 @item  --with-whiny-user-strftime
-Force use of the included version of the C @code{strftime()}
-function for deficient systems.
+强制在低效的系统上使用 C 版本的 @code{strftime()} 函数。
 @end table
 
-Use the command @samp{./configure --help} to see the full list of
-options supplied by @command{configure}.
+使用命令 @samp{./configure --help} 来查看 @command{configure} 提供的完整的选项列表。
 
 @node Configuration Philosophy
-@appendixsubsec The Configuration Process
+@appendixsubsec 配置过程
 
 @cindex @command{gawk}, configuring
-This @value{SECTION} is of interest only if you know something about using the
-C language and Unix-like operating systems.
+这一@value{SECTION}只有在你了解 C 语言以及类 Unix 操作系统时才会有趣。
 
-The source code for @command{gawk} generally attempts to adhere to formal
-standards wherever possible.  This means that @command{gawk} uses library
-routines that are specified by the ISO C standard and by the POSIX
-operating system interface standard.
-The @command{gawk} source code requires using an ISO C compiler (the 1990
-standard).
+@command{gawk} 的代码一般会尝试尽量符合正式的标准。这就是说，@command{gawk} 会使用由 ISO C 标准以及 POSIX 操作系统接口标准的库例程。@command{gawk} 源代码需要使用 ISO C 的编译器（1990 标准）。
 
-Many Unix systems do not support all of either the ISO or the
-POSIX standards.  The @file{missing_d} subdirectory in the @command{gawk}
-distribution contains replacement versions of those functions that are
-most likely to be missing.
+很多的 Unix 系统要么不支持 ISO，要么不支持 POSIX 标准。@command{gawk} 中的 @file{missing_d} 子目录包含了那些最可以缺失的函数。
 
-The @file{config.h} file that @command{configure} creates contains
-definitions that describe features of the particular operating system
-where you are attempting to compile @command{gawk}.  The three things
-described by this file are: what header files are available, so that
-they can be correctly included, what (supposedly) standard functions
-are actually available in your C libraries, and various miscellaneous
-facts about your operating system.  For example, there may not be an
-@code{st_blksize} element in the @code{stat} structure.  In this case,
-@samp{HAVE_STRUCT_STAT_ST_BLKSIZE} is undefined.
+@command{configure} 生成的 @file{config.h} 文件包含了那些你编译 @command{gawk} 所在系统的特定特性。这个文件描述的三件事情是：可以包含哪些头文件，这样它们可以正确地包含，在你的 C 库中可以使用哪些标准的函数，以及其他的系统特性。如，有可能在 @code{stat} 结构中没有 @code{st_blksize} 元素。在这个情况下，@samp{HAVE_STRUCT_STAT_ST_BLKSIZE} 就会被反定义。
 
 @cindex @code{custom.h} file
-It is possible for your C compiler to lie to @command{configure}. It may
-do so by not exiting with an error when a library function is not
-available.  To get around this, edit the @file{custom.h} file.
-Use an @samp{#ifdef} that is appropriate for your system, and either
-@code{#define} any constants that @command{configure} should have defined but
-didn't, or @code{#undef} any constants that @command{configure} defined and
-should not have.  The @file{custom.h} file is automatically included by
-the @file{config.h} file.
+也有可能你的 C 编译器会对 @command{configure} 说谎。当某个库函数不可用时，不会以错误退出。为了解决这个问题，修改 @file{custom.h} 文件。使用适用于你的系统的 @samp{#ifdef} 或者 @code{#define} 所有那些应该定义而没有定义的常量，或者 @code{#undef} 那些本不应该定义而定义了的常量。@file{config.h} 文件会被 @file{config.h} 文件自动包含。
 
-It is also possible that the @command{configure} program generated by
-Autoconf will not work on your system in some other fashion.
-If you do have a problem, the @file{configure.ac} file is the input for
-Autoconf.  You may be able to change this file and generate a
-new version of @command{configure} that works on your system
-(@pxref{Bugs}
-for information on how to report problems in configuring @command{gawk}).
-The same mechanism may be used to send in updates to @file{configure.ac}
-and/or @file{custom.h}.
+有可能由 Autoconf 生成的 @command{configure} 文件在你的系统上没法工作。如果有问题，@file{configure.ac} 文件作为 Autoconf 的输入文件，你以修改这个文件来产生一个新版本的 @command{configure} 文件，使其可以运行在你的系统上（查看 @pxref{Bugs}，来获取如何来报告 @command{gawk} 的配置问题）。类似的机制可以应用于 @file{configure.ac} 与/或者 @file{custom.h}文件。
 
 @node Non-Unix Installation
-@appendixsec Installation on Other Operating Systems
+@appendixsec 安装到其他操作系统上 
 
-This @value{SECTION} describes how to install @command{gawk} on
-various non-Unix systems.
+这一@value{SECTION}描述如何将 @command{gawk} 安装到其他的非 Unix 系统上。
 
 @menu
 * PC Installation::             Installing and Compiling @command{gawk} on
@@ -28061,27 +27968,22 @@ various non-Unix systems.
 @c and Darrel Hankerson <hankedr@mail.auburn.edu>
 
 @node PC Installation
-@appendixsubsec Installation on PC Operating Systems
+@appendixsubsec 安装到 PC 操作系统 
 
 @cindex PC operating systems@comma{} @command{gawk} on, installing
 @cindex operating systems, PC@comma{} @command{gawk} on, installing
+本@value{SECTION}包含的内容为在运行于 Intel 架构的机器上的 
 This @value{SECTION} covers installation and usage of @command{gawk}
 on Intel architecture machines
 @ifclear FOR_PRINT
-running MS-DOS, any version of MS-Windows, or OS/2.
+MS-DOS，任意的 MS-Windows 或者 OS/2 系统中 @command{gawk} 的安装与使用。
 @end ifclear
 @ifset FOR_PRINT
-running MS-DOS and any version of MS-Windows.
+MS-DOS 和任意的 MS-Windows 系统中 @command{gawk} 的安装与使用。
 @end ifset
-In this @value{SECTION}, the term ``Windows32''
-refers to any of Microsoft Windows 95/98/ME/NT/2000/XP/Vista/7/8.
+这一@value{SECTION}中所使用的术语“Windows32”指的是 Microsoft 的 Windows95/98/ME/NT/2000/XP/Vista/7/8。
 
-The limitations of MS-DOS (and MS-DOS shells under the other operating
-systems) have meant that various ``DOS extenders'' are often used with
-programs such as @command{gawk}.  The varying capabilities of Microsoft
-Windows 3.1 and Windows32 can add to the confusion.  For an overview
-of the considerations, refer to @file{README_d/README.pc} in
-the distribution.
+MS-DOS 的范围（以及在其他操作系统下的 MS-DOS 外壳程序）指的是不同的“DOS 扩展器”，常与 @command{gawk} 这样的程序一起使用。Microsoft Windows 3.1 与 Windows32 不同的能力导致了困惑的产生。为了对这些考量有个全面的概况，请查看发布程序中的 @file{README_d/README.pc} 文件。
 
 @menu
 * PC Binary Installation::      Installing a prepared distribution.
@@ -28097,91 +27999,52 @@ the distribution.
 
 @ifclear FOR_PRINT
 @node PC Binary Installation
-@appendixsubsubsec Installing a Prepared Distribution for PC Systems
+@appendixsubsubsec 为 PC 系统安装一个编译版 
 
-If you have received a binary distribution prepared by the MS-DOS
-maintainers, then @command{gawk} and the necessary support files appear
-under the @file{gnu} directory, with executables in @file{gnu/bin},
-libraries in @file{gnu/lib/awk}, and manual pages under @file{gnu/man}.
-This is designed for easy installation to a @file{/gnu} directory on your
-drive---however, the files can be installed anywhere provided @env{AWKPATH} is
-set properly.  Regardless of the installation directory, the first line of
-@file{igawk.cmd} and @file{igawk.bat} (in @file{gnu/bin}) may need to be
-edited.
+如果你有一个维护者为 MS-DOS 提供二进制版本，@command{gawk} 以及相关的支持文件会存存在 @file{gnu} 目录下，执行文件存在 @file{gnu/bin}，库存存储在 @file{gnu/lib/awk} 目录中，手册存放在 @file{gnu/man}。这是为了能够非常容易地将 @command{gawk} 安装到你的驱动程序中的 @file{/gnu} 目录——但是，只要正确设置 @env{AWKPATH}，你可以安装在任何位置。如果不考虑安装目录，@file{igawk.cmd} 与 @file{igawk.bat}（在 @file{gnu/bin} 目录中）有可能需要修改。
 
-The binary distribution contains a separate file describing the
-contents. In particular, it may include more than one version of the
-@command{gawk} executable.
+二进制发布版本包含一个独立的文件来描述内容。有一些特别情况下，它可能包含多于一个版本的 @command{gawk} 可执行文件。
 
-OS/2 (32 bit, EMX) binary distributions are prepared for the @file{/usr}
-directory of your preferred drive. Set @env{UNIXROOT} to your installation
-drive (e.g., @samp{e:}) if you want to install @command{gawk} onto another drive
-than the hardcoded default @samp{c:}. Executables appear in @file{/usr/bin},
-libraries under @file{/usr/share/awk}, manual pages under @file{/usr/man},
-Texinfo documentation under @file{/usr/info}, and NLS files
-under @file{/usr/share/locale}.
-Note that the files can be installed anywhere provided @env{AWKPATH} is
-set properly.
+OS/2（32 位 EMS）二进制发布版本会安装在你选择的驱动的 @file{/usr} 目录下。如果你想将 @command{gawk} 安装到一个不是硬编码的 @samp{c:} 分区上，你可以将 @env{UNIXROOT} 设置为你安装的驱动器上（如，@samp{c:}）。可执行文件会出现在 @file{/usr/bin} 目录下，库会存储在 @file{/usr/share/awk} 目录下，而手册则在 @file{/usr/man} 目录下，Texinfo 文档存在 @file{/usr/info}，NLS 文件存在 @file{/usr/share/locale} 中。注意，只要正确地设置 @env{AWKPATH}，你可以安装到任何位置。
 
-If you already have a file @file{/usr/info/dir} from another package
-@emph{do not overwrite it!} Instead enter the following commands at your prompt
-(replace @samp{x:} by your installation drive):
+如果你已经有一个文件 @file{/usr/info/dir} 是另一个包的，@emph{不要覆盖它！}相反在你提示符下输入命令（将 @samp{x:} 按成你的安装驱动器）：
 
 @example
 install-info --info-dir=x:/usr/info x:/usr/info/gawk.info
 install-info --info-dir=x:/usr/info x:/usr/info/gawkinet.info
 @end example
 
-The binary distribution may contain a separate file containing additional
-or more detailed installation instructions.
+二进制发布版本中可能还包含单独的文件，其中包含了一些额外的更详细的安装指导。
 @end ifclear
 
 @node PC Compiling
-@appendixsubsubsec Compiling @command{gawk} for PC Operating Systems
+@appendixsubsubsec 为 PC 操作系统编译 @command{gawk}
+
 
 @ifclear FOR_PRINT
-@command{gawk} can be compiled for MS-DOS, Windows32, and OS/2 using
-MinGW (Windows32) or Eberhard
-Mattes (EMX: MS-DOS, Windows32 and OS/2).
+可以使用来自于 MinGW（Windows32）或者 Eberhard Mattes(EMX: MS-DOS，Windows32 与 OS/2) 为 MS-DOS，Windows32 与 OS/2 编译 @command{gawk}。
 @end ifclear
 @ifset FOR_PRINT
-@command{gawk} can be compiled for Windows32 using
-MinGW.
+可以使用来自于 MinGW 为 Windows32 编译 @command{gawk}。
 @end ifset
-The file
-@file{README_d/README.pc} in the @command{gawk} distribution contains
-additional notes, and @file{pc/Makefile} contains important information on
-compilation options.
+@command{gawk} 发行中的文件 @file{README_d/README.pc} 中包含了额外的提示，@file{pc/Makefile} 包含了编译编译选项的重要信息。
 
 @cindex compiling @command{gawk} for MS-DOS and MS-Windows
-To build @command{gawk} for MS-DOS and Windows32, copy the files in
-the @file{pc} directory (@emph{except} for @file{ChangeLog}) to the
-directory with the rest of the @command{gawk} sources, then invoke
-@command{make} with the appropriate target name as an argument to
-build @command{gawk}.  The @file{Makefile} copied from the @file{pc}
-directory contains a configuration section with comments and may need
-to be edited in order to work with your @command{make} utility.
+为了为 MS-DOS 与 Windows32 构建 @command{gawk}，将 @file{pc} 目录下（@emph{除了} @file{ChangeLog}）的文件与 @command{gawk} 其他的源文件复制到某个目录下，然后调用 @command{make} 来执行特定的目标以构建 @command{gawk}。从 @file{pc} 目录下复制而来的 @file{Makefile} 中包含了一个配置段，其中带有相应的注释，有可能需要修改以使其可以使用你的 @command{make} 工具用于其上。
 
-The @file{Makefile} supports a number of targets for building various
-MS-DOS and Windows32 versions.  A list of targets is printed if the
-@command{make} command is given without a target.  As an example,
-to build a
-native MS-Windows binary of @command{gawk} using the MinGW tools,
-type @samp{make mingw32}.
+@file{Makefile} 支持很多的构建目标，用于构建不同的 MS-DOS 与 Windows32 版本。如果 @command{make} 时没有带上目标，则可用的目标会被打印出来。
+如，使用 MinGW 构建本地的 MS-Windows 的二进制版本的 @command{gawk}，则输入 @samp{make mingw32}。
 
 @ifclear FOR_PRINT
 @cindex compiling @command{gawk} with EMX for OS/2
-The 32 bit EMX version of @command{gawk} works ``out of the box'' under OS/2.
-However, it is highly recommended to use GCC 2.95.3 for the compilation.
-In principle, it is possible to compile @command{gawk} the following way:
+@command{gawk} 的 32 位 EMX 版本在 OS/2 下是“开箱即用”的。但是，我们强烈建议你用 GCC 2.95.3 来进行编译。总的来说，可以通过下面的方式来对 @command{gawk} 进行编译：
 
 @example
 $ @kbd{./configure}
 $ @kbd{make}
 @end example
 
-This is not recommended, though.  To get an OMF executable you should
-use the following commands at your @command{sh} prompt:
+但是我们不建议这么做。为了要取得一个 OMF 的可执行文件，在你的 @command{sh} 提示符下，你应该使用下面的命令行：
 
 @example
 $ @kbd{CFLAGS="-O2 -Zomf -Zmt"}
@@ -28194,8 +28057,7 @@ $ @kbd{./configure --prefix=c:/usr}
 $ @kbd{make AR=emxomfar}
 @end example
 
-These are just suggestions for use with GCC 2.x.  You may use any other set of
-(self-consistent) environment variables and compiler flags.
+这是对使用 GCC 2.x 的建议。你可以使用任何其他的环境集变量（自包含的）以及编译选项。
 
 @ignore
 To get an FHS-compliant file hierarchy it is recommended to use the additional
@@ -28209,14 +28071,14 @@ to use either an external one (@option{--without-included-gettext}) or to disabl
 NLS entirely (@option{--disable-nls}).
 @end ignore
 
-If you use GCC 2.95 it is recommended to use also:
+如果使用的是 GCC 2.95，我们还建议如下：
 
 @example
 $ @kbd{LIBS="-lgcc"}
 $ @kbd{export LIBS}
 @end example
 
-You can also get an @code{a.out} executable if you prefer:
+如果你想的话，你还可以得到一个 @code{a.out} 可执行文件：
 
 @example
 $ @kbd{CFLAGS="-O2 -Zmt"}
@@ -28229,59 +28091,37 @@ $ @kbd{./configure --prefix=c:/usr}
 $ @kbd{make}
 @end example
 
-@quotation NOTE
-Compilation of @code{a.out} executables also works with GCC 3.2.
-Versions later than GCC 3.2 have not been tested successfully.
+@quotation 提示
+@code{a.out} 可执行文件的编译在 GCC 3.2 下也是可用的。GCC 3.2 后的版本还没有测试成功过。
 @end quotation
 
-@samp{make install} works as expected with the EMX build.
+@samp{make install} 在 EMX 构建时会如预期的方式执行。
 
-@quotation NOTE
-Ancient OS/2 ports of GNU @command{make} are not able to handle
-the Makefiles of this package.  If you encounter any problems with
-@command{make}, try GNU Make 3.79.1 or later versions.  You should
-find the latest version on
-@uref{ftp://hobbes.nmsu.edu/pub/os2/}.@footnote{As of November 2014,
-this site is still there, but the author could not find a package
-for GNU Make.}
+@quotation 提示
+GNU @command{make} 的古老 OS/2 移植版本无法处理这个包中的 Makefile 文件。如果你使用 @command{make} 遇到了这样的问题，尝试一下 GNU Make 3.79.1 或者更新的版本。你应该在 @uref{ftp://hobbes.nmsu.edu/pub/os2/} 上查找最新版本。
+@footnote{2014 年的 11 月，这个站点都还在，但是作者没有找到 GNU Make 包。}
 @end quotation
 @end ifclear
 
 @node PC Testing
-@appendixsubsubsec Testing @command{gawk} on PC Operating Systems
+@appendixsubsubsec 在 PC 操作系统上测试 @command{gawk}
 
-Using @command{make} to run the standard tests and to install @command{gawk}
-requires additional Unix-like tools, including @command{sh}, @command{sed}, and
-@command{cp}. In order to run the tests, the @file{test/*.ok} files may need to
-be converted so that they have the usual MS-DOS-style end-of-line markers.
-Alternatively, run @command{make check CMP="diff -a"} to use GNU @command{diff}
-in text mode instead of @command{cmp} to compare the resulting files.
+使用 @command{make} 来执行标准的测试并安装 @command{gawk} 需要一些其他的类 Unix 的工具，这些工具包括 @command{sh}，@command{sed} 以及 @command{cp}。为了要执行测试，@file{test/*.ok} 文件必须要进行相应的更改，这样它们就有通常的 MS-DOS 风格的换行标志。另外，可以执行 @command{make check CMP="diff -a"} 来在文本模式下使用 GNU 的 @command{diff} 工具而不是 @command{cmp} 来比较结果文件。
 
 @ifclear FOR_PRINT
-Most
-of the tests work properly with Stewartson's shell along with the
-companion utilities or appropriate GNU utilities.  However, some editing of
-@file{test/Makefile} is required. It is recommended that you copy the file
-@file{pc/Makefile.tst} over the file @file{test/Makefile} as a
-replacement. Details can be found in @file{README_d/README.pc}
-and in the file @file{pc/Makefile.tst}.
+大多数的测试在 Stewartson 的 shell 环境中都应该是成功的，这个 Shell 中带有相应的工具以及适当的 GNU 工具。但是，需要对 @file{test/Makefile} 做一些修改。我们建议你复制 @file{pc/Makefile.tst} 文件到 @file{test/Makefile} 中进行替换。相关的细节可以在 @file{README_d/README.pc} 文件以及 @file{pc/Makefile.tst} 文件中找到。
 
-On OS/2 the @code{pid} test fails because @code{spawnl()} is used instead of
-@code{fork()}/@code{execl()} to start child processes.
-Also the @code{mbfw1} and @code{mbprintf1} tests fail because the needed
-multibyte functionality is not available.
+在 OS/2 中，由于使用了 @code{spawnl()} 而不是 @code{fork()}/@code{execl()} 来开启子进程，所以 @code{pid} 测试会失败。由于所需要的多字节函数不可用，所以 @code{mbfw1} 与 @code{mbprintf1} 测试也会失败。
 @end ifclear
 
 @node PC Using
-@appendixsubsubsec Using @command{gawk} on PC Operating Systems
+@appendixsubsubsec 在 PC 操作系统上使用 @command{gawk}
 @cindex operating systems, PC, @command{gawk} on
 @cindex PC operating systems, @command{gawk} on
 
-Under MS-DOS and MS-Windows, the Cygwin and MinGW environments support
-both the @samp{|&} operator and TCP/IP networking
-(@pxref{TCP/IP Networking}).
+在 MS-DOS 与 MS-Windows 平台下，Cygwin 与 MinGW 环境支持 @samp{|&} 操作符与 TCP/IP 网络（查看 @pxref{TCP/IP Networking}）。
 @ifclear FOR_PRINT
-EMX (OS/2 only) supports at least the @samp{|&} operator.
+EMX (仅 OS/2)至少支持 @samp{|&} 操作符。
 @end ifclear
 
 @cindex search paths
@@ -28291,27 +28131,14 @@ EMX (OS/2 only) supports at least the @samp{|&} operator.
 @cindex @code{;} (semicolon), @env{AWKPATH} variable and
 @cindex semicolon (@code{;}), @env{AWKPATH} variable and
 @cindex @env{AWKPATH} environment variable
-The MS-DOS and MS-Windows versions of @command{gawk} search for
-program files as described in @ref{AWKPATH Variable}.  However,
-semicolons (rather than colons) separate elements in the @env{AWKPATH}
-variable.  If @env{AWKPATH} is not set or is empty, then the default
-search path is @samp{@w{.;c:/lib/awk;c:/gnu/lib/awk}}.
+MS-DOS 与 MS-Windows 版本的 @command{gawk} 会搜索在 @ref{AWKPATH Variable}，中描述的程序文件。但是，是用分号（而不是冒号）来分隔 @env{AWKPATH} 变量中的元素。如果没有设置 @env{AWKPATH} 或者为空，则默认的搜索路径是 @samp{@w{.;c:/lib/awk;c:/gnu/lib/awk}}。
 
 @ifclear FOR_PRINT
 @cindex @command{gawk}, OS/2 version of
 @cindex @code{UNIXROOT} variable, on OS/2 systems
-The search path for OS/2 (32 bit, EMX) is determined by the prefix directory
-(most likely @file{/usr} or @file{c:/usr}) that has been specified as an option of
-the @command{configure} script as is the case for the Unix versions.
-If @file{c:/usr} is the prefix directory then the default search path contains @file{.}
-and @file{c:/usr/share/awk}.
-Additionally, to support binary distributions of @command{gawk} for OS/2
-systems whose drive @samp{c:} might not support long @value{FN}s or might not exist
-at all, there is a special environment variable.  If @env{UNIXROOT} specifies
-a drive then this specific drive is also searched for program files.
-E.g., if @env{UNIXROOT} is set to @file{e:} the complete default search path is
-@samp{@w{.;c:/usr/share/awk;e:/usr/share/awk}}.
+对于 OS/2(32位，EMX）的搜索路径是前缀路径来确定（多为 @file{/usr} 或者 @file{c:/usr}），在 Unix 版本的情况下，这个前缀已经在 @command{configure} 配置时的一个选项中进行了指定。如果 @file{c:/usr} 是目录缀，则默认的搜索路径包含 @file{.} 与 @file{c:/usr/share/awk}。另外，为了支持在 OS/2 系统中的二进制发布，在该系统上 @samp{c:} 分区有可能不支持长@value{FN}或者，或者根本就不存在，因此需要一个特殊的环境变量。如果 @env{UNIXROOT} 指定了一个驱动器，这个驱动器也会进行程序文件的搜索。比如，如果 @env{UNIXROOT} 被设置为 @file{e:}，则完全的默认搜索路径为 @samp{@w{.;c:/usr/share/awk;e:/usr/share/awk}}。
 
+#TODO
 An @command{sh}-like shell (as opposed to @command{command.com} under MS-DOS
 or @command{cmd.exe} under MS-Windows or OS/2) may be useful for @command{awk} programming.
 The DJGPP collection of tools@footnote{Available from

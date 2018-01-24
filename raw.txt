@@ -9676,10 +9676,10 @@ $ @command{gawk} @option{-i} @code{inplace} @option{-v} @code{INPLACE_SUFFIX}=.@
 另外，你必须还要有 GNU @code{Autotools} 安装在系统上（@code{Autoconf}，@code{Automake}，@code{Libtool} 以及 GNU @code{gettext}）。
 一个简单的构建与测试 @code{gawkextlib} 的过程如下。首先是构建与安装  @command{gawk}：
 @code{cd} .../@code{path}/@code{to}/@command{gawk}/@code{code}
-./@code{configure} @option{--prefix}=/@code{tmp}/@code{newgawk}   @code{Install} @code{in} /@code{tmp}/@code{newgawk} @code{for} @code{now}
+./@command{configure} @option{--prefix}=/@code{tmp}/@code{newgawk}   @code{Install} @code{in} /@code{tmp}/@code{newgawk} @code{for} @code{now}
 @code{make} && @code{make}                        @code{check} @code{Build} @code{and} @code{check} @code{that} @code{all} @code{is} @code{OK}
 @code{make} @code{install}                        @code{Install} @command{gawk}
-接下来，到 @code{http}://@code{sourceforge}.@code{net}/@code{projects}/@code{gawkextlib}/@code{files} 中下载 @code{gawkextlib} 以及任意的你想要构建的扩展。站点中的 @code{README} 文件说明了如何来构建代码。如果你将 @command{gawk} 安装在一个非标准的位置，你还要指定  ./@code{configure} @option{--with}-@command{gawk}=/@code{path}/@code{to}/@command{gawk} 来指定它。你可能需要使用 @code{sudo} 工具来安装 @command{gawk} 与@code{gawkextlib}，这视你所在的系统的工作方式。
+接下来，到 @code{http}://@code{sourceforge}.@code{net}/@code{projects}/@code{gawkextlib}/@code{files} 中下载 @code{gawkextlib} 以及任意的你想要构建的扩展。站点中的 @code{README} 文件说明了如何来构建代码。如果你将 @command{gawk} 安装在一个非标准的位置，你还要指定  ./@command{configure} @option{--with}-@command{gawk}=/@code{path}/@code{to}/@command{gawk} 来指定它。你可能需要使用 @code{sudo} 工具来安装 @command{gawk} 与@code{gawkextlib}，这视你所在的系统的工作方式。
 如果你写了一个扩展，而希望与其他的 @command{gawk} 用户一起分离，可以考虑通过 @code{gawkextlib} 项目来进行分发。查看这个项目的网站来获取更多的信息。
 16.9@code{}总结
 你可以为 @command{gawk} 用 C 或者 C++ ，并利用由 @command{gawk} 开发者所定义的应用程序接口（@code{API}）来写扩展（有时也叫插件）。
@@ -10125,14 +10125,14 @@ POSIX.@code{STD}
 在配置过程中使用的输入文件，用于产生实际的生成文档的 @code{Makefile}。
 @code{Makefile}.@code{am}
 */@code{Makefile}.@code{am}
-被 GNU @code{Automake} 软件使用的文件，以生成由 @code{Autoconf} 与 @code{configure} 使用的 @code{Makefile}.@code{in} 文件。
+被 GNU @code{Automake} 软件使用的文件，以生成由 @code{Autoconf} 与 @command{configure} 使用的 @code{Makefile}.@code{in} 文件。
 @code{Makefile}.@code{in}
 @code{aclocal}.m4
 @code{bisonfix}.@command{awk}
 @code{config}.@code{guess}
 @code{configh}.@code{in}
-@code{configure}.@code{ac}
-@code{configure}
+@command{configure}.@code{ac}
+@command{configure}
 @code{custom}.@code{h}
 @code{depcomp}
 @code{install}@option{-sh}
@@ -10144,10 +10144,9 @@ m4/*    这些文件与子目录在在不同的 Unix 系统中配置及编译 @c
 @code{awklib}/@code{Makefile}.@code{am}
 @code{awklib}/@code{Makefile}.@code{in}
 @code{awklib}/@code{eg}/*
-@code{awklib} 目录包含了 @code{extract}.@command{awk} 的复本（查看 11.3.7 从 @code{Texinfo} 源文件中提取程序， 在第 281 页），这个文件用于从本书的 @code{Texinfo} 源文件中提供例子程序。同时也包含了 @code{Makefile}.@code{in} 文件， @code{configure} 使用其来生成 @code{Makefile} 文件。@code{Makefile}.@code{am} 文件被  GNU @code{Automake} 用来创建 @code{Makefile}.@code{in} 文件。来自于 第十章 @command{awk} 函数库，在第 221 页，的库函数，以及来自于 11.3.9 使用库函数的简单方式，在第 286 页，的 @code{igawk} 程序，已经含在发布版本中，并且开箱即用。在安装过程中作为一部分进行安装。本书的其他程序在 @code{awklib} 等子目录中都可以获取 。
+@code{awklib} 目录包含了 @code{extract}.@command{awk} 的复本（查看 11.3.7 从 @code{Texinfo} 源文件中提取程序， 在第 281 页），这个文件用于从本书的 @code{Texinfo} 源文件中提供例子程序。同时也包含了 @code{Makefile}.@code{in} 文件， @command{configure} 使用其来生成 @code{Makefile} 文件。@code{Makefile}.@code{am} 文件被  GNU @code{Automake} 用来创建 @code{Makefile}.@code{in} 文件。来自于 第十章 @command{awk} 函数库，在第 221 页，的库函数，以及来自于 11.3.9 使用库函数的简单方式，在第 286 页，的 @code{igawk} 程序，已经含在发布版本中，并且开箱即用。在安装过程中作为一部分进行安装。本书的其他程序在 @code{awklib} 等子目录中都可以获取 。
 @code{extension}/*
 被  @command{gawk} 包含的例子扩展的源代码，手册，以及基础文件。查看 第十六章 编写 @command{gawk} 扩展，在第 349 页，来获取更多信息。
-#TODO
 @code{posix}/*     用于在 POSIX 兼容的系统上构建 @command{gawk} 所需要的文件。
 @code{pc}/*    用于在 @code{MS}@option{-Windows} 与 @code{OS}/2 系统上构建 @command{gawk} 所需要的文件（查看 @code{B}.3.1@code{}安装到 @code{PC} 操作系统，在第 425 页，获取相关信息）。
 @code{vms}/*   用于在 @code{Vax}/@code{VMS} 与 @code{OpenVMS} 系统上构建 @command{gawk} 所需要的文件（查看 @code{B}.3.2@code{}在 @code{Vax}/@code{VMS} 以及 @code{OpenVMS} 系统上编译安装 @command{gawk} ，在第 430 页，获取相关信息）。
@@ -10156,19 +10155,19 @@ m4/*    这些文件与子目录在在不同的 Unix 系统中配置及编译 @c
 一般情况下，你只需要两个命令来编译与安装 @command{gawk}。但是，如果你使用的是不常用的系统，你可能需要自己来为你的系统来配置 @command{gawk}。
 @code{B}.2.1 为 Unix@option{-like} 的系统编译 @command{gawk}
 在所有的现代由 Unix 派生出来的系统中，都可以使用上面的常规步骤，如 GNU/@code{Linux}，@code{BSD} 派生的系统，以及 @code{MS}@option{-Windows} 中的 @code{Cygwin} 环境。
-在解压了 @command{gawk} 发布文件后 切换到 @command{gawk}-4.1.2 目录。与大多的 GNU 软件类似，你通过执行 @code{configure} 文件来在系统上对 @command{gawk} 进行配置。这个程序是一个 @code{Bourne} @code{Shell} 脚本，由 GNU 的 @code{Autoconf} 自动产生。（@code{Autoconf} 软件在 @code{Autoconf}——配置脚本自动力生成，中有全面的描述，这个可以在自由软件基金会的网站上找到。）
+在解压了 @command{gawk} 发布文件后 切换到 @command{gawk}-4.1.2 目录。与大多的 GNU 软件类似，你通过执行 @command{configure} 文件来在系统上对 @command{gawk} 进行配置。这个程序是一个 @code{Bourne} @code{Shell} 脚本，由 GNU 的 @code{Autoconf} 自动产生。（@code{Autoconf} 软件在 @code{Autoconf}——配置脚本自动力生成，中有全面的描述，这个可以在自由软件基金会的网站上找到。）
 简单地运行下面的命令来配置 @command{gawk}：
-@code{sh} ./@code{configure}
+@code{sh} ./@command{configure}
 这会产生 @code{Makefile} 与你的系统匹配 @code{config}.@code{h}。@code{config}.@code{h} 文件描述了你的系统的各种特性。你可以编辑 @code{Makefile} 来改变 @code{CFLAGS} 变量，用以控制传递到 C 编译的命令行选项（如优化等级或者调试编译选项）。
 还有一种方法，你可以添加你自己的 @code{make} 变量到命令行中，像 @code{CC} 以及 @code{CFLAGS} 等，如下：
-@code{CC}=@code{cc} @code{CFLAGS}=@option{-g} @code{sh} ./@code{configure}
+@code{CC}=@code{cc} @code{CFLAGS}=@option{-g} @code{sh} ./@command{configure}
 查看文件 @code{INSTALL} 来获取详细内容。
-完成了 @code{configure}，并对 @code{Makefile} 做了相应修改，输入：
+完成了 @command{configure}，并对 @code{Makefile} 做了相应修改，输入：
 @code{make}
 不久后，你就可以有一个可以运行的 @command{gawk} 版本。所有的就是这些了。为了确认@command{gawk} 是可以工作正常的，执行 ‘@code{make} @code{check}’。所有的测试都应该是成功的。如果这些步骤没有成功，或者测试失败，检查 @code{README_d} 目录来查看是否找到已知的问题。如果在那里并没有相关的失败的描述内容，则发送一个 @code{Bug} 报告（查看 @code{B}.4@code{}报告问题与@code{BUG} ， 在第 434 页）。
 当然，一旦完成了构建  @command{gawk}，你可以安装它。为了安装 @command{gawk}，你还需要执行 ‘@code{make} @code{install}’，所执行的用户需要有一定的权限。如何来完成安装，不同的系统是不同的，但是在多数的系统中，你可以通过 @code{sudo} 来完成。则命令会变成 ‘@code{sudo} @code{make} @code{install}’。有可能有密码输入请求，在这之前，你应该有配置好哪些用户可以执行 @code{sudo} 命令。
 @code{B}.2.2@code{}其他配置选项 
-当从头编译 @command{gawk} 时，还有几个额外的选项可以用在 @code{configure} 命令行上，它们是：
+当从头编译 @command{gawk} 时，还有几个额外的选项可以用在 @command{configure} 命令行上，它们是：
 @option{--disable}@option{-extensions}
 禁用配置与构建 @code{extension} 目录下的例子扩展。在交叉编译的时候，这个很有用。默认的行为是动态地检查扩展是否可以配置与编译。
 @option{--disable}@option{-lint}
@@ -10178,14 +10177,14 @@ m4/*    这些文件与子目录在在不同的 Unix 系统中配置及编译 @c
 禁用所有的消息翻译功能。一般来说这并不是所期望的，但是可以给你带来一点性能提升。
 @option{--with}@option{-whiny}@option{-user}@option{-strftime}
 强制在低效的系统上使用 C 版本的 @code{strftime()} 函数。
-使用命令 ‘./@code{configure} @option{--help}’来查看 @code{configure} 提供的完整的选项列表。
+使用命令 ‘./@command{configure} @option{--help}’来查看 @command{configure} 提供的完整的选项列表。
 @code{B}.2.3@code{}配置过程 
 这一节只有在你了解 C 语言以及类 Unix 操作系统时才会有趣。
 @command{gawk} 的代码一般会尝试尽量符合正式的标准。这就是说，@command{gawk} 会使用由 @code{ISO} C 标准以及 POSIX 操作系统接口标准的库例程。@command{gawk} 源代码需要使用 @code{ISO} C 的编译器（1990 标准）。
 很多的 Unix 系统要么不支持 @code{ISO}，要么不支持 POSIX 标准。@command{gawk} 中的 @code{missing_d} 子目录包含了那些最可以缺失的函数。
-@code{configure} 生成的 @code{config}.@code{h} 文件包含了那些你编译 @command{gawk} 所在系统的特定特性。这个文件描述的三件事情是：可以包含哪些头文件，这样它们可以正确地包含，在你的 C 库中可以使用哪些标准的函数，以及其他的系统特性。如，有可能在 @code{stat} 结构中没有 @code{st_blksize} 元素。在这个情况下，‘@code{HAVE_STRUCT_STAT_ST_BLKSIZE}’ 就会被反定义。
-也有可能你的 C 编译器会对 @code{configure} 说谎。当某个库函数不可用时，不会以错误退出。为了解决这个问题，修改 @code{custom}.@code{h} 文件。使用适用于你的系统的 ‘#@code{ifdef}’ 或者 #@code{define} 所有那些应该定义而没有定义的常量，或者 #@code{undef} 那些本不应该定义而定义了的常量。@code{custom}.@code{h} 文件会被  @code{config}.@code{h} 文件自动力包含。
-有可能由 @code{Autoconf} 生成的 @code{configure} 文件在你的系统上没法工作。如果有问题，@code{configure}.@code{ac} 文件作为 @code{Autoconf} 的输入文件，你以修改这个文件来产生一个新版本的 @code{configure} 文件，使其可以运行在你的系统上（查看 @code{B}.4@code{}报告问题与@code{BUG} ，在第 434 页，来获取如何来报告 @command{gawk} 的配置问题）。类似的机制可以应用于 @code{configure}.@code{ac} 与/或者 @code{custom}.@code{h} 文件。
+@command{configure} 生成的 @code{config}.@code{h} 文件包含了那些你编译 @command{gawk} 所在系统的特定特性。这个文件描述的三件事情是：可以包含哪些头文件，这样它们可以正确地包含，在你的 C 库中可以使用哪些标准的函数，以及其他的系统特性。如，有可能在 @code{stat} 结构中没有 @code{st_blksize} 元素。在这个情况下，‘@code{HAVE_STRUCT_STAT_ST_BLKSIZE}’ 就会被反定义。
+也有可能你的 C 编译器会对 @command{configure} 说谎。当某个库函数不可用时，不会以错误退出。为了解决这个问题，修改 @code{custom}.@code{h} 文件。使用适用于你的系统的 ‘#@code{ifdef}’ 或者 #@code{define} 所有那些应该定义而没有定义的常量，或者 #@code{undef} 那些本不应该定义而定义了的常量。@code{custom}.@code{h} 文件会被  @code{config}.@code{h} 文件自动力包含。
+有可能由 @code{Autoconf} 生成的 @command{configure} 文件在你的系统上没法工作。如果有问题，@command{configure}.@code{ac} 文件作为 @code{Autoconf} 的输入文件，你以修改这个文件来产生一个新版本的 @command{configure} 文件，使其可以运行在你的系统上（查看 @code{B}.4@code{}报告问题与@code{BUG} ，在第 434 页，来获取如何来报告 @command{gawk} 的配置问题）。类似的机制可以应用于 @command{configure}.@code{ac} 与/或者 @code{custom}.@code{h} 文件。
 @code{B}.3@code{}安装到其他操作系统上 
 这一节描述如何将 @command{gawk} 安装到其他的非 Unix 系统上。
 @code{B}.3.1@code{}安装到 @code{PC} 操作系统 
@@ -10200,11 +10199,11 @@ m4/*    这些文件与子目录在在不同的 Unix 系统中配置及编译 @c
 @code{install}@option{-info} @option{--info}@option{-dir}=@code{x}:/@code{usr}/@code{info} @code{x}:/@code{usr}/@code{info}/@code{gawkinet}.@code{info}
 二进制发布版本中可能还包含单独的文件，其中包含了一些额外的更详细的安装指导。
 @code{B}.3.1.2@code{}为 @code{PC} 操作系统编译 @command{gawk} 
-可以使用来自于@code{DJ} @code{Delorie}（ 只应用于 @code{DJGPP}: @code{MS}@option{-DOS} ），@code{MinGW}（Windows32）或者 @code{Eberhard} @code{Mattes}(@code{EMX}: @code{MS}@option{-DOS}， Windows32 与 @code{OS}/2) 的 GNU 开发工具为 @code{MS}@option{-DOS}，Windows32 与 @code{OS}/2 编译 @command{gawk}。文件 @code{README_d}/@code{README}.@code{pc} 中包含了额外的提示，@code{pc}/@code{Makefile} 包含了编译编译选项的重要信息。
+可以使用来自于DJ Delorie（ 只应用于 DJGPP: MS-DOS ），MinGW（Windows32）或者 Eberhard Mattes(EMX: MS-DOS， Windows32 与 OS/2) 的 GNU 开发工具为 MS-DOS，Windows32 与 OS/2 编译 @command{gawk}。文件 README_d/README.pc 中包含了额外的提示，pc/Makefile 包含了编译编译选项的重要信息。
 为了为 @code{MS}@option{-DOS} 与 Windows32 构建 @command{gawk}，将 @code{pc} 目录下（除了 @code{ChangeLog}）的文件与 @command{gawk} 其他的源文件复制到某个目录下，然后调用 @code{make} 来执行特定的目标以构建 @command{gawk}。从 @code{pc} 目录下复制而来的 @code{Makefile} 中包含了一个配置段，其中带有相应的注释，有可能需要修改以使其可以使用你的 @code{make} 工具用于其上。
 @code{Makefile} 支持很多的构建目标，用于构建不同的 @code{MS}@option{-DOS} 与 Windows32 版本。如果 @code{make} 时没有带上目标，则可用的目标会被打印出来。如，要使用 @code{DJGPP} 工具来构建 @command{gawk}，输入‘@code{make} @code{djgpp}’。（在编译时所需要的 @code{DJGPP} 工具可以在 @code{ftp}://@code{ftp}.@code{delorie}.@code{com}/@code{pub}/@code{djgpp}/@code{current}/v2gnu/ 找到）使用 @code{MinGW} 构建本地的 @code{MS}@option{-Windows} 的二进制版本的 @command{gawk}，则输入 ‘@code{make} mingw32’。
 @command{gawk} 的 32 位 @code{EMX} 版本在 @code{OS}/2 下是“开箱即用”的。但是，我们强烈建议你用 GCC2.95.3 来进行编译。总的来说，可以通过下面的方式来对 @command{gawk} 进行编译：
-$ ./@code{configure}
+$ ./@command{configure}
 $ @code{make}
 但是我们不建议这么做。为了要取得一个 @code{OMF} 的可执行文件，在你的 @code{sh} 提示符下，你应该使用下面的命令行：
 $ @code{CFLAGS}="-O2 @option{-Zomf} @option{-Zmt}"
@@ -10213,7 +10212,7 @@ $ @code{LDFLAGS}="@option{-s} @option{-Zcrtdll} @option{-Zlinker} /@code{exepack
 $ @code{export} @code{LDFLAGS}
 $ @code{RANLIB}="@code{echo}"
 $ @code{export} @code{RANLIB}
-$ ./@code{configure} @option{--prefix}=@code{c}:/@code{usr}
+$ ./@command{configure} @option{--prefix}=@code{c}:/@code{usr}
 $ @code{make} @code{AR}=@code{emxomfar}
 这是对使用 @code{GCC} 2.@code{x} 的建议。你可以使用任何其他的环境集变量（自包含的）以及编译选项。
 如果使用的是 @code{GCC} 2.95，我们还建议如下：
@@ -10225,7 +10224,7 @@ $ @code{export} @code{CFLAGS}
 $ @code{LDFLAGS}="@option{-s} @option{-Zstack} 0x6000"
 $ @code{LIBS}="@option{-lgcc}"
 $ @code{unset} @code{RANLIB}
-$ ./@code{configure} @option{--prefix}=@code{c}:/@code{usr}
+$ ./@command{configure} @option{--prefix}=@code{c}:/@code{usr}
 $ @code{make}
 提示：@code{a}.@code{out} 可执行文件的编译在 GCC3.2 下也是可用的。GCC3.2 后的版本还没有测试成功过。
 ‘@code{make} @code{install}’在 @code{EMX} 构建时会如预期的方式执行。
@@ -10237,8 +10236,9 @@ $ @code{make}
 @code{B}.3.1.4@code{}在@code{PC} 操作系统上使用 @command{gawk}
 在 @code{MS}@option{-DOS} 与 @code{MS}@option{-Windows} 平台下，@code{Cygwin} 与 @code{MinGW} 环境支持 ‘|&’操作符与 TCP/IP 网络（查看 12.4 利用 @command{gawk} 进行网络通信， 在第 306 页）。@code{EMX} (仅 @code{OS}/2)至少支持 ‘|&’ 操作符。
 @code{MS}@option{-DOS} 与 @code{MS}@option{-Windows} 版本的 @command{gawk} 会搜索在 2.5.1 环境变量 @code{AWKPATH} ，在第 43 页，中描述的程序文件。但是，是用分号（而不是冒号）来分隔 @code{AWKPATH} 变量中的元素。如果没有设置 @code{AWKPATH} 或者为空，则默认的搜索路径是 ‘.;@code{c}:/@code{lib}/@command{awk};@code{c}:/@code{gnu}/@code{lib}/@command{awk}’。
-对于 @code{OS}/2(32@code{}位，@code{EMX}）的搜索路径是前缀路径来确定（多为 /@code{usr} 或者 @code{c}:/@code{usr}），在 Unix 版本的情况下，这个前缀已经在 @code{configure} 配置时的一个选项中进行了指定。如果 @code{c}:/@code{usr} 是目录缀，则默认的搜索路径包含 ‘.’ 与 ‘@code{c}:/@code{usr}/@code{share}/@command{awk}’。另外，为了支持在 @code{OS}/2 系统中的二进制发布，在该系统上 ‘@code{c}:’分区有可能不支持长文件或者，或者根本就不存在，因此需要一个特殊的环境变量。如果 @code{UNIXROOT} 指定了一个驱动器，这个驱动器也会进行程序文件的搜索。比如，如果 @code{UNIXROOT} 被设置为 ‘@code{e}:’，则完全的默认搜索路径为 ‘.;@code{c}:/@code{usr}/@code{share}/@command{awk};@code{e}:/@code{usr}/@code{share}/@command{awk}’。
+对于 @code{OS}/2(32@code{}位，@code{EMX}）的搜索路径是前缀路径来确定（多为 /@code{usr} 或者 @code{c}:/@code{usr}），在 Unix 版本的情况下，这个前缀已经在 @command{configure} 配置时的一个选项中进行了指定。如果 @code{c}:/@code{usr} 是目录缀，则默认的搜索路径包含 ‘.’ 与 ‘@code{c}:/@code{usr}/@code{share}/@command{awk}’。另外，为了支持在 @code{OS}/2 系统中的二进制发布，在该系统上 ‘@code{c}:’分区有可能不支持长文件或者，或者根本就不存在，因此需要一个特殊的环境变量。如果 @code{UNIXROOT} 指定了一个驱动器，这个驱动器也会进行程序文件的搜索。比如，如果 @code{UNIXROOT} 被设置为 ‘@code{e}:’，则完全的默认搜索路径为 ‘.;@code{c}:/@code{usr}/@code{share}/@command{awk};@code{e}:/@code{usr}/@code{share}/@command{awk}’。
 如像 @code{sh} 样的 @code{shell}（相比于 @code{MS}@option{-DOS} 中的 @code{command}.@code{com} 或者 @code{MS} @code{Windows} 或者 @code{OS}/2 中的 @code{cmd}.@code{exe}）对于 @command{awk} 编译会大有用处。@code{DJGPP} 工具组件包含了一个 @code{MS}@option{-DOS} 版本的 @code{Bash}，也包含了多个用于 @code{OS}/2 中的 @code{Shell}，如 @code{ksh}。
+#TODO
 在 @code{MS}@option{-Windows}，@code{OS}/2 以及 @code{MS}@option{-DOS} 中，@command{gawk}（以及很多的其他的文件程序）会默默地将 ‘\@code{r}\@code{n}’这样的行尾转换成成 ‘\@code{n}’，或者将输入中的 ‘\@code{n}’转换成 ‘\@code{r}\@code{n}’输出。特殊变量 @code{BINMODE}（@code{c}.@code{e}.）可以控制这样的转换，并做如下解释：
 如果 @code{BINMODE} 为 “@code{r}”，或者 1，则二进制模式被设置在“读”操作上（即在读时不会进行转换。
 如果 @code{BINMODE} 为 “@code{w}”或者 2，则二进制模式设计在“写”操作上（即写时不会进行转换。）
@@ -10259,9 +10259,9 @@ $ @code{make}
 如果你在 @code{MS}@option{-Windows} 系统中使用 @code{Cygwin}环境，则@command{gawk}可以构建完成后即可使用。这个提供了对使用 @code{Bash}，@code{GCC}，GNU @code{Make} 及其他 GNU 程序的 GNU/@code{Linux} 系统很好的模拟环境。在 @code{Cygwin} 上编译与安装与在 Unix 系统上是一样的：
 @code{tar} @option{-xvpzf} @command{gawk}-4.1.2.@code{tar}.@code{gz}
 @code{cd} @command{gawk}-4.1.2
-./@code{configure}
+./@command{configure}
 @code{make} && @code{make} @code{check}
-与同一个系统上的 GNU/@code{Linux} 相比，‘@code{configure}’在 @code{Cygwin} 中要花长得多的时间。但是，它一旦完成，就可以像通常那样使用 ‘@code{make}’。
+与同一个系统上的 GNU/@code{Linux} 相比，‘@command{configure}’在 @code{Cygwin} 中要花长得多的时间。但是，它一旦完成，就可以像通常那样使用 ‘@code{make}’。
 @code{B}.3.1.6@code{}在@code{MSYS} 环境中使用 @command{gawk} 
 在 @code{MS}@option{-Windows} 系统中的 @code{MSYS} 环境，@command{gawk} 会自动地使用读写二进制模式。所以，没有必要设置 @code{BINMODE} 变量。
 对于其他已移植到 @code{MS}@option{-Windows} 的类 Unix 组件，这可能会导致问题。因为它们可能认为 @command{gawk} 会自动转换 “\@code{r}\@code{n}”，但是实际上却没有。
@@ -10405,7 +10405,7 @@ Unix @command{awk}    @code{Brian} @code{Kernighan} 是 Unix @command{awk} 的�
 @code{wget} @code{http}://@code{ftp}.@code{gnu}.@code{org}/@code{gnu}/@command{gawk}/@command{gawk}-4.1.2.@code{tar}.@code{gz}
 @code{tar} @option{-xvpzf} @command{gawk}-4.1.2.@code{tar}.@code{gz}
 @code{cd} @command{gawk}-4.1.2
-./@code{configure} && @code{make} && @code{make} @code{check}
+./@command{configure} && @code{make} && @code{make} @code{check}
 @command{gawk} 可以构建在非 POSIX 系统上。当前支持的系统包含使用 @code{DJGPP}，@code{MSYS}，@code{MinGW} 以及 @code{Cygwin} 的 @code{MS}@option{-Windows}，使用 @code{EMX} 的 @code{OS}/2，以及 @code{Vax}/@code{VMS} 与 @code{OpenVMS}。在相应系统上的指导也在这个附录中了。
 @code{Bug} 报告应该通过邮件发送给 @code{bug}-@command{gawk}@@code{gnu}.@code{org}。@code{Bug} 报告应该使用英语，并包含 @command{gawk} 的版本，如何进行编译的，以及一个短程序与数据文件来说明其中的问题。
 很多的的自由获取 @command{awk} 实现，很多与 POSIX 兼容，有的则兼容得较少。
@@ -10475,7 +10475,7 @@ C.2.3@code{}将 @command{gawk} 移植到新系统中
 按这样的步骤，可以使其容易来将你的变化整合到 @command{gawk} 中，并使其与其他的已经存在操作系统代码和平共处。
 在你提供与维护的代码中，可以自由使用你的风格以及括号布局。
 C.2.4@code{}为什么自动生成的文件要放在 @code{Git} 中 
-如果你查看  @code{Git} 库中的 @command{gawk} 源代码，你会注意到里面包含了由 GNU 基础工作自动力生成的文件，如 @code{Makefile}.@code{in} 由 @code{Automake} 生成，甚至是由 @code{Autoconf} 生成的 @code{configure}。
+如果你查看  @code{Git} 库中的 @command{gawk} 源代码，你会注意到里面包含了由 GNU 基础工作自动力生成的文件，如 @code{Makefile}.@code{in} 由 @code{Automake} 生成，甚至是由 @code{Autoconf} 生成的 @command{configure}。
 这个不同于不存储衍生文件其他自由软件项目，因为这使得库不会这么混乱，而且更容易在比较在不同提交之间的真正改变。但是，有几个原因，使得 @command{gawk} 要把所有的东西放在库中。
 首先，这更容易生成完整的版本，而不依赖于其他工作的能力（有一些老的，被丢弃，甚至没办法找得到。）
 一个极端例子是，如果你想编译，比方说 V7 的 @command{awk}，你会发现你不仅要用 V7 的 @code{yacc} 来处理，还需要 V7 的 @code{lex}。对于后者，在现代的 GNU/@code{Linux} 系统根本没有。 
@@ -10484,13 +10484,13 @@ C.2.4@code{}为什么自动生成的文件要放在 @code{Git} 中
 这使得我们有第二个理由（更强的）为什么把所有的文件都放在 @code{Git} 中。简单地说就是你让谁开心——是 @command{gawk} 的开发者，还是仅想取某个版本然后试试它的用户？
 @command{gawk} 的维护维护者想全世界所有的对 @command{awk} 有兴趣的用户，只要克隆库，然后检出所感兴趣的分支构建即可。而不需要他们必须有正确的 @code{autotools}  版本。这也是 @code{bootstrap}.@code{sh} 文件的目的。它以正确的顺序来处理不同的文件，这样：
 # @code{The} @code{canonical} @code{incantation} @code{for} @code{building} GNU @code{software}:
-./@code{bootstrap}.@code{sh} && ./@code{configure} && @code{make}
+./@code{bootstrap}.@code{sh} && ./@command{configure} && @code{make}
 也可以工作。
 这对于主线以及 @command{gawk}@option{-X}.@code{Y}@option{-stable} 分支来说尤其重要。
 再者，@command{gawk} 的维护者也觉得这对于 @command{gawk} 的开发者也非常重要。当某人尝试检出 @code{xgawk} 的分支 来构建时，却发现不能。（没有 @code{ltmain}.@code{sh} 文件，也不知道如何来生成，并且这也不是唯一的问题。）
 此人会感觉精疲力尽。对于相应的分支，维护者与 @code{Jane} 这样的想构建从库中取得的 @command{gawk}-4.1@option{-stable} 用户没有什么不同。
 因此，维护者觉得对于任何分支而言，上面的代码可能工作，这样不仅是重要，而且非常关键。
-第三个原因是，如果没有这些文件，使用 ‘@code{git} @code{bisect}’来查找引入 @code{bug} 的提交会变成相当困难。维护者会在其他的项目中使用这个方法，这个项目需要运行自举脚本，以创建 @code{configure} 等文件，这相当痛苦。当库自己是自包含的，使用  @code{git} @code{bisect} 就相应容易了。
+第三个原因是，如果没有这些文件，使用 ‘@code{git} @code{bisect}’来查找引入 @code{bug} 的提交会变成相当困难。维护者会在其他的项目中使用这个方法，这个项目需要运行自举脚本，以创建 @command{configure} 等文件，这相当痛苦。当库自己是自包含的，使用  @code{git} @code{bisect} 就相应容易了。
 有什么结果与/或者采取什么行动呢？
 我们不介意在不同的分支下有不同的文件，这是不同的 @code{autotools} 版本的结果。
 这是维护者的事来合并与处理。
@@ -10500,7 +10500,7 @@ C.2.4@code{}为什么自动生成的文件要放在 @code{Git} 中
 @code{wget} @code{http}://@code{ftp}.@code{gnu}.@code{org}/@code{gnu}/@code{package}/@code{package}@option{-x}.@code{y}.@code{z}.@code{tar}.@code{gz}
 @code{tar} @option{-xpzvf} @code{package}@option{-x}.@code{y}.@code{z}.@code{tar}.@code{gz}
 @code{cd} @code{package}@option{-x}.@code{y}.@code{z}
-./@code{configure} && @code{make} && @code{make} @code{check}
+./@command{configure} && @code{make} && @code{make} @code{check}
 @code{make} @code{install} # @code{as} @code{root}
 上面大多数一开始是由其他的 @command{gawk} 维护者写的。有一个开发者提出的反对意见“... 从 @code{Git} 库中提取源代码的人并不都是终端用户。”
 但是，事情不是这么回事。有“大牛级的 @command{awk} 用户”，他们可以构建 @command{gawk}（使用之前所列的代码），但是他们没办法用 C 写程序。所以，主要的分支 应该一真保持是可构建的。

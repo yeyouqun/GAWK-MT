@@ -14,4 +14,8 @@ suggestion.
 
 it seems that a ')' is missed in '(@pxref{Uniq Program},'
 
-
+//
+Use an @samp{#ifdef} that is appropriate for your system, and either
+@code{#define} any constants that @command{configure} should have defined but
+didn't, or @code{#undef} any constants that @command{configure} defined and
+should not have. 

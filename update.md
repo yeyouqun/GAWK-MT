@@ -441,3 +441,20 @@
 
 改动
 > API 版本可以在编译时刻获得。它在 C 语言预处理中定义以支持条件编译，以及作为枚举型常量用于 debug：
+
+
+## ?
+英文原文
+> @command{gawk} can be compiled for MS-DOS, Windows32, and OS/2 using
+> MinGW (Windows32) or Eberhard
+> Mattes (EMX: MS-DOS, Windows32 and OS/2).
+
+译文
+> 可以使用来自于DJ Delorie（ 只应用于 DJGPP: MS-DOS ），MinGW（Windows32）或者 Eberhard Mattes(EMX: MS-DOS， Windows32 与 OS/2) 的 GNU 开发工具为 MS-DOS，Windows32 与 OS/2 编译 @command{gawk}。文件 README_d/README.pc 中包含了额外的提示，pc/Makefile 包含了编译编译选项的重要信息。
+
+改动
+> 可以使用来自于 MinGW（Windows32）或者 Eberhard Mattes(EMX: MS-DOS，Windows32 与 OS/2) 为 MS-DOS，Windows32 与 OS/2 编译 @command{gawk}。
+
+## 
+删除
+要使用 DJGPP 工具来构建 @command{gawk}，输入‘make djgpp’。（在编译时所需要的 DJGPP 工具可以在 ftp://ftp.delorie.com/pub/djgpp/current/v2gnu/ 找到）
