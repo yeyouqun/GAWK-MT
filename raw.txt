@@ -14,7 +14,7 @@ GNU @command{awk} 4.1 版用户指南
 我跟 @code{Arnold} @code{Robbins} 是好朋友。我们由于 @code{AWK} 因缘际会而结识。这是好几年前的事了。当时我正开始一份新工作，并注意到在公司角落里放着一台没用的 Unix 计算机。没有人知道怎么使用它，我也不会。但是，几天后，它跑起来了，并且我就是 @code{root}，也是唯一的用户。从那天起，我就开始从一个统计分析师向一个 Unix 程序员转变了。
 我经常往返于图书馆与书店，搜索跟 Unix 相关的图书。有一次找到一本灰色的 @code{AWK} 相关的书，即 @code{a}.@code{k}.@code{a}. @code{Alfred} @code{V}. @code{Aho}， @code{Brian} @code{W}. @code{Kernighan}， 与 @code{Peter} @code{J}. @code{Weinberger} 写的 @code{The} @code{AWK} @code{Programming} @code{Language}    (@code{Addison}@option{-Wesley}， 1988)。@command{awk} 简洁的编程规范——就是在输入中查找某种模式的字串并执行相应动作——经常能够将复杂的或者冗长的操作化为几行代码。我非常兴奋，并着手开始利用 @code{AWK} 进行编程。
 可是，我计算机上的 @command{awk} 是在灰色书里所描述的一个受限的语言版本。而我发现我的计算机中的就是“旧 @command{awk}”，而书中讲述的是“新 @command{awk}”。我知道这是典型情况；旧版本不肯让位，也不愿意放弃自己的名字。如果一个系统有一个“新 @command{awk}”，就会毫无例外地叫做 @code{nawk}，并且有几个系统有这样的软件。取得 @code{nawk} 的方式是通过 @code{prep}.@code{ai}.@code{mit}.@code{edu} 的 @code{ftp} 下载源代码。@command{gawk} 是一个由 @code{David} @code{Trueman} @code{and} @code{Arnold} 所写的新版本的 @command{awk}，并可以在 @code{GNUL} @code{General} @code{Public} @code{License} 的许可下取得。
-（顺便说一句，现在找“新 @command{awk}”很容易了，GNU/@code{Linux} 就带有，你也可以在大多数系统中下载二进制版本或者源代码；我老婆就在他的 @code{VMS} @code{BOX} 中使用 @command{gawk}。）
+（顺便说一句，现在找“新 @command{awk}”很容易了，GNU/Linux 就带有，你也可以在大多数系统中下载二进制版本或者源代码；我老婆就在他的 VMS @code{BOX} 中使用 @command{gawk}。）
 我的 Unix 系统因闲置而被使用起来，当然也还不会连接到网络中。因此，很明显由于@command{gawk} 的存在，以及 Unix 社会社区的一般特点，我需要一个“新 @command{awk}”，因此，我就写了一个，我把它叫做 @command{mawk}。在我完成前，我已经知道了 @command{gawk}，但是已经太迟了。因此，我还是把 @command{mawk} 发送到了 @code{comp}.@code{source} 的新闻组里。
 几天后，我收到了来自 @code{Arnold} 的邮件，里面他介绍了一下他自己。他建议我分享 @command{mawk} 的设计与算法，并且提交一个 POSIX 标准草案，这样我就能够更新 @command{mawk} 来支持 @code{AWK} @code{Programming} @code{Language} 发布后的语言扩展。
 袒白讲，如果我们的角色互换，我可能就不会如此开放，我们也就可能从不会见面。我很高兴我们见了一面。他是一个 @code{AWK} 专家中的专家，也是确实是个好人。@code{Arnold} 为 @code{Free} @code{Software} @code{Foundation} 贡献了很多的才能与时间。
@@ -51,11 +51,11 @@ GNU 版本的 @command{awk} 称为 @command{gawk}，使用恰当的参数或者�
 排序数据
 测评并调试 @command{awk} 程序
 用 C/C++ 编写函数以扩展语言功能
-本书会向你们传授@command{awk}语言，并告诉你们如何来有效地使用它。你有可能已经熟悉基本的系统命令，如 @code{cat}、@code{ls} 等，也熟悉一些基本的 @code{shell} 工具，如输入输出重定向以及管道。
-@command{awk} 语言的实现可以在许多不同的计算机环境中获取。本书除了描述 @command{awk} 语言的总体，也会描述@command{awk} 的特殊实现，即 @command{gawk}（表示 GNU @command{awk}）。@command{gawk} 在很多 Unix 系统下运行，包括从 @code{Intel} 架构的 @code{PC} 机，到大型机系统。@command{gawk} 也被移植到了 @code{Mac} @code{OS} 平台，@code{Windows} 平台（所有版本）以及 @code{OS}/2 的 @code{PC} 机，还有 @code{OpenVMS}  系统上。 
+本书会向你们传授@command{awk}语言，并告诉你们如何来有效地使用它。你有可能已经熟悉基本的系统命令，如 @code{cat}、@code{ls} 等，也熟悉一些基本的 shell 工具，如输入输出重定向以及管道。
+@command{awk} 语言的实现可以在许多不同的计算机环境中获取。本书除了描述 @command{awk} 语言的总体，也会描述@command{awk} 的特殊实现，即 @command{gawk}（表示 GNU @command{awk}）。@command{gawk} 在很多 Unix 系统下运行，包括从 @code{Intel} 架构的 @code{PC} 机，到大型机系统。@command{gawk} 也被移植到了 @code{Mac} OS 平台，Windows 平台（所有版本）以及 OS/2 的 @code{PC} 机，还有 OpenVMS  系统上。 
 译序
 这是我第一次翻译这么长的书。
-当我看到 @code{GAWK} 简单的语言与强大的功能时，我于是想到网上查找一些中文的资料，以快速学习一下这个工具，这样可以方便我在处理 @code{Linux} 字串时能够使用到它。
+当我看到 @code{GAWK} 简单的语言与强大的功能时，我于是想到网上查找一些中文的资料，以快速学习一下这个工具，这样可以方便我在处理 Linux 字串时能够使用到它。
 但是我很失望，找了很久，能够找到的资料基本上是支离破碎的，并没有完整全面的中文手册。我于是求其次地找了一个英文文档，其原名为《@code{GAWK}: @code{Effective} @code{AWK} @code{Programming}》，由 @code{Arnold} @code{D}. @code{Robbins}，即 @command{gawk} 当前的主要维护者之一编写。初看之下，里面的内容浅显易懂，正好符合我自己的需求。因为这个原因，我萌发了将这个手册翻译为中文的想法。但是我拿不准我是否有这样的坚持，能够将这个手册全部翻译出来。
 我长久都没有动手，主要是因为没有这个魄力下定决心来做这件事情，再一个对于自己的语言能力也不太自信。一年后，这个想法一直在大脑里挥之不去。于是心里盘算，英文文档大概有@code{}500@code{}多页，如果我每天翻译两页，则一年后，怎么着也能够把这个文档翻译出来。并且，如果能够翻译到四页，则所需要的时间立即减少一半。翻译一本英文书，除去能力外，还得看自己是不是能够放弃翻译时的功利想法，觉得这么做是否值得。并在这种情况下，是否能够坚持一个较长而无味的过程，最后将文档翻译出来。最后，我还是下定决心，试一试。
 于是我第一步是将 @code{PDF} 格式的英文文档转换成 @code{Word} 文档（我用其他的工具转换过，但是结果不是很好。因为原来的 @code{PDF} 文档中有很多特别的格式，在 @code{Word} 中很难控制。所以一不做，二不休，干脆把文字复制出来，再调整其格式与原来的 @code{PDF} 相符。我不知道这么做是不是很蠢，并有违程序员懒的美名！）。光这个事情就耗了我近一个星期的时间，2016 年春节前把这个底本做好了，并且开始了翻译。
@@ -67,7 +67,7 @@ GNU 版本的 @command{awk} 称为 @command{gawk}，使用恰当的参数或者�
 4. 翻译能力是否有大的提高，这个不好说，但是应该有一点吧。
 这里的文字，几乎都是一个字一个字码起来，而且也是第一次翻译，里面肯定还是有很多错误的地方，也有一些词不达意的地方，对于汉语的掌握有欠火候，也会使得翻译出来的行文没有那么符合中文习惯，或者不够优美。这些真还得要各位海涵，如果大家觉得这个翻译对大家有一点作用，我就觉得这些付出也值得了。如果读者更慷慨一点，能够告诉我哪里有问题，或者有一些改进的建议那就更好了。如果有这方面的改进，请发邮件到 @code{yeyouqun}@163.@code{com}。
 我希望我的一点小努力，也为中国的软件事业做了一点点贡献。
-在最后，如果要有什么感谢的，首先得要感谢自由软件运动的发起者们。如果没有他们，就不会有自由软件社区，也就不会有 GNU/@code{Linux}，也就没有 @code{GAWK} 这些优秀的工具。其次还要感谢原文的作者。别人也是自由软件的拥趸，如果没有他们的先期付出，也就没有这个文档的存在。目前还只有我一个人在翻译这个文档，如果可以，我想小激动地感谢一下自己。我希望以后感谢列表能够变得更长。希望更多的人参与到完善它的过程里来。
+在最后，如果要有什么感谢的，首先得要感谢自由软件运动的发起者们。如果没有他们，就不会有自由软件社区，也就不会有 GNU/Linux，也就没有 @code{GAWK} 这些优秀的工具。其次还要感谢原文的作者。别人也是自由软件的拥趸，如果没有他们的先期付出，也就没有这个文档的存在。目前还只有我一个人在翻译这个文档，如果可以，我想小激动地感谢一下自己。我希望以后感谢列表能够变得更长。希望更多的人参与到完善它的过程里来。
 对了，我想感谢一下我儿子。好多次我打开电脑开启一天的翻译工作的时候，他经常会在键盘上随意敲击，使得我还得花掉一些时间来撤销他所做的“工作”。而且还要嚷着要听 《@code{ABCD} 歌》什么的，还得陪他听他所说的一万分钟那么久。
 不自量力的叶佑群
 2016@code{}年 4 月 
@@ -92,8 +92,8 @@ GNU 项目及本书  15
 1.1.3 运行长程序    22
 1.1.4 可执行的 @command{awk} 程序 22
 1.1.5 @command{awk}程序中的注释   23
-1.1.6 @code{Shell}引号问题 24
-1.1.6.1 @code{MS}@option{-Windows}批处理文件中的引号问题    26
+1.1.6 Shell引号问题 24
+1.1.6.1 MS-Windows批处理文件中的引号问题    26
 1.2 例子中使用的数据文件    27
 1.3 一些简单例子    28
 1.4 两规则的例子    29
@@ -218,7 +218,7 @@ GNU 项目及本书  15
 7.1.4. @code{BEGIN} 与 @code{END} 规则中的输入输出@code{}2   142
 7.1.5 @code{BEGINFILE} 与 @code{ENDFILE} 特殊模式 143
 7.1.7 空模式    144
-7.2 在程序中使用 @code{Shell} 变量 144
+7.2 在程序中使用 Shell 变量 144
 7.3 动作    145
 7.4 动作中的控制语句    146
 7.4.1 @code{if}@option{-else} 语句  146
@@ -284,7 +284,7 @@ GNU 项目及本书  15
 10.2.6 将数组合并成字串 228
 10.2.7 管理时间 229
 10.2.8 一次读取整个文件 231
-10.2.9 将字串用引号引起并传递给 @code{Shell}   232
+10.2.9 将字串用引号引起并传递给 Shell   232
 10.3 数据文件管理   232
 10.3.1 注意数据文件的边界   233
 10.3.2 重新读取当前文件 234
@@ -455,15 +455,15 @@ GNU 项目及本书  15
 @code{B}.3.1.2@code{}为 @code{PC} 操作系统编译 @command{gawk}  426
 @code{B}.3.1.3@code{}在@code{PC}操作系统上测试@command{gawk}   427
 @code{B}.3.1.4@code{}在@code{PC} 操作系统上使用 @command{gawk} 428
-@code{B}.3.1.5@code{}在@code{Cygwin} 中使用 @command{gawk} 429
+@code{B}.3.1.5@code{}在Cygwin 中使用 @command{gawk} 429
 @code{B}.3.1.6@code{}在@code{MSYS} 环境中使用 @command{gawk}   430
-@code{B}.3.2@code{}在 @code{Vax}/@code{VMS} 以及 @code{OpenVMS} 系统上编译安装 @command{gawk}    430
-@code{B}.3.2.1@code{}在@code{VMS} 上编译 @command{gawk}    430
-@code{B}.3.2.2@code{}在 @code{VMS} 编译 @command{gawk} 动态扩展    431
-@code{B}.3.2.3@code{}在@code{VMS} 上安装@command{gawk} 432
-@code{B}.3.2.4@code{}在 @code{VMS} 上运行 @command{gawk}   433
-@code{B}.3.2.5 @code{VMS} 的 @code{GNV} 项目 434
-@code{B}.3.2.6@code{}有一些 @code{VMS} 系统有旧版本的 @command{gawk}   434
+@code{B}.3.2@code{}在 @code{Vax}/VMS 以及 OpenVMS 系统上编译安装 @command{gawk}    430
+@code{B}.3.2.1@code{}在VMS 上编译 @command{gawk}    430
+@code{B}.3.2.2@code{}在 VMS 编译 @command{gawk} 动态扩展    431
+@code{B}.3.2.3@code{}在VMS 上安装@command{gawk} 432
+@code{B}.3.2.4@code{}在 VMS 上运行 @command{gawk}   433
+@code{B}.3.2.5 VMS 的 @code{GNV} 项目 434
+@code{B}.3.2.6@code{}有一些 VMS 系统有旧版本的 @command{gawk}   434
 @code{B}.4@code{}报告问题与@code{BUG}    434
 @code{B}.5@code{}其他可自由获取的 @command{awk} 实现    435
 @code{B}.6@code{}总结 437
@@ -545,7 +545,7 @@ $ @command{awk} 1 /@code{dev}/@code{null}
 GNU 通用公共许可，在第 465 页，与 GNU 自由文档许可，在第 466 页，提供本书中源代码以及本书所使用到的两个许可证协议。
 排版约定
 本书是通过 @code{TextInfo}  完成的。这是一种文档格式化语言。单一的 @code{TexInfo} 源文件，即可用于产生在线版本的文档，也可以产生打印输出的文档。因为这个原因，其排版约定与你所读其他的书可能有一些差异。
-你在命令行上输入的例子，由通用的@code{Shell} 主次提示符，‘$’与‘>’引导。命令行的输出由字符“-|”引导。这代表了命令行的典型输出。错误信息以及其他的命令行标准错误输出则由“@code{error}”引导，例如：
+你在命令行上输入的例子，由通用的Shell 主次提示符，‘$’与‘>’引导。命令行的输出由字符“-|”引导。这代表了命令行的典型输出。错误信息以及其他的命令行标准错误输出则由“@code{error}”引导，例如：
 $ @code{echo} @code{hi} @code{on} @code{stdout}
 -|@code{hi} @code{on} @code{stdout}
 $ @code{echo} @code{hello} @code{on} @code{stderr} 1>&2
@@ -562,8 +562,8 @@ $ @code{echo} @code{hello} @code{on} @code{stderr} 1>&2
 GNU 项目及本书
 自由软件基金会是一个非营利性组织，其专注于开发与发布可自由分发的软件。它由@code{Richard} @code{M}. @code{Stallman}——即最初的 @code{Emacs} 编辑器的作者——创建。GNU 的 @code{Emacs} 软件也是目前用得最广泛的 @code{Emacs} 版本。
 GNU 项目是自由软件基金会的项目，其目前依然还在持续地为创建一个完全可自由发布，与POSIX兼容的计算环境而努力。自由软件基金会通过“通用公共请可”（@code{GPL}）来保证其下的软件的源代码对于终端用户总是可用的。@code{GPL} 的复本已经包含在本书中（GNU 通用公共许可，在第 465 页）。@code{GPL} 也应用于用 C 写成的 @command{gawk}。要查找更多的关于自由软件基金会以及GNU项目的在线信息，你可以查看 GNU 项目的主页。本书也可以从 GNU 站点上阅读。
-@code{Shell}，编辑器（@code{Emacs}），高度可移植的 C、C++ 与 @code{Object}-C 编译器，符号调试器以及大量的小工具（如 @command{gawk}），都已经完成并可自由获取。GNU 操作系统内核（@code{HURD}）也已经发布，只是还处于开发的早期阶段。
-在 GNU 操作系统完全开发好前，你应该考虑使用 GNU/@code{Linux}，一个可自由发布的，Unix@option{-like} 的操作系统，用于 @code{Intel}、@code{Power} 这样的构架，@code{Sun} @code{Sparc}，@code{IBM} @code{S}/390 等其他系统。 很多的 GNU/@code{Linux} 发行版本都可以通过互联网下载。
+Shell，编辑器（@code{Emacs}），高度可移植的 C、C++ 与 @code{Object}-C 编译器，符号调试器以及大量的小工具（如 @command{gawk}），都已经完成并可自由获取。GNU 操作系统内核（@code{HURD}）也已经发布，只是还处于开发的早期阶段。
+在 GNU 操作系统完全开发好前，你应该考虑使用 GNU/Linux，一个可自由发布的，Unix@option{-like} 的操作系统，用于 @code{Intel}、@code{Power} 这样的构架，@code{Sun} @code{Sparc}，@code{IBM} @code{S}/390 等其他系统。 很多的 GNU/Linux 发行版本都可以通过互联网下载。
 你正在阅读的这本书也是免费的——最起码的。这里面的信息对任何一个人都是免费的。也包括与 @command{gawk} 相关的，对于机器可读的源代码。（花一点时间阅读一下在GNU 自由文档许可，在第 466 页，中的自由文档许可证协议。）
 此书已经经过了多个版本。@code{Paul} @code{Rubin}写了第一份 @code{GAWK} @code{Manual}，大概有@code{}40@code{}页。@code{Diane} @code{Close} 与 @code{Richard} @code{Stallman}丰富了它，产生了一个大概@code{}90@code{}页的版本，它只针对最初的，“旧”版本的@command{awk}。
 如何贡献
@@ -579,7 +579,7 @@ GNU 项目是自由软件基金会的项目，其目前依然还在持续地为�
 本书早期版本的感谢如下：
 下面的人（按字母顺序）为本书的不同版本提供了很好的点评：@code{Rick} @code{Adams}， @code{Dr}. @code{Nelson} @code{H}.@code{F}. @code{Beebe}， @code{Karl} @code{Berry}， @code{Dr}. @code{Michael} @code{Brennan}， @code{Rich} @code{Burridge}， @code{Claire} @code{Cloutier}， @code{Diane} @code{Close}， @code{Scott} @code{Deifik}， @code{Christopher} (“@code{Topher}”) @code{Eliot}， @code{Jeffrey} @code{Friedl}， @code{Dr}. @code{Darrel} @code{Hankerson}， @code{Michal} @code{Jaegermann}， @code{Dr}. @code{Richard} @code{J}. @code{LeBlanc}， @code{Michael} @code{Lijewski}， @code{Pat} @code{Rankin}， @code{Miriam} @code{Robbins}， @code{Mary} @code{Sheehan}， 和 @code{Chuck} @code{Toporek}。
 @code{Robert} @code{J}. @code{Chassell}在使用 @code{Texinfo} 上提供了非常有价值的建议。它也应该得到特别感谢，因为他说服我不要用@code{How} @code{to} @code{Gawk} @code{Politely}这样的书名。@code{Karl} @code{Berry}在 @code{Texinfo} 中的 @code{TEX} 部分给予了相当大的帮助。我也要感谢@code{Marshall} 与 @code{Seattle} 的@code{Elaine} @code{Hartholz} ，还有 @code{Detroit} 的 @code{Bert} @code{and} @code{Rita} @code{Schreiber} 博士，他们牺牲了大量的假期时间，安安静解地呆在他们的家里，使得我能够写作神速，也包括在 @command{gawk} 上的工作。
-@code{SSC}的@code{Phil} @code{Hughes}借给我他的笔记本 GNU/@code{Linux} 系统，不是一次，而是两次，他以这样的一种方式使我在离开家的时候做了大量的工作。
+@code{SSC}的@code{Phil} @code{Hughes}借给我他的笔记本 GNU/Linux 系统，不是一次，而是两次，他以这样的一种方式使我在离开家的时候做了大量的工作。
 @code{David} @code{Trueman}应该得到特别的致谢。他自告奋勇地承担起了优化 @command{gawk} 的工作，因此 @command{gawk} 才会执行得如此之好，没有 @code{Bug}。尽管他现在不再介入 @command{gawk} 的工作，但是与他在这个项目上一起工作相当愉快。
 @code{GNITS}邮件列表中的那些无畏的成员们，以及最值得尊敬的@code{Ulrich} @code{Drepper}为设计国际化特性提供了无价的帮助与反馈。
 @code{Dr}. @code{Nelson} @code{Beebe}， @code{Andreas} @code{Buening}， @code{Dr}. @code{Manuel} @code{Collado}， @code{Antonio} @code{Colombo}， @code{Stephen} @code{Davies}， @code{Scott} @code{Deifik}， @code{Akim} @code{Demaille}， @code{Darrel} @code{Hankerson}， @code{Michal} @code{Jaegermann}， @code{J}¨@code{urgen} @code{Kahrs}，@code{Stepan} @code{Kasal}， @code{John} @code{Malmberg}， @code{Dave} @code{Pitts}， @code{Chet} @code{Ramey}， @code{Pat} @code{Rankin}， @code{Andrew} @code{Schorr}， @code{Corinna} @code{Vinschen}， 跟 @code{Eli} @code{Zaretskii}（按字母顺序）组成了目前的 @command{gawk} “霹雳移植性小组”。如果没有他们的艰苦工作与帮助，@command{gawk} 不会今天有如此稳定，可移植的程序。与这样的一群好人小组一起工作曾经是也将一直是件快乐的事情。
@@ -615,18 +615,18 @@ GNU 项目是自由软件基金会的项目，其目前依然还在持续地为�
 一旦你熟悉了@command{awk}，你就可以在使用时立即输入一些简单的程序。你可以把程序作为@command{awk}命令行的第一个参数，像这样：
 @command{awk} '@code{program}' @code{input}-file1 @code{input}-file2 ...
 这个程序包括一系列的模式与动作，正如早些时候所描述的那样。
-这种命令格式告诉@code{Shell}，或者命令行解释器，开启@command{awk}，并用其中的程序来处理输入文件。程序是由单引号引起来的，因此@code{Shell} 不会将@command{awk}中的特殊字符解析成@code{Shell} 的字符。单引号也使用@code{Shell} 将所有的程序都作为单独的@command{awk}程序，可以让程序多于一行。
-这样的方式用来执行短的或者中等大小的@command{awk}程序是很方便的，因为它避免了要用一个单独的文件来写@command{awk}程序。自包含的@code{Shell} 脚本更加可靠，这样就不会跟其他的文件弄混淆。
+这种命令格式告诉Shell，或者命令行解释器，开启@command{awk}，并用其中的程序来处理输入文件。程序是由单引号引起来的，因此Shell 不会将@command{awk}中的特殊字符解析成Shell 的字符。单引号也使用Shell 将所有的程序都作为单独的@command{awk}程序，可以让程序多于一行。
+这样的方式用来执行短的或者中等大小的@command{awk}程序是很方便的，因为它避免了要用一个单独的文件来写@command{awk}程序。自包含的Shell 脚本更加可靠，这样就不会跟其他的文件弄混淆。
 在本章的后面部分，即@code{}1.3 一些简单例子，在第 28 页，我们会学一些那些自包含的程序很短的例子。
 1.1.2 不带输入文件运行 @command{awk} 
 你也可以运行@command{awk}程序，不带输入文件，如果你敲入下面的命令行：
 @command{awk} '@code{program}'
-@command{awk}会使程序导向到标准输入，也就是说，你在键盘上输入的一切都会接受为输入数据。这会一直持续，直到你输入@code{Ctrl}@option{-d} 来表示‘@code{end}@option{-of}@option{-file}’。（在非POSIX 操作系统中，‘@code{end}@option{-of}@option{-file}’有可能不同，如在@code{OS}/2 中则是@code{Ctrl}@option{-z}）
+@command{awk}会使程序导向到标准输入，也就是说，你在键盘上输入的一切都会接受为输入数据。这会一直持续，直到你输入@code{Ctrl}@option{-d} 来表示‘@code{end}@option{-of}@option{-file}’。（在非POSIX 操作系统中，‘@code{end}@option{-of}@option{-file}’有可能不同，如在OS/2 中则是@code{Ctrl}@option{-z}）
 如下面的例子，程序打印一小段建议（来自由@code{Douglas} @code{Adams} 的 @code{The} @code{Hitchhiker}’@code{s} @code{Guide} @code{to} @code{the} @code{Galaxy}），使你消除计算机程序复杂性的忧虑：
 $ @command{awk} ’@code{BEGIN} { @code{print} "@code{Don}\47t @code{Panic}!" }’
 -| @code{Don}’@code{t} @code{Panic}!
-@command{awk}在读入任何输入之前，先执行与@code{BEGIN} 相关的语句。如果程序中没有了其他的代码了，像这个例子中的情况一样，@command{awk}就直接结束，而不是试图读取自己不知道如何处理的输入。‘\47’是一个小技巧（后面会解释）来将单引号引入程序，这样就不用使用@code{Shell} 丑陋的引文伎俩。
-提示：如果你使用@code{Bash}，你需要先执行命令@code{set}+@code{H}，然后再执行这个交互式的命令，以禁用C @code{shell} 式的命令历史，在这种方式下‘!’会被当作特殊字符。我们建议你将这个命令放在你用户的启动文件中。 
+@command{awk}在读入任何输入之前，先执行与@code{BEGIN} 相关的语句。如果程序中没有了其他的代码了，像这个例子中的情况一样，@command{awk}就直接结束，而不是试图读取自己不知道如何处理的输入。‘\47’是一个小技巧（后面会解释）来将单引号引入程序，这样就不用使用Shell 丑陋的引文伎俩。
+提示：如果你使用@code{Bash}，你需要先执行命令@code{set}+@code{H}，然后再执行这个交互式的命令，以禁用C shell 式的命令历史，在这种方式下‘!’会被当作特殊字符。我们建议你将这个命令放在你用户的启动文件中。 
 下面是一个简单模拟@code{cat} 工具的@command{awk}程序；它复制你输入的字符，然后输出到标准输出上（为什么这个可以做得到等会解释）：
 $ @command{awk} '{ @code{print} }'
 @code{Now} @code{is} @code{the} @code{time} @code{for} @code{all} @code{good} @code{men}
@@ -647,17 +647,17 @@ $ @command{awk} '{ @code{print} }'
 @command{awk} @option{-f} @code{advice}
 下面的代码做一样的事情：
 @command{awk} '@code{BEGIN} { @code{print} "@code{Don}\47t @code{Panic}!" }'
-这个已经早解释过（查看@code{}1.1.2 不带输入文件运行 @command{awk} ，在第 21 页）。注意，当你用–@code{f} 参数指定文件名时，你不需要把文件名引起来，因为大多数文件名都不会含@code{Shell} 特殊字符。在文件@code{advice} 中，@command{awk}程序并没有把文件内容给引起来。引号只在命令行上输入程序才需要。（当然，把程序代码放入文件中，使得我们可以直接使用引号（‘’），而不需要像‘\47’这样的进行输入。
+这个已经早解释过（查看@code{}1.1.2 不带输入文件运行 @command{awk} ，在第 21 页）。注意，当你用–@code{f} 参数指定文件名时，你不需要把文件名引起来，因为大多数文件名都不会含Shell 特殊字符。在文件@code{advice} 中，@command{awk}程序并没有把文件内容给引起来。引号只在命令行上输入程序才需要。（当然，把程序代码放入文件中，使得我们可以直接使用引号（‘’），而不需要像‘\47’这样的进行输入。
 如果你想清楚地标识这样的@command{awk}程序，你可以给文件加上扩展名 .@command{awk}。这不会影响@command{awk} 程序的执行，但确实使“家务事”容易了许多。
 1.1.4 可执行的 @command{awk} 程序
 如果你学过@command{awk}，你可能就会想用‘#!’ 这样的机制写一个自包含的@command{awk}脚本。在很多系统 上你都可以这么干。例如，你可以把@code{advice}文件写成这样：
 #! /@code{bin}/@command{awk} @option{-f}
 @code{BEGIN} { @code{print} "@code{Don}’@code{t} @code{Panic}!" }
-把这个文件设置成可执行权限（用 @code{chmod} 工具），在@code{Shell}中简单地输入‘@code{advice}’，系统就会将@command{awk}执行成像你输入了‘@command{awk} –@code{f} @code{advice}’一样：
+把这个文件设置成可执行权限（用 @code{chmod} 工具），在Shell中简单地输入‘@code{advice}’，系统就会将@command{awk}执行成像你输入了‘@command{awk} –@code{f} @code{advice}’一样：
 $ @code{chmod} +@code{x} @code{advice}
 $ @code{advice}
 -| @code{Don}’@code{t} @code{Panic}!
-（我们假设你已经将你的当前目录放在了你的@code{Shell} 的搜索路径变量下【一般为 $@code{PATH}】。如果没有这么做，你可以敲入‘./@code{advice} ’就可以了。）
+（我们假设你已经将你的当前目录放在了你的Shell 的搜索路径变量下【一般为 $@code{PATH}】。如果没有这么做，你可以敲入‘./@code{advice} ’就可以了。）
 自包含的@command{awk} 脚本在用户调用脚本但不需要知道程序是用@command{awk}实现时非常有用。
 理解‘#!’
 @code{Awk} 是一个解释型语言。这表示，@command{awk}工具把你的程序读入后，会根据你程序中的指令来处理你的数据。（这不同于C这样的编译型语言，首先你需要将它们编译成机器代码，这些代码可以直接被你系统的处理器执行。）@command{awk}工具因此被称为解释器（@code{interpreter}）。多数的现代语言都是解释执行的。
@@ -673,28 +673,28 @@ $ @code{advice}
 # @code{keep} @code{novice} @code{users} @code{from} @code{being} @code{afraid} @code{of} @code{the} @code{computer}.
 @code{BEGIN} { @code{print} "@code{Don}’@code{t} @code{Panic}!" }
 你可以将注释也带进命令行中的“用后即扔”@command{awk}程序中，但是一般来讲，这个用处不大；注释的目的是帮你或者其他人后面阅读时理解程序。
-注意：如@code{}1.1.1 一次性 @command{awk} 程序，在第 20 页，所提到的，你可以将一个中等大小的程序用单引号引起来。这样就使得你的@code{Shell}脚本是自包含的了。你这么做的时候，你不要将撇号（’）放到你的注释中（或者你的程序的任何位置）。@code{Shell} 会将闭引号当做整个程序的结束。结果就是，@code{Shell} 会打印出引号不匹配的错误，而如果@command{awk}实际是执行了，也会打印出语法错误等奇怪的信息。如下面的例子中：
+注意：如@code{}1.1.1 一次性 @command{awk} 程序，在第 20 页，所提到的，你可以将一个中等大小的程序用单引号引起来。这样就使得你的Shell脚本是自包含的了。你这么做的时候，你不要将撇号（’）放到你的注释中（或者你的程序的任何位置）。Shell 会将闭引号当做整个程序的结束。结果就是，Shell 会打印出引号不匹配的错误，而如果@command{awk}实际是执行了，也会打印出语法错误等奇怪的信息。如下面的例子中：
 $ @command{awk} '@code{BEGIN} { @code{print} "@code{hello}" } # @code{let}'@code{s} @code{be} @code{cute}'
 >
-@code{Shell}首先看到前面两个引号匹配，然后在后面的注释又看到了一个开始的引号。因此就有第二个提示，并等待输入。对于Unix @command{awk}，闭引号串会产生这样的结果：
+Shell首先看到前面两个引号匹配，然后在后面的注释又看到了一个开始的引号。因此就有第二个提示，并等待输入。对于Unix @command{awk}，闭引号串会产生这样的结果：
 $ @command{awk}  '{ @code{print} "@code{hello}" } # @code{let}'@code{s} @code{be} @code{cute}’
 >’
 @code{errorawk}: @code{can}’@code{t} @code{open} @code{file} @code{be}
 @code{error} @code{source} @code{line} @code{number} 1
-在撇号的前面加一个转义符（\）也没有作用，因为转义符在单引号中也不是一个特殊的字符。后面一节中我们会解释@code{Shell}的引号规则。
-1.1.6 @code{Shell}引号问题
-对于短到中等大小的@command{awk}程序而言，最方便的方式是将程序在命令行中输入。这个通过将整个程序包含在一对单引号当中即可。无论在交互式的输入程序，还是在一个大的@code{Shell} 脚本中输入都是可以的：
+在撇号的前面加一个转义符（\）也没有作用，因为转义符在单引号中也不是一个特殊的字符。后面一节中我们会解释Shell的引号规则。
+1.1.6 Shell引号问题
+对于短到中等大小的@command{awk}程序而言，最方便的方式是将程序在命令行中输入。这个通过将整个程序包含在一对单引号当中即可。无论在交互式的输入程序，还是在一个大的Shell 脚本中输入都是可以的：
 @command{awk}  '@code{program} @code{text}' @code{input}-file1 @code{input}-file2 ...
-一旦你通过@code{Shell} 来运行，对于@code{Shell} 的引号规则有所了解总是好的。下面的规则只应用于POSIX 兼容的@code{Bourne}-式的@code{Shell} 中（如@code{Bash}，GNU @code{Bourne}@option{-Again} @code{Shell}）。如果你用的是C @code{Shell}，那就需要你自处了。
+一旦你通过Shell 来运行，对于Shell 的引号规则有所了解总是好的。下面的规则只应用于POSIX 兼容的@code{Bourne}-式的Shell 中（如@code{Bash}，GNU @code{Bourne}@option{-Again} Shell）。如果你用的是C Shell，那就需要你自处了。
 在深入规则之前，我们先介绍本书中通书所使用的概念，它们就是@code{null}，或者@code{empty} 串。
-@code{null} @code{string} 就是在字符数据中没有值。换句话说，就是空的。在@command{awk}程序中写成这样：””。在@code{Shell}中，它可以写成单或者双引号的形式：”” 或者’’。虽说@code{null} @code{string} 中没有字符，但是确实是存在的。例如下面的指令：
+@code{null} @code{string} 就是在字符数据中没有值。换句话说，就是空的。在@command{awk}程序中写成这样：””。在Shell中，它可以写成单或者双引号的形式：”” 或者’’。虽说@code{null} @code{string} 中没有字符，但是确实是存在的。例如下面的指令：
 $ @code{echo} ""
 在这里，@code{echo} 工具收到单一的参数，就算参数中没有字符在其中。在本书的后续部分，我们使用术语 @code{null} @code{string} 以及 @code{empty} @code{string} 来表示这样的串。现在在引号规则中：
-被引起来的项可以与没有被引起来项连接，也可以与已经引起来的项进行连接。@code{Shell} 会将它们全部转换成命令的参数。
-在引起来的串中，在任何单个字符前的反斜杠（’\’）都会被@code{Shell} 移除，而将被引起来的字符传递给命令。
-单引号保护在开与闭引号之间的所有字符。@code{Shell} 不会对串中的东西做任何解析，并原样地传递给命令。不可能在一个单引号中嵌入单引号。参考@code{}1.1.5 @command{awk}程序中的注释，在第 23 页，中的例子，看看如果你这么做会有什么结果。
-双引号保护开引号与闭引号之间的大多数据字串。@code{Shell} 只做最小的变量与命令的替换。不同的@code{Shell} 对于双引号的处理是不一样的。
-由于在双引号中，特定的字符是会被@code{Shell}处理的，因此他们在串中一定要进行转义。要注意这些符号‘$’，‘‘’， ‘\’， 和‘"’。这些符号如果要原样地传递给程序中，你就需要在串中用反斜杠（‘\’）进行转义。（前导的反斜杠（’\’）会先被过滤掉。）你可以参考之前的例子，在这里@code{}1.1.2 不带输入文件运行 @command{awk} ，在第 21 页：
+被引起来的项可以与没有被引起来项连接，也可以与已经引起来的项进行连接。Shell 会将它们全部转换成命令的参数。
+在引起来的串中，在任何单个字符前的反斜杠（’\’）都会被Shell 移除，而将被引起来的字符传递给命令。
+单引号保护在开与闭引号之间的所有字符。Shell 不会对串中的东西做任何解析，并原样地传递给命令。不可能在一个单引号中嵌入单引号。参考@code{}1.1.5 @command{awk}程序中的注释，在第 23 页，中的例子，看看如果你这么做会有什么结果。
+双引号保护开引号与闭引号之间的大多数据字串。Shell 只做最小的变量与命令的替换。不同的Shell 对于双引号的处理是不一样的。
+由于在双引号中，特定的字符是会被Shell处理的，因此他们在串中一定要进行转义。要注意这些符号‘$’，‘‘’， ‘\’， 和‘"’。这些符号如果要原样地传递给程序中，你就需要在串中用反斜杠（‘\’）进行转义。（前导的反斜杠（’\’）会先被过滤掉。）你可以参考之前的例子，在这里@code{}1.1.2 不带输入文件运行 @command{awk} ，在第 21 页：
 @command{awk} '@code{BEGIN} { @code{print} "@code{Don}\47t @code{Panic}!" }'
 可以写成这样的形式：
 $ @command{awk} "@code{BEGIN} { @code{print} \"@code{Don}’@code{t} @code{Panic}!\" }"
@@ -704,7 +704,7 @@ $ @command{awk} "@code{BEGIN} { @code{print} \"@code{Don}’@code{t} @code{Panic
 而不要这么来：
 @command{awk} @option{-F}"" '@code{program}' @code{files} # @code{wrong}!
 在第二个例子中，@command{awk}会尝试使用程序的文本作为@code{FS} 的值，第一个文件名会做为程序的文本！这会导致在最好的情况下是语法错误，而最坏的情况下会导致令人费解的行为。
-混用单双引号是比较麻烦的。你需要用一些@code{Shell} 的伎俩，如：
+混用单双引号是比较麻烦的。你需要用一些Shell 的伎俩，如：
 $ @command{awk} ’@code{BEGIN} { @code{print} "@code{Here} @code{is} @code{a} @code{single} @code{quote} <’"’"’>" }’
 -| @code{Here} @code{is} @code{a} @code{single} @code{quote} <’>
 这个程序中包括三个连接的引串。第一个与第三个都是单引号串，而第二个是双引号串。这个其实可以简化为：
@@ -724,10 +724,10 @@ $ @command{awk} '@code{BEGIN} { @code{print} "@code{Here} @code{is} @code{a} @co
 $ @command{awk} @option{-v} @code{sq}="’" '@code{BEGIN} { @code{print} "@code{Here} @code{is} @code{a} @code{single} @code{quote} <" @code{sq} ">" }'
 -| @code{Here} @code{is} @code{a} @code{single} @code{quote} <’>
 （在这里，两个串常量以及@code{sq} 的值会被连接起来成为一个单一的串，然后用@code{print} 打印出来。）
-如果你确实在程序中即需要单引号也需要双引号，你最好是将它们移到一个单独的文件中，在文件里，@code{Shell} 不会解析你的程序所要做的事情。
-1.1.6.1 @code{MS}@option{-Windows}批处理文件中的引号问题
-尽管本书中一般只针对POSIX 系统以及POSIX @code{Shell}，下面的问题也值得为用户提出来。
-微软@code{Windows} 系统中的@code{Shell} 用双引号来引字串。因此，比较难或者不可能在命令行脚本中通过转义的方式来包含双引号。多谢@code{Jeroen} @code{Brink} 提供，下面的例子，呈现文件中的每一行都并用双引号引起来：
+如果你确实在程序中即需要单引号也需要双引号，你最好是将它们移到一个单独的文件中，在文件里，Shell 不会解析你的程序所要做的事情。
+1.1.6.1 MS-Windows批处理文件中的引号问题
+尽管本书中一般只针对POSIX 系统以及POSIX Shell，下面的问题也值得为用户提出来。
+微软Windows 系统中的Shell 用双引号来引字串。因此，比较难或者不可能在命令行脚本中通过转义的方式来包含双引号。多谢@code{Jeroen} @code{Brink} 提供，下面的例子，呈现文件中的每一行都并用双引号引起来：
 @command{gawk} "{ @code{print} \"\042\" $0 \"\042\" }" @code{file}
 1.2 例子中使用的数据文件
 本书中所使用到的例子，主要从两个例子数据文件中输入数据。第一个是@code{mail}@option{-list}，里面展示了一系列的人名，同时还有他们的邮件地址，以及相关的个人信息。第二个文件为@code{inventory}@option{-shipped}，包含了每月的发货情况。两个文件中，每一行都称为一条记录。
@@ -851,15 +851,15 @@ $ @command{awk} '/12/ { @code{print} $0 }
 @command{awk} ’/@code{This} @code{regular} @code{expression} @code{is} @code{too} @code{long}， @code{so} @code{continue} @code{it}\
 @code{on} @code{the} @code{next} @code{line}/ { @code{print} $1 }’
 我们一般不在我们的程序代码中利用反斜杠来续行。@command{gawk} 对于一行的长度没有限制，因此反斜杠续行并非是必要的。这仅是使得程序更有可读性。因为这个原因，也为清晰起见，我们尽量保证书中代码的语句的短小。如果你的代码是写在单独的文件而不是命令行中，那么反斜杠就最有用了。同时你也需要知道不同的发布版本的@command{awk}对于反斜杠在何处使用是有特殊地方的。因此，为了能最大化你的代码的可移植性，最好不要把你的代码行在字串或者正则表达式中间断行分开。
-注意：反斜杠续行不会在C @code{Shell} 中有效。它只在独立的@command{awk}程序文件，或者一次性的程序中有用，前提是你使用的是POSIX 兼容的@code{Shell}，例如Unix @code{Bourne} @code{Shell} 或者@code{Bash}。但是C @code{Shell} 的表现不同！你需要在行中使用两个反斜杠，然后再写入新行。在使用C @code{Shell} 时你也需要留意@command{awk}程序中的每一个新行都需要反斜杠转义。作为说明如下：
+注意：反斜杠续行不会在C Shell 中有效。它只在独立的@command{awk}程序文件，或者一次性的程序中有用，前提是你使用的是POSIX 兼容的Shell，例如Unix @code{Bourne} Shell 或者@code{Bash}。但是C Shell 的表现不同！你需要在行中使用两个反斜杠，然后再写入新行。在使用C Shell 时你也需要留意@command{awk}程序中的每一个新行都需要反斜杠转义。作为说明如下：
 % @command{awk} ’@code{BEGIN} { \
 ? @code{print} \\
 ? "@code{hello}， @code{world}" \
 ? }’
 -| @code{hello}， @code{world}
 ‘$’ @code{and} ‘>’.
-这里面，‘%’ 与‘？’ 都是C @code{Shell} 的主、次提示符，与标准的@code{Shell} ‘$’ 与‘>’ 类似。
-与前面一个例子相比，看看POSIX 兼容的@code{Shell} 如何来完成：
+这里面，‘%’ 与‘？’ 都是C Shell 的主、次提示符，与标准的Shell ‘$’ 与‘>’ 类似。
+与前面一个例子相比，看看POSIX 兼容的Shell 如何来完成：
 $ @command{awk} ’@code{BEGIN} {
 > @code{print} \
 >"@code{hello}， @code{world}"
@@ -884,14 +884,14 @@ $ @command{gawk} ’@code{BEGIN} { @code{print} "@code{dont} @code{panic}" # @co
 目前，我们已经了解了一些@command{awk}可以做的事情，你可能有疑问@command{awk}对你有什么用处。通过使用其他工具程序，更高级的模式，域分隔符，算术语句以及其他的选择方案，你可以产生更为复杂的输出。@command{awk}对于从大量的原始数据产生报表的场景中非常用有，如从其他的工具，如 @code{ls} 的输出中汇总信息。（查看 1.5 复杂一点的例子，在第 30 页）
 用@command{awk}语言写的程序一般会比较其他的语言所写的程序要短。这使得@command{awk}程序非常容易组合与使用。@command{awk}常常在“用后即丢”的场景中快速实现你的代码。由于@command{awk}是解释型的，这就避免了在编辑-编译-测试-调试这样的程序开发流程的编译流程，而这个流程通常都比较长。
 也有非常复杂@command{awk}程序，包括一个完整的可重定位的为@code{}8@code{}位微处理写的汇编器（查看名词解释，在第 453 页，取得详细信息），以及为专用的@code{Prolog} 计算机写的微代码的汇编器。起初的@command{awk}的能力没有办法完成这么复杂的任务，但是现代版本的@command{awk}则具备了这样的能力。
-如果你发现你可能需要写好几百行的程序代码，你或许应该考虑使用其他的编程语言，@code{Shell} 就对字串处理与匹配就很在行；另外，它也可以让你充分使用系统中的强大工具。@code{Python} 在高层级上的语言编程方便性与使用系统工具之间提供了很好的平衡。 
+如果你发现你可能需要写好几百行的程序代码，你或许应该考虑使用其他的编程语言，Shell 就对字串处理与匹配就很在行；另外，它也可以让你充分使用系统中的强大工具。@code{Python} 在高层级上的语言编程方便性与使用系统工具之间提供了很好的平衡。 
 1.9 总结
 @command{awk}程序由模式-动作对组成。
 没有模式的动作也会运行。对于没有模式的默认动作就是‘{@code{print} $0 }’。
 要么使用@command{awk} ‘@code{program}’ @code{file} 或者@command{awk} –@code{f} @code{program}@option{-file} @code{files} 来运行@command{awk}。
 你可以使用特殊的‘#！’ 字串放在@command{awk}程序的第一行来直接执行。
 @command{awk}程序的注释以‘#’ 开始，并持续到同一行的结束。
-当在写大的脚本的一部份时，@command{awk}时候要注意引号问题（或者@code{MS}@option{-Windows} 的批处理文件）。
+当在写大的脚本的一部份时，@command{awk}时候要注意引号问题（或者MS-Windows 的批处理文件）。
 可以使用反斜杠来进行源代码续行。也可以在逗号‘，’，开大括号‘{’，问号‘？’，冒号‘：’，‘||’，‘&&’，‘@code{do}’，与‘@code{else}’后面自动续行。
  
 第二章 运行@command{awk}与 @command{gawk}
@@ -922,7 +922,7 @@ $ @command{gawk} ’@code{BEGIN} { @code{print} "@code{dont} @code{panic}" # @co
 选择一个实现有关的选项。这是为特定实现而提供的一种POSIX 转换。这个选项也有一个GNU 风格的长选项。注意长选项是可以缩写的，只要保证缩写是唯一的即可。特定于@command{gawk} 的选项的完整列表下面会列出。
 -- 
 指示命令行选项的结束。后续的参数不会被识别为选项，即使它们以‘-’开始。
-对于–- 的解释是参照POSIX 的参数分析习惯。如果你有一个文件名以‘-’开始，这个参数则非常有用，或者在@code{Shell} 脚本里，文件名会由用户来指定。在把参数传递给@command{awk} 程序上，这个参数也非常有用。查看@code{}10.4 处理命令行选项，在第 237 页。
+对于–- 的解释是参照POSIX 的参数分析习惯。如果你有一个文件名以‘-’开始，这个参数则非常有用，或者在Shell 脚本里，文件名会由用户来指定。在把参数传递给@command{awk} 程序上，这个参数也非常有用。查看@code{}10.4 处理命令行选项，在第 237 页。
 下面的选项是特定于@command{gawk} 的选项：
 @option{-b}
 @option{--characters}@option{-as}@option{-bytes}
@@ -1014,10 +1014,10 @@ $ @command{gawk} ’@code{BEGIN} { @code{print} "@code{dont} @code{panic}" # @co
 标准的 @command{awk} 中，就算程序是通过键盘输入的，通过 @option{-f} /@code{dev}/@code{tty} 完成，库函数也还是可以使用的。输入程序后，键入 @code{Ctrl}+@code{d} （文件结束符）来结束。（你也可以使用 @option{-f} - 来从标准输入中读取程序源代码，只是这个时候，你就不能同时使用标准输入作为数据的输入源。
 由于标准 @command{awk} 中混用源文件与命令行 @command{awk} 程序，显得有一些笨拙，所以 @command{gawk} 提供了一个 @option{-e} 选项。这并不需要你抢占标准输入来输入源代码，而是让你很容易地混合使用命令行与库源代码（查看@code{}2.5.1 环境变量 @code{AWKPATH} ，在第 43 页）。与 @option{-f} 一样，@option{-e} 与 @option{-i} 选项也可以在命令中多次使用。
 如果没有 @option{-f} 或者 @option{-e} 选项指定，@command{gawk} 会使用命令行中的第一个非选项参数作为程序的源代码。
-如果环境变量@code{POSIXLY_CORRECT}存在，@command{gawk} 就会严格地按照 POSIX 模式执行，就如你提供了 @option{--posix} 参数一样。许多的 GNU 程序都查找这个环境变量来禁用与 POSIX 标准有冲突的扩展，但是 @command{gawk} 的行为有一些不同：它禁用所有的扩展，就算某个特性与 POSIX 没有冲突，然后按照严格的POSIX 标准模式执行。如果指定了 @option{--lint} 选项，@command{gawk} 会因为@code{POSIXLY_CORRECT}而开启 POSIX 模式，然后会输出警告信息，说 POSIX 模式已经启用。一般来说，你可能会在你的 @code{Shell} 的启动脚本中设置这个变量。对于与 @code{Bourne} @code{Shell} 兼容的 @code{Shell} 来说（如 @code{Bash}），你可以将下面的行加入到用户主目录的 .@code{profile} 文件中：
+如果环境变量@code{POSIXLY_CORRECT}存在，@command{gawk} 就会严格地按照 POSIX 模式执行，就如你提供了 @option{--posix} 参数一样。许多的 GNU 程序都查找这个环境变量来禁用与 POSIX 标准有冲突的扩展，但是 @command{gawk} 的行为有一些不同：它禁用所有的扩展，就算某个特性与 POSIX 没有冲突，然后按照严格的POSIX 标准模式执行。如果指定了 @option{--lint} 选项，@command{gawk} 会因为@code{POSIXLY_CORRECT}而开启 POSIX 模式，然后会输出警告信息，说 POSIX 模式已经启用。一般来说，你可能会在你的 Shell 的启动脚本中设置这个变量。对于与 @code{Bourne} Shell 兼容的 Shell 来说（如 @code{Bash}），你可以将下面的行加入到用户主目录的 .@code{profile} 文件中：
 @code{POSIXLY_CORRECT}=@code{true}
 @code{export} @code{POSIXLY_CORRECT}
-对于与C @code{shell} 兼容的 @code{shell}， 你可以将下面的行加入到用户主目录的 .@code{login} 文件中：
+对于与C shell 兼容的 shell， 你可以将下面的行加入到用户主目录的 .@code{login} 文件中：
 @code{setenv} @code{POSIXLY_CORRECT} @code{true}
 对于每日的工作环境，设置@code{POSIXLY_CORRECT}变量并不值得建议，但是对于测试你的程序在其他环境中的可移植性则有相当作用。
 2.3 其他命令行参数
@@ -1048,14 +1048,14 @@ $ @command{gawk} ’@code{BEGIN} { @code{print} "@code{dont} @code{panic}" # @co
 搜索路径特性用来创建通用的 @command{awk} 函数库非常有用。库文件可以放在一个标准的默认目录中，然后在命令行中指定一个短的文件名。不然的话，你需要输入每个文件的完整路径。
 通过使用 @option{-i} 或者 @option{-f} 选项，你的命令行 @command{awk} 程序可以利用 @command{awk} 的库文件（查看第十章 @command{awk} 函数库，在第 221 页）。如果是在兼容模式中，路径搜索并没有实现，因此，而对于@option{--traditional} 与 @option{--posix}模式，搜索路径不可用。查看@code{}2.2 命令行参数.在第 35 页。
 如果源代码文件没有在初始的路径中找到，则路径搜索会在文件名后面加一个 .@command{awk} 后缀名后再执行搜索。
-@command{gawk} 的路径搜索机制与 @code{Shell} 的机制有点类似。（可以查看 @code{Bourne}@option{-Again} @code{Shell} 手册）它将空的路径项视为当前路径。（一个空项由一个冒号开始，或者以冒号结束的路径，或者两个紧接着的冒号表示[‘::’]。）
+@command{gawk} 的路径搜索机制与 Shell 的机制有点类似。（可以查看 @code{Bourne}@option{-Again} Shell 手册）它将空的路径项视为当前路径。（一个空项由一个冒号开始，或者以冒号结束的路径，或者两个紧接着的冒号表示[‘::’]。）
 提示：要将当前路径包括在路径中，要么在项目中放一个点号 . 或者写一个空的路径项。
 @command{gawk} 之前的几个不同版本会显示地在当前目录进行搜索，不管是在搜索路径前还是后。在版本 4.1.2 这个版本中，则不再这么处理；如果你希望搜索当前目录，你必须包括一个点 . 作为一个独立的项，要么在搜索路径中加入一个空项。
 @code{AWKPATH} 的默认路么是：‘.:/@code{usr}/@code{local}/@code{share}/@command{awk}’。 由于 . 包括在了开始处，@command{gawk} 会首先搜索当前目录，然后再搜索/@code{usr}/@code{local}/@code{share}/@command{awk}。在实践中，这意味着你很少需要更改 @code{AWKPATH} 的值。
 @command{gawk} 将其使用的搜索路径的值放在@code{ENVIRON}["@code{AWKPATH}"]元素中。这提供了可以让你在程序中访问搜索路径的机制。
 尽管你可以在程序中更改@code{ENVIRON}["@code{AWKPATH}"]的值，但这不会影响正在执行的程序的行为。原因如下：@code{AWKPATH}是用来作为搜索程序文件的环境变量。一旦你的程序运行起来，所有的文件都已经搜索到了，@command{gawk} 就不再需要 @code{AWKPATH} 变量了。
 2.5.2 环境变量 @code{AWPLIBPATH}
-@code{AWKLIBPATH}环境变量与 @code{AWKPATH} 变量类似，但是是由来搜索可装载的扩展（存储为系统的共享库），而不是用来搜索源代码文件，这些扩展由 @option{-l} 选项进行指定。如果扩展没有找到，会在搜索完成后加上恰当的共享库后缀后再次搜索。例如，在 GNU/@code{Linux} 系统中，后缀是‘.@code{so}’。搜索路径也可以用于用@@code{load}关键词进行的扩展装载（查看@code{}2.8 在你的程序装入动态扩展，在第 48 页）。
+@code{AWKLIBPATH}环境变量与 @code{AWKPATH} 变量类似，但是是由来搜索可装载的扩展（存储为系统的共享库），而不是用来搜索源代码文件，这些扩展由 @option{-l} 选项进行指定。如果扩展没有找到，会在搜索完成后加上恰当的共享库后缀后再次搜索。例如，在 GNU/Linux 系统中，后缀是‘.@code{so}’。搜索路径也可以用于用@@code{load}关键词进行的扩展装载（查看@code{}2.8 在你的程序装入动态扩展，在第 48 页）。
 如果 @code{AWKLIBPATH} 在环境变量中不存在，或者为空，@command{gawk} 会使用默认的路径，一般是‘/@code{usr}/@code{local}/@code{lib}/@command{gawk}’，但这也会由于 @command{gawk} 构建的方式而有不同。
 @command{gawk} 会将搜索路径的值存放于 @code{ENVIRON}["@code{AWKLIBPATH}"]中。这样，在你的程序中可以得到实际的搜索路径。
 2.5.3 其他的环境变量
@@ -1134,7 +1134,7 @@ $ @command{gawk} @option{-f} test3
 2.8 在你的程序装入动态扩展
 这一节描述的也是@command{gawk} 的特性。
 @@code{load}关键字，可以用来读取外部的@command{awk} 扩展（存储为系统共享库）。这个机制可以让你使用编译过的代码来实现非常高的执行性能，并且/或者使用使用一些@command{awk} 语言所不支持的能力。@code{AWKLIBPATH} 变量来用进行扩展的搜索。使用@@code{load}机制完全与使用命令行选项 @option{-l} 等同。
-如果扩展一开始没有在 @code{AWKLIBPATH} 中找到，会通过给文件名附加上默认动态库扩展名再搜索一次。例如，在GNU/@code{Linux} 系统中，这个后缀名是‘.@code{so}’：
+如果扩展一开始没有在 @code{AWKLIBPATH} 中找到，会通过给文件名附加上默认动态库扩展名再搜索一次。例如，在GNU/Linux 系统中，这个后缀名是‘.@code{so}’：
 $ @command{gawk} ’@@code{load} "@code{ordchr}"; @code{BEGIN} {@code{print} @code{chr}(65)}’
 -| @code{A}
 上面的代码与下面的例子等同：
@@ -1462,7 +1462,7 @@ $ @code{echo} @code{record} 1 @code{AAAA} @code{record} 2 @code{BBBB} @code{reco
 有那么几次，你可能想将整个文件作为一个单独的记录。唯一能够实现这个功能的就是将 @code{RS} 的值设置成不会在输入文件中出现的字符。一般来说，程序比较难做到在任意的输入文件中都是正确的。
 对于文本文件来说，你可能认为 @code{nul} 字符，即字符的所有位都是@code{}0，可以用在这种情况下：
 @code{BEGIN} { @code{RS} = "\0" } # @code{whole} @code{file} @code{becomes} @code{one} @code{record}?
-@command{gawk} 实际上接受这样的输入，并且使用 @code{nul} 字符作为记录的分隔符。这对于特定的特殊文件是可以的，例如在 GNU/@code{Linux} 系统上的文件 /@code{proc}/@code{environ} ，实际上 @code{nul} 字符实际上是记录分隔符。可是，对于大多数的 @command{awk} 实现来说，这是不可移植的。
+@command{gawk} 实际上接受这样的输入，并且使用 @code{nul} 字符作为记录的分隔符。这对于特定的特殊文件是可以的，例如在 GNU/Linux 系统上的文件 /@code{proc}/@code{environ} ，实际上 @code{nul} 字符实际上是记录分隔符。可是，对于大多数的 @command{awk} 实现来说，这是不可移植的。
 大多数的其他 @command{awk} 实现 内部将字串存成 C 风格的字串。而 C 风格的字串使用 @code{nul} 做为字串的结束符，效果就是‘@code{RS} ="\0"’与‘@code{RS} = ""’是一样的。
 新近的 @command{mawk} 的版本也可以使用 @code{nul} 字符作为记录的分隔符。但是，这是个特殊情况：@command{mawk} 不允许在字串中嵌入 @code{nul} 字符。（这可能在 @command{mawk} 的后续版本中会改变。）
 查看@code{}10.2.8 一次读取整个文件，在第 231 页，来查看一些有趣的方法来读取整个文件。如果你使用 @command{gawk}，查看@code{}16.7.10 读取整个文件，在第 399 页，来选择其他的选项。
@@ -1472,7 +1472,7 @@ $ @code{echo} @code{record} 1 @code{AAAA} @code{record} 2 @code{BBBB} @code{reco
 当 @command{awk} 读取输入记录时，记录是自动地被 @command{awk} 工具分析或者分隔成称为域的块，默认情况下，域是通过空白进行分隔的，像一行中的单词一样。
 @command{awk} 中的空白符表示一个或者多个空格、@code{TABs}，或者换行符所组成的串； 其他的字符如回档符，垂直跳格等）被其他语言认为是空白符的这些符号都不被 @command{awk} 识别为空白符。
 域的用处是为了让你可以很方便地指定这些记录的块。你不必一定要使用他们，你可操作整个记录，但是域可以使得 @command{awk} 程序变得非常强大。
-你使用美元符号（‘$’）来指定@command{awk}程序中的域，符号后面跟的是域的编号。因此，$1 表示是第一个域，$2 是第二个等等。（不像 Unix @code{Shell} 中，域的编号只被限制用单个数字，例如，$127 是记录中的第 127 个域。假设下面的行是输入行：
+你使用美元符号（‘$’）来指定@command{awk}程序中的域，符号后面跟的是域的编号。因此，$1 表示是第一个域，$2 是第二个等等。（不像 Unix Shell 中，域的编号只被限制用单个数字，例如，$127 是记录中的第 127 个域。假设下面的行是输入行：
 @code{This} @code{seems} @code{like} @code{a} @code{pretty} @code{nice} @code{example}.
 这里第一个域，或者 $1 是‘@code{This}’，第二个域，或者说 $2 是‘@code{seems}’等等。注意最后一个域，即 $7 是‘@code{example}.’。因为在‘@code{e}’与‘.’之间没有空格，因此点号被认为是第七个域的一部份。
 @code{NF} 是预定义变量，用来记录当前记录的域数量。@command{awk} 在每次读取记录的时候，会自动更新 @code{NF} 的值。无论记录中有多少个域，其最后一个域都可以用 $@code{NF} 来表示。因此在上面的例子中，$@code{NF} 与 $7 相同，即‘@code{example}.’。如果你指定域超过了最后一个域（如上面的只有@code{}7@code{}个域的例子中指定 $8），你会得到一个空串（如果用作数值操作中，则你会得到@code{}0。）
@@ -1557,7 +1557,7 @@ $1 = $1 # @code{force} @code{record} @code{to} @code{be} @code{reconstituted}
 4.5 指定记录如何进行分隔
 域分隔符要么是一个单个字符，或者是一个正则表达式，以控制 @command{awk} 将输入记录分隔成域。@command{awk} 扫描输入记录的字符序列以匹配分隔符；域则是匹配之间的文本。在下面的例子中，我们使用子弹符(●)个表示输出之间的空间。如果域分隔符是‘@code{oo}’然后下面的行：
 @code{moo} @code{goo} @code{gai} @code{pan}
-将被分成三个域：‘@code{m}’， ‘●@code{g}’， @code{and} ‘●@code{gai}●@code{pan}’。注意第二个与第三个域中的前导空间。域分隔符由预定义的变量 @code{FS} 表示。@code{Shell} 程序员要注意：@command{awk} 不使用由 POSIX 兼容 @code{Shell}(如果 Unix @code{Bourne} @code{shell}， @code{sh}， 或者 @code{Bash})使用的名字 @code{IFS}。
+将被分成三个域：‘@code{m}’， ‘●@code{g}’， @code{and} ‘●@code{gai}●@code{pan}’。注意第二个与第三个域中的前导空间。域分隔符由预定义的变量 @code{FS} 表示。Shell 程序员要注意：@command{awk} 不使用由 POSIX 兼容 Shell(如果 Unix @code{Bourne} shell， @code{sh}， 或者 @code{Bash})使用的名字 @code{IFS}。
 @code{FS} 的值可以在 @command{awk} 的程序当中使用赋值操作符来进行改变，‘=’（查看@code{}6.2.3 赋值表达式，在第 122 页），一般来说，进行赋值的正确时机一般是在执行的开始，并在任何记录还没有被处理之前，因此第一条记录会通过正确的分隔符进行处理。为了实现这样的赋值，你可以使用 @code{BEGIN} 模式（查看@code{}7.1.4 @code{BEGIN} 与 @code{END} 特殊模式，在第 141 页）。例如，下面的例子将 @code{FS} 的值设置成字串“，”：
 @command{awk} ’@code{BEGIN} { @code{FS} = "，" } ; { @code{print} $2 }’
 如果输入的行为：
@@ -1614,8 +1614,8 @@ $ @code{echo} @code{a} @code{b} | @command{gawk} ’@code{BEGIN} { @code{FS} = "
 用来 @option{-F} 参数的值按照命令行上的赋值参数的方式一样处理。任何在域分隔字符中的特殊字符都必须进行适当地转义。如使用一个‘\’用作一个域分隔符，你需要这样来输入：
 # @code{same} @code{as} @code{FS} = "\\"
 @command{awk} @option{-F}\\\\ ’...’ @code{files} ...
-由于 ‘\’ 要在 @code{shell} 中用引号引起来，@command{awk} 会看到 ‘@option{-F}\\’。之后 @command{awk} 会处理 ‘\\’ 转义字符，（查看@code{}3.2 转义序列，在第 51 页），最后，产生一个单独的 ‘\’ 用作域分隔符。
-有一个特殊的例子，在兼容模式下（查看@code{}2.2 命令行参数，在第 35 页），如果 @option{-F} 的参数是‘@code{t}’，则 @code{FS} 会被设置成 @code{TAB} 符号。如果你在 @code{Shell} 中输入‘@option{-F}\@code{t}’，没有进行任何转义，则‘\’会被删除掉，所以， @command{awk} 会了解到你是真的想用 @code{TABs} 来分隔记录，而不是‘@code{t}’。如果你确实是要用‘@code{t}’来分隔记录，则在命令行中使用‘@option{-v} @code{FS}="@code{t}"’或者‘@option{-F}"[@code{t}]"’。如果不是在兼容模式下，使用‘@option{-F} ’\@code{t}’’来指定 @code{TABs} 来做域分隔符。
+由于 ‘\’ 要在 shell 中用引号引起来，@command{awk} 会看到 ‘@option{-F}\\’。之后 @command{awk} 会处理 ‘\\’ 转义字符，（查看@code{}3.2 转义序列，在第 51 页），最后，产生一个单独的 ‘\’ 用作域分隔符。
+有一个特殊的例子，在兼容模式下（查看@code{}2.2 命令行参数，在第 35 页），如果 @option{-F} 的参数是‘@code{t}’，则 @code{FS} 会被设置成 @code{TAB} 符号。如果你在 Shell 中输入‘@option{-F}\@code{t}’，没有进行任何转义，则‘\’会被删除掉，所以， @command{awk} 会了解到你是真的想用 @code{TABs} 来分隔记录，而不是‘@code{t}’。如果你确实是要用‘@code{t}’来分隔记录，则在命令行中使用‘@option{-v} @code{FS}="@code{t}"’或者‘@option{-F}"[@code{t}]"’。如果不是在兼容模式下，使用‘@option{-F} ’\@code{t}’’来指定 @code{TABs} 来做域分隔符。
 下面的例子中，我们利用一个名为 @code{edu}.@command{awk} 的程序文件，其中包括了 /@code{edu}/ 模式，以及动作‘@code{print} $1’：
 /@code{edu}/ { @code{print} $1 }
 我们将 @code{FS} 的值设置成‘-’字符，并把程序运行在文件 @code{mail}@option{-list} 上。下面的命令打印出那些工作在大学或者在上大学的人的名字列表，以及他们电话号码的前三个数字：
@@ -1799,7 +1799,7 @@ $ @command{awk} @option{-f} @code{addrs}.@command{awk} @code{addresses}
 到目前为止，我们都是从 @command{awk} 的主要输入流中获取数据，要么是标准输入（通常是你的键盘，有时是其他程序的输出）或者通过命令行指定的文件。@command{awk} 语言有一个特殊的内建命令 @code{getline} 可以用来显式地在你的控制下读取输入。
 @code{getline} 命令有几种不同的使用方式，并且初学者最好不要使用。下面的 @code{getline} 使用例子以及相应的解释包括了一些目前还没有涉及的知识。因此，当你阅读了第一、二部分剩下的部分时，再回过头来学习 @code{getline}，则你会更了解 @command{awk} 是如何进行工作的。
 @code{getline} 命令查看到一个记录时则返回 1，如果遇到文件结束时则返回 0。如果在读取数据时发生了错误，如文件不能被打开，则 @code{getline} 返回 @minus{}1。在这个情况下，@command{gawk} 将变量 @code{ERRNO} 的值设置成所遇到的的错误的描述字串。
-在下面的例子中，@code{command} 代表 @code{shell} 命令的字串值。
+在下面的例子中，@code{command} 代表 shell 命令的字串值。
 提示：当 @option{--sandbox} 指定时（查看@code{}2.2 命令行参数，在第 35 页），从文件，管道或者并程 中读取行数据是被禁止的。
 4.9.1 不带参数调用 @code{getline}
 @code{getline} 命令可以不带参数来从当前文件中读取输入。在这种情形下，就是读取下一个输入记录并将其分割为域。当你已经完成当前记录的处理，但是对于下一个记录想先做一些处理的情况下非常有用。例如：
@@ -1882,7 +1882,7 @@ $0 = @code{out} @code{rest}
 4.9.5 从管道中使用 @code{getline} 
 全知全能太遥远，还不是关注细节更有用。
 —@code{Brian} @code{Kernighan}
-命令的输入也可以被通过使用‘@code{command}|@code{getline}’来以管道输出给 @code{getline}。在这种情形中，@code{command} 是一个 @code{Shell} 命令，同时，它的输出会被以管道形式输出给 @command{awk} 来作为输入。这种形式的 @code{getline} 从管道中一次读取一个记录。如，下面的程序复制它的输入到输出中，排除那些以‘@@code{exclude}’开头的行，这些行会被替换为将行的剩下的内容当做@code{Shell}命令执行时产生的输出：
+命令的输入也可以被通过使用‘@code{command}|@code{getline}’来以管道输出给 @code{getline}。在这种情形中，@code{command} 是一个 Shell 命令，同时，它的输出会被以管道形式输出给 @command{awk} 来作为输入。这种形式的 @code{getline} 从管道中一次读取一个记录。如，下面的程序复制它的输入到输出中，排除那些以‘@@code{exclude}’开头的行，这些行会被替换为将行的剩下的内容当做Shell命令执行时产生的输出：
 {
 @code{if} ($1 == "@@code{execute}") {
 @code{tmp} = @code{substr}($0， 10) # @code{Remove} "@@code{execute}"
@@ -1992,7 +1992,7 @@ $ @command{gawk} ’@code{BEGIN} { @code{PROCINFO}["-"， "@code{READ_TIMEOUT}"]
 赋值一个超时值，可以避免读操作一直被阻塞。但是要记住，还有其他的方法来等待输入设置准备就绪。一个网络客户端在可以读取数据之前可能需要等待很长的时间来建立连接，或者要很长的时间来打开 @code{FIFO} 特殊文件以进行读取，这时会一直阻塞，直到其他的进程打开这个特殊文件并进行写。
 4.11 命令行中的目录
 根据 POSIX 标准，在 @command{awk} 命令行中指定的文件名必须是文本文件；如果不是则会是一个致命错误。大多数 @command{awk} 版本将命令行上指定目录看成是一个致命错误。
-在默认情况下，@command{gawk} 在命令行上指定目录会产生一个告警，但是会忽略它。这样的知，可能很容易使用右 @command{awk} 程序中使用 @code{Shell} 通配符：
+在默认情况下，@command{gawk} 在命令行上指定目录会产生一个告警，但是会忽略它。这样的知，可能很容易使用右 @command{awk} 程序中使用 Shell 通配符：
 $ @command{gawk} @option{-f} @code{whizprog}.@command{awk} * @code{Directories} @code{could} @code{kill} @code{this} @code{program}
 如果指定了 @option{--posix} 或者 @option{--traditional} 选项，@command{gawk} 则会将在命令行上指定目录视为致命错误。
 查看 16.7.6 读取目录，在第 397 页，有一个方式来在 @command{awk} 程序将目录视为有用的数据。
@@ -2167,7 +2167,7 @@ $ @code{LC_ALL}=C @command{gawk} @option{-f} @code{thousands}.@command{awk}
 $ @code{LC_ALL}=@code{en_US}.@code{UTF}-8 @command{gawk} @option{-f} @code{thousands}.@command{awk}
 -| 1，234，567                  @code{Results} @code{in} @code{US} @code{English} @code{UTF} @code{locale}
 要获取关于语言设置与国际化问题的更多信息，请查看@code{}6.6 哪里造成差异，在第 136 页。
-提示：‘'’标志是一个非常好的特性，但是使用起来会导致一些事情复杂起来：在命令行程序中用起来非常困难。要了解引号技巧的一些信息，请看 1.1.6 @code{Shell}引号问题，在第 24 页。
+提示：‘'’标志是一个非常好的特性，但是使用起来会导致一些事情复杂起来：在命令行程序中用起来非常困难。要了解引号技巧的一些信息，请看 1.1.6 Shell引号问题，在第 24 页。
 @code{width}   这是一个数值指定符，指定一个域所需要的最小宽度。在‘%’与格式控制字母之间插入一个数值，强制域的宽度扩展到指定的大小。默认的情况下会在左边的位置在空闲位置以空格填充。例如：
 @code{printf} "%4s"， "@code{foo}"
 会打印‘●@code{foo}’。
@@ -2238,11 +2238,11 @@ $ @command{awk}’{ @code{printf} "%@minus{}10s %@code{s}\@code{n}"， $1， $2 
 5.6 重定向@code{print} 与 @code{printf} 的输出
 到目前，从 @code{print} 与 @code{printf} 的输出都打印在标准输出上，一般就是屏幕。@code{print} 与 @code{printf} 都可以将其输出定向到其他的地方，这就称为重定向。
 提示：当在命令行中指定了 @option{--sandbox} （查看），将输出定向到文件，管道与并程会被禁用。
-重定向出现在 @code{print} 与 @code{printf} 语句之后。@command{awk} 中的重定向如 @code{Shell} 脚本中的重定向一样，区别只是它们是写在 @command{awk} 程序中。
+重定向出现在 @code{print} 与 @code{printf} 语句之后。@command{awk} 中的重定向如 Shell 脚本中的重定向一样，区别只是它们是写在 @command{awk} 程序中。
 有@code{}4@code{}种重定向方式：定向到文件，定向附加到文件的末尾；定向到另一个命令的管道中，与定向到一个并程。我们将其展示在 @code{print} 语句中，但也可以应用在 @code{printf} 语句：
 @code{print} @code{items} > @code{output}@option{-file}
 这个类型的定向会将项目输出到一个名字为 @code{output}@option{-file} 的文件中。文件名 @code{output}@option{-file} 可以是任意表达式。它的值会被转换成字串并用作文件名（查看第六章 表达式， 在第 112 页）。
-当使用这种重定向时，@code{output}@option{-file} 在第一个输出写入前会将文件清空。后续对同一个文件的写不再进行内容擦除，只会附加。（这与你在 @code{Shell} 中使用重定向不同。）如果 @code{output}@option{-file} 不存在，则创建它。例如下面是一个 @command{awk} 程序，其会将人名列表写到名为@code{name}@option{-list}的文件中，并将电话号码写入到另一个名为 @code{phone}@option{-list} 的文件中：
+当使用这种重定向时，@code{output}@option{-file} 在第一个输出写入前会将文件清空。后续对同一个文件的写不再进行内容擦除，只会附加。（这与你在 Shell 中使用重定向不同。）如果 @code{output}@option{-file} 不存在，则创建它。例如下面是一个 @command{awk} 程序，其会将人名列表写到名为@code{name}@option{-list}的文件中，并将电话号码写入到另一个名为 @code{phone}@option{-list} 的文件中：
 $ @command{awk}’{ @code{print} $2 >"@code{phone}@option{-list}"
 > @code{print} $1 >"@code{name}@option{-list}" }’ @code{mail}@option{-list}
 $ @code{cat} @code{phone}@option{-list}
@@ -2258,7 +2258,7 @@ $ @code{cat} @code{name}@option{-list}
 这个类型的重定向将项目输出到一个已经存在的名为 @code{output}@option{-file} 的文件中。这个用法与单个的‘>’的重定向有不同时，@code{output}@option{-file} 文件中的旧内容（如果有）不会被清空。@command{awk} 的输出会附加到文件中。如果文件不存在，则创建它。
 @code{print} @code{items} | @code{command}
 通过管道可以将输出定向到一个另一个程序而不是文件。这个方式的重定向会向 @code{command} 打开一个管道，然后将项目的值通过为执行的 @code{command} 创建的管道写到咖一个程序中。
-重定向参数  @code{command} 实际是是一个 @command{awk} 表达式。它的值会被转换成要执行的 @code{Shell} 命令的字串。例如，下面的代码会产生两个文件，一个是未排序的人名，一个按字母倒序对人名进行排列：
+重定向参数  @code{command} 实际是是一个 @command{awk} 表达式。它的值会被转换成要执行的 Shell 命令的字串。例如，下面的代码会产生两个文件，一个是未排序的人名，一个按字母倒序对人名进行排列：
 @command{awk}’{ @code{print} $1 >"@code{names}.@code{unsorted}"
 @code{command} = "@code{sort} @option{-r} > @code{names}.@code{sorted}"
 @code{print} $1 | @code{command} }’ @code{mail}@option{-list}
@@ -2279,20 +2279,20 @@ $ @code{cat} @code{name}@option{-list}
 ...
 # @code{append}
 @code{print} "@code{Avoid} @code{improbability} @code{generators}">>"@code{guide}.@code{txt}"
-在@code{Shell} 中确实是这么重定向的。但是在@command{awk} 中，却没有必要。在这咱情况下，程序应该在所有的 @code{print} 语句上使用‘>’，因为输出文件只会打开一次。（在混合使用‘>’  与‘>>’ 时，也是打开一次。但是，混用操作符是一种糟糕的编程习惯，会让你程序的读取困惑。）
+在Shell 中确实是这么重定向的。但是在@command{awk} 中，却没有必要。在这咱情况下，程序应该在所有的 @code{print} 语句上使用‘>’，因为输出文件只会打开一次。（在混合使用‘>’  与‘>>’ 时，也是打开一次。但是，混用操作符是一种糟糕的编程习惯，会让你程序的读取困惑。）
 如早前所述（查看@code{}4.9.9 回顾 @code{getline}，在第 89 页），许多的@command{awk} 实现限制了@command{awk} 程序可以打开的管线数量为一个！@command{gawk}则没有这个限制。@command{gawk} 可以打开的管线的数量只能所在的操作系统的限制。
 管道输出到@code{sh}
-一种使用重定向的强大方式是构造一个命令行，然后将用管道输出到@code{Shell}，@code{sh} 中。例如，你有一堆的文件是从其他系统中取来的，并且文件名都以大写存储，而你想把他们全部改成小写的。下面的程序即简单也很高效：
+一种使用重定向的强大方式是构造一个命令行，然后将用管道输出到Shell，@code{sh} 中。例如，你有一堆的文件是从其他系统中取来的，并且文件名都以大写存储，而你想把他们全部改成小写的。下面的程序即简单也很高效：
 { @code{printf}("@code{mv} %@code{s} %@code{s}\@code{n}"， $0， @code{tolower}($0)) | "@code{sh}" }
 @code{END} { @code{close}("@code{sh}") }
-@code{tolower()} 函数返回参数字串中所有的大写字母被转换为小写的串（查看@code{}9.1.3 字串操作函数，在第 184 页）。程序构建了一系列的命令行，并使用@code{mv} 工具对文件进行改名，然后将这些命令列表发送给@code{Shell} 执行。
-查看@code{}10.2.9 将字串用引号引起并传递给 @code{Shell}，在第 232 页，了解可以辅助产生可以发送到@code{Shell} 的命令行函数。
+@code{tolower()} 函数返回参数字串中所有的大写字母被转换为小写的串（查看@code{}9.1.3 字串操作函数，在第 184 页）。程序构建了一系列的命令行，并使用@code{mv} 工具对文件进行改名，然后将这些命令列表发送给Shell 执行。
+查看@code{}10.2.9 将字串用引号引起并传递给 Shell，在第 232 页，了解可以辅助产生可以发送到Shell 的命令行函数。
 5.7 标准的预打开的特殊文件数据流
 一般地，正在执行的程序有三个输入输出游戏已经可以用来进行读写。这就是众所周知的标准输入，标准输出以及标准错误输出。这些已经打开的流（以及任意已经打开的文件或者管道）技术上可以由所谓的文件描述符来表示。
-默认情况下，这些流是你的键盘与你的屏幕，但是他们常常通过‘<’，‘<<’，‘>’，‘>>’，‘>&’ 与‘|’ 操作符，在@code{Shell} 中被重定向。标准错误一股用于写错误信息，有两个分离流（标准输出与标准错误输出）的原因是它们可以被单独地进行重定向。
+默认情况下，这些流是你的键盘与你的屏幕，但是他们常常通过‘<’，‘<<’，‘>’，‘>>’，‘>&’ 与‘|’ 操作符，在Shell 中被重定向。标准错误一股用于写错误信息，有两个分离流（标准输出与标准错误输出）的原因是它们可以被单独地进行重定向。
 在@command{awk} 的传统实现中，在@command{awk} 程序中将错误信息写到标准错误输出的唯一方式如下：
 @code{print} "@code{Serious} @code{error} @code{detected}!" | "@code{cat} 1>&2"
-通过打开一个到@code{Shell} 命令的管线，而该命令可以访问从@command{awk} 继承而来的标准错误流。这样写没那么优雅，而且也需要开启一个独立的进程。因此，人们在@command{awk} 程序不常这么干，而是通过下面的方式来输出信息到屏幕：
+通过打开一个到Shell 命令的管线，而该命令可以访问从@command{awk} 继承而来的标准错误流。这样写没那么优雅，而且也需要开启一个独立的进程。因此，人们在@command{awk} 程序不常这么干，而是通过下面的方式来输出信息到屏幕：
 @code{print} "@code{Serious} @code{error} @code{detected}!">"/@code{dev}/@code{tty}"
 （/@code{dev}/@code{tty} 是一个由操作系统提供的特殊文件，该文件与你的键盘与屏幕连接。它表示的是“终端” （@code{Terminal}），在现在系统中是键盘与屏幕，而不是串行控制台。）这一般有相同的效果，但是并不总是如此：尽管标准错误输出一般就是屏幕，但是它可以被重定向。当发生这种情况时，写到屏幕就不正确了。事实上，如果@command{awk} 是一个后台任务，它根本主没有终端。这样，打开 /@code{dev}/@code{tty} 就会失败。
 @command{gawk}，@code{GWK} @command{awk} 以及@command{mawk} 提供了访问三个标准流的特殊文件名。如果@command{gawk} 在重定向输入输出时，文件名匹配这其中之一，它就直接使用这个名字所所代表的文件描述符。这此特殊文件名在所有的 @command{gawk} 已经移植到的操作系统中都有效，并不仅仅是POSIX 兼容的系统：
@@ -2311,7 +2311,7 @@ $ @code{cat} @code{name}@option{-list}
 5.8.1 在@command{gawk}访问其他已开文件
 除了/@code{dev}/@code{stdin}， /@code{dev}/@code{stdout}， 与/@code{dev}/@code{stderr}这些早前提过的特殊文件外，@command{gawk} 还提供了访问已经打开的文件的语法：
 /@code{dev}/@code{fd}/@code{N}
-与文件描述符@code{N} 关联的文件。该文件必须由启动@command{awk} 程序执行的程序（一般是@code{Shell}）打开的文件。除非在调用@command{gawk}的@code{Shell} 中多花一些功夫，不然只会有描述符 0，1 与 2 是打开的。
+与文件描述符@code{N} 关联的文件。该文件必须由启动@command{awk} 程序执行的程序（一般是Shell）打开的文件。除非在调用@command{gawk}的Shell 中多花一些功夫，不然只会有描述符 0，1 与 2 是打开的。
 文件名 /@code{dev}/@code{stdin}， /@code{dev}/@code{stdout}， 与 /@code{dev}/@code{stderr}实际上就是/@code{dev}/@code{fd}/0， /@code{dev}/@code{fd}/1， 与 /@code{dev}/@code{fd}/2@code{}的别名。但是，这些名字更有说明性。
 注意，对于文件描述符号大于@code{}2@code{}以上的文件形式“/@code{dev}/@code{fd}/@code{N}” 执行 @code{close()} 函数，才会真正地执行关闭（@code{close}）操作。
 5.8.2 用于网络的特殊文件
@@ -2324,9 +2324,9 @@ $ @code{cat} @code{name}@option{-list}
 对于其他特殊文件名的识别，只有 @command{gawk} 处于兼容模式时才会被禁止（要么使用 @option{--traditional}，要么是使用 @option{--posix} 选项，查看 2.2 命令行参数，在第 35 页）。
 @command{gawk} 总是会解释这些特殊文件名。例如，使用 ‘/@code{dev}/@code{fd}/4’ 为输出，实际上写入的是描述符为@code{}4@code{}的文件，而不是使用 @code{dup} 复制@code{}4 描述符的新文件。大多数情况下，这没有什么问题。但是，不要关闭任意与文件描述符 0，1，2 相关的文件，这个相当重要。这么做的话，会导致不可预知的行为。
 5.9 关闭输入输出重定向
-在 @command{awk} 程序执行期间，如果同样的文件名或者同一个 @code{Shell} 命令被 @code{getline} 使用过多于一次（查看 ），则文件（或者命令的执行）只在第一次发生。从那以后，从中读取第一个输入记录。通过 @code{getline} 再次读取同一个文件或者命令时，第二条记录从其中获取，以此类推。
+在 @command{awk} 程序执行期间，如果同样的文件名或者同一个 Shell 命令被 @code{getline} 使用过多于一次（查看 ），则文件（或者命令的执行）只在第一次发生。从那以后，从中读取第一个输入记录。通过 @code{getline} 再次读取同一个文件或者命令时，第二条记录从其中获取，以此类推。
 相似地，当文件或者管道被打开用于输出时，@command{awk} 会记录文件名或者与其相关的命令，后续对于同一个文件或者命令写入，会被附加到前一个写操作之后。真到 @command{awk} 退出后，文件或者管道才会被关闭。
-这意思是说，为了再次从头开始读取同一个文件，或者重新执行一个@code{Shell} 命令，你需要一些特别步骤（而不是从同一个命令中读取更多的输出）。@code{close()} 函数就是用来执行这个步骤：
+这意思是说，为了再次从头开始读取同一个文件，或者重新执行一个Shell 命令，你需要一些特别步骤（而不是从同一个命令中读取更多的输出）。@code{close()} 函数就是用来执行这个步骤：
 @code{close}(@code{filename})
 或者：
 @code{close}(@code{command})
@@ -2492,7 +2492,7 @@ $ @command{awk}’{ @code{print} $@code{n} }’ @code{n}=4 @code{inventory}@opti
 @code{b} 的值为 “12”，而不是 “12.00”。
 6.1.4.2 语言设置会影响转换
 当要在字串与数值之间进行转换时，什么地方会对此产生影响？本地字符设置与语言，即 @code{locale}，会影响数值的格式。特别是，对于 @command{awk} 程序，它还会影响十进制小数点字符以及百分位字符。“C” 语言设置或者大多数的英语语言，使用点符号（‘.’）当做为十进制数小数点，并且没有百分位。但是，许多（如果不是大多数）的欧洲以及非英语语言区域使用逗号（‘，’）作为十进制小数点字符。欧洲语言通常在需要的时候使用空格或者点来作为百分位。
-POSIX 标准规定，当读取 @command{awk} 程序源代码，以及在读取命令行赋值变量时，总是使用点号作为十进制小数点（查看 2.3 其他命令行参数，在第 41 页）。但是，当解释输入数据时、进行 @code{print} 或者 @code{printf} 输出，以及进行数值与字串转换时，则使用本地的十进制小数点。在所有的情况下，源代码中的数值，以及输入数据不可以有百分位分隔符。下面的代码在 GNU/@code{Linux} 系统解释了这些差异：
+POSIX 标准规定，当读取 @command{awk} 程序源代码，以及在读取命令行赋值变量时，总是使用点号作为十进制小数点（查看 2.3 其他命令行参数，在第 41 页）。但是，当解释输入数据时、进行 @code{print} 或者 @code{printf} 输出，以及进行数值与字串转换时，则使用本地的十进制小数点。在所有的情况下，源代码中的数值，以及输入数据不可以有百分位分隔符。下面的代码在 GNU/Linux 系统解释了这些差异：
 $ @code{export} @code{POSIXLY_CORRECT}=1 @code{Force} POSIX @code{behavior}
 $ @command{gawk} ’@code{BEGIN} { @code{printf} "%@code{g}\@code{n}"， 3.1415927 }’
 -| 3.14159
@@ -3014,16 +3014,16 @@ $ @command{awk} ’
 一个空模式（如不存在模式）被视为匹配所有的输入记录。例如，下面的程序：
 @command{awk} ’{ @code{print} $1 }’ @code{mail}@option{-list}
 打印每一个记录的第一个域。
-7.2 在程序中使用 @code{Shell} 变量
-@command{awk} 程序常用于一个用 @code{Shell} 写成的大程序中的一个组件。例如，使用一个 @code{Shell} 变量来存放 @command{awk} 程序要搜索的模式。有两个方式来取得 @code{Shell} 变量的值，并插入到 @command{awk} 程序中。
-一种通用的方式是使用 @code{Shell} 引号来在脚本中替代变量的值，由此来插入到程序中。例如，下面的程序：
+7.2 在程序中使用 Shell 变量
+@command{awk} 程序常用于一个用 Shell 写成的大程序中的一个组件。例如，使用一个 Shell 变量来存放 @command{awk} 程序要搜索的模式。有两个方式来取得 Shell 变量的值，并插入到 @command{awk} 程序中。
+一种通用的方式是使用 Shell 引号来在脚本中替代变量的值，由此来插入到程序中。例如，下面的程序：
 @code{printf} "@code{Enter} @code{search} @code{pattern}: "
 @code{read} @code{pattern}
 @command{awk} "/$@code{pattern}/ "’{ @code{nmatches}++ }
 @code{END} { @code{print} @code{nmatches}， "@code{found}" }’ /@code{path}/@code{to}/@code{data}
-@command{awk} 程序将引号文本的片段视作为连接操作来形成程序。第一部分就被双引号引起来，这可以使得用 @code{Shell} 变量来替换引起来模式。第二部分是单引号的部分。
-通过引号方式的变量替换虽然可以工作，但是有可能导致潜在的混乱。这需要对 @code{Shell} 的引号规则有比较好的理解（查看  1.1.6 @code{Shell}引号问题，在第 24 页），并且当读取程序，匹配引号的时候会比较麻烦。
-更好的方法是使用 @command{awk} 的变量赋值特性（查看 6.1.3.2 在命令行中进行变量赋值，在第 116 页）来将 @code{Shell} 变量的值赋给 @command{awk} 变量。然后使用动态正则表达式来匹配模式（查看 3.6 使用动态正则表达式，在第 58 页）。下面的代码显示使用这个技巧来重写上面的功能：
+@command{awk} 程序将引号文本的片段视作为连接操作来形成程序。第一部分就被双引号引起来，这可以使得用 Shell 变量来替换引起来模式。第二部分是单引号的部分。
+通过引号方式的变量替换虽然可以工作，但是有可能导致潜在的混乱。这需要对 Shell 的引号规则有比较好的理解（查看  1.1.6 Shell引号问题，在第 24 页），并且当读取程序，匹配引号的时候会比较麻烦。
+更好的方法是使用 @command{awk} 的变量赋值特性（查看 6.1.3.2 在命令行中进行变量赋值，在第 116 页）来将 Shell 变量的值赋给 @command{awk} 变量。然后使用动态正则表达式来匹配模式（查看 3.6 使用动态正则表达式，在第 58 页）。下面的代码显示使用这个技巧来重写上面的功能：
 @code{printf} "@code{Enter} @code{search} @code{pattern}: "
 @code{read} @code{pattern}
 @command{awk} @option{-v} @code{pat}="$@code{pattern}" ’$0 ~ @code{pat} { @code{nmatches}++ }
@@ -3458,7 +3458,7 @@ $ @command{awk} @option{-v} @code{A}=1 @option{-f} @code{showargs}.@command{awk}
 7.6 总结
 模式-行为 对组成了 @command{awk} 程序的基本元素。模式要是么一个普通的表达式，范围表达式，或者是正则表达式常量，或者是特殊关键字 @code{BEGIN}，@code{END}，@code{BEGINFILE}，@code{ENDFILE}，或者为空。动作在当前记录匹配模式后执行。空的（省略）的模式匹配所有的记录。
 从 @code{BEGIN} 与 @code{END} 模式中进行 I/O 有一定的限制，对于 @code{BEGINFILE} 以及 @code{ENDFILE} 也是如此，而且限制更多。后两者可以让你在处理文件之间打入勾子，因此可你使用从可以导致致使错误的文件中恢复回来（例如文件不能被打开）。
-@code{Shell} 变量可以通过仔细地使用 @code{Shell} 引号来用在 @command{awk} 程序中。用 @command{awk} 的 @option{-v} 选项来传递 @code{Shell} 变量到 @command{awk} 变量会更加容易。
+Shell 变量可以通过仔细地使用 Shell 引号来用在 @command{awk} 程序中。用 @command{awk} 的 @option{-v} 选项来传递 Shell 变量到 @command{awk} 变量会更加容易。
 动作由花括号包含的语句组成 。语句由表达式，控制语句，复合语句，输入输出语句以及删除文句组成。
 @command{awk} 的控制语句是 @code{if}@option{-else}，@code{while}，@code{for} 和 @code{do}@option{-while}。@command{gawk} 添加了 @code{switch} 语句。@code{for} 语句有两个用处：一个是执行一般的循环，另一个是用来迭代数组。
 @code{break} 与 @code{continue} 可以让你早点或者开启下一个循环替代（或者跳出 @code{switch}）。
@@ -4137,7 +4137,7 @@ POSIX 规则描述说，在 @code{replacement}  中的 ‘\&’ 产生一个 ‘
 9.1.4 输入输出函数
 下面的函数与 I/O 相关。可选择的参数放在方括号中（[]）：
 @code{close}(@code{filename} [， @code{how}])
-关闭用于输入或者输出的文件 @code{filename}。另外，参数也可以是一个用来创建并程或者用于重定向输出，或者从管道中输入的 @code{Shell} 命令。如果参数是这个，则会关闭相应的并程与管道。查看 5.9 关闭输入输出重定向，在第 108 页，获取更多信息。
+关闭用于输入或者输出的文件 @code{filename}。另外，参数也可以是一个用来创建并程或者用于重定向输出，或者从管道中输入的 Shell 命令。如果参数是这个，则会关闭相应的并程与管道。查看 5.9 关闭输入输出重定向，在第 108 页，获取更多信息。
 当关闭一个并程时，有时先关闭两路管道中的一端然后再关闭另一端非常有用。这通过向 @code{close} 传递第二个参数来完成。这第二个参数（@code{how}）要是下面两个串中的一个，即 “@code{to}” 或者 “@code{from}”，以表示关闭管道的哪一端。字串的大小写是无关的。查看 12.3 与其他进程进行双向通信，在第 304 页，在里面更详细地讨论了这个特性，并且还举了一个例子。
 注意 @code{close()} 的第二个参数是 @command{gawk} 扩展，在兼容模式下是不可用的（查看  2.2 命令行参数， 在第 35 页）。
 @code{fflush}([@code{filename}])
@@ -4171,16 +4171,16 @@ $ @command{awk} ’{ @code{print} $1 + $2 }’ | @code{cat}
 @code{system}("@code{date} | @code{mail} @option{-s}  '@command{awk} @code{run} @code{done}' @code{root}")
 }
 当 @command{awk} 程序完成处理输入，并且开启输入结束处理流程时，会向系统管理员发送邮件。
-注意重定向 @code{print} 或者 @code{printf} 到管道一般来就就够来完成你的工作。如果你需要运行许多命令，则简单地将它们通过管线打印到 @code{Shell} 更高效：
+注意重定向 @code{print} 或者 @code{printf} 到管道一般来就就够来完成你的工作。如果你需要运行许多命令，则简单地将它们通过管线打印到 Shell 更高效：
 @code{while} (@code{more} @code{stuff} @code{to} @code{do})
 @code{print} @code{command} | "/@code{bin}/@code{sh}"
 @code{close}("/@code{bin}/@code{sh}")
-但是，如果你的 @command{awk} 程序是交互式的，@code{system()} 用于大型的自包含的程序就非常有用，比如 @code{Shell} 或者编辑器。一些操作系统不能实现 @code{system} 函数。@code{system()} 在不其不支持的情况下生成一个致命错误。
+但是，如果你的 @command{awk} 程序是交互式的，@code{system()} 用于大型的自包含的程序就非常有用，比如 Shell 或者编辑器。一些操作系统不能实现 @code{system} 函数。@code{system()} 在不其不支持的情况下生成一个致命错误。
 注意：当指定了 @option{--sandbox} 选项，@code{system()} 函数会被禁用（查看 2.2 命令行参数，在第 35 页）。
 通过 @code{system()} 来控制输出缓存
 @code{fflush()} 函数提供了显式的控制输出单独文件或者管道缓存的方式。但是，对于许多的旧的 @command{awk} 实现却是不可移植的。一个可用的方法就是通过调用 @code{system()} 函数，并给其提供一个空串作为其参数来刷出输出缓存：
 @code{system}("") # @code{flush} @code{output}
-@command{gawk} 将这种使用 @code{system()} 函数的方式作为一种特殊方式来对待，并且聪明地不用空命令来运行一个 @code{Shell}（或者其他的命令解释器）。因此，在 @command{gawk} 中，这种范式不仅很有用，同时也非常高效。尽管这个方法也会在其他的 @command{awk} 实现中可工作，但是却不是必须要避免开启一个不必要 @code{Shell}。（其他的实现可能只刷出与标准输出关键的缓存，而必是所有的缓存输出。）
+@command{gawk} 将这种使用 @code{system()} 函数的方式作为一种特殊方式来对待，并且聪明地不用空命令来运行一个 Shell（或者其他的命令解释器）。因此，在 @command{gawk} 中，这种范式不仅很有用，同时也非常高效。尽管这个方法也会在其他的 @command{awk} 实现中可工作，但是却不是必须要避免开启一个不必要 Shell。（其他的实现可能只刷出与标准输出关键的缓存，而必是所有的缓存输出。）
 如果你考虑一下一个程序员的预期，@code{system()} 会刷出所有的挂起的输出看起来就有意思了。下面的程序：
 @code{BEGIN} {
 @code{print} "@code{first} @code{print}"
@@ -4247,7 +4247,7 @@ $ @command{awk} ’{ @code{print} $1 + $2 }’ | @code{cat}
 %@code{z}  时区差，用 ‘+@code{HHMM}’ 格式表示（即格式需要产生 RFC822/@code{RFC} 1036 的日期头）。
 %@code{Z}  时区名或者是其缩写，如果时区不能确定则没有字符。
 %@code{Ec} %@code{EC} %@code{Ex} %@code{EX} %@code{Ey} %@code{EY} %@code{Od} %@code{Oe} %@code{OH}
-%@code{OI} %@code{Om} %@code{OM} %@code{OS} %@code{Ou} %@code{OU} %@code{OV} %@code{Ow} %@code{OW} %@code{Oy}
+%@code{OI} %@code{Om} %@code{OM} %OS %@code{Ou} %@code{OU} %@code{OV} %@code{Ow} %@code{OW} %@code{Oy}
 在规范中只使用第二个字符的“替代表示”（‘%@code{c}’， ‘%C’，等等）。 （这个设施是与 POSIX 的 @code{date} 工具兼容的。）
 %%  字面的 ‘%’。
 如果转换指定符不是上面所列之一，行为就是未定义的。 
@@ -5114,7 +5114,7 @@ C 语言可以使条件转换为字串，并在打印诊断信息里使用。但
 # @code{file} @code{was} @code{empty} ...
 这里测试结果看其是否为空还是不为空，一个等同的测试为 ‘@code{contents}== ""’。
 查看 16.7.10 读取整个文件，在第 399 页，来查看扩展的函数，它也将整个文件的内容读取到内存中。
-10.2.9 将字串用引号引起并传递给 @code{Shell}
+10.2.9 将字串用引号引起并传递给 Shell
 @code{Michael} @code{Brennan} 提供了下面的编程模式，他经常是这么使用：
 #! /@code{bin}/@code{sh}
 @code{awkp}= ’
@@ -5123,13 +5123,13 @@ C 语言可以使条件转换为字串，并在打印诊断信息里使用。但
 @code{input_program} | @command{awk} "$@code{awkp}" | /@code{bin}/@code{sh}
 比如，他的一个程序名为 @code{flac}@option{-edit} 就使用这种形式：
 $ @code{flac}@option{-edit} @option{-song}="@code{Whoope}! @code{That}’@code{s} @code{Great}" @code{file}.@code{flac}
-它产生下面的输出，这些输出通过管道输出给 @code{Shell}（/@code{bin}/@code{sh}）：
+它产生下面的输出，这些输出通过管道输出给 Shell（/@code{bin}/@code{sh}）：
 @code{chmod} +@code{w} @code{file}.@code{flac}
 @code{metaflac} @option{--remove}@option{-tag}=@code{TITLE} @code{file}.@code{flac}
 @code{LANG}=@code{en_US}.88591 @code{metaflac} @option{--set}@option{-tag}=@code{TITLE}=’@code{Whoope}! @code{That}’"’"’@code{s} @code{Great}’ @code{file}.@code{flac}
 @code{chmod} @option{-w} @code{file}.@code{flac}
-注意@code{Shell} 需要引号。函数 @code{shell_quote()} 就是来做这个事情的。@code{SINGLE} 是一个一字符的串 “'”，而 @code{QSINGLE} 是一个三字符的串“\"'\"”：
-# @code{shell_quote} --- @code{quote} @code{an} @code{argument} @code{for} @code{passing} @code{to} @code{the} @code{shell}
+注意Shell 需要引号。函数 @code{shell_quote()} 就是来做这个事情的。@code{SINGLE} 是一个一字符的串 “'”，而 @code{QSINGLE} 是一个三字符的串“\"'\"”：
+# @code{shell_quote} --- @code{quote} @code{an} @code{argument} @code{for} @code{passing} @code{to} @code{the} shell
 @code{function} @code{shell_quote}(@code{s}， # @code{parameter}
 @code{SINGLE}， @code{QSINGLE}， @code{i}， @code{X}， @code{n}， @code{ret}) # @code{locals}
 {
@@ -5429,9 +5429,9 @@ POSIX 标准没有定义用户的信息存在哪。相反，它提供了 <@code{
 @code{Group}@option{-ID}    用户的组数值 @code{ID}。（内容与刚才所述的 @code{long} 与 @code{int} 类型的解释类似。）
 @code{Full} @code{name}   用户的全名，以及与这个用户相关的其他信息。
 @code{Home} @code{directory}
-用户的登录目录（或者 “@code{home}”）（类似于 @code{Shell} 程序员中的 $@code{HOME}）。
-@code{Login} @code{shell}
-当用户登录时所要运行的程序。一般来说是一个 @code{Shell} 程序，如 @code{Bash}。
+用户的登录目录（或者 “@code{home}”）（类似于 Shell 程序员中的 $@code{HOME}）。
+@code{Login} shell
+当用户登录时所要运行的程序。一般来说是一个 Shell 程序，如 @code{Bash}。
 @code{pwcat} 的输出的几行内容例子如下：
 $ @code{pwcat}
 -| @code{root}:@code{x}:0:1:@code{Operator}:/:/@code{bin}/@code{sh}
@@ -5888,7 +5888,7 @@ $ @command{gawk} @option{-f} @code{walk_array}.@command{awk}
 11.2.2 用正则表达式在文件中搜索
 @code{egrep} 工具要来按模式搜索文件内容。它使用的正则表达式几乎与 @command{awk} 所使用的一样（查看 第三章 正则表达式， 在第 50 页）。你这么来调用：
 @code{egrep} [@code{options}]  '@code{pattern}' @code{files} . . .
-@code{pattern} 是一个正则表达式。在典型的使用情况下，正则表达式会被引起来，以避免@code{Shell} 将一些特殊字符扩展为文件名的通配符。一般情况下，@code{egrep} 打印匹配的行。如果在命令行中提供了多个文件，则每个输出行前都带上文件名，后面跟着冒号：
+@code{pattern} 是一个正则表达式。在典型的使用情况下，正则表达式会被引起来，以避免Shell 将一些特殊字符扩展为文件名的通配符。一般情况下，@code{egrep} 打印匹配的行。如果在命令行中提供了多个文件，则每个输出行前都带上文件名，后面跟着冒号：
 @code{egrep} 的选项如下：
 @option{-c}  打印匹配 @code{pattern} 的行的总数，而不是匹配行本身。
 @option{-s}  静默处理，不产生输出，并且用退出值来表示是否有匹配的行。
@@ -6621,9 +6621,9 @@ $0 = @code{tolower}($0) # @code{remove} @code{case} @code{distinctions}
 这种方式的排序必须使用在那些在命令行一层没有真正的管道的的系统上（或者批处理文件）。查看操作系统上如何使用 @code{sort} 程序的文档来获取更多信息。
 11.3.6 从未排序的文本中去重
 @code{uniq} 程序（查看 11.2.6 打印去重文本行， 在第 267 页）在经过排序的数据中移除重复的行。
-但是，你可能需要移除数据文件中的重复的行，而又想保留行中的顺序。这样处理的一个合适的例子就是 @code{Shell} 的 @code{histroy} 文件。@code{history} 文件保留了你已经输入过的命令的复本，在一行中重复几次相同的命令的情况并不多见。有时候，你可能想移除重复的行来压缩文件。但是还要保留最初命令行的顺序。
+但是，你可能需要移除数据文件中的重复的行，而又想保留行中的顺序。这样处理的一个合适的例子就是 Shell 的 @code{histroy} 文件。@code{history} 文件保留了你已经输入过的命令的复本，在一行中重复几次相同的命令的情况并不多见。有时候，你可能想移除重复的行来压缩文件。但是还要保留最初命令行的顺序。
 下面这个简单的程序可以完成这个工作。它会使用两个数组。 @code{data} 数组由每行的文本来作索引。对每一行，@code{data}[$0] 会进行递增。如果某个特定的行之前没有出现过，则 @code{data}[$0] 会是 0。在这种情况下，那一行的文本会存在 @code{lines}[@code{count}] 中。@code{lines} 中的元素都是唯一的，而 @code{lines} 的索引表示了行出现的顺序。@code{END} 规则中介简单地按顺序打印 @code{lines}：
-# @code{histsort}.@command{awk} --- @code{compact} @code{a} @code{shell} @code{history} @code{file}
+# @code{histsort}.@command{awk} --- @code{compact} @code{a} shell @code{history} @code{file}
 # @code{Thanks} @code{to} @code{Byron} @code{Rakitzis} @code{for} @code{the} @code{general} @code{idea}
 {
 @code{if} (@code{data}[$0]++ == 0)
@@ -6768,7 +6768,7 @@ command1 < @code{orig}.@code{data} | @code{sed} ’@code{s}/@code{old}/@code{new
 @code{BEGIN} 规则处理环境的设置，检查参数的正确数值，并在出问题时调用 @code{usage()} 函数。然后再设置 @code{RS} 与 @code{ORS} 为从命令行中取得的参数，并调协 @code{ARGV}[1] 与 @code{ARGV}[2] 为空串，这样它们就不会被当成文件名来处理（查看  7.5.3 使用 @code{ARGC} 与 @code{ARGV}， 在第 163 页）。
 @code{usage()} 函数会打印一个错误信息并退出。最后，一个简单的规则根据 @code{RT} 的值来相应地使用 @code{print} 与 @code{printf} 来打印之前确定好的方案。
 11.3.9 使用库函数的简单方式
-在 2.7 在你的程序中包含其他的文件，在第 46 页，中我们看到了 @command{gawk} 如何来提供内置的文件包含能力。但是，这是 @command{gawk} 的扩展。这一节提供了让标准的 @command{awk} 有文件包含能力的动机，以及如何通过 @code{Shell} 与 @command{awk} 的编程组合来实现。
+在 2.7 在你的程序中包含其他的文件，在第 46 页，中我们看到了 @command{gawk} 如何来提供内置的文件包含能力。但是，这是 @command{gawk} 的扩展。这一节提供了让标准的 @command{awk} 有文件包含能力的动机，以及如何通过 Shell 与 @command{awk} 的编程组合来实现。
 使用在 @command{awk} 中的库函数用处非常大。它鼓励代码重用来写一些通用函数。程序看起来会更小更清晰。但是，写 @command{awk} 程序时使用库函数非常容易，但是运行他们时却很痛苦，因为需要多个 @option{-f} 选项。如果 @command{gawk} 不可用，则通过 @code{AWKPATH} 环境来变量来将 @command{awk} 函数放到库目录的能力也一样痛苦（查看  2.2 命令行参数， 在第 35 页）。如果能以下面的方式来写程序则就非常好了：
 # @code{library} @code{functions}
 @@code{include} @code{getopt}.@command{awk}
@@ -6782,26 +6782,26 @@ command1 < @code{orig}.@code{data} | @code{sed} ’@code{s}/@code{old}/@code{new
 }
 下面的程序 @code{igawk}.@code{sh} 提供了这样的服务。它模拟 @command{gawk} 的搜索 @code{AWKPATH} 变量的行为，并允许嵌套的 @code{include}（即被@@code{include} 包含的文件可以再包含 @@code{include} 语句）。@code{igawk} 努力使文件只被包含一次，因此嵌套的包含不会偶然包含一个库函数两次。
 @code{igawk} 应该外在表现得像 @command{gawk}。这就是说，它可以接收所有的 @command{gawk} 的命令行参数，包含通过 @option{-f} 指定多个源文件的能力以及能够混用命令行与库源文件的能力。
-程序使用 POSIX @code{Shell}（@code{sh}）命令语言写成。 它工作方式如下：
+程序使用 POSIX Shell（@code{sh}）命令语言写成。 它工作方式如下：
 当程序展开执行时，循环迭代参数，保存所有不代表 @command{awk} 源代码的参数以备用。
-对于任何不代表 @command{awk} 文件的参数，将参数放到一个可展开的 @code{Shell} 变量中。有两种情形：
+对于任何不代表 @command{awk} 文件的参数，将参数放到一个可展开的 Shell 变量中。有两种情形：
 对于由 @option{-e} 或者 @option{--source} 提供的字面文本。这个文本只是直接进行附加。
-由 @option{-f} 参数提供的源文件名。我们使用一个小技巧，并附加 ‘@@code{include} @code{filename}’ 到 @code{Shell} 变量的内容中。由于文件包含程序如 @command{gawk} 一样的工作方式，这可以在正确的点取得程序中包含的文件的文本。
-在 @code{Shell} 变量之上，执行 @command{awk} 程序（自然地）来展开 @@code{include} 语句。被展开的程序放放在第二个 @code{Shell} 变量中。
+由 @option{-f} 参数提供的源文件名。我们使用一个小技巧，并附加 ‘@@code{include} @code{filename}’ 到 Shell 变量的内容中。由于文件包含程序如 @command{gawk} 一样的工作方式，这可以在正确的点取得程序中包含的文件的文本。
+在 Shell 变量之上，执行 @command{awk} 程序（自然地）来展开 @@code{include} 语句。被展开的程序放放在第二个 Shell 变量中。
 用 @command{gawk} 运行展开的程序以及其他的用户提供的命令参数（例如数据文件名）。
-这个程序扩展地使用 @code{Shell} 变量：用于存储命令行参数以及将会展开用户程序的 @command{awk} 程序的文本，用于用户的初始程序以及展开的程序。这么做可以移除一些当我们使用临时文件而导致的潜在的问题，但是代价就是使脚本带来一定的复杂性。
-程序的开始部分，如果第一个参数是 ‘@code{debug}’，则打开 @code{Shell} 的跟踪。
+这个程序扩展地使用 Shell 变量：用于存储命令行参数以及将会展开用户程序的 @command{awk} 程序的文本，用于用户的初始程序以及展开的程序。这么做可以移除一些当我们使用临时文件而导致的潜在的问题，但是代价就是使脚本带来一定的复杂性。
+程序的开始部分，如果第一个参数是 ‘@code{debug}’，则打开 Shell 的跟踪。
 下一个部分会循环所有的命令行参数。有几个情况非常有意思：
 --  这由于结束 @code{igawk} 的参数。其他的任意参数应该被原样地传递到用户的 @command{awk} 程序。
 @option{-W}  这表示下一个选项是特定于 @command{gawk} 的。为了使参数处理更加容易，@option{-W} 被附加到剩下的参数的前面，然后继续循环。（这是一个 @code{Sh} 的编程技巧。如果你不熟悉 @code{Sh} 也不用担心。）
 @option{-v}， @option{-F}     这会被存储并被传递给 @command{gawk}。
 @option{-f}， @option{--file}， @option{--file}=， @option{-Wfile}=
-使用 @@code{include} 语句附加到 @code{Shell} 变量程序的文件。@code{expr} 工具用于移除参数前面的的选项部分（比如 ‘@option{--file}=’）。（典型的 @code{Sh} 用法应该是使用 @code{echo} 以及@code{sed} 工具来做这样的事情。很不幸的是，有一些版本的 @code{echo} 会对它的参数列表中的转义序列进行求值，有可能会弄乱程序文本。使用 @code{expr} 可以避免这个问题。）
+使用 @@code{include} 语句附加到 Shell 变量程序的文件。@code{expr} 工具用于移除参数前面的的选项部分（比如 ‘@option{--file}=’）。（典型的 @code{Sh} 用法应该是使用 @code{echo} 以及@code{sed} 工具来做这样的事情。很不幸的是，有一些版本的 @code{echo} 会对它的参数列表中的转义序列进行求值，有可能会弄乱程序文本。使用 @code{expr} 可以避免这个问题。）
 @option{--source}， @option{--source}=， @option{-Wsource}=
 源代码被附加到程序中。
 @option{--version}， @option{-Wversion}
 @code{igawk} 打印它的版本号，运行 ‘@command{gawk} @option{--version}’ 来取得 @command{gawk} 的版本信息，然后退出。
-如果 @option{-f} @option{--file}，@option{-Wfile}，@option{--source} 或者 @option{-Wsource} 参数一个都没有提供，则第一个非选项参数会用作 @command{awk} 的程序。如果没有其他的命令行参数，@code{igawk} 打印一个错误信息后退出。否则，第一个参数会被附加到程序。在任何情况下，在参数被处理后， @code{Shell} 变量程序包含最初 @command{awk} 程序的完全的文本。程序如下：
+如果 @option{-f} @option{--file}，@option{-Wfile}，@option{--source} 或者 @option{-Wsource} 参数一个都没有提供，则第一个非选项参数会用作 @command{awk} 的程序。如果没有其他的命令行参数，@code{igawk} 打印一个错误信息后退出。否则，第一个参数会被附加到程序。在任何情况下，在参数被处理后， Shell 变量程序包含最初 @command{awk} 程序的完全的文本。程序如下：
 #! /@code{bin}/@code{sh}
 # @code{igawk} --- @code{like} @command{gawk} @code{but} @code{do} @@code{include} @code{processing}
 @code{if} [ "$1" = @code{debug} ]
@@ -6859,7 +6859,7 @@ command1 < @code{orig}.@code{data} | @code{sed} ’@code{s}/@code{old}/@code{new
 @code{shift}
 @code{fi}
 # @code{At} @code{this} @code{point}， ‘@code{program}’ @code{has} @code{the} @code{program}.
-处理 @@code{include} 指令的 @command{awk} 程序被存储在 @code{Shell} 的变量 @code{expand_prog} 中。这么做可以使得 @code{Shell} 脚本更可读。@command{awk} 程序使用 @code{getline}（查看 4.9 用 @code{getline} 输入数据， 在第 83 页）读取用户的程序，一次一行。输入文件名以及 @@code{include} 语句使用栈来管理。每遇到一个 @@code{include}，当前的文件名会被推到栈中，在 @@code{include} 中的文件名则成为当前文件名。每完成一个文件，则会对栈进行弹出，这样前一个文件会成为当前文件。处理是以最开始的文件作为栈中的第一个文件开始的。
+处理 @@code{include} 指令的 @command{awk} 程序被存储在 Shell 的变量 @code{expand_prog} 中。这么做可以使得 Shell 脚本更可读。@command{awk} 程序使用 @code{getline}（查看 4.9 用 @code{getline} 输入数据， 在第 83 页）读取用户的程序，一次一行。输入文件名以及 @@code{include} 语句使用栈来管理。每遇到一个 @@code{include}，当前的文件名会被推到栈中，在 @@code{include} 中的文件名则成为当前文件名。每完成一个文件，则会对栈进行弹出，这样前一个文件会成为当前文件。处理是以最开始的文件作为栈中的第一个文件开始的。
 @code{pathto()} 函数处理查找文件全路径的事情。它模拟 @command{gawk} 的查找 @code{AWKPATH}（查看 2.5.1 环境变量 @code{AWKPATH} ， 在第 43 页） 环境变量的行为。如果文件名中有 ‘/’，则不会进行路径搜索。类似地，如果文件名是 “-”，则相应的字串则原样不变。否则，文件名被与路径中的每一个上进进行连接，并尝试打开生成的文件。唯一的测试文件是否可在 @command{awk} 中进行读取的方式是继续通过 @code{getline} 来尝试读取，这正是 @code{pathto()} 所做的。 如果文件可读，则关闭它，把返回文件名：
 @code{expand_prog}=’
 @code{function} @code{pathto}(@code{file}， @code{i}， @code{t}， @code{junk})
@@ -6918,24 +6918,24 @@ command1 < @code{orig}.@code{data} | @code{sed} ’@code{s}/@code{old}/@code{new
 $@code{program}
 @code{EOF}
 )
-@code{Shell} 的 ‘@code{command} << @code{marker}’ 结构称为就地文档。在 @code{Shell} 脚本中的到这个标志的所有内容都被当成是 @code{command} 的输入。@code{Shell} 处理就地文档的内容用于变量与命令的替换（也可以是其他的事情，这要看 @code{Shell}）。
-@code{Shell} 的 ‘$(...)’ 这样的结构称为命令替换。在括号中的命令的输出会替换命令行。因为结果会在变量赋值中使用，它会被存成一个单独的字串，就算结果包含空格。
+Shell 的 ‘@code{command} << @code{marker}’ 结构称为就地文档。在 Shell 脚本中的到这个标志的所有内容都被当成是 @code{command} 的输入。Shell 处理就地文档的内容用于变量与命令的替换（也可以是其他的事情，这要看 Shell）。
+Shell 的 ‘$(...)’ 这样的结构称为命令替换。在括号中的命令的输出会替换命令行。因为结果会在变量赋值中使用，它会被存成一个单独的字串，就算结果包含空格。
 展开的程序被保存在变量 @code{processed_programe} 中。它通过下面几步来完成：
-与从标准输入读取的 @@code{include} 程序一起执行 @command{gawk} （即 @code{expand_prog} @code{Shell} 变量的值）。
-标准输入是用户程序的内容，来自于 @code{Shell} 变量程序。将它的内容通过就地文档的方式灌入 @command{gawk} 中。
-将这个处理的结果使用命令替换存到 @code{Shell} 变量 @code{processed_program} 中。
+与从标准输入读取的 @@code{include} 程序一起执行 @command{gawk} （即 @code{expand_prog} Shell 变量的值）。
+标准输入是用户程序的内容，来自于 Shell 变量程序。将它的内容通过就地文档的方式灌入 @command{gawk} 中。
+将这个处理的结果使用命令替换存到 Shell 变量 @code{processed_program} 中。
 最后一步使用展开的程序以及用户提供的最初的选项以及命令行参数调用 @command{gawk}：
 @code{eval} @command{gawk} $@code{opts} -- ’"$@code{processed_program}"’’"$@"’
-@code{eval} 命令是一个 @code{Shell} 结果用来重新执行 @code{Shell} 的分析过程。这使得内容会被恰当地引起来。
+@code{eval} 命令是一个 Shell 结果用来重新执行 Shell 的分析过程。这使得内容会被恰当地引起来。
 @code{igawk} 的这个版本呈现了这个程序的第五个版本。有@code{}4 个关键的简化使得程序运行得更好：
 使用 @@code{include} 使得最开始的集合 @command{awk} 程序更简单，即使是使用 @option{-f} 指定的文件名，所有的 @@code{include} 处理都可以一次完成。
 当测试文件的可访问性，以在主程序中使用时，不会尝试存储在 @code{pathto()} 函数中使用 @code{getline} 读取的行。这使得事情得到相当的简化。
 在 @code{BEGIN} 规则中使用 @code{getline} 在一个地方就完成所有的工作。没有必要再调用另外一个循环来处理嵌套的 @@code{include} 语句。
-不将展开的程序存在一个临时文件中，而是将它们放在一个 @code{Shell} 变量中可以避免一些潜在的安全问题。但这也有缺点，因为脚本要依赖于 @code{Sh} 语言的更多特性，使得那些不熟悉 @code{Sh} 的人很验证于跟踪。
-同时 ，这个程序也说明了将 @code{sh} 与 @command{awk} 程序混合使用是值得一试的。你可以通过这样来完成很多的事情，不用寻求更加底层的 C 或者 C++ 语言，通常在 @code{Shell} 中要比 @command{awk} 也更容易来处理特定类型的字串与参数操作。
+不将展开的程序存在一个临时文件中，而是将它们放在一个 Shell 变量中可以避免一些潜在的安全问题。但这也有缺点，因为脚本要依赖于 @code{Sh} 语言的更多特性，使得那些不熟悉 @code{Sh} 的人很验证于跟踪。
+同时 ，这个程序也说明了将 @code{sh} 与 @command{awk} 程序混合使用是值得一试的。你可以通过这样来完成很多的事情，不用寻求更加底层的 C 或者 C++ 语言，通常在 Shell 中要比 @command{awk} 也更容易来处理特定类型的字串与参数操作。
 最后 @code{igawk} 展示了给程序添加新的特性并不总是必要的，它们可以一层层叠加来实现。 
 11.3.10 从字典中查找单词
-一个有趣的编程挑战就是在一个单词列表中查找单词（如在很多的 GNU/@code{Linux} 系统中的/@code{usr}/@code{share}/@code{dict}/@code{words}）。如果两个单词包含相同的字母，则一个单词是另一个单词的字谜（如 “@code{babbling}” 与 “@code{blabbing}”）。
+一个有趣的编程挑战就是在一个单词列表中查找单词（如在很多的 GNU/Linux 系统中的/@code{usr}/@code{share}/@code{dict}/@code{words}）。如果两个单词包含相同的字母，则一个单词是另一个单词的字谜（如 “@code{babbling}” 与 “@code{blabbing}”）。
 @code{Jon} @code{Bentley} 所著的书 @code{Programming} @code{Pearls}， @code{Second} @code{Edition}，第二卷的问题 C，提出了一个优雅的算法。其思想是给单词的字谜一个共同的简单，并通过这些签名来对单词进行排序，然后打印它们。@code{Bentley} 博士发现发现用每个单词中出现的字母，并对它们排序来作为单词的签名.
 下面的程序使用数组之数组来将有相同签名的单词组织在一起，以及对数组排序来以有序的方式打印单词：
 # @code{anagram}.@command{awk} --- @code{An} @code{implementation} @code{of} @code{the} @code{anagram}@option{-finding} @code{algorithm}
@@ -7143,7 +7143,7 @@ $ @command{gawk} @option{-f} @code{compdemo}.@command{awk}
 -| @code{data}[100] = 100
 -| @code{data}[10] = @code{one}
 -| @code{data}[20] = @code{two}
-考虑对 GNU/@code{Linux} 系统的密码文件中的项按登录名来排序。下面的程序对特定域位置的比较来进行记录的排序可用于这个目的：
+考虑对 GNU/Linux 系统的密码文件中的项按登录名来排序。下面的程序对特定域位置的比较来进行记录的排序可用于这个目的：
 # @code{passwd}@option{-sort}.@command{awk} --- @code{simple} @code{program} @code{to} @code{sort} @code{by} @code{field} @code{position}
 # @code{field} @code{position} @code{is} @code{specified} @code{by} @code{the} @code{global} @code{variable} @code{POS}
 @code{function} @code{cmp_field}(i1， v1， i2， v2)
@@ -7239,13 +7239,13 @@ v2 = v2 i2
 @code{close}(@code{tempfile})
 @code{system}("@code{rm} " @code{tempfile})
 这可以工作，但是没那么优雅。在其他事情间，它需要程序运行一个不能被其全用户共享的目录中，比如 /@code{tmp} 就不可以，因为其他的用户有可能碰巧使用相同文件名的临时文件。 
-但是，使用 @command{gawk} 可以打开一个双路的管道到另一个进程中。第二个进程被称为并程，因为它与 @command{gawk} 一道运行。双路连接使用 ‘|&’操作符来建立（从 @code{Korn} @code{shell}， @code{ksh} 借来的）： 
+但是，使用 @command{gawk} 可以打开一个双路的管道到另一个进程中。第二个进程被称为并程，因为它与 @command{gawk} 一道运行。双路连接使用 ‘|&’操作符来建立（从 @code{Korn} shell， @code{ksh} 借来的）： 
 @code{do} {
 @code{print} @code{data} |&"@code{subprogram}"
 "@code{subprogram}" |&@code{getline} @code{results}
 } @code{while} (@code{data} @code{left} @code{to} @code{process})
 @code{close}("@code{subprogram}")
-第一次使用 ‘|&’ 操作符执行 I/O 操作时，@command{gawk} 会创建一个双路管线到进行另一个程序的子进程中。用 @code{print} 或者 @code{printf} 创建的输出会被写到程序的标准输入中，而程序的标准输出可以被 @command{gawk} 的程序使用 @code{getline} 来读取。与通过 ‘|’ 创建的程序一样，子程序可以是任何程序，或者程序的管线，可被 @code{Shell} 启动。
+第一次使用 ‘|&’ 操作符执行 I/O 操作时，@command{gawk} 会创建一个双路管线到进行另一个程序的子进程中。用 @code{print} 或者 @code{printf} 创建的输出会被写到程序的标准输入中，而程序的标准输出可以被 @command{gawk} 的程序使用 @code{getline} 来读取。与通过 ‘|’ 创建的程序一样，子程序可以是任何程序，或者程序的管线，可被 Shell 启动。
 要了解的几个注意点是：
 就目前 @command{gawk} 中的代码，并程的标准错误会输出到父进程 @command{gawk} 的标准错误输出的地方。不可以单独读取子进程的标准错误。
 I/O 缓存可能是个问题。@command{gawk} 会自动地刷出所有的输出到并程管道。但是，如果并程没有刷出它的输出，@command{gawk} 可能在执行 @code{getline} 以读取并程的输出时而挂起。这会导致所谓的死锁问题，在这种情形下，每个进程都在等待对方做些什么事情。
@@ -7378,7 +7378,7 @@ I/O 缓存可能是个问题。@command{gawk} 会自动地刷出所有的输出�
 当程序执行完成后会生成测评外，@command{gawk} 也可以在运行的时候生成。如果你的 @command{awk} 程序会进入一个无限循环，而你又想看执行了什么的时候，这会非常有用。为了使用这个特性，请在后台模式来执行带 @option{--profile} 选项的 @command{gawk}：
 $ @command{gawk} @option{--profile} @option{-f} @code{myprog} &
 [1] 13992
-@code{Shell} 会打印一个任务号以及进程 @code{ID} 号，在这里是 13992。使用 @code{kill} 命令来发送 USR1 信号到 @command{gawk}：
+Shell 会打印一个任务号以及进程 @code{ID} 号，在这里是 13992。使用 @code{kill} 命令来发送 USR1 信号到 @command{gawk}：
 $ @code{kill} -USR1 13992
 如通常情况，测评的程序版本被写入到 @code{awkprofile}.@code{out} 文件中，或者写入到在 @option{--profile} 选项中指定的文件中。
 作为常规的测评，如稍早显示的，测评中包含任何活动的函数的跟踪信息：
@@ -7389,7 +7389,7 @@ $ @code{kill} -USR1 13992
 # -- @code{main} --
 你可以发送多次 USR1 信号。每发一次，测评与函数调用路径会被附加到测评文件中。
 如果你使用的是 @code{HUP} 信号，而不是 USR1 信号，@command{gawk} 会产生测评与函数调用路径信息后退出。
-当 @command{gawk} 在 @code{MS}@option{-Windows} 系统上运行时，它使用 @code{INT} 与 @code{QUIT} 信息来产生测评，在使用 @code{INT} 信号时，@command{gawk} 会退出。这里因为这些系统不支持 @code{kill} 命令，所以只能通过键盘产生的信号来发送给程序。@code{INT} 信号通过 @code{Ctrl}+@code{c} 或者 @code{Ctrl}+@code{BREAK} 键来产生，而 @code{QUIT} 信息则由 @code{Ctrl}+\ 键来产生。
+当 @command{gawk} 在 MS-Windows 系统上运行时，它使用 @code{INT} 与 @code{QUIT} 信息来产生测评，在使用 @code{INT} 信号时，@command{gawk} 会退出。这里因为这些系统不支持 @code{kill} 命令，所以只能通过键盘产生的信号来发送给程序。@code{INT} 信号通过 @code{Ctrl}+@code{c} 或者 @code{Ctrl}+@code{BREAK} 键来产生，而 @code{QUIT} 信息则由 @code{Ctrl}+\ 键来产生。
 最后，@command{gawk} 也接收其他的选项，@option{--pretty}@option{-print}。当这么调用时，@command{gawk} 会“简洁打印”程序到 @code{awkprof}.@code{out} 中，不带执行统计的方式。
 提示：@option{--pretty}@option{-print} 会执行你的程序。这会在下一个主要版本中改变。
 12.6@code{}总结
@@ -7585,7 +7585,7 @@ $ @code{cp} @code{guide}.@code{pot} @code{guide}@option{-mellow}.@code{po}
 #: @code{guide}.@command{awk}:5
 @code{msgid} "@code{The} @code{Answer} @code{Is}"
 @code{msgstr} "@code{Like}， @code{the} @code{scoop} @code{is}"
-下一步是创建一个目录来存储二进制消息对象文件，然后创建 @code{guide}.@code{mo} 文件。我们假装我们的文件准备在 @code{en_US}.@code{UTF}-8 语言设置中使用，因为我们必须使用一个 C 的@code{gettext} 例程知道的语言设置。这里显示的目录布局表示的是 GNU/@code{Linux} 系统上的 GNU @code{gettext}。其他版本的 @code{gettext} 可以使用不同的布局：
+下一步是创建一个目录来存储二进制消息对象文件，然后创建 @code{guide}.@code{mo} 文件。我们假装我们的文件准备在 @code{en_US}.@code{UTF}-8 语言设置中使用，因为我们必须使用一个 C 的@code{gettext} 例程知道的语言设置。这里显示的目录布局表示的是 GNU/Linux 系统上的 GNU @code{gettext}。其他版本的 @code{gettext} 可以使用不同的布局：
 $ @code{mkdir} @code{en_US}.@code{UTF}-8 @code{en_US}.@code{UTF}-8/@code{LC_MESSAGES}
 @code{msgfmt} 工具将人可读的 .@code{po} 文件转换成机器可读的 .@code{mo} 文件。默认情况下，@code{msgfmt} 创建一个叫做 @code{messages} 文件。这个文件必须被重新命名，并被放在合适的位置（使用 @option{-o} 选项），因此 @command{gawk} 可以找到它：
 $ @code{msgfmt} @code{guide}@option{-mellow}.@code{po} @option{-o} @code{en_US}.@code{UTF}-8/@code{LC_MESSAGES}/@code{guide}.@code{mo}
@@ -9382,7 +9382,7 @@ $ @code{AWKLIBPATH}=$@code{PWD} ./@command{gawk} @option{-f} @code{subarray}.@co
 @code{dl_load_func}(@code{func_table}， @code{filefuncs}， "")
 以上即是所有代码！                                           
 16.6.3 整合扩展
-现在代码已经写在，但是需要能够在 @command{gawk} 解释器运行的时候，将其载入。首先，代码是需要编译的。假充函数在一个名为 @code{filefuncs}.@code{c} 的文件中，而 @code{idir} 是 @code{gawkapi}.@code{h} 头文件所在的位置。下面的步骤 用来创建一个 GNU/@code{Linux} 共享库：
+现在代码已经写在，但是需要能够在 @command{gawk} 解释器运行的时候，将其载入。首先，代码是需要编译的。假充函数在一个名为 @code{filefuncs}.@code{c} 的文件中，而 @code{idir} 是 @code{gawkapi}.@code{h} 头文件所在的位置。下面的步骤 用来创建一个 GNU/Linux 共享库：
 $ @code{gcc} @option{-fPIC} @option{-shared} -@code{DHAVE_CONFIG_H} @option{-c} @option{-O} @option{-g} @option{-Iidir} @code{filefuncs}.@code{c}
 $ @code{gcc} @option{-o} @code{filefuncs}.@code{so} @option{-shared} @code{filefuncs}.@code{o}
 库一旦生成，就可以通过 @@code{load} 关键字来进行载入：
@@ -9593,7 +9593,7 @@ $ @command{gawk} @option{-i} @code{inplace} @option{-v} @code{INPLACE_SUFFIX}=.@
 @code{u}   其他（未知）
 表 16.2：由 @code{readdir} 扩展返回的文件类型
 在没有文件系统的系统中，第三个域总是‘@code{u}’。
-提示：在 GNU/@code{Linux} 系统中，有一些文件系统不支持 @code{d_type} 项（查看 @code{readdir}(3) 手册页），因此文件类型也总是 ‘@code{u}’。你可以使用 @code{filefuncs} 扩展来调用 @code{stat()} 来取得正确的类型信息。
+提示：在 GNU/Linux 系统中，有一些文件系统不支持 @code{d_type} 项（查看 @code{readdir}(3) 手册页），因此文件类型也总是 ‘@code{u}’。你可以使用 @code{filefuncs} 扩展来调用 @code{stat()} 来取得正确的类型信息。
 下面是例子：
 @@code{load} "@code{readdir}"
 ...
@@ -9655,7 +9655,7 @@ $ @command{gawk} @option{-i} @code{inplace} @option{-v} @code{INPLACE_SUFFIX}=.@
 @@code{load} "@code{time}"
 如何来使用扩展。
 @code{the_time} = @code{gettimeofday()}
-返回从 1970-01-01 @code{UTC} 以来的消逝的秒数，类型为浮点数。如果时间在平台上不可得，则返回 @minus{}1 并设置 @code{ERRNO}。返回的时间应该有次秒的精度，但是实际的精度在不同的平台上是不同的。如果标准的 C @code{gettimeofday()} 系统调用在平台上是可用的，则它只是简单地返回这个函数的值。否则，如果在 @code{MS}@option{-Windows} 平台上，它返回 @code{GetSystemTimeAsFileTime()} 函数返回的值。
+返回从 1970-01-01 @code{UTC} 以来的消逝的秒数，类型为浮点数。如果时间在平台上不可得，则返回 @minus{}1 并设置 @code{ERRNO}。返回的时间应该有次秒的精度，但是实际的精度在不同的平台上是不同的。如果标准的 C @code{gettimeofday()} 系统调用在平台上是可用的，则它只是简单地返回这个函数的值。否则，如果在 MS-Windows 平台上，它返回 @code{GetSystemTimeAsFileTime()} 函数返回的值。
 @code{result} = @code{sleep}(@code{seconds})
 尝试休眠 @code{seconds} 秒。如果 @code{seconds} 为负数，或者尝试休眠失败，则返回 @minus{}1 并且设置 @code{ERRNO}。否则在休眠了指定的时间后返回@code{}0。注意，@code{seconds} 可以是一个浮点数（非整数）。实现细节是：依赖于平台的可获得性，这个函数会尝试使用 @code{nanosleep()} 或者 @code{select} 来实现延迟。
 16.7.12 @code{API} 测试
@@ -9815,13 +9815,13 @@ I/O 重定向中的特殊文件：
 @code{BeOS}
 @code{Cray}
 @code{MIPS} @code{RiscOS}
-@code{MS}@option{-DOS} @code{with} @code{the} @code{Microsoft} @code{Compiler}
-@code{MS}@option{-Windows} @code{with} @code{the} @code{Microsoft} @code{Compiler}
+MS-DOS @code{with} @code{the} @code{Microsoft} @code{Compiler}
+MS-Windows @code{with} @code{the} @code{Microsoft} @code{Compiler}
 @code{NeXT}
 @code{SunOS} 3.@code{x}， @code{Sun} 386 (@code{Road} @code{Runner})
 @code{Tandem} (@code{non}-POSIX)
-@code{Prestandard} @code{VAX} C @code{compiler} @code{for} @code{VAX}/@code{VMS}
-@code{GCC} @code{for} @code{VAX} @code{and} @code{Alpha} @code{has} @code{not} @code{been} @code{tested} @code{for} @code{a} @code{while}.
+@code{Prestandard} VAX C @code{compiler} @code{for} VAX/VMS
+GCC @code{for} VAX @code{and} Alpha @code{has} @code{not} @code{been} @code{tested} @code{for} @code{a} @code{while}.
 支持下面过时系统从 @command{gawk} 4.1 版本中被移除了。
 @code{Ultrix}
 @code{A}.6 @command{gawk} 特性历史
@@ -9943,12 +9943,12 @@ POSIX 兼容 @code{sub()} 与 @code{gsub()}（查看 9.1.3.1 @code{sub()}、@cod
 @code{BeOS}
 @code{Cray}
 @code{MIPS} @code{RiscOS}
-@code{MS}@option{-DOS} @code{with} @code{Microsoft} @code{Compiler}
-@code{MS}@option{-Windows} @code{with} @code{Microsoft} @code{Compiler}
+MS-DOS @code{with} @code{Microsoft} @code{Compiler}
+MS-Windows @code{with} @code{Microsoft} @code{Compiler}
 @code{NeXT}
 @code{SunOS} 3.@code{x}， @code{Sun} 386 (@code{Road} @code{Runner})
 @code{Tandem} (@code{non}-POSIX)
-@code{Prestandard} @code{VAX} C @code{compiler} @code{for} @code{VAX}/@code{VMS}
+@code{Prestandard} VAX C @code{compiler} @code{for} VAX/VMS
 4.1 版本的 @command{gawk} 引入了下面的特性：
 新加了三个变量：@code{SYMTAB}，@code{FUNCTAB}，以及 @code{PROIFO}["@code{identifiers}"]（查看 7.5.2 传递信息的内置变量， 在第 158 页）。
 @command{gawk}，@code{pgawk} 与 @code{dgawk} 被整合为一，并命名为 @command{gawk}。因为仅是命令行选项有变化。
@@ -9996,7 +9996,7 @@ $ @code{echo} something1234abc | @command{gawk}-3.1.8 ’{ @code{sub}("[@code{A}
 这个输出并不是所期望的，因为 ‘@code{bc}’是 ‘something1234abc’的结束串，不应该匹配 ‘[@code{A}@option{-Z}]*’。是本地语言设置导致了这样的结果（因此你可能在你的系统上看不这样的输出）。
 其他范围也有类似的问题。如 ‘["-/]’ 在 @code{ASCII} 中绝对有效，但是在很多的 @code{Unicode} 语言设置中，如 @code{en_US}.@code{UTF}-8 中就不是这样。
 @command{gawk} 早期的版本使用的正则表达式代码对于语言设置是不敏感的，所以对于范围的解释是之前的做法。
-当 @command{gawk} 切换到使用语言设置敏感的正则表达式匹配器，问题就出现了。特别是在 GNU/@code{Linux} 与商业 Unix 的厂商开始实现非 @code{ASCII} 语言之后，并使这些语言成为默认选项。也许 @code{FAQ}（@code{frequently} @code{asked} @code{question}） 的问题已经变成这样，“为什么‘[@code{A}@option{-Z}]’会匹配小写字母？！？”
+当 @command{gawk} 切换到使用语言设置敏感的正则表达式匹配器，问题就出现了。特别是在 GNU/Linux 与商业 Unix 的厂商开始实现非 @code{ASCII} 语言之后，并使这些语言成为默认选项。也许 @code{FAQ}（@code{frequently} @code{asked} @code{question}） 的问题已经变成这样，“为什么‘[@code{A}@option{-Z}]’会匹配小写字母？！？”
 这样的问题已经存在了近@code{}10@code{}年，如果不是更多的话。@command{gawk} 已经很好地支持标准，并处理好了用户本地语言的问题，@command{gawk} 的维护者对于解释这些问题都已经非常厌倦了。在开发 4.0 版本的过程中，他们修改了 @command{gawk}，使其总是按原来的方式对待范围，即在标准前的方式。除非吏用了 @option{--posix} 选项（查看 2.2 命令行参数， 在第 35 页）。 
 幸运的是，最 @command{gawk} 4.0 发布不久，维护者了解到 2008 的标准已经更改了范围的定义，这样 “C” 与 “POSIX”之外的语言设置，范围表达式的含义是未定义的。 
 由于使用了这么一个可爱的技术术语，标准给了实现者相应许可来自己选择实现范围的方式。@command{gawk} 维护者选择了使用 POSIX 标准之前的含义，而不论是默认的正则表达式匹配还是使用了 @option{--traditional} 或者 @option{--posix} 选项。在所有的情况下，@command{gawk} 都与 POSIX 标准是符合的。
@@ -10011,14 +10011,14 @@ $ @code{echo} something1234abc | @command{gawk}-3.1.8 ’{ @code{sub}("[@code{A}
 @code{Richard} @code{Stallman} 帮助完成了最开始的实现，以及本书初稿。他同时也是 @code{FSF} 与 GNU 项目的创建者。
 @code{John} @code{Woods} 贡献了 @command{gawk} 初始版本的部分代码（大部份是修复）。
 1988 年，@code{David} @code{Trueman} 成为 @command{gawk} 的主要维护者，并使其与“新”的 @command{awk} 兼容，并极大地提高了性能。
-@code{Conrad} @code{Kwok}， @code{Scott} @code{Garfinkle} 与 @code{Kent} @code{Williams} 使用不同版本的 @code{MSC} 完成了最初的向 @code{MS}@option{-DOS} 的移植。
-@code{Pat} @code{Rankin} 提供了 @code{VMS} 的移植及其文档。
+@code{Conrad} @code{Kwok}， @code{Scott} @code{Garfinkle} 与 @code{Kent} @code{Williams} 使用不同版本的 @code{MSC} 完成了最初的向 MS-DOS 的移植。
+@code{Pat} @code{Rankin} 提供了 VMS 的移植及其文档。
 @code{Hal} @code{Peterson} 提供了移植 @command{gawk} 到 @code{Cray} @code{Systems} 的帮助。（当前已不再支持。）
-@code{Kai} @code{Uwe} @code{Rommel} 提供了 @code{OS}/2 的最初的移植版本及其文档。
+@code{Kai} @code{Uwe} @code{Rommel} 提供了 OS/2 的最初的移植版本及其文档。
 @code{Michal} @code{Jaegermann} 提供了 @code{Atari} 系统的移植及其文档。（这个移植不再支持。）他持续提供了可移植性检查，并完成了相当多的工作，以确定 @command{gawk} 可以工作在非 32 位系统上。
 @code{Fred} @code{Fish} 提供了 @code{Amiga} 系统的移植及其文档。（随着 @code{Fred} 的去世，这也不再支持了。）
-@code{Scott} @code{Deifik} 当前使用 @code{DJGPP} 维护 @code{MS}@option{-DOS} 的移植版。
-@code{Eli} @code{Zaretskii} 当前使用 @code{MinGW} 维护 @code{MS}@option{-Windows} 的移植版。
+@code{Scott} @code{Deifik} 当前使用 @code{DJGPP} 维护 MS-DOS 的移植版。
+@code{Eli} @code{Zaretskii} 当前使用 @code{MinGW} 维护 MS-Windows 的移植版。
 @code{Juan} @code{Grigera} 提供了 Window32 系统的移植。（这已经不再支持。）
 很多年以后，@code{Dr}. @code{Darrel} @code{Hankerson} 作为不同 @code{PC} 平台的移植版本的协调者，并构建了不同 @code{PC} 操作系统上的二进制发布版本。它也维护不同 @code{PC} 平台上的文档，以保持文档的及时更新。
 @code{Christos} @code{Zoulas} 提供 @code{extension()} 内置函数用于动态添加新功能（这在 @command{gawk} 4.1 版本已经取消。）
@@ -10028,11 +10028,11 @@ $ @code{echo} something1234abc | @command{gawk}-3.1.8 ’{ @code{sub}("[@code{A}
 @code{Martin} @code{Brown} 提供了 @code{BeOS} 的移植版本及其文档。（已不再支持。）
 @code{Arno} @code{Peters} 做了初始工作来将 @command{gawk} 切换到 GNU @code{Automake} 以及 GNU @code{gettext}。
 @code{Alan} @code{J}. @code{Broder} 提供了最初的 @code{asort()} 函数的版本，以及 @code{match()} 函数的第三个可选参数的代码。
-@code{Andreas} @code{Buening} 更新了 @command{gawk} 的 @code{OS}/2 的移植版本。
+@code{Andreas} @code{Buening} 更新了 @command{gawk} 的 OS/2 的移植版本。
 @code{IBM} 日本的 @code{Isamu} @code{Hasegawa} （长谷川勇）贡献了对多字节字符的支持。
 @code{Michael} @code{Benzinger} 贡献了 @code{switch} 语句的最初代码。
 @code{Patrick} @code{T}.@code{J}. @code{McPhee} 贡献了在 Windows32 环境下动态装载的代码。（不再支持。）
-@code{Anders} @code{Wallin} 帮助维护了 @code{VMS} 移植版本多年。
+@code{Anders} @code{Wallin} 帮助维护了 VMS 移植版本多年。
 @code{Assaf} @code{Gordon} 贡献了实现 @option{--sandbox} 选项的实现代码。
 @code{John} @code{Haque} 作了如下贡献：
 修改 @command{gawk}，将其切换为一个字节码解释器，及其调试器。
@@ -10045,7 +10045,7 @@ $ @code{echo} something1234abc | @command{gawk}-3.1.8 ’{ @code{sub}("[@code{A}
 @code{Panos} @code{Papadopoulos} 贡献了 2.7 在你的程序中包含其他的文件，在第 46 页，的初始文本。
 @code{Efraim} @code{Yawitz} 贡献了第十四章 调试 @command{awk} 程序，在第 320 页，的初始文本。
 在 @command{gawk} 4.1 版本的扩展 @code{API} 的开发主要由 @code{Arnold} @code{Robbins} 与 @code{Andrew} @code{Schorr} 驱动，并在后面的开发团队中做了巨大的贡献。
-@code{John} @code{Malmberg} 对于 @code{OpenVMS} 移植版及其文档做了巨大的贡献与增强。
+@code{John} @code{Malmberg} 对于 OpenVMS 移植版及其文档做了巨大的贡献与增强。
 @code{Antonio} @code{Giovanni} @code{Colombo} 重写了之前章节中的很多例子，因为那些例子很多已经严重过时，我对其感谢不尽。
 @code{Arnold} @code{Robbins} 从 1988 年以来一直工作在 @command{gawk} 上，第一个协助 @code{David} @code{Trueman}，也是 1994 年以来的最主要的维护者。
 @code{A}.10@code{}总结
@@ -10056,7 +10056,7 @@ $ @code{echo} something1234abc | @command{gawk}-3.1.8 ’{ @code{sub}("[@code{A}
 很多人多来来对 @command{gawk} 的开发做出了贡献。 我们希望本章中所提供的列表是完整的，并在值得感谢的地方给予了相应的感谢。
  
 附录 @code{B} 安装 @command{gawk}
-本附录提供了用于安装 @command{gawk} 到由开发者所支持的不同平台上的指导。主要的开发者支持 GNU/@code{Linux} （以及 Unix）平台，其他则由贡献决定。查看 @code{B}.4@code{}报告问题与@code{BUG} ，在第 434 页，来获取维护相应移植版本的维护者的邮件。
+本附录提供了用于安装 @command{gawk} 到由开发者所支持的不同平台上的指导。主要的开发者支持 GNU/Linux （以及 Unix）平台，其他则由贡献决定。查看 @code{B}.4@code{}报告问题与@code{BUG} ，在第 434 页，来获取维护相应移植版本的维护者的邮件。
 @code{B}. 1gawk 发布版 
 这一节描述如何来获取 @command{gawk} 发布版本，如何解释，并列出不同的文件以及子目录。
 @code{B}.1.1 取得 @command{gawk} 发布版 
@@ -10072,7 +10072,7 @@ GNU 软件文档在全世界都有镜像。同步更新的镜像站点可以从�
 在使用 GNU @code{tar} 的系统上，你可以让 @code{tar} 来帮你进行解压：
 @code{tar} @option{-xvpzf} @command{gawk}-4.1.2.@code{tar}.@code{gz}
 解压后的文件会在当前目录下创建一个名字为 @command{gawk}-4.1.2 的目录。
-发布文件名是 @command{gawk}@option{-V}.@code{R}.@code{P}.@code{tar}.@code{gz} 形式的名字。@code{V} 代表了 @command{gawk} 的主要版本，@code{R} 表示了当前 @code{V} 版本的发布版本，@code{P} 代表了补丁等级，表示在这个发布中修复了一些将要的 @code{Bug}。当补丁等级是 2，但是当返回发布时，你会取得最高版本号，发布版以及补丁等级。（提示，补丁等级大于等于@code{}70，表示是“@code{beta}”或者是非生产用软件，除非你不介意实验，否则你不要使用这样的版本。）如果你不在 Unix 或者 GNU/@code{Linux} 系统上，你需要对获取了解压 @command{gawk} 发布版另做打算。你可以咨询一下身边的专家。
+发布文件名是 @command{gawk}@option{-V}.@code{R}.@code{P}.@code{tar}.@code{gz} 形式的名字。@code{V} 代表了 @command{gawk} 的主要版本，@code{R} 表示了当前 @code{V} 版本的发布版本，@code{P} 代表了补丁等级，表示在这个发布中修复了一些将要的 @code{Bug}。当补丁等级是 2，但是当返回发布时，你会取得最高版本号，发布版以及补丁等级。（提示，补丁等级大于等于@code{}70，表示是“@code{beta}”或者是非生产用软件，除非你不介意实验，否则你不要使用这样的版本。）如果你不在 Unix 或者 GNU/Linux 系统上，你需要对获取了解压 @command{gawk} 发布版另做打算。你可以咨询一下身边的专家。
 @code{B}.1.3 @command{gawk} 发布版的内容
 @command{gawk} 发布版有很多的 C 源文件，文档文件，子目录以及与配置过程相关的文件（查看 @code{B}.2 在 Unix@option{-like} 的系统上编译与安装 @command{gawk}， 在第 423 页），还有几个子目录与不同的非 Unix 操作系统相关：
 各种 ‘.@code{c}’，‘.@code{y}’，与 ‘.@code{h}’ 文件
@@ -10148,14 +10148,14 @@ m4/*    这些文件与子目录在在不同的 Unix 系统中配置及编译 @c
 @code{extension}/*
 被  @command{gawk} 包含的例子扩展的源代码，手册，以及基础文件。查看 第十六章 编写 @command{gawk} 扩展，在第 349 页，来获取更多信息。
 @code{posix}/*     用于在 POSIX 兼容的系统上构建 @command{gawk} 所需要的文件。
-@code{pc}/*    用于在 @code{MS}@option{-Windows} 与 @code{OS}/2 系统上构建 @command{gawk} 所需要的文件（查看 @code{B}.3.1@code{}安装到 @code{PC} 操作系统，在第 425 页，获取相关信息）。
-@code{vms}/*   用于在 @code{Vax}/@code{VMS} 与 @code{OpenVMS} 系统上构建 @command{gawk} 所需要的文件（查看 @code{B}.3.2@code{}在 @code{Vax}/@code{VMS} 以及 @code{OpenVMS} 系统上编译安装 @command{gawk} ，在第 430 页，获取相关信息）。
+@code{pc}/*    用于在 MS-Windows 与 OS/2 系统上构建 @command{gawk} 所需要的文件（查看 @code{B}.3.1@code{}安装到 @code{PC} 操作系统，在第 425 页，获取相关信息）。
+@code{vms}/*   用于在 @code{Vax}/VMS 与 OpenVMS 系统上构建 @command{gawk} 所需要的文件（查看 @code{B}.3.2@code{}在 @code{Vax}/VMS 以及 OpenVMS 系统上编译安装 @command{gawk} ，在第 430 页，获取相关信息）。
 @code{test}/*  @command{gawk} 的测试包。你可以在 @command{gawk} 的顶层目录中使用‘@code{make} @code{check}’来执行 @command{gawk} 的测试包。如果 @command{gawk} 测试成功，则你可以认为移植是成功的。
 @code{B}.2 在 Unix@option{-like} 的系统上编译与安装 @command{gawk}
 一般情况下，你只需要两个命令来编译与安装 @command{gawk}。但是，如果你使用的是不常用的系统，你可能需要自己来为你的系统来配置 @command{gawk}。
 @code{B}.2.1 为 Unix@option{-like} 的系统编译 @command{gawk}
-在所有的现代由 Unix 派生出来的系统中，都可以使用上面的常规步骤，如 GNU/@code{Linux}，@code{BSD} 派生的系统，以及 @code{MS}@option{-Windows} 中的 @code{Cygwin} 环境。
-在解压了 @command{gawk} 发布文件后 切换到 @command{gawk}-4.1.2 目录。与大多的 GNU 软件类似，你通过执行 @command{configure} 文件来在系统上对 @command{gawk} 进行配置。这个程序是一个 @code{Bourne} @code{Shell} 脚本，由 GNU 的 @code{Autoconf} 自动产生。（@code{Autoconf} 软件在 @code{Autoconf}——配置脚本自动力生成，中有全面的描述，这个可以在自由软件基金会的网站上找到。）
+在所有的现代由 Unix 派生出来的系统中，都可以使用上面的常规步骤，如 GNU/Linux，@code{BSD} 派生的系统，以及 MS-Windows 中的 Cygwin 环境。
+在解压了 @command{gawk} 发布文件后 切换到 @command{gawk}-4.1.2 目录。与大多的 GNU 软件类似，你通过执行 @command{configure} 文件来在系统上对 @command{gawk} 进行配置。这个程序是一个 @code{Bourne} Shell 脚本，由 GNU 的 @code{Autoconf} 自动产生。（@code{Autoconf} 软件在 @code{Autoconf}——配置脚本自动力生成，中有全面的描述，这个可以在自由软件基金会的网站上找到。）
 简单地运行下面的命令来配置 @command{gawk}：
 @code{sh} ./@command{configure}
 这会产生 @code{Makefile} 与你的系统匹配 @code{config}.@code{h}。@code{config}.@code{h} 文件描述了你的系统的各种特性。你可以编辑 @code{Makefile} 来改变 @code{CFLAGS} 变量，用以控制传递到 C 编译的命令行选项（如优化等级或者调试编译选项）。
@@ -10171,7 +10171,7 @@ m4/*    这些文件与子目录在在不同的 Unix 系统中配置及编译 @c
 @option{--disable}@option{-extensions}
 禁用配置与构建 @code{extension} 目录下的例子扩展。在交叉编译的时候，这个很有用。默认的行为是动态地检查扩展是否可以配置与编译。
 @option{--disable}@option{-lint}
-禁用所有的 @command{gawk} 的 @code{lint} 检查。@option{--lint} 与 @option{--lint}@option{-old} 选项（查看 ）可以被接受，但是什么也不做。类似地，设置 @code{LINT} 变量（查看 ）在运行的 @command{awk} 程序中也没有任务效果。当使用 @code{GCC} 的自动力的死代码清除功能时，这个选项可以使 @command{gawk} 的可选择体在 GNU/@code{Linux} x86-64 系统上小 23KB。在其他系统与编译器上的结果有差异。使用这个选项，可以给你带来一点性能上的提升。
+禁用所有的 @command{gawk} 的 @code{lint} 检查。@option{--lint} 与 @option{--lint}@option{-old} 选项（查看 ）可以被接受，但是什么也不做。类似地，设置 @code{LINT} 变量（查看 ）在运行的 @command{awk} 程序中也没有任务效果。当使用 GCC 的自动力的死代码清除功能时，这个选项可以使 @command{gawk} 的可选择体在 GNU/Linux x86-64 系统上小 23KB。在其他系统与编译器上的结果有差异。使用这个选项，可以给你带来一点性能上的提升。
 注意：使用这个选项可能导致测试包中的一些测试无法通过。这个选项可能在后面会被移除。
 @option{--disable}@option{-nls}
 禁用所有的消息翻译功能。一般来说这并不是所期望的，但是可以给你带来一点性能提升。
@@ -10188,21 +10188,21 @@ m4/*    这些文件与子目录在在不同的 Unix 系统中配置及编译 @c
 @code{B}.3@code{}安装到其他操作系统上 
 这一节描述如何将 @command{gawk} 安装到其他的非 Unix 系统上。
 @code{B}.3.1@code{}安装到 @code{PC} 操作系统 
-本节包含的内容为在运行于 @code{Intel} 架构的机器上的 @code{MS}@option{-DOS}，任意的 @code{MS}@option{-Windows} 或者 @code{OS}/2 系统中 @command{gawk} 的安装与使用。这一节中所使用的术语“Windows32”指的是 @code{Microsoft} 的 Windows95/98/@code{ME}/@code{NT}/2000/@code{XP}/@code{Vista}/7/8。
-@code{MS}@option{-DOS} 的范围（以及在其他操作系统下的 @code{MS}@option{-DOS}外壳程序）指的是不同的“@code{DOS} 扩展器”，常与 @command{gawk} 这样的程序一起使用。@code{Microsoft} @code{Windows} 3.1 与 Windows32 不同的能力导致了困惑的产生。为了对这些考量有个全面的概况，请查看发布程序中的 @code{README_d}/@code{README} 文件。
+本节包含的内容为在运行于 @code{Intel} 架构的机器上的 MS-DOS，任意的 MS-Windows 或者 OS/2 系统中 @command{gawk} 的安装与使用。这一节中所使用的术语“Windows32”指的是 @code{Microsoft} 的 Windows95/98/@code{ME}/@code{NT}/2000/@code{XP}/@code{Vista}/7/8。
+MS-DOS 的范围（以及在其他操作系统下的 MS-DOS外壳程序）指的是不同的“@code{DOS} 扩展器”，常与 @command{gawk} 这样的程序一起使用。@code{Microsoft} Windows 3.1 与 Windows32 不同的能力导致了困惑的产生。为了对这些考量有个全面的概况，请查看发布程序中的 @code{README_d}/@code{README} 文件。
 @code{B}.3.1.1@code{}为 @code{PC} 系统安装一个编译版 
-如果你有一个维护者为 @code{MS}@option{-DOS}提供二进制版本，@command{gawk} 以及相关的支持文件会存存在 @code{gnu} 目录下，执行文件存在 @code{gnu}/@code{bin}，库存存储在 @code{gnu}/@code{lib}/@command{awk} 目录中，手册存放在 @code{gnu}/@code{man}。这是为了能够非常容易地将 @command{gawk} 安装到你的驱动程序中的 @code{gnu} 目录——但是，只要正确设置 @code{AWKPATH}，你可以安装在任何位置。如果不考虑安装目录，@code{igawk}.@code{cmd} 与 @code{igawk}.@code{bat}（在 @code{gnu}/@code{bin} 目录中）有可能需要修改。
+如果你有一个维护者为 MS-DOS提供二进制版本，@command{gawk} 以及相关的支持文件会存存在 @code{gnu} 目录下，执行文件存在 @code{gnu}/@code{bin}，库存存储在 @code{gnu}/@code{lib}/@command{awk} 目录中，手册存放在 @code{gnu}/@code{man}。这是为了能够非常容易地将 @command{gawk} 安装到你的驱动程序中的 @code{gnu} 目录——但是，只要正确设置 @code{AWKPATH}，你可以安装在任何位置。如果不考虑安装目录，@code{igawk}.@code{cmd} 与 @code{igawk}.@code{bat}（在 @code{gnu}/@code{bin} 目录中）有可能需要修改。
 二进制发布版本包含一个独立的文件来描述内容。有一些特别情况下，它可能包含多于一个版本的 @command{gawk} 可执行文件。
-@code{OS}/2（32 位 @code{EMS}）二进制发布版本会安装在你选择的驱动的 /@code{usr} 目录下。如果你想将 @command{gawk} 安装到一个不是硬编码的 ‘@code{c}:’分区上，你可以将 @code{UNIXROOT} 设置为你安装的驱动器上（如，‘@code{e}:’）。可执行文件会出现在 /@code{usr}/@code{bin} 目录下，库会存储在 /@code{usr}/@code{share}/@command{awk} 目录下，而手册则在 /@code{usr}/@code{man} 目录下，@code{Texinfo} 文档存在 /@code{usr}/@code{info}，@code{NLS} 文件存在 /@code{usr}/@code{share}/@code{locale} 中。注意，只要正确地设置 @code{AWKPATH}，你可以安装到任何位置。
+OS/2（32 位 @code{EMS}）二进制发布版本会安装在你选择的驱动的 /@code{usr} 目录下。如果你想将 @command{gawk} 安装到一个不是硬编码的 ‘@code{c}:’分区上，你可以将 @code{UNIXROOT} 设置为你安装的驱动器上（如，‘@code{e}:’）。可执行文件会出现在 /@code{usr}/@code{bin} 目录下，库会存储在 /@code{usr}/@code{share}/@command{awk} 目录下，而手册则在 /@code{usr}/@code{man} 目录下，@code{Texinfo} 文档存在 /@code{usr}/@code{info}，@code{NLS} 文件存在 /@code{usr}/@code{share}/@code{locale} 中。注意，只要正确地设置 @code{AWKPATH}，你可以安装到任何位置。
 如果你已经有一个文件 /@code{usr}/@code{info}/@code{dir} 是另一个包的，不要覆盖它！相反在你提示符下输入命令（将 ‘@code{x}:’按成你的安装驱动器）：
 @code{install}@option{-info} @option{--info}@option{-dir}=@code{x}:/@code{usr}/@code{info} @code{x}:/@code{usr}/@code{info}/@command{gawk}.@code{info}
 @code{install}@option{-info} @option{--info}@option{-dir}=@code{x}:/@code{usr}/@code{info} @code{x}:/@code{usr}/@code{info}/@code{gawkinet}.@code{info}
 二进制发布版本中可能还包含单独的文件，其中包含了一些额外的更详细的安装指导。
 @code{B}.3.1.2@code{}为 @code{PC} 操作系统编译 @command{gawk} 
 可以使用来自于DJ Delorie（ 只应用于 DJGPP: MS-DOS ），MinGW（Windows32）或者 Eberhard Mattes(EMX: MS-DOS， Windows32 与 OS/2) 的 GNU 开发工具为 MS-DOS，Windows32 与 OS/2 编译 @command{gawk}。文件 README_d/README.pc 中包含了额外的提示，pc/Makefile 包含了编译编译选项的重要信息。
-为了为 @code{MS}@option{-DOS} 与 Windows32 构建 @command{gawk}，将 @code{pc} 目录下（除了 @code{ChangeLog}）的文件与 @command{gawk} 其他的源文件复制到某个目录下，然后调用 @code{make} 来执行特定的目标以构建 @command{gawk}。从 @code{pc} 目录下复制而来的 @code{Makefile} 中包含了一个配置段，其中带有相应的注释，有可能需要修改以使其可以使用你的 @code{make} 工具用于其上。
-@code{Makefile} 支持很多的构建目标，用于构建不同的 @code{MS}@option{-DOS} 与 Windows32 版本。如果 @code{make} 时没有带上目标，则可用的目标会被打印出来。如，要使用 @code{DJGPP} 工具来构建 @command{gawk}，输入‘@code{make} @code{djgpp}’。（在编译时所需要的 @code{DJGPP} 工具可以在 @code{ftp}://@code{ftp}.@code{delorie}.@code{com}/@code{pub}/@code{djgpp}/@code{current}/v2gnu/ 找到）使用 @code{MinGW} 构建本地的 @code{MS}@option{-Windows} 的二进制版本的 @command{gawk}，则输入 ‘@code{make} mingw32’。
-@command{gawk} 的 32 位 @code{EMX} 版本在 @code{OS}/2 下是“开箱即用”的。但是，我们强烈建议你用 GCC2.95.3 来进行编译。总的来说，可以通过下面的方式来对 @command{gawk} 进行编译：
+为了为 MS-DOS 与 Windows32 构建 @command{gawk}，将 @code{pc} 目录下（除了 @code{ChangeLog}）的文件与 @command{gawk} 其他的源文件复制到某个目录下，然后调用 @code{make} 来执行特定的目标以构建 @command{gawk}。从 @code{pc} 目录下复制而来的 @code{Makefile} 中包含了一个配置段，其中带有相应的注释，有可能需要修改以使其可以使用你的 @code{make} 工具用于其上。
+@code{Makefile} 支持很多的构建目标，用于构建不同的 MS-DOS 与 Windows32 版本。如果 @code{make} 时没有带上目标，则可用的目标会被打印出来。如，要使用 @code{DJGPP} 工具来构建 @command{gawk}，输入‘@code{make} @code{djgpp}’。（在编译时所需要的 @code{DJGPP} 工具可以在 @code{ftp}://@code{ftp}.@code{delorie}.@code{com}/@code{pub}/@code{djgpp}/@code{current}/v2gnu/ 找到）使用 @code{MinGW} 构建本地的 MS-Windows 的二进制版本的 @command{gawk}，则输入 ‘@code{make} mingw32’。
+@command{gawk} 的 32 位 @code{EMX} 版本在 OS/2 下是“开箱即用”的。但是，我们强烈建议你用 GCC2.95.3 来进行编译。总的来说，可以通过下面的方式来对 @command{gawk} 进行编译：
 $ ./@command{configure}
 $ @code{make}
 但是我们不建议这么做。为了要取得一个 @code{OMF} 的可执行文件，在你的 @code{sh} 提示符下，你应该使用下面的命令行：
@@ -10214,8 +10214,8 @@ $ @code{RANLIB}="@code{echo}"
 $ @code{export} @code{RANLIB}
 $ ./@command{configure} @option{--prefix}=@code{c}:/@code{usr}
 $ @code{make} @code{AR}=@code{emxomfar}
-这是对使用 @code{GCC} 2.@code{x} 的建议。你可以使用任何其他的环境集变量（自包含的）以及编译选项。
-如果使用的是 @code{GCC} 2.95，我们还建议如下：
+这是对使用 GCC 2.@code{x} 的建议。你可以使用任何其他的环境集变量（自包含的）以及编译选项。
+如果使用的是 GCC 2.95，我们还建议如下：
 $ @code{LIBS}="@option{-lgcc}"
 $ @code{export} @code{LIBS}
 如果你想的话，你还可以得到一个 @code{a}.@code{out} 可执行文件：
@@ -10228,25 +10228,24 @@ $ ./@command{configure} @option{--prefix}=@code{c}:/@code{usr}
 $ @code{make}
 提示：@code{a}.@code{out} 可执行文件的编译在 GCC3.2 下也是可用的。GCC3.2 后的版本还没有测试成功过。
 ‘@code{make} @code{install}’在 @code{EMX} 构建时会如预期的方式执行。
-提示：GNU @code{make} 的古老 @code{OS}/2 移植版本无法处理这个包中的 @code{Makefile} 文件。如果你使用 @code{make} 遇到了这样的问题，尝试一下 GNU @code{Make} 3.79 或者更新的版本。你应该在 @code{ftp}://@code{hobbes}.@code{nmsu}.@code{edu}/@code{pub}/os2/  上查找最新版本。
+提示：GNU @code{make} 的古老 OS/2 移植版本无法处理这个包中的 @code{Makefile} 文件。如果你使用 @code{make} 遇到了这样的问题，尝试一下 GNU Make 3.79 或者更新的版本。你应该在 @code{ftp}://@code{hobbes}.@code{nmsu}.@code{edu}/@code{pub}/os2/  上查找最新版本。
 @code{B}.3.1.3@code{}在@code{PC}操作系统上测试@command{gawk} 
-使用 @code{make} 来执行标准的测试并安装 @command{gawk} 需要一些其他的类 Unix 的工具，这些工具包括 @code{sh}，@code{sed} 以及 @code{cp}。为了要执行测试，@code{test}/*.@code{ok} 文件必须要进行相应的更改，这样它们就有通常的 @code{MS}@option{-DOS} 风格的换行标志。另外，可以执行 @code{make} @code{check} @code{CMP}="@code{diff} @option{-a}" 来在文本模式下使用 GNU 的 @code{diff} 工具而不是 @code{cmp} 来比较结果文件。
-大多数的测试在 @code{Stewartson} 的 @code{shell} 环境中都应该是成功的，这个 @code{Shell} 中带有相应的工具以及适当的 GNU 工具。但是，需要对 @code{test}/@code{Makefile} 做一些修改。我们建议你复制 @code{pc}/@code{Makefile}.@code{tst} 文件到 @code{test}/@code{Makefile} 中进行替换。相关的细节可以在 @code{README_d}/@code{README}.@code{pc} 文件以及 @code{pc}/@code{Makefile}.@code{tst} 文件中找到。
-在 @code{OS}/2 中，由于使用了 @code{spawnl()} 而不是 @code{fork()}/@code{execl()} 来开启子进程，所以 @code{pid} 测试会失败。由于所需要的多字节函数不可用，所以 mbfw1 与 mbprintf1 测试也会失败。
+使用 @code{make} 来执行标准的测试并安装 @command{gawk} 需要一些其他的类 Unix 的工具，这些工具包括 @code{sh}，@code{sed} 以及 @code{cp}。为了要执行测试，@code{test}/*.@code{ok} 文件必须要进行相应的更改，这样它们就有通常的 MS-DOS 风格的换行标志。另外，可以执行 @code{make} @code{check} @code{CMP}="@code{diff} @option{-a}" 来在文本模式下使用 GNU 的 @code{diff} 工具而不是 @code{cmp} 来比较结果文件。
+大多数的测试在 @code{Stewartson} 的 shell 环境中都应该是成功的，这个 Shell 中带有相应的工具以及适当的 GNU 工具。但是，需要对 @code{test}/@code{Makefile} 做一些修改。我们建议你复制 @code{pc}/@code{Makefile}.@code{tst} 文件到 @code{test}/@code{Makefile} 中进行替换。相关的细节可以在 @code{README_d}/@code{README}.@code{pc} 文件以及 @code{pc}/@code{Makefile}.@code{tst} 文件中找到。
+在 OS/2 中，由于使用了 @code{spawnl()} 而不是 @code{fork()}/@code{execl()} 来开启子进程，所以 @code{pid} 测试会失败。由于所需要的多字节函数不可用，所以 mbfw1 与 mbprintf1 测试也会失败。
 @code{B}.3.1.4@code{}在@code{PC} 操作系统上使用 @command{gawk}
-在 @code{MS}@option{-DOS} 与 @code{MS}@option{-Windows} 平台下，@code{Cygwin} 与 @code{MinGW} 环境支持 ‘|&’操作符与 TCP/IP 网络（查看 12.4 利用 @command{gawk} 进行网络通信， 在第 306 页）。@code{EMX} (仅 @code{OS}/2)至少支持 ‘|&’ 操作符。
-@code{MS}@option{-DOS} 与 @code{MS}@option{-Windows} 版本的 @command{gawk} 会搜索在 2.5.1 环境变量 @code{AWKPATH} ，在第 43 页，中描述的程序文件。但是，是用分号（而不是冒号）来分隔 @code{AWKPATH} 变量中的元素。如果没有设置 @code{AWKPATH} 或者为空，则默认的搜索路径是 ‘.;@code{c}:/@code{lib}/@command{awk};@code{c}:/@code{gnu}/@code{lib}/@command{awk}’。
-对于 @code{OS}/2(32@code{}位，@code{EMX}）的搜索路径是前缀路径来确定（多为 /@code{usr} 或者 @code{c}:/@code{usr}），在 Unix 版本的情况下，这个前缀已经在 @command{configure} 配置时的一个选项中进行了指定。如果 @code{c}:/@code{usr} 是目录缀，则默认的搜索路径包含 ‘.’ 与 ‘@code{c}:/@code{usr}/@code{share}/@command{awk}’。另外，为了支持在 @code{OS}/2 系统中的二进制发布，在该系统上 ‘@code{c}:’分区有可能不支持长文件或者，或者根本就不存在，因此需要一个特殊的环境变量。如果 @code{UNIXROOT} 指定了一个驱动器，这个驱动器也会进行程序文件的搜索。比如，如果 @code{UNIXROOT} 被设置为 ‘@code{e}:’，则完全的默认搜索路径为 ‘.;@code{c}:/@code{usr}/@code{share}/@command{awk};@code{e}:/@code{usr}/@code{share}/@command{awk}’。
-如像 @code{sh} 样的 @code{shell}（相比于 @code{MS}@option{-DOS} 中的 @code{command}.@code{com} 或者 @code{MS} @code{Windows} 或者 @code{OS}/2 中的 @code{cmd}.@code{exe}）对于 @command{awk} 编译会大有用处。@code{DJGPP} 工具组件包含了一个 @code{MS}@option{-DOS} 版本的 @code{Bash}，也包含了多个用于 @code{OS}/2 中的 @code{Shell}，如 @code{ksh}。
-#TODO
-在 @code{MS}@option{-Windows}，@code{OS}/2 以及 @code{MS}@option{-DOS} 中，@command{gawk}（以及很多的其他的文件程序）会默默地将 ‘\@code{r}\@code{n}’这样的行尾转换成成 ‘\@code{n}’，或者将输入中的 ‘\@code{n}’转换成 ‘\@code{r}\@code{n}’输出。特殊变量 @code{BINMODE}（@code{c}.@code{e}.）可以控制这样的转换，并做如下解释：
+在 MS-DOS 与 MS-Windows 平台下，Cygwin 与 @code{MinGW} 环境支持 ‘|&’操作符与 TCP/IP 网络（查看 12.4 利用 @command{gawk} 进行网络通信， 在第 306 页）。@code{EMX} (仅 OS/2)至少支持 ‘|&’ 操作符。
+MS-DOS 与 MS-Windows 版本的 @command{gawk} 会搜索在 2.5.1 环境变量 @code{AWKPATH} ，在第 43 页，中描述的程序文件。但是，是用分号（而不是冒号）来分隔 @code{AWKPATH} 变量中的元素。如果没有设置 @code{AWKPATH} 或者为空，则默认的搜索路径是 ‘.;@code{c}:/@code{lib}/@command{awk};@code{c}:/@code{gnu}/@code{lib}/@command{awk}’。
+对于 OS/2(32@code{}位，@code{EMX}）的搜索路径是前缀路径来确定（多为 /@code{usr} 或者 @code{c}:/@code{usr}），在 Unix 版本的情况下，这个前缀已经在 @command{configure} 配置时的一个选项中进行了指定。如果 @code{c}:/@code{usr} 是目录缀，则默认的搜索路径包含 ‘.’ 与 ‘@code{c}:/@code{usr}/@code{share}/@command{awk}’。另外，为了支持在 OS/2 系统中的二进制发布，在该系统上 ‘@code{c}:’分区有可能不支持长文件或者，或者根本就不存在，因此需要一个特殊的环境变量。如果 @code{UNIXROOT} 指定了一个驱动器，这个驱动器也会进行程序文件的搜索。比如，如果 @code{UNIXROOT} 被设置为 ‘@code{e}:’，则完全的默认搜索路径为 ‘.;@code{c}:/@code{usr}/@code{share}/@command{awk};@code{e}:/@code{usr}/@code{share}/@command{awk}’。
+如像 @code{sh} 样的 shell（相比于 MS-DOS 中的 @code{command}.@code{com} 或者 MS Windows 或者 OS/2 中的 @code{cmd}.@code{exe}）对于 @command{awk} 编译会大有用处。@code{DJGPP} 工具组件包含了一个 MS-DOS 版本的 @code{Bash}，也包含了多个用于 OS/2 中的 Shell，如 @code{ksh}。
+在 MS-Windows，OS/2 以及 MS-DOS 中，@command{gawk}（以及很多的其他的文件程序）会默默地将 ‘\@code{r}\@code{n}’这样的行尾转换成成 ‘\@code{n}’，或者将输入中的 ‘\@code{n}’转换成 ‘\@code{r}\@code{n}’输出。特殊变量 @code{BINMODE}（@code{c}.@code{e}.）可以控制这样的转换，并做如下解释：
 如果 @code{BINMODE} 为 “@code{r}”，或者 1，则二进制模式被设置在“读”操作上（即在读时不会进行转换。
 如果 @code{BINMODE} 为 “@code{w}”或者 2，则二进制模式设计在“写”操作上（即写时不会进行转换。）
 如果 @code{BINMODE} 为 “@code{rw}”或者“@code{wr}”或者 3，则二进制模式会设置在读写操作上。
 @code{BINMODE}=@code{non}@option{-null}@option{-string} 与 ‘@code{BINMODE}=3’一样（即，在读写时都不进行转换）。但是 @command{gawk} 会在字串不是 “@code{rw}”或者 “@code{wr}”时，会生成一个告警信息。
 标准输入或者标准输出的模式只会设置一次（在读取命令行之后，但是在处理任何 @command{awk} 程序之前）。在命令行中，使用适当的 ‘@option{-v} @code{BINMODE}=@code{N}’的选项来设置标准输出与标准输出的 @code{BINMODE}。@code{BINMODE} 在文件或者管道打开时，并且在流处理过程中不能够改变。
-@code{BINMODE} 的名字的选择与 @command{mawk} 匹配（查看 @code{B}.5@code{}其他可自由获取的 @command{awk} 实现， 在第 435 页）。@command{mawk} 与 @command{gawk} 处理 @code{BINMODE} 是类似的，但是 @command{mawk} 添加了一个 ‘@option{-W} @code{BINMODE}=@code{N}’ 选项以及环境变量来设置 @code{BINMODE}，@code{RS}，以及 @code{ORS}。文件 @code{binmode}[1-3].@command{awk}（一些二进制发布版本会在目录 @code{gnu}/@code{lib}/@command{awk} 下）选择与 @command{mawk} 的 ‘@option{-W} @code{BINMODE}=@code{N}’选项匹配。这即可以改变也可以取消。特别是 对于 @code{RS} 的设置带来最小的“惊奇”还在争论。如果二进制模式在读操作时设置了，则 @command{mawk} 会使用 ‘@code{RS}="\@code{r}\@code{n}"’，这对于 @code{MS}@option{-DOS}风格的行结尾的文件是合适的。
-为了说明，下面的例子在写到标准输出及其他文件时设置了二进制模式，并且将 @code{ORS} 设置成“正常”的 @code{MS}@option{-DOS}风格的行尾。
+@code{BINMODE} 的名字的选择与 @command{mawk} 匹配（查看 @code{B}.5@code{}其他可自由获取的 @command{awk} 实现， 在第 435 页）。@command{mawk} 与 @command{gawk} 处理 @code{BINMODE} 是类似的，但是 @command{mawk} 添加了一个 ‘@option{-W} @code{BINMODE}=@code{N}’ 选项以及环境变量来设置 @code{BINMODE}，@code{RS}，以及 @code{ORS}。文件 @code{binmode}[1-3].@command{awk}（一些二进制发布版本会在目录 @code{gnu}/@code{lib}/@command{awk} 下）选择与 @command{mawk} 的 ‘@option{-W} @code{BINMODE}=@code{N}’选项匹配。这即可以改变也可以取消。特别是 对于 @code{RS} 的设置带来最小的“惊奇”还在争论。如果二进制模式在读操作时设置了，则 @command{mawk} 会使用 ‘@code{RS}="\@code{r}\@code{n}"’，这对于 MS-DOS风格的行结尾的文件是合适的。
+为了说明，下面的例子在写到标准输出及其他文件时设置了二进制模式，并且将 @code{ORS} 设置成“正常”的 MS-DOS风格的行尾。
 @command{gawk} @option{-v} @code{BINMODE}=2 @option{-v} @code{ORS}="\@code{r}\@code{n}" ...
 或者：
 @command{gawk} @option{-v} @code{BINMODE}=@code{w} @option{-f} binmode2.@command{awk} ...
@@ -10255,41 +10254,42 @@ $ @code{make}
 或者：
 @command{gawk} @option{-f} binmode1.@command{awk} ...
 如果引号恰当，第一个例子中对 @code{RS} 的设置可以移到 @code{BEGIN} 规则中。
-@code{B}.3.1.5@code{}在@code{Cygwin} 中使用 @command{gawk} 
-如果你在 @code{MS}@option{-Windows} 系统中使用 @code{Cygwin}环境，则@command{gawk}可以构建完成后即可使用。这个提供了对使用 @code{Bash}，@code{GCC}，GNU @code{Make} 及其他 GNU 程序的 GNU/@code{Linux} 系统很好的模拟环境。在 @code{Cygwin} 上编译与安装与在 Unix 系统上是一样的：
+@code{B}.3.1.5@code{}在Cygwin 中使用 @command{gawk} 
+如果你在 MS-Windows 系统中使用 Cygwin环境，则@command{gawk}可以构建完成后即可使用。这个提供了对使用 @code{Bash}，GCC，GNU Make 及其他 GNU 程序的 GNU/Linux 系统很好的模拟环境。在 Cygwin 上编译与安装与在 Unix 系统上是一样的：
 @code{tar} @option{-xvpzf} @command{gawk}-4.1.2.@code{tar}.@code{gz}
 @code{cd} @command{gawk}-4.1.2
 ./@command{configure}
 @code{make} && @code{make} @code{check}
-与同一个系统上的 GNU/@code{Linux} 相比，‘@command{configure}’在 @code{Cygwin} 中要花长得多的时间。但是，它一旦完成，就可以像通常那样使用 ‘@code{make}’。
+与同一个系统上的 GNU/Linux 相比，‘@command{configure}’在 Cygwin 中要花长得多的时间。但是，它一旦完成，就可以像通常那样使用 ‘@code{make}’。
 @code{B}.3.1.6@code{}在@code{MSYS} 环境中使用 @command{gawk} 
-在 @code{MS}@option{-Windows} 系统中的 @code{MSYS} 环境，@command{gawk} 会自动地使用读写二进制模式。所以，没有必要设置 @code{BINMODE} 变量。
-对于其他已移植到 @code{MS}@option{-Windows} 的类 Unix 组件，这可能会导致问题。因为它们可能认为 @command{gawk} 会自动转换 “\@code{r}\@code{n}”，但是实际上却没有。
-@code{B}.3.2@code{}在 @code{Vax}/@code{VMS} 以及 @code{OpenVMS} 系统上编译安装 @command{gawk} 
-这个子章节描述如何来编译并安装 @command{gawk} 到 @code{VMS} 中。下面使用 “@code{VMS}”这个老的术语来表示 @code{OpenVMS}。
-@code{B}.3.2.1@code{}在@code{VMS} 上编译 @command{gawk} 
-为了在 @code{VMS} 下编译 @command{gawk}，有一个 @code{DCL} 命令过程会发起所有的 @code{CC} 与 @code{LINK} 命令。也有一个@code{Makefile} 与 @code{MMS} 以及 @code{MMK} 一起使用。在源代码目录下，使用：
+在 MS-Windows 系统中的 @code{MSYS} 环境，@command{gawk} 会自动地使用读写二进制模式。所以，没有必要设置 @code{BINMODE} 变量。
+对于其他已移植到 MS-Windows 的类 Unix 组件，这可能会导致问题。因为它们可能认为 @command{gawk} 会自动转换 “\@code{r}\@code{n}”，但是实际上却没有。
+@code{B}.3.2@code{}在 @code{Vax}/VMS 以及 OpenVMS 系统上编译安装 @command{gawk} 
+这个子章节描述如何来编译并安装 @command{gawk} 到 VMS 中。下面使用 “VMS”这个老的术语来表示 OpenVMS。
+@code{B}.3.2.1@code{}在VMS 上编译 @command{gawk} 
+为了在 VMS 下编译 @command{gawk}，有一个 @code{DCL} 命令过程会发起所有的 @code{CC} 与 @code{LINK} 命令。也有一个@code{Makefile} 与 @code{MMS} 以及 @code{MMK} 一起使用。在源代码目录下，使用：
 $ @[.@code{vms}]@code{vmsbuild}.@code{com}
 或者：
 $ @code{MMS}/@code{DESCRIPTION}=[.@code{vms}]@code{descrip}.@code{mms} @command{gawk}
 或者：
 $ @code{MMK}/@code{DESCRIPTION}=[.@code{vms}]@code{descrip}.@code{mms} @command{gawk}
 @code{MMK} 是开源免费的，几乎 是 @code{MMS} 的克隆，并能够很好地处理 @code{ODS}-5 中的大小写文件名。@code{MMK} 可以从 @code{https}: / / @code{github} . @code{com} /@code{endlesssoftware}/@code{mmk} 取得。
-@command{gawk} 在使用 @code{Compaq} C V6.4 的 @code{VAX}/@code{VMS} 7.3 以及 @code{Alpha}/@code{VMS} 7.3@minus{}1 ，@code{Alpha}/@code{VMS} 7.3， @code{Alpha}/@code{VMS} 7.3-2， 与 IA64/@code{VMS} 8.3 上都已经做了相应的测试。最近的构建使用 @code{Alpha} @code{VMS} 8.3 上的 @code{HP} C V7.3，以及使用 @code{HP} C 7.3 的 @code{Alpha} 与 IA64。 
-查看 @code{B}.3.2.5 @code{VMS} 的 @code{GNV} 项目，在第 434 页，来获取将 @command{gawk} 构建成与 @code{GNV} 产品兼容的 @code{PCSI} 包相关的信息。
-@code{B}.3.2.2@code{}在 @code{VMS} 编译 @command{gawk} 动态扩展 
-被移植到 @code{VMS} 的扩展可以使用下面的命令之一来进行构建 ：
+@command{gawk} 在使用 @code{Compaq} C V6.4 的 VAX/VMS 7.3 以及 Alpha/VMS 7.3@minus{}1 ，Alpha/VMS 7.3， Alpha/VMS 7.3-2， 与 IA64/VMS 8.3 上都已经做了相应的测试。最近的构建使用 Alpha VMS 8.3 上的 HP C V7.3，以及使用 HP C 7.3 的 Alpha 与 IA64。 
+查看 @code{B}.3.2.5 VMS 的 @code{GNV} 项目，在第 434 页，来获取将 @command{gawk} 构建成与 @code{GNV} 产品兼容的 @code{PCSI} 包相关的信息。
+#TODO
+@code{B}.3.2.2@code{}在 VMS 编译 @command{gawk} 动态扩展 
+被移植到 VMS 的扩展可以使用下面的命令之一来进行构建 ：
 $ @code{MMS}/@code{DESCRIPTION}=[.@code{vms}]@code{descrip}.@code{mms} @code{extensions}
 或者：
 $ @code{MMK}/@code{DESCRIPTION}=[.@code{vms}]@code{descrip}.@code{mms} @code{extensions}
 @command{gawk} 使用 @code{AWKLIBPATH} 来作为环境变量，或者是查找动态扩展的逻辑名。
-动态扩展需要使用与编译 @command{gawk} 一样的编译器来编译，这样使用与 @command{gawk} 一样的方式来处理浮点数，指针大小 以及符号名。@code{Alpha} 与 @code{Itanium} 平台应该使用 @code{IEEE} 清点数。指针大小是 32 位，而符号名处理会使用 @code{CRC} 来缩短大于 32@code{}位的符号。
-对于 @code{Alpha} 与 @code{Itanium} 平台：
+动态扩展需要使用与编译 @command{gawk} 一样的编译器来编译，这样使用与 @command{gawk} 一样的方式来处理浮点数，指针大小 以及符号名。Alpha 与 @code{Itanium} 平台应该使用 @code{IEEE} 清点数。指针大小是 32 位，而符号名处理会使用 @code{CRC} 来缩短大于 32@code{}位的符号。
+对于 Alpha 与 @code{Itanium} 平台：
 /@code{name}=(@code{as_is}，@code{short})
 /@code{float}=@code{ieee}/@code{ieee_mode}=@code{denorm_results}
-对于 @code{VAX} 平台：
+对于 VAX 平台：
 /@code{name}=(@code{as_is}，@code{short})
-编译时间宏需要在 @code{VMS} 提供的头文件被包含前进行定义，如：
+编译时间宏需要在 VMS 提供的头文件被包含前进行定义，如：
 #@code{if} (@code{__CRTL_VER} >= 70200000) && !@code{defined} (@code{__VAX})
 #@code{define} @code{_LARGEFILE} 1
 #@code{endif}
@@ -10300,8 +10300,8 @@ $ @code{MMK}/@code{DESCRIPTION}=[.@code{vms}]@code{descrip}.@code{mms} @code{ext
 #@code{endif}
 #@code{endif}
 #@code{endif}
-如果你写了自己的扩展运行在 @code{VMS} 上，你必须提供这些定义。@code{config}.@code{h} 文件会在 @code{VMS} 平台上构建 @command{gawk} 时为你完成这个工作。如果你使用这个文件，或者类似的其他文件，则你必须要记住在要包含 @code{VMS} 所提供的头文件之前包含它。
-@code{B}.3.2.3@code{}在@code{VMS} 上安装@command{gawk} 
+如果你写了自己的扩展运行在 VMS 上，你必须提供这些定义。@code{config}.@code{h} 文件会在 VMS 平台上构建 @command{gawk} 时为你完成这个工作。如果你使用这个文件，或者类似的其他文件，则你必须要记住在要包含 VMS 所提供的头文件之前包含它。
+@code{B}.3.2.3@code{}在VMS 上安装@command{gawk} 
 要使用 @command{gawk} ，你所需要是一个“外部”命令，这是一个 @code{DCL} 符号，它的值以美元符号开始。如：
 $ @code{GAWK} :== $disk1:[@code{gnubin}]@command{gawk}
 将 @command{gawk}.@code{exe} 的实际路径替换 ‘$disk1:[@code{gnubin}]’。符号需要在任何的想使用 @command{gawk} 的用户的 @code{login}.@code{com} 中替换，这样每次用户登录时都会进行定义。另外 ，符号也可以用全系统的 @code{sylogin}.@code{com} 过程来替换，这样所有的用户都可以使用 @command{gawk}。
@@ -10311,34 +10311,34 @@ $ @code{GAWK} :== $disk1:[@code{gnubin}]@command{gawk}
 $ @code{set} @code{command} @code{gnv}$@code{gnu}:[@code{vms_bin}]@code{gawk_verb}.@code{cld}
 或者系统管理员可以使用 @code{GNV}$GNU:[@code{vms_bin}]@code{gawk_verb}.@code{cld} 来将 @command{gawk} 与 @command{awk} 加到系统级的 @code{DCLTABLES}’ 中。
 @code{DCL} 语法在 @command{gawk}.@code{hlp} 文件中有记录。
-另外，@command{gawk}.@code{hlp} 项可以被加入到 @code{VMS} 帮助库中：
+另外，@command{gawk}.@code{hlp} 项可以被加入到 VMS 帮助库中：
 $ @code{LIBRARY}/@code{HELP} @code{sys}$@code{help}:@code{helplib} [.@code{vms}]@command{gawk}.@code{hlp}
-（你可能想将特定于站点的帮助库进行替换，而不是标准的 @code{VMS} 库 ‘@code{HELPLIB}’）在载入了帮助文件后，命令：
+（你可能想将特定于站点的帮助库进行替换，而不是标准的 VMS 库 ‘@code{HELPLIB}’）在载入了帮助文件后，命令：
 $ @code{HELP} @code{GAWK}
 提供了关于 @command{gawk} 实现 与 @command{awk} 程序语言的信息。
 逻辑名 ‘@code{AWK_LIBRARY}’可以设设成 @command{awk} 程序文件的默认位置。对于 @option{-f} 选项，如果所指定的文件吃饭去没有设备或者路径信息，@command{gawk} 会在首先在当前的目录下搜索，如果没有找到，则会在由 ‘@code{AWK_LIBRARY}’ 所指定路径下搜索。如果在搜索了两个目录下，文件还没有找到，@command{gawk} 会加上‘.@command{awk}’后缀到文件名中，将再次尝试搜索。如果 ‘@code{AWK_LIBRARY}’没有定义，则会使用 ‘@code{SYS}$@code{LIBRARY}:’的值。
-@code{B}.3.2.4@code{}在 @code{VMS} 上运行 @command{gawk} 
-在 @code{VMS} 上，命令行的分析与引号规范完全不同，因此这本书中的例子，或者其他的源代码要做一些小变化。虽然小，所有的 @command{awk} 程序都应该是可以正常执行的。
+@code{B}.3.2.4@code{}在 VMS 上运行 @command{gawk} 
+在 VMS 上，命令行的分析与引号规范完全不同，因此这本书中的例子，或者其他的源代码要做一些小变化。虽然小，所有的 @command{awk} 程序都应该是可以正常执行的。
 这是一些简单的测试：
 $ @command{gawk} -- "@code{BEGIN} {@code{print} ""@code{Hello}， @code{World}!""}"
 $ @command{gawk} -"@code{W}" @code{version}
 ! @code{could} @code{also} @code{be} -"@code{W} @code{version}" @code{or} "@option{-W} @code{version}"
 注意大小混用时，文本必须引起来。
-@command{gawk} 的 @code{VMS} 移植版本包含了一个 @code{DCL} 风格的接口，以及原始 @code{Shell} 风格的接口（查看 @code{help} 项来获取详细信息）。双路径行分析的副作用是，如果只有一个参数（如程序中引起来的程序），则命令则会有一点模棱两可。为了解决这个问题，常规的可选的 -- 标志则用来强制使用 Unix 风格的分析方法，而不是 @code{DCL} 的分析方法。如果还有其他任何的 “横杠类型”的选项（或者多个参数，如要处理的数据文件），则就不会有二义性，-- 则可以省略掉。
-退出值是一个 Unix 风格的值，当程序退出时，会被编码为 @code{VMS} 的退出值。
-@code{VMS} 的严重程序位会根据退出值来进行设置。1 表示失败，@code{VMS} 会设置 @code{ERROR} 状态。2 表示致命错误，@code{VMS} 会设置 @code{FATAL} 状态。所有其他的值都表示 @code{SUCCESS} 状态。退出值的编码符合 @code{VMS} 的编码标准并使用@code{C_FACILITY_NO} 值 0x350000 与常量 0xA0000 加到为腾出严重程度编码位而左移了@code{}3@code{}位的数值上。
-从 @code{VMS} 状态码中提取实际的 @command{gawk} 退出码，使用下面的代码：
+@command{gawk} 的 VMS 移植版本包含了一个 @code{DCL} 风格的接口，以及原始 Shell 风格的接口（查看 @code{help} 项来获取详细信息）。双路径行分析的副作用是，如果只有一个参数（如程序中引起来的程序），则命令则会有一点模棱两可。为了解决这个问题，常规的可选的 -- 标志则用来强制使用 Unix 风格的分析方法，而不是 @code{DCL} 的分析方法。如果还有其他任何的 “横杠类型”的选项（或者多个参数，如要处理的数据文件），则就不会有二义性，-- 则可以省略掉。
+退出值是一个 Unix 风格的值，当程序退出时，会被编码为 VMS 的退出值。
+VMS 的严重程序位会根据退出值来进行设置。1 表示失败，VMS 会设置 @code{ERROR} 状态。2 表示致命错误，VMS 会设置 @code{FATAL} 状态。所有其他的值都表示 @code{SUCCESS} 状态。退出值的编码符合 VMS 的编码标准并使用@code{C_FACILITY_NO} 值 0x350000 与常量 0xA0000 加到为腾出严重程度编码位而左移了@code{}3@code{}位的数值上。
+从 VMS 状态码中提取实际的 @command{gawk} 退出码，使用下面的代码：
 @code{unix_status} = (@code{vms_status} .@code{and}. &x7f8) / 8
 使用 @code{exec()} 的 C 程序调用 @command{gawk} 会得到最初的 Unix 风格的退出值。
-用于 @code{VMS} 的旧版 @command{gawk} 会将 Unix 的退出码@code{}0@code{}当成@code{}1，失败则为 2，致命错误则为 4，其他的值则直接传递。这违反了 @code{VMS} 的退出状态编码要求。
-@code{VAX}/@code{VMS} 浮点数使用无倾向的舍入舍出方案。查看 10.2.3 数值舍入舍出， 在第 226 页。
-@code{VMS} 会用 @code{GMT} 的格式报告时间，除非设置了 @code{SYS}$@code{TIMEZONE_RULE} 或者 @code{TZ} 逻辑名字。
+用于 VMS 的旧版 @command{gawk} 会将 Unix 的退出码@code{}0@code{}当成@code{}1，失败则为 2，致命错误则为 4，其他的值则直接传递。这违反了 VMS 的退出状态编码要求。
+VAX/VMS 浮点数使用无倾向的舍入舍出方案。查看 10.2.3 数值舍入舍出， 在第 226 页。
+VMS 会用 @code{GMT} 的格式报告时间，除非设置了 @code{SYS}$@code{TIMEZONE_RULE} 或者 @code{TZ} 逻辑名字。
 当搜索由 @option{-f} 指定的 @command{awk} 程序文件时，默认的搜索路径是 "@code{SYS}$@code{DISK}:[]，@code{AWK_LIBRARY}:"。逻辑名字 @code{AWKPATH} 可以用来覆盖这个默认设置。@code{AWKPATH} 的格式是一个逗号分隔的目录列表。如果定义了这个变量，值应该被引起来，这样它会保留为独立转换，而不是 @code{RMS} 搜索列表的多转换。
-@code{B}.3.2.5 @code{VMS} 的 @code{GNV} 项目 
-@code{VMS} @code{GNV} 包提供了与 POSIX 类似的构建环境，并带了很多开源工作的移植版本。@command{gawk} 可以在 @code{GNV} 的库中找到，但是是一个旧移植版本。当前，GNU 项目被重新组织了，以为每个组件提供单独的 @code{PCSI} 包。查看 @code{https}://@code{sourceforge}.@code{net}/@code{p}/@code{gnv}/@code{wiki}/@code{InstallingGNVPackages}/。@command{gawk} 的常规的构建过程会生成一个适用于 @code{GNV} 的程序。
-在发行版中的 @code{vms}/@code{gawk_build_steps}.@code{txt} 文件记录了构建与 @code{GNV} 兼容的 @code{VMS} @code{PCSI} 包的过程。
-@code{B}.3.2.6@code{}有一些 @code{VMS} 系统有旧版本的 @command{gawk} 
-有一些 @code{VMS} 的版本带有旧的 @command{gawk} 版本。为了访问它，定义如下的符号：
+@code{B}.3.2.5 VMS 的 @code{GNV} 项目 
+VMS @code{GNV} 包提供了与 POSIX 类似的构建环境，并带了很多开源工作的移植版本。@command{gawk} 可以在 @code{GNV} 的库中找到，但是是一个旧移植版本。当前，GNU 项目被重新组织了，以为每个组件提供单独的 @code{PCSI} 包。查看 @code{https}://@code{sourceforge}.@code{net}/@code{p}/@code{gnv}/@code{wiki}/@code{InstallingGNVPackages}/。@command{gawk} 的常规的构建过程会生成一个适用于 @code{GNV} 的程序。
+在发行版中的 @code{vms}/@code{gawk_build_steps}.@code{txt} 文件记录了构建与 @code{GNV} 兼容的 VMS @code{PCSI} 包的过程。
+@code{B}.3.2.6@code{}有一些 VMS 系统有旧版本的 @command{gawk} 
+有一些 VMS 的版本带有旧的 @command{gawk} 版本。为了访问它，定义如下的符号：
 $ @command{gawk} :== $@code{sys}$@code{common}:[@code{syshlp}.@code{examples}.@code{tcpip}.@code{snmp}]@command{gawk}.@code{exe}
 这个版本是 2.15.6，相当的老。我们建议你编译与使用当前的版本。
 @code{B}.4@code{}报告问题与@code{BUG} 
@@ -10350,17 +10350,17 @@ $ @command{gawk} :== $@code{sys}$@code{common}:[@code{syshlp}.@code{examples}.@c
 一旦你的问题有了全面精确的描述，你就可以给 @code{bug}-@command{gawk}@@code{gnu}.@code{org} 发送邮件。
 @command{gawk} 的维护者会订阅这个邮件地址，因此他们会收到你的 @code{Bug} 报告。尽管你可以直接给维护者发送邮件，但是最好还是使用专用的报告地址，因此邮件地址在 GNU 项目中是有的。所有的邮件都用英语。这是唯一被所有维护者都理解的语言。
 注意：不要将 @command{gawk} 的 @code{Bug} 报告到由 @code{comp}.@code{lang}.@command{awk} 所指向的 @code{Usenet}/@code{Internet} 新闻组。@command{gawk} 的开发者偶尔才会去看这个新闻组，但是不保证我们可以看得到你提交的内容。这里所描述的步骤是官方认可的组织方式。真的。
-提示：很多的 GNU/@code{Linux}  以及不同的基于 @code{BSD} 的操作系统发布版有他们自己的 @code{bug} 报告系统。如果你使用这些发布版的 @code{Bug} 报告系统，你也要发送一个复本到 @code{bug}-@command{gawk}@@code{gnu}.@code{org}。
+提示：很多的 GNU/Linux  以及不同的基于 @code{BSD} 的操作系统发布版有他们自己的 @code{bug} 报告系统。如果你使用这些发布版的 @code{Bug} 报告系统，你也要发送一个复本到 @code{bug}-@command{gawk}@@code{gnu}.@code{org}。
 这有两个原因。首先，尽管一些发布版本将 @code{Bug} 报告推送到 GNU 邮件列表，但是很多的都没有，所以很有可能 @command{gawk} 的维护者很有可能看不到你的报告。其次，发送到 GNU 邮件列表的邮件会被归档，将所有的关东西都放在 GNU 项目中，使得其是自说明的，而不依赖于其他的组织。
 非 @code{Bug} 建议也是受欢迎的。如果你看到文档中的东西说明不清，或者不理解其中的特性，你也可以在 @code{Bug} 列表中进行提问，我们会尽可能地帮助你。
 如果你在一个非 Unix 移植版本中发现 @code{bug} ，也将邮件发送到  @code{Bug} 列表 ，并抄送给维护这个移植版本的人。维护者在下面在的列表中，也存 @command{gawk} 发布版中的 @code{README} 文件里。@code{README} 文件中的信息如果与本书中的有冲突，那里的信息会更加权威。
 维护不同的移植版本的人如下：
 Unix @code{and} POSIX @code{systems}  @code{Arnold} @code{Robbins}， @code{arnold}@@code{skeeve}.@code{com}
-@code{MS}@option{-DOS} @code{with} @code{DJGPP}   @code{Scott} @code{Deifik}， @code{scottd}.@code{mail}@@code{sbcglobal}.@code{net}
-@code{MS}@option{-Windows} @code{with} @code{MinGW}   @code{Eli} @code{Zaretskii}， @code{eliz}@@code{gnu}.@code{org}
-@code{OS}/2    @code{Andreas} @code{Buening}， @code{andreas}.@code{buening}@@code{nexgo}.@code{de}
-@code{VMS}     @code{John} @code{Malmberg}， wb8tyw@@code{qsl}.@code{net}
-@code{z}/@code{OS} (@code{OS}/390)   @code{Dave} @code{Pitts}， @code{dpitts}@@code{cozx}.@code{com}
+MS-DOS @code{with} @code{DJGPP}   @code{Scott} @code{Deifik}， @code{scottd}.@code{mail}@@code{sbcglobal}.@code{net}
+MS-Windows @code{with} @code{MinGW}   @code{Eli} @code{Zaretskii}， @code{eliz}@@code{gnu}.@code{org}
+OS/2    @code{Andreas} @code{Buening}， @code{andreas}.@code{buening}@@code{nexgo}.@code{de}
+VMS     @code{John} @code{Malmberg}， wb8tyw@@code{qsl}.@code{net}
+@code{z}/OS (OS/390)   @code{Dave} @code{Pitts}， @code{dpitts}@@code{cozx}.@code{com}
 如果 @code{Bug} 在 Unix 下也是可重现的，也抄送一份报告给 @code{bug}-@command{gawk}@@code{gnu}.@code{org} 邮件列表。
 @code{B}.5@code{}其他可自由获取的 @command{awk} 实现 
 如果在 @command{awk} 代码中这样来输入注释就有味了：
@@ -10368,7 +10368,7 @@ Unix @code{and} POSIX @code{systems}  @code{Arnold} @code{Robbins}， @code{arno
 —@code{Michael} @code{Brennan}
 还有很多的可以免费获取的 @command{awk} 实现版本，这一章简单地进行说明如何来获取它们：
 Unix @command{awk}    @code{Brian} @code{Kernighan} 是 Unix @command{awk} 的最初设计者，它将他自己的 @command{awk} 开发出来了。你可以通过他的主页来获取，可以有几种文档格式：
-@code{Shell} @code{archive}
+Shell @code{archive}
 @code{http}://@code{www}.@code{cs}.@code{princeton}.@code{edu}/~@code{bwk}/@code{btl}.@code{mirror}/@command{awk}.@code{shar}
 @code{Compressed} @code{tar} @code{file}
 @code{http}://@code{www}.@code{cs}.@code{princeton}.@code{edu}/~@code{bwk}/@code{btl}.@code{mirror}/@command{awk}.@code{tar}.@code{gz}
@@ -10376,7 +10376,7 @@ Unix @command{awk}    @code{Brian} @code{Kernighan} 是 Unix @command{awk} 的�
 你也可以从 @code{GitHub} 上取得：
 @code{git} @code{clone} @code{git}://@code{github}.@code{com}/@code{onetrueawk}/@command{awk} @code{bwkawk}
 这个命令创建了一个名为 @code{bwkawk} 的 @code{Git} 库的复本。如果你将这个参数在 @code{git} 命令里省略，则 @code{git} 库的复本会创建在名字为 @command{awk} 的目录中。
-这个版本需要 @code{ISO} C（1990 标准）的编译器，来自于 @code{GCC}（GNU @code{Compiler} @code{Collection}） 的 C 编译器可以工作得很好。查看 @code{A}.7 通用扩展汇总，在第 414 页，来获取这个 @command{awk} 扩展列表，这些扩展不在 POSIX @command{awk} 中。
+这个版本需要 @code{ISO} C（1990 标准）的编译器，来自于 GCC（GNU @code{Compiler} @code{Collection}） 的 C 编译器可以工作得很好。查看 @code{A}.7 通用扩展汇总，在第 414 页，来获取这个 @command{awk} 扩展列表，这些扩展不在 POSIX @command{awk} 中。
 @command{mawk}    @code{Michael} @code{Brennan} 单独实现了 @command{awk}，称为 @command{mawk}。这可以以 @code{GPL} （查看 GNU 通用公共许可，在第 465 页）的方式获取，如 @command{gawk} 一样。
 @command{mawk} 源代码的最初的发布地址中已经不再有 @command{mawk}，可以在这里 @code{http}://@code{www}.@code{skeeve}.@code{com}/@command{gawk}/mawk1.3.3.@code{tar}.@code{gz} 取得。
 2009 年，@code{Thomas} @code{Dickey} 负责起 @command{mawk} 的维护工作。基本的信息可以在它的项目网站中可以得到。下载地址为 @code{http}://@code{invisible}@option{-island}.@code{net}/@code{datafiles}/@code{release}/@command{mawk}.@code{tar}.@code{gz}。
@@ -10390,7 +10390,7 @@ Unix @command{awk}    @code{Brian} @code{Kernighan} 是 Unix @command{awk} 的�
 @code{BusyBox} @command{awk}
 @code{BusyBox} 是一个 @code{GPL} 授权的程序，在单独的执行体中提供了很多应用的小版本。其目标是嵌入式系统。它包含了 POSIX @command{awk} 的完整实现。当构建时，不要使用 ‘@code{make} @code{install}’，因为它会覆盖 /@code{usr}/@code{local}/@code{bin} 目录下的其他复本程序。可以浏览它的主页来获取更多信息。
 @code{The} @code{OpenSolaris} POSIX @command{awk}
-在 @code{Solaris} 系统中 /@code{usr}/xpg4/@code{bin} 与 /@code{usr}/xpg6/@code{bin} 下的 @command{awk} 多多少少与 POSIX 是兼容的。它们是基于 @code{PC} 版的 @code{Mortice} @code{KernSystems} 中的 @command{awk} 版本。我们可以在 GNU/@code{Linux} 下用一两个小时来编译它的源代码。要将它弄得更可移植（使用 GNU @code{Autoconf} 与/或 @code{Automake}）需要很多的工作，而且还没有完成，至少以我们现有的了解看来是这样的。
+在 @code{Solaris} 系统中 /@code{usr}/xpg4/@code{bin} 与 /@code{usr}/xpg6/@code{bin} 下的 @command{awk} 多多少少与 POSIX 是兼容的。它们是基于 @code{PC} 版的 @code{Mortice} @code{KernSystems} 中的 @command{awk} 版本。我们可以在 GNU/Linux 下用一两个小时来编译它的源代码。要将它弄得更可移植（使用 GNU @code{Autoconf} 与/或 @code{Automake}）需要很多的工作，而且还没有完成，至少以我们现有的了解看来是这样的。
 它的源代码过去在 @code{OpenSolaris} 站点里。但是，那个项目已经结束，网站已经关闭。幸运的是 @code{Illumos} 项目让这个实现再次可用。你可以访问 @code{https}://@code{github}.@code{com}/@code{joyent}/@code{illumos}@option{-joyent}/@code{blob}/@code{master}/@code{usr}/@code{src}/@code{cmd}/awk_xpg4 来查看其中的文件。
 @code{jawk}    这是用 @code{Java} 写的 @command{awk} 解释器。它声称完全是解释器，尽管因为它使用 @code{Java} 的工具来进行 I/O 以及正则表达式匹配，它所支持的语言与 POSIX @command{awk} 是不同的。可以在网页上获取更多的信息。
 @code{Libmawk}     这是可嵌入的 @command{awk} 解释器，来自于@command{mawk}。要了解信息，请浏览 @code{http}://@code{repo}.@code{hu}/@code{projects}/@code{libmawk}/。
@@ -10406,7 +10406,7 @@ Unix @command{awk}    @code{Brian} @code{Kernighan} 是 Unix @command{awk} 的�
 @code{tar} @option{-xvpzf} @command{gawk}-4.1.2.@code{tar}.@code{gz}
 @code{cd} @command{gawk}-4.1.2
 ./@command{configure} && @code{make} && @code{make} @code{check}
-@command{gawk} 可以构建在非 POSIX 系统上。当前支持的系统包含使用 @code{DJGPP}，@code{MSYS}，@code{MinGW} 以及 @code{Cygwin} 的 @code{MS}@option{-Windows}，使用 @code{EMX} 的 @code{OS}/2，以及 @code{Vax}/@code{VMS} 与 @code{OpenVMS}。在相应系统上的指导也在这个附录中了。
+@command{gawk} 可以构建在非 POSIX 系统上。当前支持的系统包含使用 @code{DJGPP}，@code{MSYS}，@code{MinGW} 以及 Cygwin 的 MS-Windows，使用 @code{EMX} 的 OS/2，以及 @code{Vax}/VMS 与 OpenVMS。在相应系统上的指导也在这个附录中了。
 @code{Bug} 报告应该通过邮件发送给 @code{bug}-@command{gawk}@@code{gnu}.@code{org}。@code{Bug} 报告应该使用英语，并包含 @command{gawk} 的版本，如何进行编译的，以及一个短程序与数据文件来说明其中的问题。
 很多的的自由获取 @command{awk} 实现，很多与 POSIX 兼容，有的则兼容得较少。
  
@@ -10478,7 +10478,7 @@ C.2.4@code{}为什么自动生成的文件要放在 @code{Git} 中
 如果你查看  @code{Git} 库中的 @command{gawk} 源代码，你会注意到里面包含了由 GNU 基础工作自动力生成的文件，如 @code{Makefile}.@code{in} 由 @code{Automake} 生成，甚至是由 @code{Autoconf} 生成的 @command{configure}。
 这个不同于不存储衍生文件其他自由软件项目，因为这使得库不会这么混乱，而且更容易在比较在不同提交之间的真正改变。但是，有几个原因，使得 @command{gawk} 要把所有的东西放在库中。
 首先，这更容易生成完整的版本，而不依赖于其他工作的能力（有一些老的，被丢弃，甚至没办法找得到。）
-一个极端例子是，如果你想编译，比方说 V7 的 @command{awk}，你会发现你不仅要用 V7 的 @code{yacc} 来处理，还需要 V7 的 @code{lex}。对于后者，在现代的 GNU/@code{Linux} 系统根本没有。 
+一个极端例子是，如果你想编译，比方说 V7 的 @command{awk}，你会发现你不仅要用 V7 的 @code{yacc} 来处理，还需要 V7 的 @code{lex}。对于后者，在现代的 GNU/Linux 系统根本没有。 
 （或者说，@command{gawk} 1.2 所需要 1989 年中的 @code{bison} 什么什么的，在库中没有 @code{awkgram}.@code{c} 这个文件。有保证说我们可以找到 @code{bison} 版本？或者可以构建么？）
 如果库有都有生成的文件，则很容易检查并构建。（或者，依赖于我们所回到的位置可能更容易。）
 这使得我们有第二个理由（更强的）为什么把所有的文件都放在 @code{Git} 中。简单地说就是你让谁开心——是 @command{gawk} 的开发者，还是仅想取某个版本然后试试它的用户？
@@ -10539,7 +10539,7 @@ C.5@code{}扩展 @code{API} 设计
 C.5.1@code{}旧机制的问题 
 旧的扩展机制有下面的几个问题：
 严重依赖于 @command{gawk} 的内部实现。结点结构 一旦变化，扩展就得重新编译。而且，要真写一扩展，需要了解 @command{gawk} 内部功能的一些东西。这里面有一些记录在本书里，但是相当有限。
-要能够从扩展调用到 @command{gawk}，需要连接工具在 Unix 派生出来的系统中是很通用的，但是在 @code{MS}@option{-Windows} 上却不是，用户在 @code{MS}@option{-Windows} 上的扩展需要静态地连接到 @command{gawk} 中，尽管 @code{MS}@option{-Windows} 也支持动态装载共享对象。
+要能够从扩展调用到 @command{gawk}，需要连接工具在 Unix 派生出来的系统中是很通用的，但是在 MS-Windows 上却不是，用户在 MS-Windows 上的扩展需要静态地连接到 @command{gawk} 中，尽管 MS-Windows 也支持动态装载共享对象。
 当 @command{gawk} 变化时，@code{API} 也会偶尔变量，并且不同的版本之间不兼容，也没有相应的计划来兼容。
 尽管有这么些缺陷，@code{xgawk} 项目的开发者复制了 @command{gawk} 并且开发了几个很好的扩展。它们也增强了 @command{gawk} 中与文件包含与共享对象访问的功能。
 新的 @code{API} 经过的长时间的设计，直到 2012 年，@command{gawk} 的维护者与开发者最终才开始实现。关于 @code{xgawk} 项目的信息在 16.8 @code{gawkextlib} 项目，在第 400 页，这里提供。
@@ -10555,7 +10555,7 @@ C.5.2@code{}新机制的目标
 有能力创建数组（包含 @command{gawk} 真正的数组之数组）。
 其他的重要目标是：
 @code{API} 应该只使用 @code{ISO} C 90 的特性，这样扩展可以使用最广泛的 C 与 C++ 编译器。头文件应该包含适当的 ‘#@code{ifdef} @code{__cplusplus}’ 与 ‘@code{extern} "C"’ 等代码，这样可以使用 C++ 编译器。（如果使用 C++ 时，运行时系统要足够聪明来调用任何的构造函数与析构函数，因为 @command{gawk} 是一个 C 程序。在写本书时，这还没有测试过。）
-@code{API} 机制应该不需要访问 @command{gawk} 的符号， 无论是编译时还是动态连接时。这样创建的扩展也可以用在 @code{MS}@option{-Windows} 平台上。
+@code{API} 机制应该不需要访问 @command{gawk} 的符号， 无论是编译时还是动态连接时。这样创建的扩展也可以用在 MS-Windows 平台上。
 在开发的过程中，越来越清晰的是有一些特性需要提供给扩展，后面也提供了：
 扩展应该有能力将勾子打入 @command{gawk} 的 I/O 重向机制中。特别是 @code{xgawk} 的开发者提供了一种所谓的“开放勾子”来读取记录。在开发过程中，扩展对于输入处理、输出处理以及双路 I/O 的勾子都进了一般化。
 扩展应该可以提供回调函数来执行 @command{gawk} 退出时的清理动作。
@@ -10656,7 +10656,7 @@ C.7@code{}总结
 @command{awk} @code{Script} （@command{awk} 脚本）
 @command{awk} 程序的别一个名字。
 @code{Bash} 
-GNU 版的标准 @code{Shell}（@code{the} @code{Bourne}@option{-Again} @code{SHel}）。查看 “@code{Bourne} @code{Shell}”。
+GNU 版的标准 Shell（@code{the} @code{Bourne}@option{-Again} @code{SHel}）。查看 “@code{Bourne} Shell”。
 @code{Binary} 
 基于两个符号，其值为 0 与 1。因为电路“自然地”以@code{}2 为底进行工作（可以相像成开与关），在计算机的所有东西都以 2 为底进行计算。每一位都表示 2 的幂，被称为位。所以，以@code{}2@code{}为底的值 10101 与十进制的 10  ((1 @code{x} 16) + (1 @code{x} 4) + (1 @code{x} 1)) 相同。
 由于以@code{}2@code{}为底的数值很快变得太长而难于读写，它们一般被按@code{}3@code{}位进行分组（即它们可以按八进制来读），或者按@code{}4@code{}位进行分组（即它们可以按十六进制来读）。在 C 程序没有直接的方式来插入以@code{}2@code{}为底的数。存储在寄存器中以@code{}2@code{}为底用来表示计算机中的整数，可以直接表示了计算机的处理能力。现令的大多数计算机使用 64 位来表示整数，但是过去很多使用 32 位，16 位或者@code{}8@code{}位。查看 6.1.1.2 八进制与十六进制数值，在第 113 页。
@@ -10665,8 +10665,8 @@ GNU 版的标准 @code{Shell}（@code{the} @code{Bourne}@option{-Again} @code{SH
 计算机一般都是以用多少位来表示整数来定义的。典型的系统有 32 位系统，但是 64 位系统也起来越流行，16@code{}位的系统会慢慢消失。
 @code{Boolean} @code{Expression}（布林表达式）
 以英国数数家 @code{Boole} 来命令，查看“逻辑表达式”。
-@code{Bourne} @code{Shell}
-在 Unix 或者类 Unix 系统上的标准 @code{Shell}（/@code{bin}/@code{sh}），最初由贝尔实验室的 @code{Steven} @code{R}. @code{Bourne} 写成。很多的 @code{Shell} （@code{Bash}， @code{ksh}， @code{pdksh}， @code{zsh}）都与 @code{Bourne} @code{Shell} 兼容。
+@code{Bourne} Shell
+在 Unix 或者类 Unix 系统上的标准 Shell（/@code{bin}/@code{sh}），最初由贝尔实验室的 @code{Steven} @code{R}. @code{Bourne} 写成。很多的 Shell （@code{Bash}， @code{ksh}， @code{pdksh}， @code{zsh}）都与 @code{Bourne} Shell 兼容。
 @code{Braces} （花括号）
 字符 ‘{’ 与 ‘}’。花括号用在 @command{awk} 用于区分由语句与函数体组成的动作。
 @code{Bracket} @code{Expression}（方括号表达式）
@@ -10677,8 +10677,8 @@ GNU 版的标准 @code{Shell}（@code{the} @code{Bourne}@option{-Again} @code{SH
 @code{ARGC}， @code{ARGV}， @code{CONVFMT}， @code{ENVIRON}， @code{FILENAME}， @code{FNR}， @code{FS}， @code{NF}， @code{NR}， @code{OFMT}， @code{OFS}， @code{ORS}， @code{RLENGTH}， @code{RSTART}， @code{RS}， 与 @code{SUBSEP} 是对 @command{awk} 都有特殊的含义的变量。另外，@code{ARGIND}， @code{BINMODE}， @code{ERRNO}， @code{FIELDWIDTHS}， @code{FPAT}， @code{IGNORECASE}， @code{LINT}， @code{PROCINFO}， @code{RT}， 与 @code{TEXTDOMAIN} 是对于 @command{gawk} 有特殊含义的变量。对些变量的更改，会影响 @command{awk} 的运行时环境。（查看 7.5 预定义变量，在第 155 页。）
 C   
 很多的 GNU 软件都使用其编写的一种系统编程语言。@command{awk} 编程语言有 C 风格的语法，本书中，我们在合适的时候也提出了 @command{awk} 与 C 之间的差异。一般来讲，@command{gawk} 尝试使其与 1990 年的 @code{ISO} C 版本相似还有有意义的。
-C @code{Shell}     
-C @code{Shell}（@code{csh} 或者其增强版本 @code{tcsh}）是一个 Unix @code{Shell}，由 @code{Bill} @code{Joy} 在 1970 年晚些时候编写。C @code{Shell} 与其他的 @code{Shell} 之间的不同在于其交互特性以整体风格，它看起来更像 C。C @code{Shell} 没有向后兼容 @code{Bourne} @code{Shell}，所以，将其他的 Unix @code{Shell} 写的脚本转换成 C @code{Shell} 的时候要特别注意，特别是对于变量的管理。查看 “@code{Bourne} @code{Shell}”。
+C Shell     
+C Shell（@code{csh} 或者其增强版本 @code{tcsh}）是一个 Unix Shell，由 @code{Bill} @code{Joy} 在 1970 年晚些时候编写。C Shell 与其他的 Shell 之间的不同在于其交互特性以整体风格，它看起来更像 C。C Shell 没有向后兼容 @code{Bourne} Shell，所以，将其他的 Unix Shell 写的脚本转换成 C Shell 的时候要特别注意，特别是对于变量的管理。查看 “@code{Bourne} Shell”。
 C++ 
 由 C 衍生出来的一种面向对象的很流行的编程语言。
 @code{Character} @code{Class}
@@ -10686,7 +10686,7 @@ C++
 @code{Character} @code{List}
 查看“方括号表达式”。
 @code{Character} @code{Set}（字符集）
-由计算机系统用来表示特定国家或者地区的字符（字母，数字，标点等）的数值编码集合。目前使用最多的常用字符集是 @code{ASCII}（美国信息交换标准编码）。很多的欧洲国家使用 @code{ASCII} 的扩展集，@code{ISO}-8859@minus{}1（@code{ISO}@option{-Latin}@minus{}1）。@code{Unicode} 字符集使用得越来越普遍，并形成相应的标准，特别是在 GNU/@code{Linux} 系统上被广泛地使用。
+由计算机系统用来表示特定国家或者地区的字符（字母，数字，标点等）的数值编码集合。目前使用最多的常用字符集是 @code{ASCII}（美国信息交换标准编码）。很多的欧洲国家使用 @code{ASCII} 的扩展集，@code{ISO}-8859@minus{}1（@code{ISO}@option{-Latin}@minus{}1）。@code{Unicode} 字符集使用得越来越普遍，并形成相应的标准，特别是在 GNU/Linux 系统上被广泛地使用。
 @code{CHEM}    
 @code{pic} 的预处理器，用来读取分子的描述并产生 @code{pic} 输入，用于描述。它由 @code{Brian} @code{Kernighan} 与 @code{Jon} @code{Bentley} 用 @command{awk} 写成。并在此可得到：@code{http}://@code{netlib}.@code{org}/@code{typesetting}/@code{chem}。
 @code{Comparison} @code{Expression}（比较表达式）
@@ -10763,8 +10763,8 @@ C++
 “@code{Greenwich} @code{Mean} @code{Time}”（格林尼治标准时间）。这是 @code{UTC} 的旧术语。它是 Unix 与 POSIX 系统内部使用的时期时间。查看 “@code{Epoch}” 与 “@code{UTC}”。
 GNU     
 “GNU'@code{s} @code{not} Unix”。是一个持续运行的自由软件基金会的项目，用来创建一个完全的，自由发布的 POSIX 兼容的计算环境。
-GNU/@code{Linux}
-是使用 @code{Linux} @code{Kernel} 的 GNU 系统的变体，而不是自由软件基金会的 @code{Hurd} 内核。@code{Linux} 内核是一个稳定，高效，全功能的 Unix 克隆，其被移植到不各种不同的构架中。它是最流行的 @code{PC} 级的系统，但是也在其他的系统中运行。@code{Linux} 内核源代码可以在 GNU 通用公共许可的条款下获取，这可能是其最重要方面。
+GNU/Linux
+是使用 Linux @code{Kernel} 的 GNU 系统的变体，而不是自由软件基金会的 @code{Hurd} 内核。Linux 内核是一个稳定，高效，全功能的 Unix 克隆，其被移植到不各种不同的构架中。它是最流行的 @code{PC} 级的系统，但是也在其他的系统中运行。Linux 内核源代码可以在 GNU 通用公共许可的条款下获取，这可能是其最重要方面。
 @code{GPL}     
 查看“通用公共许可”
 @code{Hexadecimal}（十六进制）
@@ -10787,14 +10787,14 @@ I/O
 一个由 @code{Sun} @code{Microsystems}（现在为 @code{Oracle}）开发的现代编程语言，其支持面向对象的程序方式。尽管通常通过编译为标准虚拟机指令的方式来实现（@code{JVM}），这个语言也可以编译为本地代码。
 @code{Keyword} （关键词）
 在 @command{awk} 语言中，关键词有特殊的含义。关键词是保留的，不可以使用的变量名。@command{gawk} 的关键词有：@code{BEGIN}， @code{BEGINFILE}， @code{END}， @code{ENDFILE}， @code{break}， @code{case}， @code{continue}， @code{default} @code{delete}， @code{do}...@code{while}， @code{else}， @code{exit}， @code{for}...@code{in}， @code{for}， @code{function}， @code{func}， @code{if}， @code{next}， @code{nextfile}， @code{switch}， 与 @code{while}。
-@code{Korn} @code{Shell}
-@code{Korn} @code{Shell}（@code{ksh}）是由在贝尔实验室的 @code{David} @code{Korn} 在 1980 年代早期开发的。@code{Korn} @code{Shell} 与 @code{Bourne} @code{Shell} 以及很多的 C @code{shell} 特性是后向兼容的。查看 “@code{Bourne} @code{Shell}”。
+@code{Korn} Shell
+@code{Korn} Shell（@code{ksh}）是由在贝尔实验室的 @code{David} @code{Korn} 在 1980 年代早期开发的。@code{Korn} Shell 与 @code{Bourne} Shell 以及很多的 C shell 特性是后向兼容的。查看 “@code{Bourne} Shell”。
 @code{Lesser} @code{General} @code{Public} @code{License}（次通用公共许可）
 这个文档描述了相应条款，在此条款下可以发布二进制文档或者共享对象，也可以发布相应的源代码。
 @code{LGPL} 
 查看“次通用公共许可”。
-@code{Linux}
-查看 “GNU/@code{Linux}”。
+Linux
+查看 “GNU/Linux”。
 @code{Localization}（本地化）
 为已经国际化的程序提供必要的数据以在特定的语言中运行的过程。
 @code{Logical} @code{Expression}（逻辑表达式）
@@ -10856,13 +10856,13 @@ POSIX
 @code{Scalar}（标量）
 单一的值，可以是一个数值或者是一个字串。常规的变量是标题，数组与函数则不是。
 @code{Search} @code{Path}（搜索路径）
-在 @command{gawk} 中，是用于 @command{awk} 程序搜索文件的目录列表。在 @code{Shell} 中，是用来搜索可执行文件的路径的列表。
+在 @command{gawk} 中，是用于 @command{awk} 程序搜索文件的目录列表。在 Shell 中，是用来搜索可执行文件的路径的列表。
 @code{sed}     
 查看“流编辑器”。
 @code{Seed}    
 一系列随机数的初始值，或者开始值。
-@code{Shell}   
-用于 Unix 或者 POSIX 兼容系统的命令解释器。@code{Shell} 即可以用于交互式，也可以用于指处理文件或者 @code{Shell} 脚本的编程语言。
+Shell   
+用于 Unix 或者 POSIX 兼容系统的命令解释器。Shell 即可以用于交互式，也可以用于指处理文件或者 Shell 脚本的编程语言。
 @code{Short}@option{-Circuit}（短路）
 @command{awk} 逻辑操作符 ‘&&’ 与‘||’的自然特性。如果整个表达式的值只需要对操作符的左边的表达式进行求值就可以确定，而右边的表达式则不会被求值。（查看 6.3.3 布林表达式，在第 131 页。）
 @code{Side} @code{Effect}（副作用）
@@ -10885,7 +10885,7 @@ POSIX
 一个标识一种应用的唯一的名字。用来在运行时将翻译的消息分组到本地语言中。
 @code{Timestamp}（时间戳）
 一个“从@code{epoch}以来的秒数”格式的值，用在 Unix 与 POSIX 系统中。被用在 @command{gawk} 中的函数中，如 @code{mktime()}， @code{strftime()}， 与 @code{systime()}。查看 “@code{Epoch}”，“@code{GMT}”与“@code{UTC}”。
-Unix    一种计算机操作系统，在 1970 年代最初由 @code{AT}&@code{T} 贝尔实验室开发。一开始其在全世界的大学非常流行，然后进行了商用 化，作为软件开发系统以及网络服务器系统。有很多版本的 Unix，也有几个类型相似的可自由获取的 Unix 版本的源代码（如 GNU/@code{Linux}，@code{NetBSD}，@code{FreeBSD} 以及 @code{OpenBSD}）。
+Unix    一种计算机操作系统，在 1970 年代最初由 @code{AT}&@code{T} 贝尔实验室开发。一开始其在全世界的大学非常流行，然后进行了商用 化，作为软件开发系统以及网络服务器系统。有很多版本的 Unix，也有几个类型相似的可自由获取的 Unix 版本的源代码（如 GNU/Linux，@code{NetBSD}，@code{FreeBSD} 以及 @code{OpenBSD}）。
 @code{UTC}     已经被授受为“@code{Universal} @code{Coordinated} @code{Time}（统一协调时）”的缩写。这是 @code{England}，@code{Greenwich} 标准时间，用于时间与日期计算的参考时间。查看 “@code{Epoch}”与 “@code{GMT}”。
 @code{Variable} （变量）
 值的名字。在 @command{awk} 中变量可以是标量，也可是是数组。

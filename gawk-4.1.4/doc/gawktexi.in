@@ -27347,7 +27347,6 @@ Prestandard VAX C compiler for VAX/VMS
 
 最初的 Unix 的正则表达式工具所定义的字符范围（如 @samp{[a-z]}）用于匹配第一个字符到最后一个字符之间的字符（含）。其顺序基于每个字符在机器的本地字符集的数值值。所以，在基于 ASCII 的系统上，@samp{[a-z]} 匹配所有的小字字母，因为这些从 @samp{a} 到 @samp{z} 之间数值值是连续的。（在 EBCDIC 系统上，@samp{[a-z]} 这个范围也包含其他的非字母字符。）
 
-#TODO
 几乎所有的 Unix 基础讲义都说此类型的范围表达式都是可工作的，还特别教人们说，@samp{[a-z]} 是用来匹配小写字母的“正确”方式，而 @samp{[A-Z]} 则是匹配大写字母的“正确”方式。而实际上，这也是真的。 @footnote{那么生活就美妙了。}
 
 1992 年 POSIX 标准引入了本地语言设置这样的点子（查看 @pxref{Locales}）。很多的本地语言除了包含英语表中的 26 个字母外，还包含其他的字母，POSIX 标准则添加了字符类（查看 @pxref{Bracket Expressions}）来匹配除了 ASCII 字符集中的传统字母之外的字符。
@@ -27403,7 +27402,6 @@ $ @kbd{echo something1234abc | gawk-3.1.8 '@{ sub("[A-Z]*$", ""); print @}'}
 @cindex Weinberger, Peter
 @cindex Kernighan, Brian
 Dr.@: Alfred V.@: Aho，Dr.@: Peter J.@: Weinberger，and Dr.@: Brian W.@: Kernighan，以及贝尔实验室中所有的设计与实现了 Unix @command{awk} 的人，从这些人中形成了 @command{awk} 的主要特性集合。
-#TODO
 @item
 @cindex Rubin, Paul
 Paul Rubin
@@ -27469,7 +27467,7 @@ Fred Fish
 @item
 @cindex Deifik, Scott
 Scott Deifik
-当前使用 @code{DJGPP} 维护 @code{MS}@option{-DOS} 的移植版。
+当前使用 @code{DJGPP} 维护 MS-DOS 的移植版。
 
 @item
 @cindex Zaretskii, Eli
@@ -28138,19 +28136,14 @@ MS-DOS 与 MS-Windows 版本的 @command{gawk} 会搜索在 @ref{AWKPATH Variabl
 @cindex @code{UNIXROOT} variable, on OS/2 systems
 对于 OS/2(32位，EMX）的搜索路径是前缀路径来确定（多为 @file{/usr} 或者 @file{c:/usr}），在 Unix 版本的情况下，这个前缀已经在 @command{configure} 配置时的一个选项中进行了指定。如果 @file{c:/usr} 是目录缀，则默认的搜索路径包含 @file{.} 与 @file{c:/usr/share/awk}。另外，为了支持在 OS/2 系统中的二进制发布，在该系统上 @samp{c:} 分区有可能不支持长@value{FN}或者，或者根本就不存在，因此需要一个特殊的环境变量。如果 @env{UNIXROOT} 指定了一个驱动器，这个驱动器也会进行程序文件的搜索。比如，如果 @env{UNIXROOT} 被设置为 @file{e:}，则完全的默认搜索路径为 @samp{@w{.;c:/usr/share/awk;e:/usr/share/awk}}。
 
-#TODO
-An @command{sh}-like shell (as opposed to @command{command.com} under MS-DOS
-or @command{cmd.exe} under MS-Windows or OS/2) may be useful for @command{awk} programming.
-The DJGPP collection of tools@footnote{Available from
-@uref{ftp://ftp.delorie.com/pub/djgpp/current/v2gnu/}.}
-includes an MS-DOS port of Bash,
-and several shells are available for OS/2, including @command{ksh}.
+如像 @command{sh} 样的 shell（相比于 MS-DOS 中的 @command{command.com} 或者 MS Windows 或者 OS/2 中的 @command{cmd.exe}）对于 @command{awk} 编译会大有用处。DJGPP 工具组件
+@footnote{可以从 @uref{ftp://ftp.delorie.com/pub/djgpp/current/v2gnu/} 获得。}
+包含了一个 MS-DOS 版本的 Bash，也包含了多个用于 OS/2 中的 Shell，如 @code{ksh}。
 @end ifclear
 @ifset FOR_PRINT
-An @command{sh}-like shell (as opposed to @command{command.com} under MS-DOS
-or @command{cmd.exe} under MS-Windows) may be useful for @command{awk} programming.
-The DJGPP collection of tools@footnote{Available from
-@uref{ftp://ftp.delorie.com/pub/djgpp/current/v2gnu/}.} includes an MS-DOS port of Bash.
+如像 @command{sh} 样的 shell（相比于 MS-DOS 中的 @command{command.com} 或者 MS Windows 中的 @command{cmd.exe}）对于 @command{awk} 编译会大有用处。DJGPP 工具组件
+@footnote{可以从 @uref{ftp://ftp.delorie.com/pub/djgpp/current/v2gnu/} 获得。}
+包含了一个 MS-DOS 版本的 Bash。
 @end ifset
 
 @cindex common extensions, @code{BINMODE} variable
@@ -28158,106 +28151,68 @@ The DJGPP collection of tools@footnote{Available from
 @cindex differences in @command{awk} and @command{gawk}, @code{BINMODE} variable
 @cindex @code{BINMODE} variable
 @ifclear FOR_PRINT
-Under MS-Windows, OS/2 and MS-DOS,
+在 MS-Windows，OS/2 以及 MS-DOS 中，
 @end ifclear
 @ifset FOR_PRINT
-Under MS-Windows and MS-DOS,
+在 MS-Windows 以及 MS-DOS 中，
 @end ifset
-@command{gawk} (and many other text programs) silently
-translates end-of-line @samp{\r\n} to @samp{\n} on input and @samp{\n}
-to @samp{\r\n} on output.  A special @code{BINMODE} variable @value{COMMONEXT}
-allows control over these translations and is interpreted as follows:
+@command{gawk}（以及很多的其他的文件程序）会默默地将 @samp{\r\n} 这样的行尾转换成成 @samp{\n}，或者将输入中的 @samp{\n} 转换成 @samp{\r\n} 输出。特殊变量 @code{BINMODE} @value{COMMONEXT} 可以控制这样的转换，并做如下解释：
 
 @itemize @value{BULLET}
 @item
-If @code{BINMODE} is @code{"r"} or one,
-then
-binary mode is set on read (i.e., no translations on reads).
+如果 @code{BINMODE} 为 @code{"r"} 或者 1，则二进制模式被设置在“读”操作上（即在读时不会进行转换）。
 
 @item
-If @code{BINMODE} is @code{"w"} or two,
-then
-binary mode is set on write (i.e., no translations on writes).
+如果 @code{BINMODE} 为 @code{"w"} 或者 2，则二进制模式设计在“写”操作上（即写时不会进行转换。）
 
 @item
-If @code{BINMODE} is @code{"rw"} or @code{"wr"} or three,
-binary mode is set for both read and write.
+如果 @code{BINMODE} 为 @code{"rw"} 或者 @code{"wr"} 或者 3，则二进制模式会设置在读写操作上。
 
 @item
-@code{BINMODE=@var{non-null-string}} is
-the same as @samp{BINMODE=3} (i.e., no translations on
-reads or writes).  However, @command{gawk} issues a warning
-message if the string is not one of @code{"rw"} or @code{"wr"}.
+@code{BINMODE=@var{non-null-string}} 与 @samp{BINMODE=3} 一样（即，在读写时都不进行转换）。但是 @command{gawk} 会在字串不是 @code{"rw"} 或者 @code{"wr"} 时，会生成一个告警信息。
 @end itemize
 
 @noindent
-The modes for standard input and standard output are set one time
-only (after the
-command line is read, but before processing any of the @command{awk} program).
-Setting @code{BINMODE} for standard input or
-standard output is accomplished by using an
-appropriate @samp{-v BINMODE=@var{N}} option on the command line.
-@code{BINMODE} is set at the time a file or pipe is opened and cannot be
-changed midstream.
+标准输入或者标准输出的模式只会设置一次（在读取命令行之后，但是在处理任何 @command{awk} 程序之前）。在命令行中，使用适当的 @samp{-v BINMODE=@var{N}} 的选项来设置标准输出与标准输出的 @code{BINMODE}。@code{BINMODE} 在文件或者管道打开时，并且在流处理过程中不能够改变。
 
-The name @code{BINMODE} was chosen to match @command{mawk}
-(@pxref{Other Versions}).
-@command{mawk} and @command{gawk} handle @code{BINMODE} similarly; however,
-@command{mawk} adds a @samp{-W BINMODE=@var{N}} option and an environment
-variable that can set @code{BINMODE}, @code{RS}, and @code{ORS}.  The
-files @file{binmode[1-3].awk} (under @file{gnu/lib/awk} in some of the
-prepared binary distributions) have been chosen to match @command{mawk}'s @samp{-W
-BINMODE=@var{N}} option.  These can be changed or discarded; in particular,
-the setting of @code{RS} giving the fewest ``surprises'' is open to debate.
-@command{mawk} uses @samp{RS = "\r\n"} if binary mode is set on read, which is
-appropriate for files with the MS-DOS-style end-of-line.
+@code{BINMODE} 的名字的选择与 @command{mawk} 匹配（查看 @pxref{Other Versions}）。@command{mawk} 与 @command{gawk} 处理 @code{BINMODE} 是类似的，但是 @command{mawk} 添加了一个 @samp{-W BINMODE=@var{N}} 选项以及环境变量来设置 @code{BINMODE}，@code{RS}，以及 @code{ORS}。文件 @file{binmode[1-3].awk}（一些二进制发布版本会在目录 @file{gnu/lib/awk} 下）选择与 @command{mawk} 的 @samp{-W
+BINMODE=@var{N}} 选项匹配。这即可以改变也可以取消。特别是 对于 @code{RS} 的设置带来最小的“惊奇”还在争论。如果二进制模式在读操作时设置了，则 @command{mawk} 会使用 @samp{RS = "\r\n"}，这对于 MS-DOS 风格的行结尾的文件是合适的。
 
-To illustrate, the following examples set binary mode on writes for standard
-output and other files, and set @code{ORS} as the ``usual'' MS-DOS-style
-end-of-line:
+为了说明，下面的例子在写到标准输出及其他文件时设置了二进制模式，并且将 @code{ORS} 设置成“正常”的 MS-DOS 风格的行尾。
 
 @example
 gawk -v BINMODE=2 -v ORS="\r\n" @dots{}
 @end example
 
 @noindent
-or:
+或者：
 
 @example
 gawk -v BINMODE=w -f binmode2.awk @dots{}
 @end example
 
 @noindent
-These give the same result as the @samp{-W BINMODE=2} option in
-@command{mawk}.
-The following changes the record separator to @code{"\r\n"} and sets binary
-mode on reads, but does not affect the mode on standard input:
+这与 @command{mawk} 中的 @samp{-W BINMODE=2} 有相同的结果。下面将记录的分隔符改成 @code{"\r\n"} 并设置读的二进制模式，但是不影响标准输入的模式：
 
 @example
 gawk -v RS="\r\n" -e "BEGIN @{ BINMODE = 1 @}" @dots{}
 @end example
 
 @noindent
-or:
+或者：
 
 @example
 gawk -f binmode1.awk @dots{}
 @end example
 
 @noindent
-With proper quoting, in the first example the setting of @code{RS} can be
-moved into the @code{BEGIN} rule.
+如果引号恰当，第一个例子中对 @code{RS} 的设置可以移到 @code{BEGIN} 规则中。
 
 @node Cygwin
-@appendixsubsubsec Using @command{gawk} In The Cygwin Environment
+@appendixsubsubsec 在 Cygwin 中使用 @command{gawk} 
 @cindex compiling @command{gawk} for Cygwin
 
-@command{gawk} can be built and used ``out of the box'' under MS-Windows
-if you are using the @uref{http://www.cygwin.com, Cygwin environment}.
-This environment provides an excellent simulation of GNU/Linux, using
-Bash, GCC, GNU Make,
-and other GNU programs.  Compilation and installation for Cygwin is the
-same as for a Unix system:
+如果你在 MS-Windows 系统中使用 @uref{http://www.cygwin.com, Cygwin 环境}，则 @command{gawk} 可以构建完成后即可使用。这个提供了对使用 @code{Bash}，GCC，GNU Make 及其他 GNU 程序的 GNU/Linux 系统很好的模拟环境。在 Cygwin 上编译与安装与在 Unix 系统上是一样的：
 
 @example
 tar -xvpzf gawk-@value{VERSION}.@value{PATCHLEVEL}.tar.gz
@@ -28266,23 +28221,17 @@ cd gawk-@value{VERSION}.@value{PATCHLEVEL}
 make && make check
 @end example
 
-When compared to GNU/Linux on the same system, the @samp{configure}
-step on Cygwin takes considerably longer.  However, it does finish,
-and then the @samp{make} proceeds as usual.
+与同一个系统上的 GNU/Linux 相比，@samp{configure} 在 Cygwin 中要花长得多的时间。但是，它一旦完成，就可以像通常那样使用 @samp{make} 。
 
 @node MSYS
-@appendixsubsubsec Using @command{gawk} In The MSYS Environment
+@appendixsubsubsec 在 MSYS 环境中使用 @command{gawk} 
 
-In the MSYS environment under MS-Windows, @command{gawk} automatically
-uses binary mode for reading and writing files.  Thus, there is no
-need to use the @code{BINMODE} variable.
+在 MS-Windows 系统中的 @code{MSYS} 环境，@command{gawk} 会自动地使用读写二进制模式。所以，没有必要设置 @code{BINMODE} 变量。
 
-This can cause problems with other Unix-like components that have
-been ported to MS-Windows that expect @command{gawk} to do automatic
-translation of @code{"\r\n"}, because it won't.
+对于其他已移植到 MS-Windows 的类 Unix 组件，这可能会导致问题。因为它们可能认为 @command{gawk} 会自动转换 @code{"\r\n"}，但是实际上却没有。
 
 @node VMS Installation
-@appendixsubsec Compiling and Installing @command{gawk} on Vax/VMS and OpenVMS
+@appendixsubsec 在 Vax/VMS 以及 OpenVMS 系统上编译安装 @command{gawk} 
 
 @c based on material from Pat Rankin <rankin@eql.caltech.edu>
 @c now rankin@pactechdata.com
@@ -28290,8 +28239,7 @@ translation of @code{"\r\n"}, because it won't.
 
 @cindex @command{gawk}, VMS version of
 @cindex installation, VMS
-This @value{SUBSECTION} describes how to compile and install @command{gawk} under VMS.
-The older designation ``VMS'' is used throughout to refer to OpenVMS.
+这个@value{SUBSECTION}描述如何来编译并安装 @command{gawk} 到 VMS 中。下面使用“VMS”这个老的术语来表示 OpenVMS。
 
 @menu
 * VMS Compilation::             How to compile @command{gawk} under VMS.
@@ -28304,48 +28252,39 @@ The older designation ``VMS'' is used throughout to refer to OpenVMS.
 @end menu
 
 @node VMS Compilation
-@appendixsubsubsec Compiling @command{gawk} on VMS
+@appendixsubsubsec 在 VMS 上编译 @command{gawk} 
 @cindex compiling @command{gawk} for VMS
 
-To compile @command{gawk} under VMS, there is a @code{DCL} command procedure
-that issues all the necessary @code{CC} and @code{LINK} commands. There is
-also a @file{Makefile} for use with the @code{MMS} and @code{MMK} utilities.
-From the source directory, use either:
+为了在 VMS 下编译 @command{gawk}，有一个 @code{DCL} 命令过程会发起所有的 @code{CC} 与 @code{LINK} 命令。也有一个 @file{Makefile} 与 @code{MMS} 以及 @code{MMK} 一起使用。在源代码目录下，使用：
 
 @example
 $ @kbd{@@[.vms]vmsbuild.com}
 @end example
 
 @noindent
-or:
+或者：
 
 @example
 $ @kbd{MMS/DESCRIPTION=[.vms]descrip.mms gawk}
 @end example
 
 @noindent
-or:
+或者：
 
 @example
 $ @kbd{MMK/DESCRIPTION=[.vms]descrip.mms gawk}
 @end example
 
-@command{MMK} is an open source, free, near-clone of @command{MMS} and
-can better handle ODS-5 volumes with upper- and lowercase @value{FN}s.
-@command{MMK} is available from @uref{https://github.com/endlesssoftware/mmk}.
+@command{MMK} 是开源免费的，几乎是 @command{MMS} 的克隆，并能够很好地处理 ODS-5 中的大小写文件名。@command{MMK} 可以从 @uref{https://github.com/endlesssoftware/mmk} 取得。
 
-With ODS-5 volumes and extended parsing enabled, the case of the target
-parameter may need to be exact.
+在 ODS-5 存储和扩展解析可用的时候，可能需要精确的目标参数。
 
-@command{gawk} has been tested under VAX/VMS 7.3 and Alpha/VMS 7.3-1
-using Compaq C V6.4, and under Alpha/VMS 7.3, Alpha/VMS 7.3-2, and IA64/VMS 8.3.
-The most recent builds used HP C V7.3 on Alpha VMS 8.3 and both
-Alpha and IA64 VMS 8.4 used HP C 7.3.@footnote{The IA64 architecture
-is also known as ``Itanium.''}
+@command{gawk} 在使用 Compaq C V6.4 的 VAX/VMS 7.3 以及 Alpha/VMS 7.3-1，Alpha/VMS 7.3，Alpha/VMS 7.3-2，与 IA64/VMS 8.3 上都已经做了相应的测试。最近的构建使用 Alpha VMS 8.3 上的 HP C V7.3，以及使用 HP C 7.3 的 Alpha 与 IA64。 
+@footnote{IA64 平台也称为 “Itanium”。}
 
-@xref{VMS GNV} for information on building
-@command{gawk} as a PCSI kit that is compatible with the GNV product.
+查看 @xref{VMS GNV}，来获取将 @command{gawk} 构建成与 GNV 产品兼容的 PCSI 包相关的信息。
 
+#TODO
 @node VMS Dynamic Extensions
 @appendixsubsubsec Compiling @command{gawk} Dynamic Extensions on VMS
 

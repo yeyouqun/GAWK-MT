@@ -458,3 +458,15 @@
 ## 
 删除
 要使用 DJGPP 工具来构建 @command{gawk}，输入‘make djgpp’。（在编译时所需要的 DJGPP 工具可以在 ftp://ftp.delorie.com/pub/djgpp/current/v2gnu/ 找到）
+
+## 
+英文原文
+> With ODS-5 volumes and extended parsing enabled, the case of the target
+> parameter may need to be exact.
+
+译文原文
+> （无）
+
+改动
+> 在 ODS-5 存储和扩展解析可用的时候，可能需要精确的目标参数。
+*没看懂，尝试翻了一下*。
