@@ -28255,7 +28255,7 @@ make && make check
 @appendixsubsubsec 在 VMS 上编译 @command{gawk} 
 @cindex compiling @command{gawk} for VMS
 
-为了在 VMS 下编译 @command{gawk}，有一个 @code{DCL} 命令过程会发起所有的 @code{CC} 与 @code{LINK} 命令。也有一个 @file{Makefile} 与 @code{MMS} 以及 @code{MMK} 一起使用。在源代码目录下，使用：
+为了在 VMS 下编译 @command{gawk}，有一个 DCL 命令过程会发起所有的 @code{CC} 与 @code{LINK} 命令。也有一个 @file{Makefile} 与 @code{MMS} 以及 @code{MMK} 一起使用。在源代码目录下，使用：
 
 @example
 $ @kbd{@@[.vms]vmsbuild.com}
@@ -28284,49 +28284,40 @@ $ @kbd{MMK/DESCRIPTION=[.vms]descrip.mms gawk}
 
 查看 @xref{VMS GNV}，来获取将 @command{gawk} 构建成与 GNV 产品兼容的 PCSI 包相关的信息。
 
-#TODO
 @node VMS Dynamic Extensions
-@appendixsubsubsec Compiling @command{gawk} Dynamic Extensions on VMS
+@appendixsubsubsec 在 VMS 编译 @command{gawk} 动态扩展
 
-The extensions that have been ported to VMS can be built using one of
-the following commands:
+被移植到 VMS 的扩展可以使用下面的命令之一来进行构建 ：
 
 @example
 $ @kbd{MMS/DESCRIPTION=[.vms]descrip.mms extensions}
 @end example
 
 @noindent
-or:
+或者：
 
 @example
 $ @kbd{MMK/DESCRIPTION=[.vms]descrip.mms extensions}
 @end example
 
-@command{gawk} uses @code{AWKLIBPATH} as either an environment variable
-or a logical name to find the dynamic extensions.
+@command{gawk} 使用 @code{AWKLIBPATH} 来作为环境变量，或者是查找动态扩展的逻辑名。
 
-Dynamic extensions need to be compiled with the same compiler options for
-floating-point, pointer size, and symbol name handling as were used
-to compile @command{gawk} itself.
-Alpha and Itanium should use IEEE floating point.  The pointer size is 32 bits,
-and the symbol name handling should be exact case with CRC shortening for
-symbols longer than 32 bits.
+动态扩展需要使用与编译 @command{gawk} 一样的编译器来编译，这样使用与 @command{gawk} 一样的方式来处理浮点数，指针大小 以及符号名。Alpha 与 Itanium 平台应该使用 IEEE 清点数。指针大小是 32 位，而符号名处理会使用 CRC 来缩短大于 32 位的符号。
 
-For Alpha and Itanium:
+对于 Alpha 与 Itanium 平台：
 
 @example
 /name=(as_is,short)
 /float=ieee/ieee_mode=denorm_results
 @end example
 
-For VAX:
+对于 VAX 平台：
 
 @example
 /name=(as_is,short)
 @end example
 
-Compile-time macros need to be defined before the first VMS-supplied
-header file is included, as follows:
+编译时间宏需要在 VMS 提供的头文件被包含前进行定义，如：
 
 @example
 #if (__CRTL_VER >= 70200000) && !defined (__VAX)
@@ -28342,87 +28333,58 @@ header file is included, as follows:
 #endif
 @end example
 
-If you are writing your own extensions to run on VMS, you must supply these
-definitions yourself. The @file{config.h} file created when building @command{gawk}
-on VMS does this for you; if instead you use that file or a similar one, then you
-must remember to include it before any VMS-supplied header files.
+如果你写了自己的扩展运行在 VMS 上，你必须提供这些定义。@file{config.h} 文件会在 VMS 平台上构建 @command{gawk} 时为你完成这个工作。如果你使用这个文件，或者类似的其他文件，则你必须要记住在要包含 VMS 所提供的头文件之前包含它。
 
 @node VMS Installation Details
-@appendixsubsubsec Installing @command{gawk} on VMS
+@appendixsubsubsec 在VMS 上安装@command{gawk} 
 
-To use @command{gawk}, all you need is a ``foreign'' command, which is a
-@code{DCL} symbol whose value begins with a dollar sign. For example:
+要使用 @command{gawk} ，你所需要是一个“外部”命令，这是一个 DCL 符号，它的值以美元符号开始。如：
 
 @example
 $ @kbd{GAWK :== $disk1:[gnubin]gawk}
 @end example
 
 @noindent
-Substitute the actual location of @command{gawk.exe} for
-@samp{$disk1:[gnubin]}. The symbol should be placed in the
-@file{login.com} of any user who wants to run @command{gawk},
-so that it is defined every time the user logs on.
-Alternatively, the symbol may be placed in the system-wide
-@file{sylogin.com} procedure, which allows all users
-to run @command{gawk}.
+将 @command{gawk.exe} 的实际路径替换 @samp{$disk1:[gnubin]}。符号需要在任何的想使用 @command{gawk} 的用户的 @file{login.com} 中替换，这样每次用户登录时都会进行定义。另外 ，符号也可以用全系统的 @file{sylogin.com} 过程来替换，这样所有的用户都可以使用 @command{gawk}。
 
-If your @command{gawk} was installed by a PCSI kit into the
-@file{GNV$GNU:} directory tree, the program will be known as
-@file{GNV$GNU:[bin]gnv$gawk.exe} and the help file will be
-@file{GNV$GNU:[vms_help]gawk.hlp}.
+如果你的 @command{gawk} 是通过 PCSI 包来安装到 @file{GNV$GNU:} 目录树的，程序的名字则为 @file{GNV$GNU:[bin]gnv$gawk.exe} ，帮助文件则为 @file{GNV$GNU:[vms_help]gawk.hlp}。
 
-The PCSI kit also installs a @file{GNV$GNU:[vms_bin]gawk_verb.cld} file
-that can be used to add @command{gawk} and @command{awk} as DCL commands.
+PCSI 包也会安装 @file{GNV$GNU:[vms_bin]gawk_verb.cld} 文件，这个文件可以用来将将 @command{gawk} 与 @command{awk} 为 DCL 命令。
 
-For just the current process you can use:
+对于当前的过程，你可以使用：
 
 @example
 $ @kbd{set command gnv$gnu:[vms_bin]gawk_verb.cld}
 @end example
 
-Or the system manager can use @file{GNV$GNU:[vms_bin]gawk_verb.cld} to
-add the @command{gawk} and @command{awk} to the system-wide @samp{DCLTABLES}.
+或者系统管理员可以使用 @file{GNV$GNU:[vms_bin]gawk_verb.cld} 来将 @command{gawk} 与 @command{awk} 加到系统级的 @samp{DCLTABLES} 中。
 
-The DCL syntax is documented in the @file{gawk.hlp} file.
+DCL 语法在 @file{gawk.hlp} 文件中有记录。
 
-Optionally, the @file{gawk.hlp} entry can be loaded into a VMS help library:
+另外，@file{gawk.hlp} 项可以被加入到 VMS 帮助库中：
 
 @example
 $ @kbd{LIBRARY/HELP sys$help:helplib [.vms]gawk.hlp}
 @end example
 
 @noindent
-(You may want to substitute a site-specific help library rather than
-the standard VMS library @samp{HELPLIB}.)  After loading the help text,
-the command:
+（你可能想将特定于站点的帮助库进行替换，而不是标准的 VMS 库 @samp{HELPLIB}）在载入了帮助文件后，命令：
 
 @example
 $ @kbd{HELP GAWK}
 @end example
 
 @noindent
-provides information about both the @command{gawk} implementation and the
-@command{awk} programming language.
+提供了关于 @command{gawk} 实现 与 @command{awk} 程序语言的信息。
 
-The logical name @samp{AWK_LIBRARY} can designate a default location
-for @command{awk} program files.  For the @option{-f} option, if the specified
-@value{FN} has no device or directory path information in it, @command{gawk}
-looks in the current directory first, then in the directory specified
-by the translation of @samp{AWK_LIBRARY} if the file is not found.
-If, after searching in both directories, the file still is not found,
-@command{gawk} appends the suffix @samp{.awk} to the @value{FN} and retries
-the file search.  If @samp{AWK_LIBRARY} has no definition, a default value
-of @samp{SYS$LIBRARY:} is used for it.
+逻辑名 @samp{AWK_LIBRARY} 可以设设成 @command{awk} 程序文件的默认位置。对于 @option{-f} 选项，如果所指定的@value{FN}没有设备或者路径信息，@command{gawk} 会在首先在当前的目录下搜索，如果没有找到，则会在由 @samp{AWK_LIBRARY} 所指定路径下搜索。如果在搜索了两个目录下，文件还没有找到，@command{gawk} 会加上 @samp{.awk} 后缀到文件名中，将再次尝试搜索。如果 @samp{AWK_LIBRARY} 没有定义，则会使用 @samp{SYS$LIBRARY:} 的值。
 
 @node VMS Running
-@appendixsubsubsec Running @command{gawk} on VMS
+@appendixsubsubsec 在 VMS 上运行 @command{gawk} 
 
-Command-line parsing and quoting conventions are significantly different
-on VMS, so examples in this @value{DOCUMENT} or from other sources often need minor
-changes.  They @emph{are} minor though, and all @command{awk} programs
-should run correctly.
+在 VMS 上，命令行的分析与引号规范完全不同，因此这本@value{DOCUMENT}中的例子，或者其他的源代码要做一些小变化。虽然小，所有的 @command{awk} 程序都应该是可以正常执行的。
 
-Here are a couple of trivial tests:
+这是一些简单的测试：
 
 @example
 $ @kbd{gawk -- "BEGIN @{print ""Hello, World!""@}"}
@@ -28431,98 +28393,64 @@ $ @kbd{gawk -"W" version}
 @end example
 
 @noindent
-Note that uppercase and mixed-case text must be quoted.
+注意大小混用时，文本必须引起来。
 
-The VMS port of @command{gawk} includes a @code{DCL}-style interface in addition
-to the original shell-style interface (see the help entry for details).
-One side effect of dual command-line parsing is that if there is only a
-single parameter (as in the quoted string program), the command
-becomes ambiguous.  To work around this, the normally optional @option{--}
-flag is required to force Unix-style parsing rather than @code{DCL} parsing.
-If any other dash-type options (or multiple parameters such as @value{DF}s to
-process) are present, there is no ambiguity and @option{--} can be omitted.
+@command{gawk} 的 VMS 移植版本包含了一个 DCL 风格的接口，以及原始 Shell 风格的接口（查看 help 项来获取详细信息）。双路径行分析的副作用是，如果只有一个参数（如程序中引起来的程序），则命令则会有一点模棱两可。为了解决这个问题，常规的可选的 @option{--} 标志则用来强制使用 Unix 风格的分析方法，而不是 DCL 的分析方法。如果还有其他任何的 “横杠类型”的选项（或者多个参数，如要处理的数据文件），则就不会有二义性，@option{--} 则可以省略掉。
 
 @cindex exit status, of VMS
-The @code{exit} value is a Unix-style value and is encoded into a VMS exit
-status value when the program exits.
+@code{exit} 值是一个 Unix 风格的值，当程序退出时，会被编码为 VMS 的退出值。
 
-The VMS severity bits will be set based on the @code{exit} value.
-A failure is indicated by 1, and VMS sets the @code{ERROR} status.
-A fatal error is indicated by 2, and VMS sets the @code{FATAL} status.
-All other values will have the @code{SUCCESS} status.  The exit value is
-encoded to comply with VMS coding standards and will have the
-@code{C_FACILITY_NO} of @code{0x350000} with the constant @code{0xA000}
-added to the number shifted over by 3 bits to make room for the severity codes.
+VMS 的严重程序位会根据 @code{exit} 值来进行设置。1 表示失败，VMS 会设置 @code{ERROR} 状态。2 表示致命错误，VMS 会设置 @code{FATAL} 状态。所有其他的值都表示 @code{SUCCESS} 状态。退出值的编码符合 VMS 的编码标准并使用@code{C_FACILITY_NO} 值 @code{0x350000} 与常量 @code{0xA0000} 加到为腾出严重程度编码位而左移了 3 位的数值上。
 
-To extract the actual @command{gawk} exit code from the VMS status, use:
+从 VMS 状态码中提取实际的 @command{gawk} 退出码，使用下面的代码：
 
 @example
 unix_status = (vms_status .and. %x7f8) / 8
 @end example
 
 @noindent
-A C program that uses @code{exec()} to call @command{gawk} will get the original
-Unix-style exit value.
+使用 @code{exec()} 的 C 程序调用 @command{gawk} 会得到最初的 Unix 风格的退出值。
 
-Older versions of @command{gawk} for VMS treated a Unix exit code 0 as 1,
-a failure as 2, a fatal error as 4, and passed all the other numbers through.
-This violated the VMS exit status coding requirements.
+用于 VMS 的旧版 @command{gawk} 会将 Unix 的退出码 0 当成 1，失败则为 2，致命错误则为 4，其他的值则直接传递。这违反了 VMS 的退出状态编码要求。
 
 @cindex floating-point, VAX/VMS
-VAX/VMS floating point uses unbiased rounding. @xref{Round Function}.
+VAX/VMS 浮点数使用无倾向的舍入舍出方案。查看 @xref{Round Function}。
 
-VMS reports time values in GMT unless one of the @code{SYS$TIMEZONE_RULE}
-or @code{TZ} logical names is set.  Older versions of VMS, such as VAX/VMS
-7.3, do not set these logical names.
+VMS 会用 @code{GMT} 的格式报告时间，除非设置了 @code{SYS$TIMEZONE_RULE} 或者 @code{TZ} 逻辑名字。旧版本的 VMS，例如 VAX/VMS 7.3 不设置这些逻辑名字。
 
 @c @cindex directory search
 @c @cindex path, search
 @cindex search paths
 @cindex search paths, for source files
-The default search path, when looking for @command{awk} program files specified
-by the @option{-f} option, is @code{"SYS$DISK:[],AWK_LIBRARY:"}.  The logical
-name @env{AWKPATH} can be used to override this default.  The format
-of @env{AWKPATH} is a comma-separated list of directory specifications.
-When defining it, the value should be quoted so that it retains a single
-translation and not a multitranslation @code{RMS} searchlist.
+当搜索由 @option{-f} 指定的 @command{awk} 程序文件时，默认的搜索路径是 @code{"SYS$DISK:[],AWK_LIBRARY:"}。逻辑名字 @env{AWKPATH} 可以用来覆盖这个默认设置。@env{AWKPATH} 的格式是一个逗号分隔的目录列表。如果定义了这个变量，值应该被引起来，这样它会保留为独立转换，而不是 @code{RMS} 搜索列表的多转换。
 
 @cindex redirection on VMS
 
-This restriction also applies to running @command{gawk} under GNV,
-as redirection is always to a DCL command.
+这个限制也适用于在 GNV 下运行 @command{gawk}，在 GNV 下重定向总是指向一个 DCL 命令。
 
-If you are redirecting data to a VMS command or utility, the current
-implementation requires that setting up a VMS foreign command that runs
-a command file before invoking @command{gawk}.
-(This restriction may be removed in a future release of @command{gawk} on VMS.)
+如果你要重定向数据到一个 VMS 命令或工具，目前的实现需要设置一个 VMS 外部命令，在调用
+@command{gawk} 之前，这个命令会运行一个命令文件。
+（未来，这个限制可能会从 VMS 上的 @command{gawk} 发行版中删除。）
 
-Without this command file, the input data will also appear prepended
-to the output data.
+没有这个命令文件，输入数据也会出现在输出文件的前面。
 
-This also allows simulating POSIX commands that are not found on VMS or the
-use of GNV utilities.
+这里也允许模拟 VMS 或 GNV 工具中没有的 POSIX 命令。
 
-The example below is for @command{gawk} redirecting data to the VMS
-@command{sort} command.
+下面是 @command{gawk} 重定向数据到 VMS 命令 @command{sort} 的例子：
 
 @example
 $ sort = "@@device:[dir]vms_gawk_sort.com"
 @end example
 
-The command file needs to be of the format in the example below.
+命令文件需要按下面的例子的格式写。
 
-The first line inhibits the passed input data from also showing up in the
-output.  It must be in the format in the example.
+第一行阻碍了输出数据出现在输出数据中国。它必须是按照这个例子中的格式写。
 
-The next line creates a foreign command that overrides the outer foreign
-command which prevents an infinite recursion of command files.
+下一行创造了一个外部命令，这个命令重写了阻止命令文件无限递归的外部命令。
 
-The next to the last command redirects @code{sys$input} to be
-@code{sys$command}, in order to pick up the data that is being redirected
-to the command.
+下一行到最后一行的命令，重定向 @code{sys$input} 到 @code{sys$command}，为了选择被重定向到这个命令的数据。 
 
-The last line runs the actual command.  It must be the last command as the data
-redirected from @command{gawk} will be read when the command file ends.
+最后一行运行真正的命令。它必须是最后一个命令，因为当命令文件读完的时候，从 @command{gawk} 重定向的数据会被读取。
 
 @example
 $!'f$verify(0,0)'
@@ -28533,19 +28461,13 @@ $ sort sys$input: sys$output:
 
 
 @node VMS GNV
-@appendixsubsubsec The VMS GNV Project
+@appendixsubsubsec VMS 的 GNV 项目
 
-The VMS GNV package provides a build environment similar to POSIX with ports
-of a collection of open source tools.  The @command{gawk} found in the GNV
-base kit is an older port.  Currently, the GNV project is being reorganized
-to supply individual PCSI packages for each component.
-See @w{@uref{https://sourceforge.net/p/gnv/wiki/InstallingGNVPackages/}.}
+VMS GNV 包提供了与 POSIX 类似的构建环境，并带了很多开源工作的移植版本。@command{gawk} 可以在 GNV 的库中找到，但是是一个旧移植版本。当前，GNU 项目被重新组织了，以为每个组件提供单独的 PCSI 包。查看 @w{@uref{https://sourceforge.net/p/gnv/wiki/InstallingGNVPackages/}。}
 
-The normal build procedure for @command{gawk} produces a program that
-is suitable for use with GNV.
+@command{gawk} 的常规的构建过程会生成一个适用于 GNV 的程序。
 
-The file @file{vms/gawk_build_steps.txt} in the distribution documents
-the procedure for building a VMS PCSI kit that is compatible with GNV.
+在发行版中的 @file{vms/gawk_build_steps.txt} 文件记录了构建与 GNV 兼容的 VMS PCSI 包的过程。
 
 @ignore
 @c The VMS POSIX product, also known as POSIX for OpenVMS, is long defunct
@@ -28553,14 +28475,11 @@ the procedure for building a VMS PCSI kit that is compatible with GNV.
 @c old instructions might still work if anyone is still using it.
 
 @node VMS POSIX
-@appendixsubsubsec Building and Using @command{gawk} on VMS POSIX
+@appendixsubsubsec 在 VMS POSIX 上构建和使用 @command{gawk}
 
-Ignore the instructions above, although @file{vms/gawk.hlp} should still
-be made available in a help library.  The source tree should be unpacked
-into a container file subsystem rather than into the ordinary VMS filesystem.
-Make sure that the two scripts, @file{configure} and
-@file{vms/posix-cc.sh}, are executable; use @samp{chmod +x} on them if
-necessary.  Then execute the following two commands:
+虽然在帮助文档库中仍然能找到 @file{vms/gawk.hlp} 文档，忽略上面的命令吧。源树应该解包到一个容器文件子系统，而不是通常的 VMS 文件系统。
+确认这两个脚本是可执行的：@file{configure} 和 @file{vms/posix-cc.sh}；如有必要，使用 @samp{chmod +x} 命令。
+然后执行下面两个命令：
 
 @example
 psx> @kbd{CC=vms/posix-cc.sh configure}
@@ -28568,91 +28487,62 @@ psx> @kbd{make CC=c89 gawk}
 @end example
 
 @noindent
-The first command constructs files @file{config.h} and @file{Makefile} out
-of templates, using a script to make the C compiler fit @command{configure}'s
-expectations.  The second command compiles and links @command{gawk} using
-the C compiler directly; ignore any warnings from @command{make} about being
-unable to redefine @code{CC}.  @command{configure} takes a very long
-time to execute, but at least it provides incremental feedback as it runs.
+第一个命令，使用一个脚本使 C 编译器符合 @command{configure} 的需要，从模板构建 @file{config.h} 和 @file{Makefile} 文件。
+第二个命令，使用 C 编译器直接编译和链接 @command{gawk}；忽略来自 @command{make} 的关于不能重定义 @code{CC} 的警告。
+@command{configure} 需要很长的时间来执行，不过至少它会在运行过程中提供一个增量的反馈。
 
-This has been tested with VAX/VMS V6.2, VMS POSIX V2.0, and DEC C V5.2.
+这曾在 VAX/VMS V6.2，VMS POSIX V2.0 和 DEC C V5.2.下测试过。
 
-Once built, @command{gawk} works like any other shell utility.  Unlike
-the normal VMS port of @command{gawk}, no special command-line manipulation is
-needed in the VMS POSIX environment.
+一旦构建完，@command{gawk} 像其他的 shell 工具一样工作。不像通常的 @command{gawk} 端口，在 VMS POSIX 环境中不需要特殊的命令行操作。
 @end ignore
 
 @node VMS Old Gawk
-@appendixsubsubsec Some VMS Systems Have An Old Version of @command{gawk}
+@appendixsubsubsec 有一些 VMS 系统有旧版本的 @command{gawk} 
 
 @c Thanks to "gerard labadie" <gerard.labadie@gmail.com>
 
-Some versions of VMS have an old version of @command{gawk}.  To access it,
-define a symbol, as follows:
+有一些 VMS 的版本带有旧的 @command{gawk} 版本。为了访问它，定义如下的符号：
 
 @example
 $ @kbd{gawk :== $sys$common:[syshlp.examples.tcpip.snmp]gawk.exe}
 @end example
 
-This is apparently @value{PVERSION} 2.15.6, which is extremely old. We
-recommend compiling and using the current version.
+这个版本是 @value{PVERSION} 2.15.6，相当的老。我们建议你编译与使用当前的版本。
 
 
 @node Bugs
-@appendixsec Reporting Problems and Bugs
+@appendixsec 报告问题与 BUG 
 @cindex archaeologists
 @quotation
-@i{There is nothing more dangerous than a bored archaeologist.}
+@i{
+没有什么比一个无聊的考古学家更危险。
+}
 @author Douglas Adams, @cite{The Hitchhiker's Guide to the Galaxy}
 @end quotation
 @c the radio show, not the book. :-)
 
 @cindex debugging @command{gawk}, bug reports
 @cindex troubleshooting, @command{gawk}, bug reports
-If you have problems with @command{gawk} or think that you have found a bug,
-report it to the developers; we cannot promise to do anything,
-but we might well want to fix it.
+如果你的 @command{gawk} 有问题，或者你认为你找到了一个 Bug，请将它报告给开发者，我们不承诺做任何事情，但是我们也是想要修复它的。
 
-Before reporting a bug, make sure you have really found a genuine bug.
-Carefully reread the documentation and see if it says you can do
-what you're trying to do.  If it's not clear whether you should be able
-to do something or not, report that too; it's a bug in the documentation!
+在报告 Bug 之前，确认你确实是找到了一个真的 Bug。仔细重读文档，看是否你尝试要做的事。如果不是很清楚你应该做些什么，也请报告出来。这是文档中的一个 Bug。
 
-Before reporting a bug or trying to fix it yourself, try to isolate it
-to the smallest possible @command{awk} program and input @value{DF} that
-reproduce the problem.  Then send us the program and @value{DF},
-some idea of what kind of Unix system you're using,
-the compiler you used to compile @command{gawk}, and the exact results
-@command{gawk} gave you.  Also say what you expected to occur; this helps
-us decide whether the problem is really in the documentation.
+在报告 Bug 或者你自己尝试修复它之前，尝试分离出能复现问题的最小的 @command{awk} 程序和输入@value{DF}。
+然后将下列信息发给我们：程序代码和@value{DF}，你使用的 Unix 系统的种类，你用来编译 @command{gawk} 的编译器，以及你的 @command{gawk} 所返回来的确切的结果。你也可以说一下你预期的结果；这会帮助我们决定这个文件是否真的在文档里。
 
-Make sure to include the version number of @command{gawk} you are using.
-You can get this information with the command @samp{gawk --version}.
+确保包含你所使用的 @command{gawk} 的版本号。你可以通过下面的命令来获取 @samp{gawk --version}。
 
 @cindex @code{bug-gawk@@gnu.org} bug reporting address
 @cindex email address for bug reports, @code{bug-gawk@@gnu.org}
 @cindex bug reports, email address, @code{bug-gawk@@gnu.org}
-Once you have a precise problem description, send email to
-@EMAIL{bug-gawk@@gnu.org,bug-gawk at gnu dot org}.
+一旦你的问题有了全面精确的描述，你就可以给 @EMAIL{bug-gawk@@gnu.org,bug-gawk at gnu dot org} 发送邮件。
 
-The @command{gawk} maintainers subscribe to this address, and
-thus they will receive your bug report.
-Although you can send mail to the maintainers directly,
-the bug reporting address is preferred because the
-email list is archived at the GNU Project.
-@emph{All email must be in English. This is the only language
-understood in common by all the maintainers.}
-In addition, please be sure to send all mail in @emph{plain text},
-not (or not exclusively) in HTML.
+@command{gawk} 的维护者会订阅这个邮件地址，因此他们会收到你的 Bug 报告。尽管你可以直接给维护者发送邮件，但是最好还是使用专用的报告地址，因此邮件地址在 GNU 项目中是有的。@emph{所有的邮件都用英语。这是唯一被所有维护者都理解的语言。}
+另外，请确保所有的邮件是用纯文本写的，不要用（或者不要仅仅用）HTML。
 
 @cindex @code{comp.lang.awk} newsgroup
-@quotation CAUTION
-Do @emph{not} try to report bugs in @command{gawk} by
-posting to the Usenet/Internet newsgroup @code{comp.lang.awk}.
-The @command{gawk} developers do occasionally read this newsgroup,
-but there is no guarantee that we will see your posting.  The steps described
-here are the only officially recognized way for reporting bugs.
-Really.
+@quotation 注意
+@emph{不要}将 @command{gawk} 的 Bug 报告到由 @code{comp.lang.awk} 所指向的 Usenet/Internet 新闻组。@command{gawk} 的开发者偶尔才会去看这个新闻组，但是不保证我们可以看得到你提交的内容。这里所描述的步骤是官方认可的组织方式。真的。
 @end quotation
 
 @ignore
@@ -28679,31 +28569,17 @@ and run to another section of the playground.  Then, if you like mixing
 metaphors, you can throw rocks from there."
 @end ignore
 
-@quotation NOTE
-Many distributions of GNU/Linux and the various BSD-based operating systems
-have their own bug reporting systems.  If you report a bug using your distribution's
-bug reporting system, you should also send a copy to
-@EMAIL{bug-gawk@@gnu.org,bug-gawk at gnu dot org}.
+@quotation 提示
+很多的 GNU/Linux 以及不同的基于 BSD 的操作系统发布版有他们自己的 Bug 报告系统。如果你使用这些发布版的 Bug 报告系统，你也要发送一个复本到 @EMAIL{bug-gawk@@gnu.org,bug-gawk at gnu dot org}。
 
-This is for two reasons.  First, although some distributions forward
-bug reports ``upstream'' to the GNU mailing list, many don't, so there is a good
-chance that the @command{gawk}  maintainers won't even see the bug report!  Second,
-mail to the GNU list is archived, and having everything at the GNU Project
-keeps things self-contained and not dependent on other organizations.
+这有两个原因。首先，尽管一些发布版本将 Bug 报告推送到 GNU 邮件列表，但是很多的都没有，所以很有可能 @command{gawk} 的维护者很有可能看不到你的报告。其次，发送到 GNU 邮件列表的邮件会被归档，将所有的关东西都放在 GNU 项目中，使得其是自说明的，而不依赖于其他的组织。
 @end quotation
 
-Non-bug suggestions are always welcome as well.  If you have questions
-about things that are unclear in the documentation or are just obscure
-features, ask on the bug list; we will try to help you out if we can.
+非 Bug 建议也是受欢迎的。如果你看到文档中的东西说明不清，或者不理解其中的特性，你也可以在 Bug 列表中进行提问，我们会尽可能地帮助你。
 
-If you find bugs in one of the non-Unix ports of @command{gawk},
-send an email to the bug list, with a copy to the
-person who maintains that port.  The maintainers are named in the following list,
-as well as in the @file{README} file in the @command{gawk} distribution.
-Information in the @file{README} file should be considered authoritative
-if it conflicts with this @value{DOCUMENT}.
+如果你在一个非 Unix 移植版本中发现 Bug ，也将邮件发送到 Bug 列表，并抄送给维护这个移植版本的人。维护者在下面在的列表中，也存 @command{gawk} 发布版中的 @file{README} 文件里。@file{README} 文件中的信息如果与本@value{DOCUMENT}中的有冲突，那里的信息会更加权威。
 
-The people maintaining the various @command{gawk} ports are:
+维护不同的移植版本的人如下：
 
 @c put the index entries outside the table, for docbook
 @cindex Buening, Andreas
@@ -28730,13 +28606,11 @@ The people maintaining the various @command{gawk} ports are:
 @item  @tab Dave Pitts (Maintainer Emeritus), @EMAIL{dpitts@@cozx.com,dpitts at cozx dot com}
 @end multitable
 
-If your bug is also reproducible under Unix, send a copy of your
-report to the @EMAIL{bug-gawk@@gnu.org,bug-gawk at gnu dot org} email list as well.
+如果 Bug 在 Unix 下也是可重现的，也抄送一份报告给 @EMAIL{bug-gawk@@gnu.org,bug-gawk at gnu dot org} 邮件列表。
 
-The DJGPP port is no longer supported; it will remain in the code base for a while in case
-a volunteer wishes to take it over. If this does not happen, then eventually code for this
-port will be removed.
+DJGPP 端口不再支持；它仍会在代码库中一段时间，以防有志愿者愿意接管它。如果没人愿意接管，最终这个端口的代码会被删除。
 
+#TODO
 @node Other Versions
 @appendixsec Other Freely Available @command{awk} Implementations
 @cindex @command{awk}, implementations
