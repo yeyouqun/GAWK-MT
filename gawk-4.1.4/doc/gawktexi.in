@@ -68,7 +68,7 @@
 @iftex
 @set DOCUMENT 书
 @set CHAPTER 章
-@set APPENDIX appendix
+@set APPENDIX 附录
 @set SECTION 小节
 @set SUBSECTION 子小节
 @set DARKCORNER @inmargin{@image{lflashlight,1cm}, @image{rflashlight,1cm}}
@@ -88,7 +88,7 @@
 @ifhtml
 @set DOCUMENT 网页
 @set CHAPTER 章
-@set APPENDIX appendix
+@set APPENDIX 附录
 @set SECTION 小节
 @set SUBSECTION 子小节
 @set DARKCORNER (d.c.)
@@ -98,7 +98,7 @@
 @ifdocbook
 @set DOCUMENT book
 @set CHAPTER 章
-@set APPENDIX appendix
+@set APPENDIX 附录
 @set SECTION 小节
 @set SUBSECTION 子小节
 @set DARKCORNER (d.c.)
@@ -108,7 +108,7 @@
 @ifxml
 @set DOCUMENT 🌲
 @set CHAPTER 章
-@set APPENDIX appendix
+@set APPENDIX 附录
 @set SECTION 小节
 @set SUBSECTION 子小节
 @set DARKCORNER (d.c.)
@@ -118,7 +118,7 @@
 @ifplaintext
 @set DOCUMENT book
 @set CHAPTER 章
-@set APPENDIX appendix
+@set APPENDIX 附录
 @set SECTION 小节
 @set SUBSECTION 子小节
 @set DARKCORNER (d.c.)
@@ -28610,9 +28610,8 @@ metaphors, you can throw rocks from there."
 
 DJGPP 端口不再支持；它仍会在代码库中一段时间，以防有志愿者愿意接管它。如果没人愿意接管，最终这个端口的代码会被删除。
 
-#TODO
 @node Other Versions
-@appendixsec Other Freely Available @command{awk} Implementations
+@appendixsec 其他可自由获取的 @command{awk}
 @cindex @command{awk}, implementations
 @ignore
 From: emory!amc.com!brennan (Michael Brennan)
@@ -28624,21 +28623,20 @@ Date: Wed, 4 Sep 1996 08:11:48 -0700 (PDT)
 @cindex Brennan, Michael
 @ifnotdocbook
 @quotation
-@i{It's kind of fun to put comments like this in your awk code:}@*
-@ @ @ @ @ @ @code{// Do C++ comments work? answer: yes! of course}
+@i{如果在 @command{awk} 代码中这样来输入注释就有味了：}@*
+@ @ @ @ @ @ @code{// C++ 类型的注释可用么？答案是：当然可以啦。}
 @author Michael Brennan
 @end quotation
 @end ifnotdocbook
 
 @docbook
 <blockquote><attribution>Michael Brennan</attribution>
-<literallayout><emphasis>It's kind of fun to put comments like this in your awk code.</emphasis>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<literal>// Do C++ comments work? answer: yes! of course</literal></literallayout>
+<literallayout><emphasis>如果在 @command{awk} 代码中这样来输入注释就有味了。</emphasis>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<literal>// C++ 类型的注释可用么？答案是：当然可以啦。</literal></literallayout>
 </blockquote>
 @end docbook
 
-There are a number of other freely available @command{awk} implementations.
-This @value{SECTION} briefly describes where to get them:
+还有很多的可以免费获取的 @command{awk} 实现版本，这一@value{SECTION}简单地进行说明如何来获取它们：
 
 @table @asis
 @cindex Kernighan, Brian
@@ -28646,12 +28644,8 @@ This @value{SECTION} briefly describes where to get them:
 @cindex @command{awk}, versions of, See Also Brian Kernighan's @command{awk}
 @cindex Brian Kernighan's @command{awk}, source code
 @item Unix @command{awk}
-Brian Kernighan, one of the original designers of Unix @command{awk},
-has made his implementation of
-@command{awk} freely available.
-You can retrieve this version via
-@uref{http://www.cs.princeton.edu/~bwk, his home page}.
-It is available in several archive formats:
+Brian Kernighan 是 Unix @command{awk} 的最初设计者，将他自己的 @command{awk} 开发出来了。
+你可以通过@uref{http://www.cs.princeton.edu/~bwk, 他的主页}来获取，可以有几种文档格式：
 
 @table @asis
 @item Shell archive
@@ -28665,184 +28659,125 @@ It is available in several archive formats:
 @end table
 
 @cindex @command{git} utility
-You can also retrieve it from GitHub:
+你也可以从 GitHub 上取得：
 
 @example
 git clone git://github.com/onetrueawk/awk bwkawk
 @end example
 
 @noindent
-This command creates a copy of the @uref{http://git-scm.com, Git}
-repository in a directory named @file{bwkawk}.  If you leave that argument
-off the @command{git} command line, the repository copy is created in a
-directory named @file{awk}.
+这个命令创建了一个名为 @file{bwkawk} 的 @uref{http://git-scm.com, Git} 库的复本。如果你将这个参数在 @command{git} 命令里省略，则 @command{git} 库的复本会创建在名字为 @file{awk} 的目录中。
 
-This version requires an ISO C (1990 standard) compiler; the C compiler
-from GCC (the GNU Compiler Collection) works quite nicely.
+这个版本需要 ISO C（1990 标准）的编译器，来自于 GCC（GNU Compiler Collection）的 C 编译器可以工作得很好。
 
-@xref{Common Extensions}
-for a list of extensions in this @command{awk} that are not in POSIX @command{awk}.
+查看 @xref{Common Extensions}，来获取这个 @command{awk} 扩展列表，这些扩展不在 POSIX @command{awk} 中。
 
-As a side note, Dan Bornstein has created a Git repository tracking
-all the versions of BWK @command{awk} that he could find. It's
-available at @uref{git://github.com/danfuzz/one-true-awk}.
+另外，Dan Bornstein 创建了一个 Git 仓库，追踪了所有他能找到的 BWK @command{awk} 版本。在 @uref{git://github.com/danfuzz/one-true-awk} 可以访问。
 
 @cindex Brennan, Michael
 @cindex @command{mawk} utility
 @cindex source code, @command{mawk}
 @item @command{mawk}
-Michael Brennan wrote an independent implementation of @command{awk},
-called @command{mawk}.  It is available under the
+Michael Brennan 实现了一个独立的 @command{awk}，称为 @command{mawk}。
+这可以以
 @ifclear FOR_PRINT
 GPL (@pxref{Copying}),
 @end ifclear
 @ifset FOR_PRINT
 GPL,
 @end ifset
-just as @command{gawk} is.
+的方式获取，如 @command{gawk} 一样。
 
-The original distribution site for the @command{mawk} source code
-no longer has it.  A copy is available at
-@uref{http://www.skeeve.com/gawk/mawk1.3.3.tar.gz}.
+@command{mawk} 源代码的最初的发布地址中已经不再有 @command{mawk}，可以在 @uref{http://www.skeeve.com/gawk/mawk1.3.3.tar.gz} 取得。
 
-In 2009, Thomas Dickey took on @command{mawk} maintenance.
-Basic information is available on
-@uref{http://www.invisible-island.net/mawk, the project's web page}.
-The download URL is
-@url{http://invisible-island.net/datafiles/release/mawk.tar.gz}.
+2009 年，Thomas Dickey 负责起 @command{mawk} 的维护工作。基本的信息可以在@uref{http://www.invisible-island.net/mawk, 它的项目网站}中可以得到。
+下载地址为 @url{http://invisible-island.net/datafiles/release/mawk.tar.gz}。
 
-Once you have it,
-@command{gunzip} may be used to decompress this file. Installation
-is similar to @command{gawk}'s
-(@pxref{Unix Installation}).
+一旦取得后，用 @command{gunzip} 来解压这个文件。安装与 @command{gawk} 的相同（查看 @pxref{Unix Installation}）。
 
-@xref{Common Extensions}
-for a list of extensions in @command{mawk} that are not in POSIX @command{awk}.
+查看 @xref{Common Extensions}，获取不在 POSIX @command{awk} 中的 @command{mawk} 扩展列表。
 
 @cindex Sumner, Andrew
 @cindex @command{awka} compiler for @command{awk}
 @cindex source code, @command{awka}
 @item @command{awka}
-Written by Andrew Sumner,
-@command{awka} translates @command{awk} programs into C, compiles them,
-and links them with a library of functions that provide the core
-@command{awk} functionality.
-It also has a number of extensions.
+由 Andrew Sumner 编写，@command{awka} 将 @command{awk} 程序转换为 C 程序，然后编译，将他们与提供了 @command{awk} 核心功能的库进行连接。它也有很多的扩展。
 
-The @command{awk} translator is released under the GPL, and the library
-is under the LGPL.
+@command{awk} 翻译器也在 GPL 许可下发布，而库则在 LGPL 下发布。
 
-To get @command{awka}, go to @url{http://sourceforge.net/projects/awka}.
+要获取 @command{awka}，请进入 @url{http://sourceforge.net/projects/awka}。
 @c You can reach Andrew Sumner at @email{andrew@@zbcom.net}.
 @c andrewsumner@@yahoo.net
 
-The project seems to be frozen; no new code changes have been made
-since approximately 2001.
+项目看起来已经冻结起来了，从 2001 年起好像就没有新代码的变动了。
 
 @cindex Beebe, Nelson H.F.@:
 @cindex @command{pawk} (profiling version of Brian Kernighan's @command{awk})
 @cindex source code, @command{pawk}
 @item @command{pawk}
-Nelson H.F.@: Beebe at the University of Utah has modified
-BWK @command{awk} to provide timing and profiling information.
-It is different from @command{gawk} with the @option{--profile} option
-(@pxref{Profiling})
-in that it uses CPU-based profiling, not line-count
-profiling.  You may find it at either
-@uref{ftp://ftp.math.utah.edu/pub/pawk/pawk-20030606.tar.gz}
-or
-@uref{http://www.math.utah.edu/pub/pawk/pawk-20030606.tar.gz}.
+Utah 大学的 Nelson H.F.@: Beebe 修改了 BWK @command{awk} 来提供计时与采样信息。它与 @command{gawk} 的 @option{--profile} （查看 @pxref{Profiling}）是不同的，其不同在于 @code{pawk} 中使用的是基于 CPU 的采样，而不是基于行的采样。
+你可以在 @uref{ftp://ftp.math.utah.edu/pub/pawk/pawk-20030606.tar.gz} 或者 @uref{http://www.math.utah.edu/pub/pawk/pawk-20030606.tar.gz} 来获取。
 
 @item BusyBox @command{awk}
 @cindex BusyBox Awk
 @cindex source code, BusyBox Awk
-BusyBox is a GPL-licensed program providing small versions of many
-applications within a single executable. It is aimed at embedded systems.
-It includes a full implementation of POSIX @command{awk}.  When building
-it, be careful not to do @samp{make install} as it will overwrite
-copies of other applications in your @file{/usr/local/bin}.  For more
-information, see the @uref{http://busybox.net, project's home page}.
+BusyBox 是一个 GPL 授权的程序，在单独的执行体中提供了很多应用的小版本。其目标是嵌入式系统。它包含了 POSIX @command{awk} 的完整实现。
+当构建时，不要使用 @samp{make install}，因为它会覆盖 @file{/usr/local/bin} 目录下的其他复本程序。
+可以浏览@uref{http://busybox.net, 它的主页}来获取更多信息。
 
 @cindex OpenSolaris
 @cindex Solaris, POSIX-compliant @command{awk}
 @cindex source code, Solaris @command{awk}
 @item The OpenSolaris POSIX @command{awk}
-The versions of @command{awk} in @file{/usr/xpg4/bin} and
-@file{/usr/xpg6/bin} on Solaris are more or less POSIX-compliant.
-They are based on the @command{awk} from Mortice Kern Systems for PCs.
-We were able to make this code compile and work under GNU/Linux
-with 1--2 hours of work.  Making it more generally portable (using
-GNU Autoconf and/or Automake) would take more work, and this
-has not been done, at least to our knowledge.
+在 Solaris 系统中 @file{/usr/xpg4/bin} 与 @file{/usr/xpg6/bin} 下的 @command{awk} 多多少少与 POSIX 是兼容的。它们是基于 PC 版的 Mortice Kern Systems 中的 @command{awk} 版本。我们可以在 GNU/Linux 下用一两个小时来编译它的源代码。要将它弄得更可移植（使用 GNU Autoconf 与/或 Automake）需要很多的工作，而且还没有完成，至少以我们现有的了解看来是这样的。
 
 @cindex Illumos
 @cindex Illumos, POSIX-compliant @command{awk}
 @cindex source code, Illumos @command{awk}
-The source code used to be available from the OpenSolaris website.
-However, that project was ended and the website shut down.  Fortunately, the
-@uref{http://wiki.illumos.org/display/illumos/illumos+Home, Illumos project}
-makes this implementation available.  You can view the files one at a time from
-@uref{https://github.com/joyent/illumos-joyent/blob/master/usr/src/cmd/awk_xpg4}.
+它的源代码过去在 OpenSolaris 站点里。但是，那个项目已经结束，网站已经关闭。幸运的是 @uref{http://wiki.illumos.org/display/illumos/illumos+Home, Illumos project} 项目让这个实现再次可用。
+你可以访问 @uref{https://github.com/joyent/illumos-joyent/blob/master/usr/src/cmd/awk_xpg4} 来查看其中的文件。
 
 @cindex @command{jawk}
 @cindex Java implementation of @command{awk}
 @cindex source code, @command{jawk}
 @item @command{jawk}
-This is an interpreter for @command{awk} written in Java. It claims
-to be a full interpreter, although because it uses Java facilities
-for I/O and for regexp matching, the language it supports is different
-from POSIX @command{awk}.  More information is available on the
-@uref{http://jawk.sourceforge.net, project's home page}.
+这是用 Java 写的 @command{awk} 解释器。它声称完全是解释器，尽管因为它使用 @code{Java} 的工具来进行 I/O 以及正则表达式匹配，它所支持的语言与 POSIX @command{awk} 是不同的。可以在@uref{http://jawk.sourceforge.net, 网页}上获取更多的信息。
 
 @item Libmawk
 @cindex libmawk
 @cindex source code, libmawk
-This is an embeddable @command{awk} interpreter derived from
-@command{mawk}. For more information, see
-@uref{http://repo.hu/projects/libmawk/}.
+这是可嵌入的 @command{awk} 解释器，来自于 @command{mawk}。要了解信息，请浏览 @uref{http://repo.hu/projects/libmawk/}。
 
 @item @code{pawk}
 @cindex source code, @command{pawk} (Python version)
 @cindex @code{pawk}, @command{awk}-like facilities for Python
-This is a Python module that claims to bring @command{awk}-like
-features to Python. See @uref{https://github.com/alecthomas/pawk}
-for more information. (This is not related to Nelson Beebe's
-modified version of BWK @command{awk}, described earlier.)
+这是一个 Python 模式，它声称将 @command{awk} 类似的特性加入到 Python 中。查看 @uref{https://github.com/alecthomas/pawk} 来获取更多信息（这个与早前所说的 Nelson Beebe 的 BWK @command{awk} 版本没有关系。）
 
 @item @w{QSE @command{awk}}
 @cindex QSE @command{awk}
 @cindex source code, QSE @command{awk}
-This is an embeddable @command{awk} interpreter. For more information,
-see @uref{http://code.google.com/p/qse/} and @uref{http://awk.info/?tools/qse}.
+这是一个可嵌入的 @command{awk} 解释器。更多我信息请看 @uref{http://code.google.com/p/qse/} 以及 @uref{http://awk.info/?tools/qse}。
 
 @item @command{QTawk}
 @cindex QuikTrim Awk
 @cindex source code, QuikTrim Awk
-This is an independent implementation of @command{awk} distributed
-under the GPL. It has a large number of extensions over standard
-@command{awk} and may not be 100% syntactically compatible with it.
-See @uref{http://www.quiktrim.org/QTawk.html} for more information,
-including the manual. The download link there is out of date; see
-@uref{http://www.quiktrim.org/#AdditionalResources} for the latest
-download link.
+这个是独立实现的，在 GPL 许可下发布的 @command{awk}。它有比标准 @command{awk} 多得多的扩展，有可能并不是 100% 与 @command{awk} 语法兼容。查看 @uref{http://www.quiktrim.org/qtawk.html} 获取更多信息，其中包括手册。
+里面的下载链接已经过时了；查看 @uref{http://www.quiktrim.org/#AdditionalResources} 获取最新的下载链接。
 
-The project may also be frozen; no new code changes have been made
-since approximately 2014.
+这个项目可能也已经冻结了，从大约 2014 年起，就没有新代码变更了。
 
 @item Other versions
-See also the ``Versions and implementations'' section of the
-@uref{http://en.wikipedia.org/wiki/Awk_language#Versions_and_implementations,
-Wikipedia article} on @command{awk} for information on additional versions.
+查看 @uref{http://en.wikipedia.org/wiki/Awk_language#Versions_and_implementations,
+Wikipedia article} 中的 “Versions and implementations” 节来获取其他版本的信息。
 
 @end table
 
 @node Installation summary
-@appendixsec Summary
+@appendixsec 总结
 
 @itemize @value{BULLET}
 @item
-The @command{gawk} distribution is available from the GNU Project's main
-distribution site, @code{ftp.gnu.org}.  The canonical build recipe is:
+@command{gawk} 发布版本可以从 GNU 项目的主发布站点 @code{ftp.gnu.org} 获取到。正规的构建过程是：
 
 @example
 wget http://ftp.gnu.org/gnu/gawk/gawk-@value{VERSION}.@value{PATCHLEVEL}.tar.gz
@@ -28852,37 +28787,28 @@ cd gawk-@value{VERSION}.@value{PATCHLEVEL}
 @end example
 
 @item
-@command{gawk} may be built on non-POSIX systems as well. The currently
-supported systems are MS-Windows using
-MSYS, MinGW, and Cygwin,
+@command{gawk} 可以构建在非 POSIX 系统上。当前支持的系统包含使用 DJGPP，MSYS，MinGW 以及 Cygwin 的 MS-Windows，
 @ifclear FOR_PRINT
-OS/2 using EMX,
+使用 EMX 的 OS/2，
 @end ifclear
-and both Vax/VMS and OpenVMS.
-Instructions for each system are included in this @value{APPENDIX}.
+以及 @code{Vax}/VMS 与 OpenVMS。在相应系统上的指导也在这个@value{APPENDIX}中了。
 
 @item
-Bug reports should be sent via email to @email{bug-gawk@@gnu.org}.
-Bug reports should be in English and should include the version of @command{gawk},
-how it was compiled, and a short program and @value{DF} that demonstrate
-the problem.
+Bug 报告应该通过邮件发送给 @email{bug-gawk@@gnu.org}。Bug 报告应该使用英语，并包含 @command{gawk} 的版本，如何进行编译的，以及一个短程序与@value{DF}来说明其中的问题。
 
 @item
-There are a number of other freely available @command{awk}
-implementations.  Many are POSIX-compliant; others are less so.
+很多的的自由获取 @command{awk} 实现，很多与 POSIX 兼容，有的则兼容得较少。
 
 @end itemize
 
 
 @ifclear FOR_PRINT
 @node Notes
-@appendix Implementation Notes
+@appendix 实现提示
 @cindex @command{gawk}, implementation issues
 @cindex implementation issues, @command{gawk}
 
-This appendix contains information mainly of interest to implementers and
-maintainers of @command{gawk}.  Everything in it applies specifically to
-@command{gawk} and not to other implementations.
+这个附录中包含了主对是 @command{gawk} 的实现与维护者感兴趣的内容。里面的东西都只针对 @command{gawk} 而不是其他的实现。
 
 @menu
 * Compatibility Mode::          How to disable certain @command{gawk}
@@ -28896,40 +28822,30 @@ maintainers of @command{gawk}.  Everything in it applies specifically to
 @end menu
 
 @node Compatibility Mode
-@appendixsec Downward Compatibility and Debugging
+@appendixsec 后向兼容与调试 
 @cindex @command{gawk}, implementation issues, downward compatibility
 @cindex @command{gawk}, implementation issues, debugging
 @cindex troubleshooting, @command{gawk}
 @cindex implementation issues@comma{} @command{gawk}, debugging
 
-@xref{POSIX/GNU},
-for a summary of the GNU extensions to the @command{awk} language and program.
-All of these features can be turned off by invoking @command{gawk} with the
-@option{--traditional} option or with the @option{--posix} option.
+查看 @xref{POSIX/GNU}，来获取 GNU 对于 @command{awk} 语言与程序的扩展的概况。所有的这些特性都可以通过以 @option{--traditional} 或者 @option{--posix} 选项来调用 @command{gawk} 而进行关闭。
 
-If @command{gawk} is compiled for debugging with @samp{-DDEBUG}, then there
-is one more option available on the command line:
+如果 @command{gawk} 是使用 @samp{-DDEBUG} 进行编译的，则会在命令行上有额外的一个可用的命令行选项：
 
 @table @code
 @item -Y
 @itemx --parsedebug
-Print out the parse stack information as the program is being parsed.
+如果程序正在被分析时，则打印出分析栈信息。
 @end table
 
-This option is intended only for serious @command{gawk} developers
-and not for the casual user.  It probably has not even been compiled into
-your version of @command{gawk}, since it slows down execution.
+这个选项的目的仅用于很正式的 @command{gawk} 开发者，而不用于普通用户。有可能都没有编译进你的 @command{gawk} 版本，因此它会降低执行的速度。
 
 @node Additions
-@appendixsec Making Additions to @command{gawk}
+@appendixsec @command{gawk} 添加功能
 
-If you find that you want to enhance @command{gawk} in a significant
-fashion, you are perfectly free to do so.  That is the point of having
-free software; the source code is available and you are free to change
-it as you want (@pxref{Copying}).
+如果你发现你想以一种特别的方式增强 @command{gawk}，那随意好了。那正是自由软件的目的，源代码是可以获取的，你也可以按你的方式来改变（查看 @pxref{Copying}）。
 
-This @value{SECTION} discusses the ways you might want to change @command{gawk}
-as well as any considerations you should bear in mind.
+这一@value{SECTION}讨论你更改 @command{gawk} 的方式以及需要你同时记住的一些点。
 
 @menu
 * Accessing The Source::        Accessing the Git repository.
@@ -28942,406 +28858,245 @@ as well as any considerations you should bear in mind.
 @end menu
 
 @node Accessing The Source
-@appendixsubsec Accessing The @command{gawk} Git Repository
+@appendixsubsec 访问 @command{gawk} 的 Git 仓库 
 
-As @command{gawk} is Free Software, the source code is always available.
-@ref{Gawk Distribution} describes how to get and build the formal,
-released versions of @command{gawk}.
+因为 @command{gawk} 是一个免费软件，总是可以获取到它的源代码。@ref{Gawk Distribution}，中描述了如何来获取及构建 @command{gawk} 发布版本。
 
 @cindex @command{git} utility
-However, if you want to modify @command{gawk} and contribute back your
-changes, you will probably wish to work with the development version.
-To do so, you will need to access the @command{gawk} source code
-repository.  The code is maintained using the
-@uref{http://git-scm.com, Git distributed version control system}.
-You will need to install it if your system doesn't have it.
-Once you have done so, use the command:
+但是，如果你想修改 @command{gawk} 并且将这些修改发布，你可能需要使用开发版本。因此，你需要访问 @command{gawk} 的源代码库。代码是使用 @uref{http://git-scm.com, Git 分布式的版本控制系统} 来进行维护的。如果你的系统上没有，则先需要安装它。完成后，你就可以使用下面的命令：
 
 @example
 git clone git://git.savannah.gnu.org/gawk.git
 @end example
 
 @noindent
-This clones the @command{gawk} repository.  If you are behind a
-firewall that does not allow you to use the Git native protocol, you
-can still access the repository using:
+这个复制 @command{gawk} 的库。如果你在防火墙后面，而不许使用 Git 的本地协议，你可以使用下面的方式来访问库：
 
 @example
 git clone http://git.savannah.gnu.org/r/gawk.git
 @end example
 
-Once you have made changes, you can use @samp{git diff} to produce a
-patch, and send that to the @command{gawk} maintainer; see @ref{Bugs},
-for how to do that.
+一旦你做了修改，你可以使用 @samp{git diff} 来产生一个 patch，然后发送给 @command{gawk} 的维护者，查看 @ref{Bugs}，来获取如何做。
 
-Once upon a time there was Git--CVS gateway for use by people who could
-not install Git. However, this gateway no longer works, so you may have
-better luck using a more modern version control system like Bazaar,
-that has a Git plug-in for working with Git repositories.
+之前有一段时间有 Git--CVS 网关可以被那些没有安装的 Git 的人使用。但是，这个网关已经不再工作了，因此你最好一些更加现代的版本控制系统，如 Bazaar，它有一个 Git 插件可以用于 Git 库。
 
 @node Adding Code
-@appendixsubsec Adding New Features
+@appendixsubsec 添加新特性
 
 @cindex adding, features to @command{gawk}
 @cindex features, adding to @command{gawk}
 @cindex @command{gawk}, features, adding
-You are free to add any new features you like to @command{gawk}.
-However, if you want your changes to be incorporated into the @command{gawk}
-distribution, there are several steps that you need to take in order to
-make it possible to include them:
+你可以自由地将新特性加入到 @command{gawk} 中。但是，如果你想将你的改变加入到 @command{gawk} 发布版中，有几个步骤可以让你有可能将它们加入到 @command{gawk} 中：
 
 @enumerate 1
 @item
-Before building the new feature into @command{gawk} itself,
-consider writing it as an extension
-(@pxref{Dynamic Extensions}).
-If that's not possible, continue with the rest of the steps in this list.
+在构建新的特性到 @command{gawk} 前，先考虑将其写成一个扩展（查看 @pxref{Dynamic Extensions}）。如果不可能，则往下走。
 
 @item
-Be prepared to sign the appropriate paperwork.
-In order for the FSF to distribute your changes, you must either place
-those changes in the public domain and submit a signed statement to that
-effect, or assign the copyright in your changes to the FSF.
-Both of these actions are easy to do and @emph{many} people have done so
-already. If you have questions, please contact me
-(@pxref{Bugs}),
-or @EMAIL{assign@@gnu.org,assign at gnu dot org}.
+准备签署合适的协议。为了让 FSF 能够发布你的修改，你必须要么将这些修改发布到公共域里，并提交一个签署有相同效果的协议，或者将版本赋给 FSF。这两个做法都是很容易完成的，@emph{很多}的人都已经这么做了。如果有问题，请联系我（查看 @pxref{Bugs}），或者是 @EMAIL{assign@@gnu.org,assign at gnu dot org}。
 
 @item
-Get the latest version.
-It is much easier for me to integrate changes if they are relative to
-the most recent distributed version of @command{gawk}, or better yet,
-relative to the latest code in the Git repository.  If your version of
-@command{gawk} is very old, I may not be able to integrate your changes at all.
-(@xref{Getting},
-for information on getting the latest version of @command{gawk}.)
+获取最新版本。
+对我而言，如果这些更改相关于最新的 @command{gawk} 版本而变，我就很容易进行合并。最好的是，你的更改是相对于 Git 库的最新代码。如果你的 @command{gawk} 版本非常老，我就根本没法将它们合并了。（查看 @xref{Getting}，来了解如何获取最新的 @command{gawk} 版本。）
 
 @item
 @ifnotinfo
-Follow the @cite{GNU Coding Standards}.
+遵守 @cite{gnu coding standards} 的代码标准。
 @end ifnotinfo
 @ifinfo
-See @inforef{Top, , Version, standards, GNU Coding Standards}.
+查看 @inforef{Top, , Version, standards, GNU Coding Standards}.
 @end ifinfo
-This document describes how GNU software should be written. If you haven't
-read it, please do so, preferably @emph{before} starting to modify @command{gawk}.
-(The @cite{GNU Coding Standards} are available from
-the GNU Project's
-@uref{http://www.gnu.org/prep/standards/, website}.
-Texinfo, Info, and DVI versions are also available.)
+这个文档描述如何来写 GNU 软件。如果你还没有读过，请先读，特别是在修改 @command{gawk} @emph{之前}（@cite{GNU Coding Standards} 可以从 @uref{http://www.gnu.org/prep/standards/, GNU 项目的站点} 上获取。也可以获取到 Texinfo，Info，DVI 的版本。）
 
 @cindex @command{gawk}, coding style in
 @item
-Use the @command{gawk} coding style.
-The C code for @command{gawk} follows the instructions in the
-@cite{GNU Coding Standards}, with minor exceptions.  The code is formatted
-using the traditional ``K&R'' style, particularly as regards to the placement
-of braces and the use of TABs.  In brief, the coding rules for @command{gawk}
-are as follows:
+使用 @command{gawk} 编码风格。
+@command{gawk} 的 C 代码遵守 GNU 编译标准中的指导，只有一些小例外。代码使用传统的 “K&R” 风格，特别在替换花括号以及 TABs 的使用上要注意。简单地说，代码规则如下：
 
 @itemize @value{BULLET}
 @item
-Use ANSI/ISO style (prototype) function headers when defining functions.
+使用 ANSI/ISO 风格（原型）函数来定义函数。
 
 @item
-Put the name of the function at the beginning of its own line.
+将函数放在一行的前面。
 
 @item
-Use @samp{#elif} instead of nesting @samp{#if} inside @samp{#else}.
+使用 @samp{#elif} 代替 @samp{#else} 中嵌套的 @samp{#if}。
 
 @item
-Put the return type of the function, even if it is @code{int}, on the
-line above the line with the name and arguments of the function.
+将函数的返回值，即使是 @code{int} 放在有参数的函数名字的上一行。
 
 @item
-Put spaces around parentheses used in control structures
-(@code{if}, @code{while}, @code{for}, @code{do}, @code{switch},
-and @code{return}).
+在控制结构与括号之间放一个空格（@code{if}，@code{while}，@code{for}，@code{do}，@code{switch}， 以及 @code{return}）。
 
 @item
-Do not put spaces in front of parentheses used in function calls.
+在函数调用时，不要在括号之前放空格。
 
 @item
-Put spaces around all C operators and after commas in function calls.
+在所以的 C 操作符前后和函数调用中的逗号后，加上空格。
 
 @item
-Do not use the comma operator to produce multiple side effects, except
-in @code{for} loop initialization and increment parts, and in macro bodies.
+不要使用逗号操作符来产生多种副作用，除非在 @code{for} 循环中初始化与递增的部分，以及在宏定义里。
 
 @item
-Use real TABs for indenting, not spaces.
+使用真正的 TABs 来进行缩进，而不是空格。
 
 @item
-Use the ``K&R'' brace layout style.
+使用 “K&R” 风格的花括号布局风格。
 
 @item
-Use comparisons against @code{NULL} and @code{'\0'} in the conditions of
-@code{if}, @code{while}, and @code{for} statements, as well as in the @code{case}s
-of @code{switch} statements, instead of just the
-plain pointer or character value.
+在 @code{if}，@code{while}，以及 @code{for} 语句的条件中，使用与 @code{NULL} 与 @code{'\0'} 的比较，在 @code{switch} 语句中也是一样，而不要使用光指针与字符值。
 
 @item
-Use @code{true} and @code{false} for @code{bool} values,
-the @code{NULL} symbolic constant for pointer values,
-and the character constant @code{'\0'} where appropriate, instead of @code{1}
-and @code{0}.
+使用 @code{true} 与 @code{false} 来用于 @code{bool} 值，@code{NULL} 符号常量是用于指针值的，而字符常量则用 @code{'\0'}，而不是 @code{1} 与 @code{0}。
 
 @item
-Provide one-line descriptive comments for each function.
+对每个函数都提供一行描述性的注释。
 
 @item
-Do not use the @code{alloca()} function for allocating memory off the
-stack.  Its use causes more portability trouble than is worth the minor
-benefit of not having to free the storage. Instead, use @code{malloc()}
-and @code{free()}.
+不要使用 @code{alloca()} 函数用进行栈内的内存分配。它的使用会导致移植性问题，而带来的一点好处就是不用进行内存释放。要使用 @code{malloc()} 与 @code{free()}。
 
 @item
-Do not use comparisons of the form @samp{! strcmp(a, b)} or similar.
-As Henry Spencer once said, ``@code{strcmp()} is not a boolean!''
-Instead, use @samp{strcmp(a, b) == 0}.
+不要使用 @samp{! strcmp(a, b)} 类似的比较。Henry Spencer 说过，“@code{strcmp()} 不是布尔值”，相反，要使用 @samp{strcmp(a, b) == 0}。
 
 @item
-If adding new bit flag values, use explicit hexadecimal constants
-(@code{0x001}, @code{0x002}, @code{0x004}, and son on) instead of
-shifting one left by successive amounts (@samp{(1<<0)}, @samp{(1<<1)},
-and so on).
+如果添加了新的位标志值，要使用显式的十六进制常量（@code{0x001}, @code{0x002}, @code{0x004} 等等），而不要使用对 1 进行连续的左移（@samp{(1<<0)}, @samp{(1<<1)} 等等）。
 @end itemize
 
-@quotation NOTE
-If I have to reformat your code to follow the coding style used in
-@command{gawk}, I may not bother to integrate your changes at all.
+@quotation 提示
+如果我要修改了你的代码来遵守 @command{gawk} 中的代码风格，是我根本就不会将你的更改整合进去的。
 @end quotation
 
 @cindex Texinfo
 @item
-Update the documentation.
-Along with your new code, please supply new sections and/or chapters
-for this @value{DOCUMENT}.  If at all possible, please use real
-Texinfo, instead of just supplying unformatted ASCII text (although
-even that is better than no documentation at all).
-Conventions to be followed in @cite{@value{TITLE}} are provided
-after the @samp{@@bye} at the end of the Texinfo source file.
-If possible, please update the @command{man} page as well.
+更新文档。
+跟你的代码一起，请提供新的章节到本@value{DOCUMENT}中。如果有可能，请使用真正的 Texinfo，而不是提供一些未格式化的 ASCII 文本（尽管有文档要比没文档要好）。请遵守 @cite{@value{TITLE}} 中的规则，由在 Texinfo 源文件尾部的 @samp{@@bye} 所提供。
+如果可能，请也请更新 @command{man} 手册页。
 
-You will also have to sign paperwork for your documentation changes.
+你对你的文档也需要签署相应的协议。
 
 @cindex @command{git} utility
 @item
-Submit changes as unified diffs.
-Use @samp{diff -u -r -N} to compare
-the original @command{gawk} source tree with your version.
-I recommend using the GNU version of @command{diff}, or best of all,
-@samp{git diff} or @samp{git format-patch}.
-Send the output produced by @command{diff} to me when you
-submit your changes.
-(@xref{Bugs}, for the electronic mail
-information.)
+使用统一的 diffs 来提供更改。使用 @samp{diff -u -r -N} 来比较最初的 @command{gawk} 源代码与你的代码变化。我建议使用 GNU 版本的 @command{diff} 或者最好，直接使用 @samp{git diff} 或者 @samp{git format-patch}。将 @command{diff} 产生的输出发送给我。（查看 @xref{Bugs}，来获得电子邮件信息。）
 
-Using this format makes it easy for me to apply your changes to the
-master version of the @command{gawk} source code (using @code{patch}).
-If I have to apply the changes manually, using a text editor, I may
-not do so, particularly if there are lots of changes.
+使用这样的格式，我很容易将你的更改合并到 @command{gawk} 的主版本的源代码中（使用 @code{patch}）。如果我必须要使用文本编辑器手动更改，我可能不这么做，特别是有很多的变化时。
 
 @item
-Include an entry for the @file{ChangeLog} file with your submission.
-This helps further minimize the amount of work I have to do,
-making it easier for me to accept patches.
-It is simplest if you just make this part of your diff.
+在 @file{ChangeLog} 文件中包含一项，与你的更改一起提交。这可以帮助进一步最小化我的工作，这样我就比较容易接受补丁。如果你只使用你的 diff 的这部分，那就是最简单的了。
 @end enumerate
 
-Although this sounds like a lot of work, please remember that while you
-may write the new code, I have to maintain it and support it. If it
-isn't possible for me to do that with a minimum of extra work, then I
-probably will not.
+这听起来要做很多的事情，但是请记住当你写了新代码，而我就得维护并且支持它。如果对我而言不能最小化这些额外工作，我可能就不会做。
 
 @node New Ports
-@appendixsubsec Porting @command{gawk} to a New Operating System
+@appendixsubsec 将 @command{gawk} 移植到新系统中 
 @cindex portability, @command{gawk}
 @cindex operating systems, porting @command{gawk} to
 
 @cindex porting @command{gawk}
-If you want to port @command{gawk} to a new operating system, there are
-several steps:
+如果你想将 @command{gawk} 移植到新的操作系统，下面是相应的步骤：
 
 @enumerate 1
 @item
-Follow the guidelines in
+遵守
 @ifinfo
 @ref{Adding Code},
 @end ifinfo
 @ifnotinfo
-the previous @value{SECTION}
+上一@value{SECTION}
 @end ifnotinfo
-concerning coding style, submission of diffs, and so on.
+所说的代码规范，提供 diff 等等。
 
 @item
-Be prepared to sign the appropriate paperwork.
-In order for the FSF to distribute your code, you must either place
-your code in the public domain and submit a signed statement to that
-effect, or assign the copyright in your code to the FSF.
-Both of these actions are easy to do and @emph{many} people have done so
-already. If you have questions, please contact me, or
-@email{gnu@@gnu.org}.
+准备签署相应的文件。这样 FSF 可以发布你的代码，你要么将你的代码放在公共域里，要么签署一个等同于相应效果的文件，或者将版本赋给 FSF。这两个工作都是容易做的，@emph{很多人}也这么做了。如果你有问题，请联系我，或者 @email{gnu@@gnu.org}。
 
 @item
-When doing a port, bear in mind that your code must coexist peacefully
-with the rest of @command{gawk} and the other ports. Avoid gratuitous
-changes to the system-independent parts of the code. If at all possible,
-avoid sprinkling @samp{#ifdef}s just for your port throughout the
-code.
+当完成了一个移植，要记住你的代码要与 @command{gawk} 其他的部分一起共存。避免对系统无关的代码部分做无谓的修改。如果可能，请不要在你的部分里到处加 @samp{#ifdef}。
 
-If the changes needed for a particular system affect too much of the
-code, I probably will not accept them.  In such a case, you can, of course,
-distribute your changes on your own, as long as you comply
-with the GPL
-(@pxref{Copying}).
+如果改变需要一种特定系统特性，会影响太多的代码，我可能不会接受它们。在这样的情况下，你当然可以自己来发布你的更改，只要你符合 GPL 即可（查看 @pxref{Copying}）。
 
 @item
-A number of the files that come with @command{gawk} are maintained by other
-people.  Thus, you should not change them
-unless it is for a very good reason; i.e., changes are not out of the
-question, but changes to these files are scrutinized extra carefully.
-The files are
-@file{dfa.c},
-@file{dfa.h},
-@file{getopt.c},
-@file{getopt.h},
-@file{getopt1.c},
-@file{getopt_int.h},
-@file{gettext.h},
-@file{regcomp.c},
-@file{regex.c},
-@file{regex.h},
-@file{regex_internal.c},
-@file{regex_internal.h},
-and
-@file{regexec.c}.
+很多 @command{gawk} 带有的文件是被其他的用人维护的。所以，你不可以更改它们，除非有很好的理由。即，修改它们不是绝对不行，但是对这些文件的修改也要额外的仔细。
+这些文件是 
+@file{dfa.c}，
+@file{dfa.h}，
+@file{getopt.c}，
+@file{getopt.h}，
+@file{getopt1.c}，
+@file{getopt_int.h}，
+@file{gettext.h}，
+@file{regcomp.c}，
+@file{regex.c}，
+@file{regex.h}，
+@file{regex_internal.c}，
+@file{regex_internal.h}，
+和
+@file{regexec.c}。
 
 @item
-A number of other files are provided by the GNU
-Autotools (Autoconf, Automake, and GNU @command{gettext}).
-You should not change them either, unless it is for a very
-good reason. The files are
-@file{ABOUT-NLS},
-@file{config.guess},
-@file{config.rpath},
-@file{config.sub},
-@file{depcomp},
-@file{INSTALL},
-@file{install-sh},
-@file{missing},
-@file{mkinstalldirs},
-@file{xalloc.h},
-and
-@file{ylwrap}.
+有很多文件是由 GNU Autotools 提供的（Autoconf，Automake 及 GNU @command{gettext}）。你也不可以更改它们，除非有好的理由。
+这些文件是 
+@file{ABOUT-NLS}，
+@file{config.guess}，
+@file{config.rpath}，
+@file{config.sub}，
+@file{depcomp}，
+@file{INSTALL}，
+@file{install-sh}，
+@file{missing}，
+@file{mkinstalldirs}，
+@file{xalloc.h}，
+和
+@file{ylwrap}。
 
 @item
-Be willing to continue to maintain the port.
-Non-Unix operating systems are supported by volunteers who maintain
-the code needed to compile and run @command{gawk} on their systems. If no-one
-volunteers to maintain a port, it becomes unsupported and it may
-be necessary to remove it from the distribution.
+要愿意持续维护这个移植版本。非 Unix 的操作系统是由志愿者来维护的，他们维护需要在他们的系统中的代码的维护及运行。如果没有人愿意维护这个移植版本，会成为不受支持的版本，有可能有必要从发行版本中移除掉。
 
 @item
-Supply an appropriate @file{gawkmisc.???} file.
-Each port has its own @file{gawkmisc.???} that implements certain
-operating system specific functions. This is cleaner than a plethora of
-@samp{#ifdef}s scattered throughout the code.  The @file{gawkmisc.c} in
-the main source directory includes the appropriate
-@file{gawkmisc.???} file from each subdirectory.
-Be sure to update it as well.
+提供合适的 @file{gawkmisc.???} 文件。每个移植版本都有自己的 @file{gawkmisc.???} 文件，这些文件实现了特定于操作系统的函数。这个比在代码中用大量的 @samp{#ifdef} 要更加清晰。在源代码主目录中的 @file{gawkmisc.c} 包含了相应的 @file{gawkmisc.???} 文件，这个文件来自于其子目录。记得也要更新。
 
-Each port's @file{gawkmisc.???} file has a suffix reminiscent of the machine
-or operating system for the port---for example, @file{pc/gawkmisc.pc} and
-@file{vms/gawkmisc.vms}. The use of separate suffixes, instead of plain
-@file{gawkmisc.c}, makes it possible to move files from a port's subdirectory
-into the main subdirectory, without accidentally destroying the real
-@file{gawkmisc.c} file.  (Currently, this is only an issue for the
-PC operating system ports.)
+每个移植版本的 @file{gawkmisc.???} 文件有一个后缀来表示机器以及操作系统，如 @file{pc/gawkmisc.pc} 和 @file{vms/gawkmisc.vms}。
+使用其他的后缀，而不是普通的 @file{gawkmisc.c}，使其有可能将文件从移植版本的子目录行色移到主线子目录，而不会导致偶然的对 @file{gawkmisc.c} 文件的破坏。（当前，这个只对 PC 操作系统移植才会是问题。）
 
 @item
-Supply a @file{Makefile} as well as any other C source and header files that are
-necessary for your operating system.  All your code should be in a
-separate subdirectory, with a name that is the same as, or reminiscent
-of, either your operating system or the computer system.  If possible,
-try to structure things so that it is not necessary to move files out
-of the subdirectory into the main source directory.  If that is not
-possible, then be sure to avoid using names for your files that
-duplicate the names of files in the main source directory.
+提供必要的 @file{Makefile} 用于你的操作系统。你的所有代码都应该在一个单独的子目录下，名字可以与操作系统名字相同，或者是操作系统名字一部分。如果可能，将事情结构化，这样没有必须将文件从子目录中移动到主子目录下。如果不可能，则要确保使用你的文件的名字不会与主源代码目录下的文件相同。
 
 @item
-Update the documentation.
-Please write a section (or sections) for this @value{DOCUMENT} describing the
-installation and compilation steps needed to compile and/or install
-@command{gawk} for your system.
+更新文档。
+写为本@value{DOCUMENT}写一个小节（或者多个小节）来描述其安装与编译步骤，这样可以在你的系统上编译与安装 @command{gawk}。
 @end enumerate
 
-Following these steps makes it much easier to integrate your changes
-into @command{gawk} and have them coexist happily with other
-operating systems' code that is already there.
+按这样的步骤，可以使其容易来将你的变化整合到 @command{gawk} 中，并使其与其他的已经存在操作系统代码和平共处。
 
-In the code that you supply and maintain, feel free to use a
-coding style and brace layout that suits your taste.
+在你提供与维护的代码中，可以自由使用你的风格以及括号布局。
 
 @node Derived Files
-@appendixsubsec Why Generated Files Are Kept In Git
+@appendixsubsec 为什么自动生成的文件要放在 Git 中 
 
 @cindex Git, use of for @command{gawk} source code
 @c From emails written March 22, 2012, to the gawk developers list.
 
-If you look at the @command{gawk} source in the Git
-repository, you will notice that it includes files that are automatically
-generated by GNU infrastructure tools, such as @file{Makefile.in} from
-Automake and even @file{configure} from Autoconf.
+如果你查看  Git 库中的 @command{gawk} 源代码，你会注意到里面包含了由 GNU 基础工作自动力生成的文件，如 @file{Makefile.in} 由 Automake 生成，甚至是由 Autoconf 生成的 @file{configure} 。
 
-This is different from many Free Software projects that do not store
-the derived files, because that keeps the repository less cluttered,
-and it is easier to see the substantive changes when comparing versions
-and trying to understand what changed between commits.
+这个不同于不存储衍生文件其他自由软件项目，因为这使得库不会这么混乱，而且更容易在比较在不同提交之间的真正改变。
 
-However, there are several reasons why the @command{gawk} maintainer
-likes to have everything in the repository.
+但是，有几个原因，使得 @command{gawk} 要把所有的东西放在库中。
 
-First, because it is then easy to reproduce any given version completely,
-without relying upon the availability of (older, likely obsolete, and
-maybe even impossible to find) other tools.
+首先，这更容易生成完整的版本，而不依赖于其他工作的能力（有一些老的，被丢弃，甚至没办法找得到。）
 
-As an extreme example, if you ever even think about trying to compile,
-oh, say, the V7 @command{awk}, you will discover that not only do you
-have to bootstrap the V7 @command{yacc} to do so, but you also need the
-V7 @command{lex}.  And the latter is pretty much impossible to bring up
-on a modern GNU/Linux system.@footnote{We tried. It was painful.}
+一个极端例子是，如果你想编译，比方说 V7 的 @command{awk}，你会发现你不仅要用 V7 的 @code{yacc} 来处理，还需要 V7 的 @code{lex}。对于后者，在现代的 GNU/Linux 系统根本没有。 
+@footnote{我们试过，但是非常痛苦。}
 
-(Or, let's say @command{gawk} 1.2 required @command{bison} whatever-it-was
-in 1989 and that there was no @file{awkgram.c} file in the repository.  Is
-there a guarantee that we could find that @command{bison} version? Or that
-@emph{it} would build?)
+（或者说，@command{gawk} 1.2 所需要 1989 年中的 @command{bison} 什么什么的，在库中没有 @file{awkgram.c} 这个文件。有保证说我们可以找到 @command{bison} 版本？或者@emph{它}可以构建么？）
 
-If the repository has all the generated files, then it's easy to just check
-them out and build. (Or @emph{easier}, depending upon how far back we go.)
+如果库有都有生成的文件，则很容易检查并构建。（或者，依赖于我们所回到的位置可能更容易。）
 
-And that brings us to the second (and stronger) reason why all the files
-really need to be in Git.  It boils down to who do you cater
-to---the @command{gawk} developer(s), or the user who just wants to check
-out a version and try it out?
+这使得我们有第二个理由（更强的）为什么把所有的文件都放在 Git 中。简单地说就是你让谁开心——是 @command{gawk} 的开发者，还是仅想取某个版本然后试试它的用户？
 
-The @command{gawk} maintainer
-wants it to be possible for any interested @command{awk} user in the
-world to just clone the repository, check out the branch of interest and
-build it. Without their having to have the correct version(s) of the
-autotools.@footnote{There is one GNU program that is (in our opinion)
-severely difficult to bootstrap from the Git repository. For
-example, on the author's old (but still working) PowerPC Macintosh with
-Mac OS X 10.5, it was necessary to bootstrap a ton of software, starting
-with Git itself, in order to try to work with the latest code.
-It's not pleasant, and especially on older systems, it's a big waste
-of time.
+@command{gawk} 的维护维护者想全世界所有的对 @command{awk} 有兴趣的用户，只要克隆库，然后检出所感兴趣的分支构建即可。而不需要他们必须有正确的 @code{autotools} 版本。
+@footnote{有一个 GNU 程序，（以我们的观点看）很难从 Git 库中生成。比如，在作者的旧的（但是还工作）的 PowerPC Macintosh ，安装的是 Mac OS X 10.5，很有必要从 Git 库本身生成和很多软件，使其能够与最新的代码一起工作。这一点也不让人感觉愉快，特别是在一些老旧的系统中，这简直就是浪费时间。
 
-Starting with the latest tarball was no picnic either. The maintainers
-had dropped @file{.gz} and @file{.bz2} files and only distribute
-@file{.tar.xz} files.  It was necessary to bootstrap @command{xz} first!}
-That is the point of the @file{bootstrap.sh} file.  It touches the
-various other files in the right order such that
+使用最新的 tarball 也不需要担心。维护都已经不用 @file{.gz} 与 @file{.bz2} 文件了，而只发布 @file{.tar.xz} 文件。有必要先安装 @command{xz}。}
+这也是 @file{bootstrap.sh} 文件的目的。它以正确的顺序来处理不同的文件，这样：
 
 @example
 # The canonical incantation for building GNU software:
@@ -29349,11 +29104,11 @@ various other files in the right order such that
 @end example
 
 @noindent
-will @emph{just work}.
+也@emph{可以工作}。
 
-This is extremely important for the @code{master} and
-@code{gawk-@var{X}.@var{Y}-stable} branches.
+这对于 @code{master} 主干以及 @code{gawk-@var{X}.@var{Y}-stable} 分支来说尤其重要。
 
+#TODO
 Further, the @command{gawk} maintainer would argue that it's also
 important for the @command{gawk} developers. When he tried to check out
 the @code{xgawk} branch@footnote{A branch (since removed) created by one of the other

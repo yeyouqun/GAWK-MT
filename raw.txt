@@ -470,10 +470,10 @@ GNU 项目及本书  15
 附录C 实现提示  439
 C.1@code{}后向兼容与调试   439
 C.2@code{}为 @command{gawk} 添加功能 439
-C.2.1@code{}访问 @command{gawk} 的 @code{Git} 仓库  439
+C.2.1@code{}访问 @command{gawk} 的 Git 仓库  439
 C.2.2@code{}添加新特性 440
 C.2.3@code{}将 @command{gawk} 移植到新系统中 441
-C.2.4@code{}为什么自动生成的文件要放在 @code{Git} 中  442
+C.2.4@code{}为什么自动生成的文件要放在 Git 中  442
 C.3@code{}后续可能的扩展   444
 C.4@code{}实现的一些限制   445
 C.5@code{}扩展 @code{API} 设计    445
@@ -9670,7 +9670,7 @@ $ @command{gawk} @option{-i} @code{inplace} @option{-v} @code{INPLACE_SUFFIX}=.@
 @code{MPFR} 库扩展（这提供了访问很多的 @code{MPFR} 函数，这些函数在 @command{gawk} 的本地 @code{MPFR} 是不被支持的）
 @code{Redis} 扩展
 @code{XML} 分析器扩展，这个扩展使用 @code{Expat} @code{XML} 分析库
-你可以查看 @code{gawkextlib} 项目的代码，这些代码可以通过 @code{Git} 分布式源代码扩展系统获取。相应的命令为：
+你可以查看 @code{gawkextlib} 项目的代码，这些代码可以通过 Git 分布式源代码扩展系统获取。相应的命令为：
 @code{git} @code{clone} @code{git}://@code{git}.@code{code}.@code{sf}.@code{net}/@code{p}/@code{gawkextlib}/@code{code} @code{gawkextlib}@option{-code}
 为了构建 @code{XML} 扩展 ，你需要在你的系统已经安装好了 @code{Expat} @code{XML} 分析库。
 另外，你必须还要有 GNU @code{Autotools} 安装在系统上（@code{Autoconf}，@code{Automake}，@code{Libtool} 以及 GNU @code{gettext}）。
@@ -10360,7 +10360,6 @@ OS/2    @code{Andreas} @code{Buening}， @code{andreas}.@code{buening}@@code{nex
 VMS     @code{John} @code{Malmberg}， wb8tyw@@code{qsl}.@code{net}
 @code{z}/OS (OS/390)   @code{Dave} @code{Pitts}， @code{dpitts}@@code{cozx}.@code{com}
 如果 Bug 在 Unix 下也是可重现的，也抄送一份报告给 @code{bug}-@command{gawk}@@code{gnu}.@code{org} 邮件列表。
-#TODO
 @code{B}.5@code{}其他可自由获取的 @command{awk} 实现 
 如果在 @command{awk} 代码中这样来输入注释就有味了：
 //C++ 类型的注释可用么？答案是：当然可了啦。
@@ -10374,7 +10373,7 @@ Shell @code{archive}
 @code{Zip} @code{file}    @code{http}://@code{www}.@code{cs}.@code{princeton}.@code{edu}/~@code{bwk}/@code{btl}.@code{mirror}/@command{awk}.@code{zip}
 你也可以从 @code{GitHub} 上取得：
 @code{git} @code{clone} @code{git}://@code{github}.@code{com}/@code{onetrueawk}/@command{awk} @code{bwkawk}
-这个命令创建了一个名为 @code{bwkawk} 的 @code{Git} 库的复本。如果你将这个参数在 @code{git} 命令里省略，则 @code{git} 库的复本会创建在名字为 @command{awk} 的目录中。
+这个命令创建了一个名为 @code{bwkawk} 的 Git 库的复本。如果你将这个参数在 @code{git} 命令里省略，则 @code{git} 库的复本会创建在名字为 @command{awk} 的目录中。
 这个版本需要 @code{ISO} C（1990 标准）的编译器，来自于 GCC（GNU @code{Compiler} @code{Collection}） 的 C 编译器可以工作得很好。查看 @code{A}.7 通用扩展汇总，在第 414 页，来获取这个 @command{awk} 扩展列表，这些扩展不在 POSIX @command{awk} 中。
 @command{mawk}    @code{Michael} @code{Brennan} 单独实现了 @command{awk}，称为 @command{mawk}。这可以以 @code{GPL} （查看 GNU 通用公共许可，在第 465 页）的方式获取，如 @command{gawk} 一样。
 @command{mawk} 源代码的最初的发布地址中已经不再有 @command{mawk}，可以在这里 @code{http}://@code{www}.@code{skeeve}.@code{com}/@command{gawk}/mawk1.3.3.@code{tar}.@code{gz} 取得。
@@ -10421,19 +10420,19 @@ C.1@code{}后向兼容与调试
 C.2@code{}为 @command{gawk} 添加功能 
 如果你发现你想以一种特别的方式增强 @command{gawk}，那随意好了。那正是自由软件的目的，源代码是可以获取的，你也可以按你的方式来改变（查看 GNU 通用公共许可，在第 465 页）。
 这一节讨论你更改 @command{gawk} 的方式以及需要你同时记住的一些点。
-C.2.1@code{}访问 @command{gawk} 的 @code{Git} 仓库 
+C.2.1@code{}访问 @command{gawk} 的 Git 仓库 
 因为 @command{gawk} 是一个免费软件，总是可以获取到它的源代码。@code{B}. 1gawk 发布版，在第 419 页，中描述了如何来获取及构建 @command{gawk} 发布版本。
-但是，如果你想修改 @command{gawk} 并且将这些修改发布，你可能需要使用开发版本。因此，你需要访问 @command{gawk} 的源代码库。代码是使用 @code{Git} 分布式的版本控制系统来进行维护的。如果你的系统上没有，则先需要安装它。完成后，你就可以使用下面的命令：
+但是，如果你想修改 @command{gawk} 并且将这些修改发布，你可能需要使用开发版本。因此，你需要访问 @command{gawk} 的源代码库。代码是使用 Git 分布式的版本控制系统来进行维护的。如果你的系统上没有，则先需要安装它。完成后，你就可以使用下面的命令：
 @code{git} @code{clone} @code{git}://@code{git}.@code{savannah}.@code{gnu}.@code{org}/@command{gawk}.@code{git}
-这个复制 @command{gawk} 的库。如果你在防火墙后面，而不许使用 @code{Git} 的本地协议，你可以使用下面的方式来访问库：
+这个复制 @command{gawk} 的库。如果你在防火墙后面，而不许使用 Git 的本地协议，你可以使用下面的方式来访问库：
 @code{git} @code{clone} @code{http}://@code{git}.@code{savannah}.@code{gnu}.@code{org}/@code{r}/@command{gawk}.@code{git}
 一旦你做了修改，你可以使用 ‘@code{git} @code{diff}’来产生一个 @code{patch}，然后发送绘画 @command{gawk} 的维护者，查看 @code{B}.4@code{}报告问题与@code{BUG} ，在第 434 页，来获取如何做。
-之前有一段时间有 @code{Git}@option{-CVS} 网关可以被那些没有安装的 @code{Git} 的人使用。但是，这个网关已经不再工作了，因此你最好一些更加现代的版本控制系统，如 @code{Bazaar}，它有一个 @code{Git} 插件可以用于  @code{Git} 库。
+之前有一段时间有 Git@option{-CVS} 网关可以被那些没有安装的 Git 的人使用。但是，这个网关已经不再工作了，因此你最好一些更加现代的版本控制系统，如 @code{Bazaar}，它有一个 Git 插件可以用于  Git 库。
 C.2.2@code{}添加新特性 
 你可以自由地将新特性加入到 @command{gawk} 中。但是，如果你想将你的改变加入到 @command{gawk} 发布版中，有几个步骤可以让你有可能将它们加入到 @command{gawk} 中：
 在构建新的特性到 @command{gawk} 前，先考虑将其写成一个扩展（查看 第十六章 编写 @command{gawk} 扩展，在第 349 页）。如果不可能，则往下走。
 准备签署合适的协议。为了让 @code{FSF} 能够发布你的修改，你必须要么将这些修改发布到公共域里，并提交一个签署有相同效果的协议，或者将版本赋给 @code{FSF}。这两个做法都是很容易完成的，很多的人都已经这么做了。如果有问题，请联系我（查看 @code{B}.4@code{}报告问题与@code{BUG} ， 在第 434 页），或者是 @code{assign}@@code{gnu}.@code{org}。
-获取最新版本，对我而言，如果这些更改相关于最新的 @command{gawk} 版本而变，我就很容易进行合并。最好的是，你的更改是相对于 @code{Git} 库的最新代码。如果你的 @command{gawk} 版本非常老，我就根本没法将它们合并了。（查看 @code{B}.1.1 取得 @command{gawk} 发布版，在第 419 页，来了解如何获取最新的 @command{gawk} 版本。）
+获取最新版本，对我而言，如果这些更改相关于最新的 @command{gawk} 版本而变，我就很容易进行合并。最好的是，你的更改是相对于 Git 库的最新代码。如果你的 @command{gawk} 版本非常老，我就根本没法将它们合并了。（查看 @code{B}.1.1 取得 @command{gawk} 发布版，在第 419 页，来了解如何获取最新的 @command{gawk} 版本。）
 遵守 GNU C 的代码标准。这个文档描述如何来写 GNU 软件。如果你还没有读过，请先读，特别是在修改 @command{gawk} 之前（GNU 代码标准可以从 GNU 项目的站点上获取。也可以获取到 @code{Texinfo}，@code{Info}，@code{DVI} 的版本。）
 使用 @command{gawk} 编码风格。 @command{gawk} 的 C 代码遵守 GNU 编译标准中的指导，只有一些小例外。代码使用传统的 “@code{K}&@code{R}”风格，特别在替换花括号以及 @code{TABs} 的使用上要注意。简单地说，代码规则如下：
 使用 @code{ANSI}/@code{ISO} 风格（原型）函数来定义函数。
@@ -10473,19 +10472,20 @@ C.2.3@code{}将 @command{gawk} 移植到新系统中
 更新文档。写为本书写一个小节（或者多个小节）来描述其安装与编译步骤，这样可以在你的系统上编译与安装 @command{gawk}。
 按这样的步骤，可以使其容易来将你的变化整合到 @command{gawk} 中，并使其与其他的已经存在操作系统代码和平共处。
 在你提供与维护的代码中，可以自由使用你的风格以及括号布局。
-C.2.4@code{}为什么自动生成的文件要放在 @code{Git} 中 
-如果你查看  @code{Git} 库中的 @command{gawk} 源代码，你会注意到里面包含了由 GNU 基础工作自动力生成的文件，如 @code{Makefile}.@code{in} 由 @code{Automake} 生成，甚至是由 @code{Autoconf} 生成的 @command{configure}。
+C.2.4@code{}为什么自动生成的文件要放在 Git 中 
+如果你查看  Git 库中的 @command{gawk} 源代码，你会注意到里面包含了由 GNU 基础工作自动力生成的文件，如 @code{Makefile}.@code{in} 由 @code{Automake} 生成，甚至是由 @code{Autoconf} 生成的 @command{configure}。
 这个不同于不存储衍生文件其他自由软件项目，因为这使得库不会这么混乱，而且更容易在比较在不同提交之间的真正改变。但是，有几个原因，使得 @command{gawk} 要把所有的东西放在库中。
 首先，这更容易生成完整的版本，而不依赖于其他工作的能力（有一些老的，被丢弃，甚至没办法找得到。）
 一个极端例子是，如果你想编译，比方说 V7 的 @command{awk}，你会发现你不仅要用 V7 的 @code{yacc} 来处理，还需要 V7 的 @code{lex}。对于后者，在现代的 GNU/Linux 系统根本没有。 
 （或者说，@command{gawk} 1.2 所需要 1989 年中的 @code{bison} 什么什么的，在库中没有 @code{awkgram}.@code{c} 这个文件。有保证说我们可以找到 @code{bison} 版本？或者可以构建么？）
 如果库有都有生成的文件，则很容易检查并构建。（或者，依赖于我们所回到的位置可能更容易。）
-这使得我们有第二个理由（更强的）为什么把所有的文件都放在 @code{Git} 中。简单地说就是你让谁开心——是 @command{gawk} 的开发者，还是仅想取某个版本然后试试它的用户？
+这使得我们有第二个理由（更强的）为什么把所有的文件都放在 Git 中。简单地说就是你让谁开心——是 @command{gawk} 的开发者，还是仅想取某个版本然后试试它的用户？
 @command{gawk} 的维护维护者想全世界所有的对 @command{awk} 有兴趣的用户，只要克隆库，然后检出所感兴趣的分支构建即可。而不需要他们必须有正确的 @code{autotools}  版本。这也是 @code{bootstrap}.@code{sh} 文件的目的。它以正确的顺序来处理不同的文件，这样：
 # @code{The} @code{canonical} @code{incantation} @code{for} @code{building} GNU @code{software}:
 ./@code{bootstrap}.@code{sh} && ./@command{configure} && @code{make}
 也可以工作。
 这对于主线以及 @command{gawk}@option{-X}.@code{Y}@option{-stable} 分支来说尤其重要。
+#TODO
 再者，@command{gawk} 的维护者也觉得这对于 @command{gawk} 的开发者也非常重要。当某人尝试检出 @code{xgawk} 的分支 来构建时，却发现不能。（没有 @code{ltmain}.@code{sh} 文件，也不知道如何来生成，并且这也不是唯一的问题。）
 此人会感觉精疲力尽。对于相应的分支，维护者与 @code{Jane} 这样的想构建从库中取得的 @command{gawk}-4.1@option{-stable} 用户没有什么不同。
 因此，维护者觉得对于任何分支而言，上面的代码可能工作，这样不仅是重要，而且非常关键。
@@ -10501,10 +10501,10 @@ C.2.4@code{}为什么自动生成的文件要放在 @code{Git} 中
 @code{cd} @code{package}@option{-x}.@code{y}.@code{z}
 ./@command{configure} && @code{make} && @code{make} @code{check}
 @code{make} @code{install} # @code{as} @code{root}
-上面大多数一开始是由其他的 @command{gawk} 维护者写的。有一个开发者提出的反对意见“... 从 @code{Git} 库中提取源代码的人并不都是终端用户。”
+上面大多数一开始是由其他的 @command{gawk} 维护者写的。有一个开发者提出的反对意见“... 从 Git 库中提取源代码的人并不都是终端用户。”
 但是，事情不是这么回事。有“大牛级的 @command{awk} 用户”，他们可以构建 @command{gawk}（使用之前所列的代码），但是他们没办法用 C 写程序。所以，主要的分支 应该一真保持是可构建的。
 然后建建议，应该有一个 @code{cron} 任务来每晚来创建所有代码的 @code{tar} @code{ball} 。这里的问题是，有不同分支的代码线，因此，每晚的 @code{tar} @code{ball} 不是最终解决方法，特别是库有可能几周都不会有大的变化。
-幸运的是，@code{Git} 服务器可以来满足这样的需要。对于每一个名字为 @code{branchname} 的分支，使用：
+幸运的是，Git 服务器可以来满足这样的需要。对于每一个名字为 @code{branchname} 的分支，使用：
 @code{wget} @code{http}://@code{git}.@code{savannah}.@code{gnu}.@code{org}/@code{cgit}/@command{gawk}.@code{git}/@code{snapshot}/@command{gawk}@option{-branchname}.@code{tar}.@code{gz}
 来返回所指定分支的快照。
 C.3@code{}后续可能的扩展 
@@ -10512,7 +10512,7 @@ C.3@code{}后续可能的扩展
 —@code{Arnold} @code{Robbins}
 嘿，怎么说的！
 —@code{Larry} @code{Wall}
-在 @code{Git} 库中的 @command{gawk} 主线中的 @code{TODO} 文件列出来未来可能的增加。有一些与源代码相关，其他的是一些新特性。请查看这个文件来获取相关列表。如果你有兴趣跟踪列在其中的项目，请查看 C.2@code{}为 @command{gawk} 添加功能，在第 439 页。
+在 Git 库中的 @command{gawk} 主线中的 @code{TODO} 文件列出来未来可能的增加。有一些与源代码相关，其他的是一些新特性。请查看这个文件来获取相关列表。如果你有兴趣跟踪列在其中的项目，请查看 C.2@code{}为 @command{gawk} 添加功能，在第 439 页。
 C.4@code{}实现的一些限制 
 下表描述了 @command{gawk} 在类 Unix 系统中的一些限制（尽管还会有变量）。其他的系统可能还有不同的限制。
 项  限制
@@ -10583,7 +10583,7 @@ C.6@code{}对旧扩展的兼容性
 @command{gawk} 的开发团队强烈建议你将旧的扩展进行转换，这样不得不使用新的 @code{API}，它们都在 第十六章 编写 @command{gawk} 扩展，在第 349 页，中进行了描述。
 C.7@code{}总结
 @command{gawk} 的扩展可以使用 @option{--traditional} 或者 @option{--posix} 选项被禁用。如果 @command{gawk} 被编译 时使用了 ‘@option{-DDEBUG}’，则 @option{--parsedebug} 选项也可以使用。
-@command{gawk} 的源代码通过公共的 @code{Git} 库进行维护。所有人都可以检出并查看代码。
+@command{gawk} 的源代码通过公共的 Git 库进行维护。所有人都可以检出并查看代码。
 欢迎对 @command{gawk} 作出贡献。本章中随后的步骤指出步骤可以让你的贡献更容易地与代码库进行整合。对即可用于新特性的贡献，也用于将 @command{gawk} 移植到其他的系统。
 @command{gawk} 有一些限制——一般都是由机器的架构所导致的。
 扩展 @code{API} 的设置目标是解决前一个扩展机制的大量问题，启用 @code{xgawk} 项目所需要的特性，并提供后向的二进制兼容性。
