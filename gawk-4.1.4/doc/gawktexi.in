@@ -29108,55 +29108,36 @@ git clone http://git.savannah.gnu.org/r/gawk.git
 
 这对于 @code{master} 主干以及 @code{gawk-@var{X}.@var{Y}-stable} 分支来说尤其重要。
 
-#TODO
-Further, the @command{gawk} maintainer would argue that it's also
-important for the @command{gawk} developers. When he tried to check out
-the @code{xgawk} branch@footnote{A branch (since removed) created by one of the other
-developers that did not include the generated files.} to build it, he
-couldn't. (No @file{ltmain.sh} file, and he had no idea how to create it,
-and that was not the only problem.)
+再者，@command{gawk} 的维护者也觉得这对于 @command{gawk} 的开发者也非常重要。当某人尝试检出 @code{xgawk} 的分支
+@footnote{一个由其他开发者生成的分支（已经删除），并没有包含所生成的文件。}
+来构建时，却发现不能。（没有 @file{ltmain.sh} 文件，也不知道如何来生成，并且这也不是唯一的问题。）
 
-He felt @emph{extremely} frustrated.  With respect to that branch,
-the maintainer is no different than Jane User who wants to try to build
-@code{gawk-4.1-stable} or @code{master} from the repository.
+此人会感觉@emph{精疲力尽}。对于相应的分支，维护者与 @code{Jane} 这样的想构建从库中取得的 @code{gawk-4.1-stable} 或者 @code{master} 用户没有什么不同。
 
-Thus, the maintainer thinks that it's not just important, but critical,
-that for any given branch, the above incantation @emph{just works}.
+因此，维护者觉得对于任何分支而言，上面的代码@emph{能工作}，这样不仅是重要，而且非常关键。
 
 @c Added 9/2014:
-A third reason to have all the files is that without them, using @samp{git
-bisect} to try to find the commit that introduced a bug is exceedingly
-difficult. The maintainer tried to do that on another project that
-requires running bootstrapping scripts just to create @command{configure}
-and so on; it was really painful. When the repository is self-contained,
-using @command{git bisect} in it is very easy.
+第三个原因是，如果没有这些文件，使用 @samp{git
+bisect} 来查找引入 bug 的提交会变成相当困难。维护者会在其他的项目中使用这个方法，这个项目需要运行自举脚本，以创建 @command{configure} 等文件，这相当痛苦。当库自己是自包含的，使用 @command{git bisect} 就相应容易了。
 
 @c So - that's my reasoning and philosophy.
 
-What are some of the consequences and/or actions to take?
+有什么结果与/或者采取什么行动呢？
 
 @enumerate 1
 @item
-We don't mind that there are differing files in the different branches
-as a result of different versions of the autotools.
+我们不介意在不同的分支下有不同的文件，这是不同的 autotools 版本的结果。
 
 @enumerate A
 @item
-It's the maintainer's job to merge them and he will deal with it.
+合并与处理，这是维护者的事。
 
 @item
-He is really good at @samp{git diff x y > /tmp/diff1 ; gvim /tmp/diff1} to
-remove the diffs that aren't of interest in order to review code.
+为了检查代码，维护者会使用 @samp{git diff x y > /tmp/diff1 ; gvim /tmp/diff1} 来移除不感兴趣的差别，他在这方面确实非常拿手。
 @end enumerate
 
 @item
-It would certainly help if everyone used the same versions of the GNU tools
-as he does, which in general are the latest released versions of
-Automake,
-Autoconf,
-@command{bison},
-and
-GNU @command{gettext}.
+如果所有的人都使用与维护者一样的 GNU tools 的话，肯定会有帮助，一般是最新版本的 Automake，Autoconf，@command{bison} 以及 GNU @command{gettext}。
 
 @ignore
 If it would help if I sent out an ``I just upgraded to version x.y
@@ -29167,9 +29148,7 @@ dorking with the configuration machinery.
 
 @c @enumerate A
 @c @item
-Installing from source is quite easy. It's how the maintainer worked for years
-(and still works).
-He had @file{/usr/local/bin} at the front of his @env{PATH} and just did:
+从源代码安装非常容易。几年来维护者都是这么做的（而且还在这么做）。只需要将 @file{/usr/local/bin} 放在 @env{PATH} 的前面，然后执行：
 
 @example
 wget http://ftp.gnu.org/gnu/@var{package}/@var{package}-@var{x}.@var{y}.@var{z}.tar.gz
@@ -29204,34 +29183,23 @@ the "real" changes and the second with "everything else needed for
 @end ignore
 @end enumerate
 
-Most of the above was originally written by the maintainer to other
-@command{gawk} developers.  It raised the objection from one of
-the developers ``@dots{} that anybody pulling down the source from
-Git is not an end user.''
+上面大多数一开始是由其他的 @command{gawk} 维护者写的。有一个开发者提出的反对意见“@dots{} 从 Git 库中提取源代码的人并不都是终端用户。”
 
-However, this is not true. There are ``power @command{awk} users''
-who can build @command{gawk} (using the magic incantation shown previously)
-but who can't program in C.  Thus, the major branches should be
-kept buildable all the time.
+但是，事情不是这么回事。有“大牛级的 @command{awk} 用户”，他们可以构建 @command{gawk}（使用之前所列的代码），但是他们没办法用 C 写程序。所以，主要的分支应该一直保持是可构建的。
 
-It was then suggested that there be a @command{cron} job to create
-nightly tarballs of ``the source.''  Here, the problem is that there
-are source trees, corresponding to the various branches! So,
-nightly tarballs aren't the answer, especially as the repository can go
-for weeks without significant change being introduced.
+然后建议，应该有一个 @command{cron} 任务来每晚来创建所有代码的 tar ball。这里的问题是，有不同分支的代码线，因此，每晚的 tar ball 不是最终解决方法，特别是库有可能几周都不会有大的变化。
 
-Fortunately, the Git server can meet this need. For any given
-branch named @var{branchname}, use:
+幸运的是，Git 服务器可以来满足这样的需要。对于每一个名字为 @var{branchname} 的分支，使用：
 
 @example
 wget http://git.savannah.gnu.org/cgit/gawk.git/snapshot/gawk-@var{branchname}.tar.gz
 @end example
 
 @noindent
-to retrieve a snapshot of the given branch.
+来返回所指定分支的快照。
 
 @node Future Extensions
-@appendixsec Probable Future Extensions
+@appendixsec 后续可能的扩展
 @ignore
 From emory!scalpel.netlabs.com!lwall Tue Oct 31 12:43:17 1995
 Return-Path: <emory!scalpel.netlabs.com!lwall>
@@ -29270,65 +29238,53 @@ Larry
 @cindex Wall, Larry
 @cindex Robbins, Arnold
 @quotation
-@i{AWK is a language similar to PERL, only considerably more elegant.}
+@i{
+@code{AWK} 是像 @code{PERL} 语言一样，只是要比它优美得多了。
+}
 @author Arnold Robbins
 @end quotation
 
 @quotation
-@i{Hey!}
+@i{
+嘿，怎么说的！
+}
 @author Larry Wall
 @end quotation
 
-The @file{TODO} file in the @code{master} branch of the @command{gawk}
-Git repository lists possible future enhancements.  Some of these relate
-to the source code, and others to possible new features.  Please see
-that file for the list.
-@xref{Additions},
-if you are interested in tackling any of the projects listed there.
+在 Git 库中的 @command{gawk} 的 @code{master} 主分支中的 @file{TODO} 文件列出来未来可能的增加。有一些与源代码相关，其他的是一些新特性。请查看这个文件来获取相关列表。如果你有兴趣跟踪列在其中的项目，请查看 @xref{Additions}。
 
 @node Implementation Limitations
-@appendixsec Some Limitations of the Implementation
+@appendixsec 实现的一些限制
 
-This following table describes limits of @command{gawk} on a Unix-like
-system (although it is variable even then). Other systems may have
-different limits.
+下表描述了 @command{gawk} 在类 Unix 系统中的一些限制（尽管还会有变量）。其他的系统可能还有不同的限制。
 
 @multitable @columnfractions .40 .60
-@headitem Item @tab Limit
-@item Characters in a character class @tab 2^(number of bits per byte)
-@item Length of input record @tab @code{MAX_INT}
-@item Length of output record @tab Unlimited
-@item Length of source line @tab Unlimited
-@item Number of fields in a record @tab @code{MAX_LONG}
-@item Number of file redirections @tab Unlimited
-@item Number of input records in one file @tab @code{MAX_LONG}
-@item Number of input records total @tab @code{MAX_LONG}
-@item Number of pipe redirections @tab min(number of processes per user, number of open files)
-@item Numeric values @tab Double-precision floating point (if not using MPFR)
-@item Size of a field @tab @code{MAX_INT}
-@item Size of a literal string @tab @code{MAX_INT}
-@item Size of a printf string @tab @code{MAX_INT}
+@headitem 项 @tab 限制
+@item 字符类内的字符数 @tab 2^(每字节的位数)
+@item 输入记录的长度 @tab @code{MAX_INT}
+@item 输出记录的长度 @tab Unlimited
+@item 源代码长度 @tab Unlimited
+@item 记录中的域数 @tab @code{MAX_LONG}
+@item 文件重定向数 @tab Unlimited
+@item 一个文件中的记录数 @tab @code{MAX_LONG}
+@item 总是输入记录数 @tab @code{MAX_LONG}
+@item 重定向管道数 @tab min(每用进程数， 打开文件数)
+@item 数值 @tab 双精度浮点数 (如果没有使用 MPFR)
+@item 域大小 @tab @code{MAX_INT}
+@item 字串大小 @tab @code{MAX_INT}
+@item printf 字串大小 @tab @code{MAX_INT}
 @end multitable
 
 @node Extension Design
-@appendixsec Extension API Design
+@appendixsec 扩展 API 设计 
 
-This @value{SECTION} documents the design of the extension API,
-including a discussion of some of the history and problems that needed
-to be solved.
+这一@value{SECTION}，记录了扩展 API 的设计，包括一些需要解决的历史问题的讨论。
 
-The first version of extensions for @command{gawk} was developed in
-the mid-1990s and released with @command{gawk} 3.1 in the late 1990s.
-The basic mechanisms and design remained unchanged for close to 15 years,
-until 2012.
+用于 @command{gawk} 第一个版本的扩展在 1990 年代中期开发，并与 @command{gawk} 3.1 一起发布。15 年来基本的机制并没有什么变量，直到 2012 年。
 
-The old extension mechanism used data types and functions from
-@command{gawk} itself, with a ``clever hack'' to install extension
-functions.
+旧扩展的机制使用使用来自 @command{gawk} 的数据类型与函数，通过“聪明黑客”手段来安装扩展函数。
 
-@command{gawk} included some sample extensions, of which a few were
-really useful.  However, it was clear from the outset that the extension
-mechanism was bolted onto the side and was not really well thought out.
+@command{gawk} 包含了一些扩展，很多都很有用。但是很明显，从一开始扩展机制都只强制一边，而没有经过详细思考。
 
 @menu
 * Old Extension Problems::           Problems with the old mechanism.
@@ -29338,290 +29294,171 @@ mechanism was bolted onto the side and was not really well thought out.
 @end menu
 
 @node Old Extension Problems
-@appendixsubsec Problems With The Old Mechanism
+@appendixsubsec 旧机制的问题
 
-The old extension mechanism had several problems:
+旧的扩展机制有下面的几个问题：
 
 @itemize @value{BULLET}
 @item
-It depended heavily upon @command{gawk} internals.  Any time the
-@code{NODE} structure@footnote{A critical central data structure
-inside @command{gawk}.} changed, an extension would have to be
-recompiled. Furthermore, to really write extensions required understanding
-something about @command{gawk}'s internal functions.  There was some
-documentation in this @value{DOCUMENT}, but it was quite minimal.
+严重依赖于 @command{gawk} 的内部实现。@code{NODE} 结点结构
+@footnote{@command{gawk} 中的关键的核心数组结构。}
+一旦变化，扩展就得重新编译。而且，要真写一扩展，需要了解 @command{gawk} 内部功能的一些东西。这里面有一些记录在本@value{DOCUMENT}里，但是相当有限。
 
 @item
-Being able to call into @command{gawk} from an extension required linker
-facilities that are common on Unix-derived systems but that did
-not work on MS-Windows systems; users wanting extensions on MS-Windows
-had to statically link them into @command{gawk}, even though MS-Windows supports
-dynamic loading of shared objects.
+要能够从扩展调用到 @command{gawk}，这需要连接工具在 Unix 派生出来的系统中是很通用的，但是在 MS-Windows 上却不是，用户在 MS-Windows 上的扩展需要静态地连接到 @command{gawk} 中，尽管 MS-Windows 也支持动态装载共享对象。
 
 @item
-The API would change occasionally as @command{gawk} changed; no compatibility
-between versions was ever offered or planned for.
+当 @command{gawk} 变化时，API 也会偶尔变量，并且不同的版本之间不兼容，也没有相应的计划来兼容。
 @end itemize
 
-Despite the drawbacks, the @command{xgawk} project developers forked
-@command{gawk} and developed several significant extensions. They also
-enhanced @command{gawk}'s facilities relating to file inclusion and
-shared object access.
+尽管有这么些缺陷，@command{xgawk} 项目的开发者复制了 @command{gawk} 并且开发了几个很好的扩展。它们也增强了 @command{gawk} 中与文件包含与共享对象访问的功能。
 
-A new API was desired for a long time, but only in 2012 did the
-@command{gawk} maintainer and the @command{xgawk} developers finally
-start working on it together.  More information about the @command{xgawk}
-project is provided in @ref{gawkextlib}.
+新的 API 经过的长时间的设计，直到 2012 年，@command{gawk} 的维护者与开发者最终才开始实现。关于 @command{xgawk} 项目的信息在 @ref{gawkextlib}，这里提供。
 
 @node Extension New Mechanism Goals
-@appendixsubsec Goals For A New Mechanism
+@appendixsubsec 新机制的目标 
 
-Some goals for the new API were:
+新 API 的目标是：
 
 @itemize @value{BULLET}
 @item
-The API should be independent of @command{gawk} internals.  Changes in
-@command{gawk} internals should not be visible to the writer of an
-extension function.
+API 应该独立于 @command{gawk} 的内部实现。@command{gawk} 的内部实现的变更不对于扩展函数的实现者是不可见的。
 
 @item
-The API should provide @emph{binary} compatibility across @command{gawk}
-releases as long as the API itself does not change.
+API 应该提供@emph{二进制}兼容性，只要 @command{gawk} 的发行版本之间 API 没有变更。
 
 @item
-The API should enable extensions written in C or C++ to have roughly the
-same ``appearance'' to @command{awk}-level code as @command{awk}
-functions do. This means that extensions should have:
+API 应该可以用 C 或者 C++ 来写，使其与 @command{awk} 层的代码有一样的“外观”，就像 @command{awk} 函数一样。这就是说，扩展应该：
 
 @itemize @value{MINUS}
 @item
-The ability to access function parameters.
+有能力访问函数参数。
 
 @item
-The ability to turn an undefined parameter into an array (call by reference).
+有能力将一个未定义的函数转换为数组（通过引用调用）。
 
 @item
-The ability to create, access and update global variables.
+有能力创建，访问与更新全局变量。
 
 @item
-Easy access to all the elements of an array at once (``array flattening'')
-in order to loop over all the element in an easy fashion for C code.
+方便一次性访问数组的所有元素（“数组扁平化”），使其可以用 C 代码的循环就可以迭代数组中的所有的元素。
 
 @item
-The ability to create arrays (including @command{gawk}'s true
-arrays of arrays).
+有能力创建数组（包含 @command{gawk} 真正的数组之数组）。
 @end itemize
 @end itemize
 
-Some additional important goals were:
+其他的重要目标是：
 
 @itemize @value{BULLET}
 @item
-The API should use only features in ISO C 90, so that extensions
-can be written using the widest range of C and C++ compilers. The header
-should include the appropriate @samp{#ifdef __cplusplus} and @samp{extern "C"}
-magic so that a C++ compiler could be used.  (If using C++, the runtime
-system has to be smart enough to call any constructors and destructors,
-as @command{gawk} is a C program. As of this writing, this has not been
-tested.)
+API 应该只使用 ISO C 90 的特性，这样扩展可以使用最广泛的 C 与 C++ 编译器。头文件应该包含适当的 @samp{#ifdef __cplusplus} 与 @samp{extern "C"} 等代码，这样可以使用 C++ 编译器。（如果使用 C++ 时，运行时系统要足够聪明来调用任何的构造函数与析构函数，因为 @command{gawk} 是一个 C 程序。在写本书时，这还没有测试过。）
 
 @item
-The API mechanism should not require access to @command{gawk}'s
-symbols@footnote{The @dfn{symbols} are the variables and functions
-defined inside @command{gawk}.  Access to these symbols by code
-external to @command{gawk} loaded dynamically at runtime is
-problematic on MS-Windows.} by the compile-time or dynamic linker,
-in order to enable creation of extensions that also work on MS-Windows.
+无论是编译时还是动态连接时，API 机制应该不需要访问 @command{gawk} 的符号。
+@footnote{@dfn{符号}是定义在 @command{gawk} 中的变量与函数。在 @command{gawk} 外部的运行时动态装载代码中对这些符号的访问在 MS-Windows 平台上是有问题的。}
+这样创建的扩展也可以用在 MS-Windows 平台上。
 @end itemize
 
-During development, it became clear that there were other features
-that should be available to extensions, which were also subsequently
-provided:
+在开发的过程中，越来越清晰的是有一些特性需要提供给扩展，后面也提供了：
 
 @itemize @value{BULLET}
 @item
-Extensions should have the ability to hook into @command{gawk}'s
-I/O redirection mechanism.  In particular, the @command{xgawk}
-developers provided a so-called ``open hook'' to take over reading
-records.  During development, this was generalized to allow
-extensions to hook into input processing, output processing, and
-two-way I/O.
+扩展应该有能力将勾子打入 @command{gawk} 的 I/O 重向机制中。特别是 @command{xgawk} 的开发者提供了一种所谓的“开放勾子”来读取记录。在开发过程中，扩展对于输入处理、输出处理以及双路 I/O 的勾子都进了一般化。
 
 @item
-An extension should be able to provide a ``call back'' function
-to perform cleanup actions when @command{gawk} exits.
+扩展应该可以提供回调函数来执行 @command{gawk} 退出时的清理动作。
 
 @item
-An extension should be able to provide a version string so that
-@command{gawk}'s @option{--version} option can provide information
-about extensions as well.
+扩展应该可以提供版本字串，这样 @command{gawk} 的 @option{--version} 选项可以提供扩展的相关信息。
 @end itemize
 
-The requirement to avoid access to @command{gawk}'s symbols is, at first
-glance, a difficult one to meet.
+初看起来，避免访问 @command{gawk} 的符号是比较难实现的一个。
 
-One design, apparently used by Perl and Ruby and maybe others, would
-be to make the mainline @command{gawk} code into a library, with the
-@command{gawk} utility a small C @code{main()} function linked against
-the library.
+在设计上，很明显 Perl 与 Ruby 以及其他的语言，可以使主线的 @command{gawk} 代码成为一个库，@command{gawk} 使用小的 C @code{main()} 函数来连接这个库。
 
-This seemed like the tail wagging the dog, complicating build and
-installation and making a simple copy of the @command{gawk} executable
-from one system to another (or one place to another on the same
-system!) into a chancy operation.
+这看起来像摇着尾巴的狗，会导致构建与安装复杂化，使得在不同的系统中（或者同一个系统中的不同地方）都使用一个单独的 @command{gawk} 执行文件。
 
-Pat Rankin suggested the solution that was adopted.
-@xref{Extension Mechanism Outline}, for the details.
+我们接受了 Pat Rankin 提出的建议。查看 @xref{Extension Mechanism Outline}，来获取详细信息。
 
 @node Extension Other Design Decisions
-@appendixsubsec Other Design Decisions
+@appendixsubsec 其他的设计决策
 
-As an arbitrary design decision, extensions can read the values of
-predefined variables and arrays (such as @code{ARGV} and @code{FS}), but cannot
-change them, with the exception of @code{PROCINFO}.
+作为任意的设计决策，扩展可以读取预定义变量与数组的值（如 @code{ARGV} 与 @code{FS}），但是不可以改变它们，除了 @code{PROCINFO} 外。
 
-The reason for this is to prevent an extension function from affecting
-the flow of an @command{awk} program outside its control.  While a real
-@command{awk} function can do what it likes, that is at the discretion
-of the programmer.  An extension function should provide a service or
-make a C API available for use within @command{awk}, and not mess with
-@code{FS} or @code{ARGC} and @code{ARGV}.
+原因是为了扩展函数影响 @command{awk} 程序流，使其不可按。而一个真正的 @command{awk} 函数可以做它自己想做的事情，这个则由程序员自己来判断。扩展函数 应该提供一个服务或者使 C API 可以在 @command{awk} 中可以使用。而不是将 @code{FS}，@code{ARGC} 以及 @code{ARGV} 弄乱。
 
-In addition, it becomes easy to start down a slippery slope. How
-much access to @command{gawk} facilities do extensions need?
-Do they need @code{getline}?  What about calling @code{gsub()} or
-compiling regular expressions?  What about calling into @command{awk}
-functions? (@emph{That} would be messy.)
+另外，很容易就可以在一个滑滑的斜坡上开头（即一旦开启刹不住——译者注）。扩展到底需要访问多少的 @command{gawk} 工具？它们是否需要 @code{getline}？是否可以调用 @code{gsub()} 或者编译正则表达式？直接调用 @command{awk} 函数如何？（@emph{这}会弄得乱乱的）
 
-In order to avoid these issues, the @command{gawk} developers chose
-to start with the simplest, most basic features that are still truly useful.
+为了避免这样的问题，@command{gawk} 开发者以最容易的，最基础的但是确实有用的开始。
 
-Another decision is that although @command{gawk} provides nice things like
-MPFR, and arrays indexed internally by integers, these features are not
-being brought out to the API in order to keep things simple and close to
-traditional @command{awk} semantics.  (In fact, arrays indexed internally
-by integers are so transparent that they aren't even documented!)
+另一个决策是，尽管 @command{gawk} 提供了像  MPFR 这样的好东西，内部使用整数索引的数组，这些特性并没有开放出来，为的是保证事情的简单，并封闭 @command{awk} 的传统的语义（不扩张其语义范围，如 @command{gawk} 是用来做字符处理的工具，而不是数学运算的工具——译者注）。（事实上，内部使用整数来索引数组如此透明，在文档中都没有记录！）
 
-Additionally, all functions in the API check that their pointer
-input parameters are not @code{NULL}. If they are, they return an error.
-(It is a good idea for extension code to verify that
-pointers received from @command{gawk} are not @code{NULL}.
-Such a thing should not happen, but the @command{gawk} developers
-are only human, and they have been known to occasionally make
-mistakes.)
+其次，在 API 中的所有函数都要检查它们的指针输入参数是不是都不是 @code{NULL}。如果是，就返回错误。（对于扩展代码来说，验证从 @command{gawk} 返回的指针是不是 @code{NULL} 也是个好主意。这样的事情不会发生，但是 @command{gawk} 开发者也是人，他们据知一直以来也会偶尔犯错误。）
 
-With time, the API will undoubtedly evolve; the @command{gawk} developers
-expect this to be driven by user needs. For now, the current API seems
-to provide a minimal yet powerful set of features for creating extensions.
+随着时间的推移，API 也会演化，@command{gawk} 开发者希望这可以由用户的需要来驱动。目前，当前的 API 看起来是提供了最小的，但是功能强大的用来创建扩展的特性集合。
 
 @node Extension Future Growth
-@appendixsubsec Room For Future Growth
+@appendixsubsec 未来的增长空间 
 
-The API can later be expanded, in two ways:
+后面 API 可以两种方式被扩展：
 
 @itemize @value{BULLET}
 @item
-@command{gawk} passes an ``extension id'' into the extension when it
-first loads the extension.  The extension then passes this id back
-to @command{gawk} with each function call.  This mechanism allows
-@command{gawk} to identify the extension calling into it, should it need
-to know.
+在第一次装载时，@command{gawk} 传递一个“扩展 id”到扩展中。相应的扩展然后在每个函数调用时，传递这个 id 回 @command{gawk}。这个机制可以使 @command{gawk} 来区别调用它的扩展，而它也应该知道。
 
 @item
-Similarly, the extension passes a ``name space'' into @command{gawk}
-when it registers each extension function.  This accommodates a possible future
-mechanism for grouping extension functions and possibly avoiding name
-conflicts.
+类似的，在注册时，扩展传递一个“name space”到 @command{gawk} 中。这个可以实现一个未来的机制，如对扩展功能进行分组，以避免名字的冲突。
 @end itemize
 
-Of course, as of this writing, no decisions have been made with respect
-to any of the above.
+当然，在写这个文字的时候，对上面的东西都还没有做相应的决策。
 
 @node Old Extension Mechanism
-@appendixsec Compatibility For Old Extensions
+@appendixsec 对旧扩展的兼容性 
 
-@ref{Dynamic Extensions}, describes the supported API and mechanisms
-for writing extensions for @command{gawk}.  This API was introduced
-in @value{PVERSION} 4.1.  However, for many years @command{gawk}
-provided an extension mechanism that required knowledge of @command{gawk}
-internals and that was not as well designed.
+在 @ref{Dynamic Extensions}，中描述了所支持 API 以及为 @command{gawk} 写扩展的机制。这个 API 在 4.1 @value{PVERSION}中引入。但是，很多年以来，@command{gawk} 提供的扩展机制都需要了解 @command{gawk} 的内部，这设计得并不好。
 
-In order to provide a transition period, @command{gawk} @value{PVERSION} 4.1
-continues to support the original extension mechanism.
-This will be true for the life of exactly one major release.  This support
-will be withdrawn, and removed from the source code, at the next major
-release.
+为了提供一个转换时期，@command{gawk} @value{PVERSION} 4.1 还会支持最初的扩展机制。这对于一个主要的发行版本周期是这样的。在下一个主要版本发布时，这个支持也会被丢弃，并且从源代码中移除。
 
-Briefly, original-style extensions should be compiled by including the
-@file{awk.h} header file in the extension source code. Additionally,
-you must define the identifier @samp{GAWK} when building (use
-@samp{-DGAWK} with Unix-style compilers).  Otherwise, the definitions
-in @file{gawkapi.h} will cause conflicts with those in @file{awk.h}
-and your extension will not compile.
+简单地说，初始风格的扩展可以包含 @file{awk.h} 来进行编译。另外，你必须在构建时定义标识符 @samp{GAWK}（在 Unix 风格的编译器中使用 @samp{-DGAWK}）。否则，在 @file{gawkapi.h} 中的定义会与 @file{awk.h} 中的定义相冲突，你的扩展就没办法成功编译。
 
-Just as in previous versions, you load an old-style extension with the
-@code{extension()} built-in function (which is not otherwise documented).
-This function in turn finds and loads the shared object file containing
-the extension and calls its @code{dl_load()} C routine.
+如前一个版本，你使用 @code{extension()} 内置函数来装载一个旧风格的扩展（这个并没有文档）。这个函数然后找到并装载包含了扩展的共享对象文件，并调用 @code{dl_load()} C 函数。
 
-Because original-style and new-style extensions use different initialization
-routines (@code{dl_load()} versus @code{dlload()}), they may safely
-be installed in the same directory (to be found by @env{AWKLIBPATH})
-without conflict.
+因为初始风格与新风格的扩展使用不同的初始化函数（@code{dl_load()} 与 @code{dlload()}）他们可以安全地装载在同一个目录下（可以在 @env{AWKLIBPATH} 中找到）而没有冲突。
 
-The @command{gawk} development team strongly recommends that you
-convert any old extensions that you may have to use the new API
-described in @ref{Dynamic Extensions}.
+@command{gawk} 的开发团队强烈建议你将旧的扩展进行转换，这样不得不使用新的 API，它们都在 @ref{Dynamic Extensions} 中进行了描述。
 
 @node Notes summary
-@appendixsec Summary
+@appendixsec 总结
 
 @itemize @value{BULLET}
 @item
-@command{gawk}'s extensions can be disabled with either the
-@option{--traditional} option or with the @option{--posix} option.
-The @option{--parsedebug} option is available if @command{gawk} is
-compiled with @samp{-DDEBUG}.
+@command{gawk} 的扩展可以使用 @option{--traditional} 或者 @option{--posix} 选项被禁用。如果 @command{gawk} 被编译时使用了 @samp{-DDEBUG}，则 @option{--parsedebug} 选项也可以使用。
 
 @item
-The source code for @command{gawk} is maintained in a publicly
-accessible Git repository. Anyone may check it out and view the source.
+@command{gawk} 的源代码通过公共的 Git 库进行维护。所有人都可以检出并查看代码。
 
 @item
-Contributions to @command{gawk} are welcome. Following the steps
-outlined in this @value{CHAPTER} will make it easier to integrate
-your contributions into the code base.
-This applies both to new feature contributions and to ports to
-additional operating systems.
+欢迎对 @command{gawk} 作出贡献。本@value{CHAPTER}中随后的步骤指出步骤可以让你的贡献更容易地与代码库进行整合。对即可用于新特性的贡献，也用于将 @command{gawk} 移植到其他的系统。
 
 @item
-@command{gawk} has some limits---generally those that are imposed by
-the machine architecture.
+@command{gawk} 有一些限制——一般都是由机器的架构所导致的。
 
 @item
-The extension API design was intended to solve a number of problems
-with the previous extension mechanism, enable features needed by
-the @code{xgawk} project, and provide binary compatibility going forward.
+扩展 API 的设置目标是解决前一个扩展机制的大量问题，启用 @code{xgawk} 项目所需要的特性，并提供后向的二进制兼容性。
 
 @item
-The previous extension mechanism is still supported in @value{PVERSION} 4.1
-of @command{gawk}, but it @emph{will} be removed in the next major release.
+之前的扩展机制在 @command{gawk} 4.1 @value{PVERSION}还是支持的，但是@emph{会}在下一个主要发布版本中移除。
 
 @end itemize
 
 
 @node Basic Concepts
-@appendix Basic Programming Concepts
+@appendix 基本编程概念
 @cindex programming, concepts
 @cindex programming, concepts
 
-This @value{APPENDIX} attempts to define some of the basic concepts
-and terms that are used throughout the rest of this @value{DOCUMENT}.
-As this @value{DOCUMENT} is specifically about @command{awk},
-and not about computer programming in general, the coverage here
-is by necessity fairly cursory and simplistic.
-(If you need more background, there are many
-other introductory texts that you should refer to instead.)
+这一@value{APPENDIX}中尝试定义一些基本的概念与术语，它们会在本@value{DOCUMENT}中余下部分使用到。由于本书是一关于 @command{awk} 的@value{DOCUMENT}，而不是计算通用编程的@value{DOCUMENT}，这里所包含的内容相当粗糙简单。（如果需要更多的背景，你可以参考更多入门性质的内容。）
 
 @menu
 * Basic High Level::            The high level view.
@@ -29629,8 +29466,9 @@ other introductory texts that you should refer to instead.)
 @end menu
 
 @node Basic High Level
-@appendixsec What a Program Does
+@appendixsec 程序做的是什么
 
+#TODO
 @cindex processing data
 At the most basic level, the job of a program is to process
 some input data and produce results.

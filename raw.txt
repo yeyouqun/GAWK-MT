@@ -10485,7 +10485,6 @@ C.2.4@code{}为什么自动生成的文件要放在 Git 中
 ./@code{bootstrap}.@code{sh} && ./@command{configure} && @code{make}
 也可以工作。
 这对于主线以及 @command{gawk}@option{-X}.@code{Y}@option{-stable} 分支来说尤其重要。
-#TODO
 再者，@command{gawk} 的维护者也觉得这对于 @command{gawk} 的开发者也非常重要。当某人尝试检出 @code{xgawk} 的分支 来构建时，却发现不能。（没有 @code{ltmain}.@code{sh} 文件，也不知道如何来生成，并且这也不是唯一的问题。）
 此人会感觉精疲力尽。对于相应的分支，维护者与 @code{Jane} 这样的想构建从库中取得的 @command{gawk}-4.1@option{-stable} 用户没有什么不同。
 因此，维护者觉得对于任何分支而言，上面的代码可能工作，这样不仅是重要，而且非常关键。
@@ -10516,19 +10515,19 @@ C.3@code{}后续可能的扩展
 C.4@code{}实现的一些限制 
 下表描述了 @command{gawk} 在类 Unix 系统中的一些限制（尽管还会有变量）。其他的系统可能还有不同的限制。
 项  限制
-字符类内的字符数    2^(每字节的位数)
-输入记录的长度  @code{MAX_INT}
-输出记录的长度  @code{Unlimited}
-源代码长度  @code{Unlimited}
-记录中的域数    @code{MAX_LONG}
-文件重定向数    @code{Unlimited}
-一个文件中的记录数  @code{MAX_LONG}
-总是输入记录数  @code{MAX_LONG}
-重定向管道数    @code{min}(每用进程数， 打开文件数)
-数值    双精度浮点数 (如果没有使用 @code{MPFR})
-域大小  @code{MAX_INT}
-字串大小    @code{MAX_INT}
-@code{printf} 字串大小 @code{MAX_INT}
+@item 字符类内的字符数 @tab 2^(每字节的位数)
+@item 输入记录的长度 @tab @code{MAX_INT}
+@item 输出记录的长度 @tab Unlimited
+@item 源代码长度 @tab Unlimited
+@item 记录中的域数 @tab @code{MAX_LONG}
+@item 文件重定向数 @tab Unlimited
+@item 一个文件中的记录数 @tab @code{MAX_LONG}
+@item 总是输入记录数 @tab @code{MAX_LONG}
+@item 重定向管道数 @tab min(每用进程数， 打开文件数)
+@item 数值 @tab 双精度浮点数 (如果没有使用 MPFR)
+@item 域大小 @tab @code{MAX_INT}
+@item 字串大小 @tab @code{MAX_INT}
+@item printf 字串大小 @tab @code{MAX_INT}
 
 C.5@code{}扩展 @code{API} 设计 
 这一小节，记录了扩展 @code{API} 的设计，包括一些需要解决的历史问题的讨论。
@@ -10592,6 +10591,7 @@ C.7@code{}总结
 附录@code{D} 基本编程概念
 这一附录中尝试定义一些基本的概念与术语，它们会在本书中余下部分使用到。由于本书是一本关于 @command{awk} 的书，而不是计算通用编程的书，这里所包含的内容相当粗糙简单。（如果需要更多的背景，你可以参考更多入门性质的内容。）
 @code{D}.1@code{}程序做的是什么
+#TODO
 最基本的，程序的任务是处理输入数据，然后产生输出结果。如图 @code{D}.1。
 
 @code{Figure} @code{D}.1: @code{General} @code{Program} @code{Flow}
