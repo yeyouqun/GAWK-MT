@@ -10591,7 +10591,6 @@ C.7@code{}总结
 附录@code{D} 基本编程概念
 这一附录中尝试定义一些基本的概念与术语，它们会在本书中余下部分使用到。由于本书是一本关于 @command{awk} 的书，而不是计算通用编程的书，这里所包含的内容相当粗糙简单。（如果需要更多的背景，你可以参考更多入门性质的内容。）
 @code{D}.1@code{}程序做的是什么
-#TODO
 最基本的，程序的任务是处理输入数据，然后产生输出结果。如图 @code{D}.1。
 
 @code{Figure} @code{D}.1: @code{General} @code{Program} @code{Flow}
@@ -10684,6 +10683,7 @@ C++
 查看“方括号表达式”。
 @code{Character} @code{List}
 查看“方括号表达式”。
+#TODO
 @code{Character} @code{Set}（字符集）
 由计算机系统用来表示特定国家或者地区的字符（字母，数字，标点等）的数值编码集合。目前使用最多的常用字符集是 @code{ASCII}（美国信息交换标准编码）。很多的欧洲国家使用 @code{ASCII} 的扩展集，@code{ISO}-8859@minus{}1（@code{ISO}@option{-Latin}@minus{}1）。@code{Unicode} 字符集使用得越来越普遍，并形成相应的标准，特别是在 GNU/Linux 系统上被广泛地使用。
 @code{CHEM}    
