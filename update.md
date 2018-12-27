@@ -475,16 +475,3 @@
 @appendixsubsubsec Building and Using @command{gawk} on VMS POSIX
 在 VMS POSIX 上构建和使用 gawk
 
-## 
-在报告 Bug 或者你自己尝试修复它之前，尝试分离出能复现问题的最小的 @command{awk} 程序和输入@value{DF}。
-然后将下列信息发给我们：程序代码和@value{DF}，你使用的 Unix 系统的种类，你用来编译 @command{gawk} 的编译器，以及你的 @command{gawk} 所返回来的确切的结果。你也可以说一下你预期的结果；这会帮助我们决定这个文件是否真的在文档里。
-
-Before reporting a bug or trying to fix it yourself, try to isolate it
-to the smallest possible @command{awk} program and input @value{DF} that
-reproduce the problem.  Then send us the program and @value{DF},
-some idea of what kind of Unix system you're using,
-the compiler you used to compile @command{gawk}, and the exact results
-@command{gawk} gave you.  Also say what you expected to occur; this helps
-us decide whether the problem is really in the documentation.
-
-在报告 Bug 之前，请先自己尝试修复它，将其独立成最小的 @command{awk} 程序然后输入产生问题的数据。然后将程序与数据都发给我们。对于 Unix 系统的类型，编译 @command{gawk} 的编译器版本也是很有用的，还有 @command{gawk} 所返回来的确切的结果。

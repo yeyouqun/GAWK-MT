@@ -72,6 +72,7 @@
 
 @iftex
 @set DOCUMENT 书
+@set DOCUMENTEN book
 @set CHAPTER 章
 @set APPENDIX 附录
 @set SECTION 小节
@@ -92,6 +93,7 @@
 @end ifinfo
 @ifhtml
 @set DOCUMENT 网页
+@set DOCUMENTEN website
 @set CHAPTER 章
 @set APPENDIX 附录
 @set SECTION 小节
@@ -421,27 +423,43 @@ particular records in a file and perform operations upon them.
 @end ifnottex
 
 @menu
-* Foreword3::                      如何关于本@value{DOCUMENT}的一些话
-* Foreword4::                      如何其他一些话
-* Preface::                        如何本@value{DOCUMENT}的内容; 历史概述和致谢
-* Translator Preface::             如何译者的话
-* Getting Started::                如何对 @command{awk} 的基础介绍；如何执行一个 @command{awk} 程序；命令行语法
-* Invoking Gawk::                  如何执行 @command{awk} 程序
-* Regexp::                         关于使用正则表达式的方方面面
-* Reading Files::                  如何读取文件和操作域
-* Printing::                       如何使用 @command{awk} 打印；介绍 @code{print} 和 @code{printf} 语句；也介绍了重定向输出
-* Expressions::                    表达式是是语句的基本组成部分
-* Patterns and Actions::           概览模式和动作
-* Arrays::                         描述和使用数组；也包括面向数组的控制语句
-* Functions::                      内建函数和用户定义函数
-* Library Functions::              @command{awk} 函数库
-* Sample Programs::                许多有完整解释的 @command{awk} 程序
-* Advanced Features::              为高级用户而写的 @command{gawk} 相关指南
-* Internationalization::           让 @command{gawk} 适用于你的语言
-* Debugger::                       @command{awk} 调试器
-* Arbitrary Precision Arithmetic:: @command{gawk} 中的任意精度算术运算
-* Dynamic Extensions::             动态地给 @command{gawk} 添加新的内置函数
-* Language History::               @command{awk} 语言的演化过程
+* Foreword3::                      Some nice words about this
+                                   @value{DOCUMENTEN}.
+* Foreword4::                      More nice words.
+* Preface::                        What this @value{DOCUMENTEN} is about; brief
+                                   history and acknowledgments.
+* Translator Preface::             译者的话
+* Getting Started::                A basic introduction to using
+                                   @command{awk}. How to run an @command{awk}
+                                   program. Command-line syntax.
+* Invoking Gawk::                  How to run @command{gawk}.
+* Regexp::                         All about matching things using regular
+                                   expressions.
+* Reading Files::                  How to read files and manipulate fields.
+* Printing::                       How to print using @command{awk}. Describes
+                                   the @code{print} and @code{printf}
+                                   statements. Also describes redirection of
+                                   output.
+* Expressions::                    Expressions are the basic building blocks
+                                   of statements.
+* Patterns and Actions::           Overviews of patterns and actions.
+* Arrays::                         The description and use of arrays. Also
+                                   includes array-oriented control statements.
+* Functions::                      Built-in and user-defined functions.
+* Library Functions::              A Library of @command{awk} Functions.
+* Sample Programs::                Many @command{awk} programs with complete
+                                   explanations.
+* Advanced Features::              Stuff for advanced users, specific to
+                                   @command{gawk}.
+* Internationalization::           Getting @command{gawk} to speak your
+                                   language.
+* Debugger::                       The @command{gawk} debugger.
+* Arbitrary Precision Arithmetic:: Arbitrary precision arithmetic with
+                                   @command{gawk}.
+* Dynamic Extensions::             Adding new built-in functions to
+                                   @command{gawk}.
+* Language History::               The evolution of the @command{awk}
+                                   language.
 * Installation::                   Installing @command{gawk} under various
                                    operating systems.
 * Notes::                          Notes about adding things to @command{gawk}
@@ -451,16 +469,20 @@ particular records in a file and perform operations upon them.
 * Glossary::                       An explanation of some unfamiliar terms.
 * Copying::                        Your right to copy and distribute
                                    @command{gawk}.
-* GNU Free Documentation License:: The license for this @value{DOCUMENT}.
+* GNU Free Documentation License:: The license for this @value{DOCUMENTEN}.
 * Index::                          Concept and Variable Index.
 
+
 @detailmenu
-* History::                             @command{gawk} 与 @command{awk} 的历史。
-* Names::                               @command{awk} 的别名。
-* This Manual::                         使用本@value{DOCUMENT}；包括你可以使用的输入文件样例。
-* Conventions::                         排版约定。
+* History::                             The history of @command{gawk} and
+                                        @command{awk}.
+* Names::                               What name to use to find
+                                        @command{awk}.
+* This Manual::                         Using this @value{DOCUMENTEN}. Includes
+                                        sample input files that you can use.
+* Conventions::                         Typographical Conventions.
 * Manual History::                      Brief history of the GNU project and
-                                        this @value{DOCUMENT}.
+                                        this @value{DOCUMENTEN}.
 * How To Contribute::                   Helping to save the world.
 * Acknowledgments::                     Acknowledgments.
 * Running gawk::                        How to run @command{gawk} programs;
@@ -480,7 +502,7 @@ particular records in a file and perform operations upon them.
 * DOS Quoting::                         Quoting in Windows Batch Files.
 * Sample Data Files::                   Sample data files for use in the
                                         @command{awk} programs illustrated in
-                                        this @value{DOCUMENT}.
+                                        this @value{DOCUMENTEN}.
 * Very Simple::                         A very simple example.
 * Two Rules::                           A less simple one-line example using
                                         two rules.
@@ -950,7 +972,8 @@ particular records in a file and perform operations upon them.
 * Common Extensions::                   Common Extensions Summary.
 * Ranges and Locales::                  How locales used to affect regexp
                                         ranges.
-* Contributors::                        @command{gawk} 的主要贡献者.
+* Contributors::                        The major contributors to
+                                        @command{gawk}.
 * History summary::                     History summary.
 * Gawk Distribution::                   What is in the @command{gawk}
                                         distribution.
@@ -1328,14 +1351,18 @@ GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或�
 2016 年 4 月 
 
 @menu
-* History::                     @command{gawk} 与 @command{awk} 的历史
-* Names::                       @command{awk} 的别名
-* This Manual::                 使用本@value{DOCUMENT}；包括你可以使用的输入文件样例
-* Conventions::                 排版约定
-* Manual History::              GNU 项目及本@value{DOCUMENT}
-* How To Contribute::           如何贡献
-* Acknowledgments::             致谢
+* History::                     The history of @command{gawk} and
+                                @command{awk}.
+* Names::                       What name to use to find @command{awk}.
+* This Manual::                 Using this @value{DOCUMENTEN}. Includes sample
+                                input files that you can use.
+* Conventions::                 Typographical Conventions.
+* Manual History::              Brief history of the GNU project and this
+                                @value{DOCUMENTEN}.
+* How To Contribute::           Helping to save the world.
+* Acknowledgments::             Acknowledgments.
 @end menu
+
 
 @node History
 @unnumberedsec @command{awk} 与 @command{gawk} 的历史
@@ -2090,9 +2117,10 @@ February 2015
 @end example
 
 @menu
-* Running gawk::                如何执行 @command{awk} 程序；包括命令行语法。
+* Running gawk::                How to run @command{gawk} programs; includes
+                                command-line syntax.
 * Sample Data Files::           Sample data files for use in the @command{awk}
-                                programs illustrated in this @value{DOCUMENT}.
+                                programs illustrated in this @value{DOCUMENTEN}.
 * Very Simple::                 A very simple example.
 * Two Rules::                   A less simple one-line example using two
                                 rules.
@@ -2125,7 +2153,8 @@ awk -f @var{program-file} @var{input-file1} @var{input-file2} @dots{}
 在本@value{SECTION}中，我们使用两种方式，但是每种方式都有一些变化。
 
 @menu
-* One-shot::                    运行一次性 @command{awk} 程序。
+* One-shot::                    Running a short throwaway @command{awk}
+                                program.
 * Read Terminal::               Using no input files (input from the keyboard
                                 instead).
 * Long::                        Putting permanent @command{awk} programs in
@@ -19252,10 +19281,6 @@ END @{
 @cindex searching, for words
 @cindex documents@comma{} searching
 在写大量的单调文章的常见错误就是会偶然输入重复的词。一般情况下你会看到似下面的东西“the the program does the following@dots{}”。当文件是在线的时候，重复的词常常出现在一行的尾部以及另一行的行首，因此很难进行定位。
-A common error when writing large amounts of prose is to accidentally
-duplicate words.  Typically you will see this in text as something like ``the
-the program does the following@dots{}''  When the text is online, often
-the duplicated words occur at the end of one line and the
 @c as here!
 
 @file{dupword.awk} 这个程序会扫描整个文件，一次一行，并查找同一个字符的的连续出现。它同时也保存一行中的最后一个单词（放在变量 @code{prev} 中），用于与下一个单词的第一个单词进行比较。
@@ -24060,7 +24085,7 @@ int plugin_is_GPL_compatible;
 @node Extension Mechanism Outline
 @section 在高层级中是它是如何工作的
 
-@command{gawk} 与 扩展之间的通信是双向的。首先，当扩展被装载，@command{gawk} 会向它传递一个结构体 @code{struct} 的指针，结构体中都是函数指针。
+@command{gawk} 与扩展之间的通信是双向的。首先，当扩展被装载，@command{gawk} 会向它传递一个结构体 @code{struct} 的指针，结构体中都是函数指针。
 @ifnotdocbook
 如 @ref{figure-load-extension} 所示：
 @end ifnotdocbook
@@ -27161,7 +27186,7 @@ online documentation}.
 * Feature History::             The history of the features in @command{gawk}.
 * Common Extensions::           Common Extensions Summary.
 * Ranges and Locales::          How locales used to affect regexp ranges.
-* Contributors::                @command{gawk} 的主要贡献者.
+* Contributors::                The major contributors to @command{gawk}.
 * History summary::             History summary.
 @end menu
 
@@ -27409,7 +27434,7 @@ I/O 重定向中的特殊文件：
 间接函数调用（查看 @pxref{Indirect Calls}）。
 
 @item
-在命令行上输入目录会导致警告产生，但会跳过（查看 @pxref{command-line directories}）。
+在命令行上输入目录会导致警告产生，但会跳过（查看 @pxref{Command-line directories}）。
 @end itemize
 
 @item
