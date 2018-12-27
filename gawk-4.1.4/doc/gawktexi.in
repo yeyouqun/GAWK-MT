@@ -402,7 +402,7 @@ for enrichening our lives in innumerable ways.</para>
 @ifnotdocbook
 @node Top
 @top General Introduction
-@c 前言 node should come right after the Top
+@c Preface node should come right after the Top
 @c node, in `unnumbered' sections, then the chapter, `What is gawk'.
 @c Licensing nodes are appendices, they're not central to AWK.
 
@@ -416,41 +416,27 @@ particular records in a file and perform operations upon them.
 @end ifnottex
 
 @menu
-* 第三版前言::                      关于本@value{DOCUMENT}的一些话.
-* 第四版前言::                      其他一些话.
-* 前言::                        本@value{DOCUMENT}的内容; 历史概述和致谢.
-* 译序::                        译者的话.
-* Getting Started::                A basic introduction to using
-                                   @command{awk}. How to run an @command{awk}
-                                   program. Command-line syntax.
-* Invoking Gawk::                  How to run @command{gawk}.
-* Regexp::                         All about matching things using regular
-                                   expressions.
-* Reading Files::                  How to read files and manipulate fields.
-* Printing::                       How to print using @command{awk}. Describes
-                                   the @code{print} and @code{printf}
-                                   statements. Also describes redirection of
-                                   output.
-* Expressions::                    Expressions are the basic building blocks
-                                   of statements.
-* Patterns and Actions::           Overviews of patterns and actions.
-* Arrays::                         The description and use of arrays. Also
-                                   includes array-oriented control statements.
-* Functions::                      Built-in and user-defined functions.
-* Library Functions::              A Library of @command{awk} Functions.
-* Sample Programs::                Many @command{awk} programs with complete
-                                   explanations.
-* Advanced Features::              Stuff for advanced users, specific to
-                                   @command{gawk}.
-* Internationalization::           Getting @command{gawk} to speak your
-                                   language.
-* Debugger::                       The @command{gawk} debugger.
-* Arbitrary Precision Arithmetic:: Arbitrary precision arithmetic with
-                                   @command{gawk}.
-* Dynamic Extensions::             Adding new built-in functions to
-                                   @command{gawk}.
-* Language History::               The evolution of the @command{awk}
-                                   language.
+* Foreword3::                      关于本@value{DOCUMENT}的一些话
+* Foreword4::                      其他一些话
+* Preface::                        本@value{DOCUMENT}的内容; 历史概述和致谢
+* Translator Preface::             译者的话
+* Getting Started::                对 @command{awk} 的基础介绍；如何执行一个 @command{awk} 程序；命令行语法
+* Invoking Gawk::                  如何执行 @command{awk} 程序
+* Regexp::                         关于使用正则表达式的方方面面
+* Reading Files::                  如何读取文件和操作域
+* Printing::                       如何使用 @command{awk} 打印；介绍 @code{print} 和 @code{printf} 语句；也介绍了重定向输出
+* Expressions::                    表达式是是语句的基本组成部分
+* Patterns and Actions::           概览模式和动作
+* Arrays::                         描述和使用数组；也包括面向数组的控制语句
+* Functions::                      内建函数和用户定义函数
+* Library Functions::              @command{awk} 函数库
+* Sample Programs::                许多有完整解释的 @command{awk} 程序
+* Advanced Features::              为高级用户而写的 @command{gawk} 相关指南
+* Internationalization::           让 @command{gawk} 适用于你的语言
+* Debugger::                       @command{awk} 调试器
+* Arbitrary Precision Arithmetic:: @command{gawk} 中的任意精度算术运算
+* Dynamic Extensions::             动态地给 @command{gawk} 添加新的内置函数
+* Language History::               @command{awk} 语言的演化过程
 * Installation::                   Installing @command{gawk} under various
                                    operating systems.
 * Notes::                          Notes about adding things to @command{gawk}
@@ -1041,7 +1027,7 @@ for enrichening our lives in innumerable ways.
 @summarycontents
 @contents
 
-@node 第三版前言
+@node Foreword3
 @unnumbered 第三版前言
 
 @c This bit is post-processed by a script which turns the chapter
@@ -1150,7 +1136,7 @@ March 2001
 @end display
 @end ifnotdocbook
 
-@node 第四版前言
+@node Foreword4
 @unnumbered 第四版前言
 
 @c This bit is post-processed by a script which turns the chapter
@@ -1192,8 +1178,9 @@ October 2014
 @end display
 @end ifnotdocbook
 
-@node 前言
+@node Preface
 @unnumbered 前言
+
 @c I saw a comment somewhere that the preface should describe the book itself,
 @c and the introduction should describe what the book covers.
 @c
@@ -1291,7 +1278,7 @@ GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或�
 @end ifclear
 还有 OpenVMS@footnote{一些已经不用的系统，在这些系统上 @command{gawk} 有过移植，但是已经不再支持，并且为支持这些系统而存在的代码也已经移除} 系统上。 
 
-@node 译序
+@node Translator Preface
 @unnumbered 译序
 
 这是我第一次翻译这么长的书。
@@ -1336,14 +1323,13 @@ GNU 版本的 @command{awk} 称为 @command{gawk}。在使用恰当的参数或�
 2016 年 4 月 
 
 @menu
-* History::                     @command{gawk} 与 @command{awk} 的历史。
-* Names::                       @command{awk} 的别名。
-* This Manual::                 使用本@value{DOCUMENT}；包括你可以使用的输入文件样例。
-* Conventions::                 排版约定。
-* Manual History::              Brief history of the GNU project and this
-                                @value{DOCUMENT}.
-* How To Contribute::           Helping to save the world.
-* Acknowledgments::             Acknowledgments.
+* History::                     @command{gawk} 与 @command{awk} 的历史
+* Names::                       @command{awk} 的别名
+* This Manual::                 使用本@value{DOCUMENT}；包括你可以使用的输入文件样例
+* Conventions::                 排版约定
+* Manual History::              GNU 项目及本@value{DOCUMENT}
+* How To Contribute::           如何贡献
+* Acknowledgments::             致谢
 @end menu
 
 @node History
@@ -1731,7 +1717,7 @@ Cautionary or warning notes look like this.
 @end ifset
 
 @node Manual History
-@unnumberedsec GNU 项目及本书
+@unnumberedsec GNU 项目及本@value{DOCUMENT}
 
 @cindex FSF (Free Software Foundation)
 @cindex Free Software Foundation (FSF)
@@ -3897,6 +3883,7 @@ long-undocumented ``feature'' of Unix @command{awk}.
 
 @node Regexp
 @chapter 正则表达式
+
 @cindex regexp
 @cindex regular expressions
 
@@ -7805,7 +7792,7 @@ BEGIN @{ print "Serious error detected!" > /dev/stderr @}
 @chapter 表达式
 @cindex expressions
 
-表达式是 @command{awk} 模式与动作的基本构造块。表达试求值后可用于打印，测试或者传递给函数。另外，表达式还可以通过赋值操作符将一个新值赋给一个变量。
+表达式是 @command{awk} 模式与动作的基本构造块。表达式求值后可用于打印，测试或者传递给函数。另外，表达式还可以通过赋值操作符将一个新值赋给一个变量。
 
 表达式本身可以成为一个模式，或者动作语句。多数其他类型的语句包含一个或者多个表达式，来指定要操作的数据。如在其他语言中一样，
 @command{awk} 中的表达式可以包含变量、数组参考、常量以及函数调用，还可以是这些内容与不同的操作符的各种组合。
@@ -26167,7 +26154,7 @@ if (contents == "" && ERRNO != "") @{
 
 @cindex @code{sleep()} extension function
 @item result = sleep(@var{seconds})
-尝试休眠 @var{seconds} 秒。如果 @var{{seconds} 为负数，或者尝试休眠失败，则返回 @minus{}1 并且设置 @code{ERRNO}。否则在休眠了指定的时间后返回 0。注意，@var{seconds} 可以是一个浮点数（非整数）。实现细节是：依赖于平台的可获得性，这个函数会尝试使用 @code{nanosleep()} 或者 @code{select} 来实现延迟。
+尝试休眠 @var{seconds} 秒。如果 @var{seconds} 为负数，或者尝试休眠失败，则返回 @minus{}1 并且设置 @code{ERRNO}。否则在休眠了指定的时间后返回 0。注意，@var{seconds} 可以是一个浮点数（非整数）。实现细节是：依赖于平台的可获得性，这个函数会尝试使用 @code{nanosleep()} 或者 @code{select} 来实现延迟。
 @end table
 
 @node Extension Sample API Tests
@@ -27338,7 +27325,7 @@ Prestandard VAX C compiler for VAX/VMS
 @item @code{BINMODE} 变量 @tab @tab X @tab X @tab
 @item @code{RS} 可为正则表达式 @tab @tab X @tab X @tab
 @item 时间相关函数 @tab @tab X @tab X @tab
-@end multitabl
+@end multitable
 
 @node Ranges and Locales
 @appendixsec 正则表达式范围与本地语言设置：又臭又长陈年旧事
