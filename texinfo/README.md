@@ -6,7 +6,7 @@
 在转写过程中，对于一些翻译我进行了一些修改，所以和原版的 word 文档有不一致的地方。修改的内容没有一一记录，其中部分记录在 `update.md`。
 
 
-# Requiremenrs
+# Requirements
 texi2html
 
 
